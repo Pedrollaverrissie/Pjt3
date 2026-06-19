@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>login-page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-   <script src="script.js"></script>
+   <script src="{{ url_for('static', filename='script.js') }}"></script>
+  
 </head>
 <body>
 <form action="/signup" method="POST">    
@@ -36,8 +37,8 @@
         <input type="text" placeholder="07xxxxxxxx" name="phone" required>
         <label for="">Password</label>
         <div class="show-password2">
-               <input type="password"  id="" placeholder="Min. 6 characters" name="password" required>
-               <div class="eye2" ><img src="static/images/close-eye.jfif" alt=""></div> 
+               <input type="password"  id="password" placeholder="Min. 6 characters" name="password" required>
+               <div class="eye2" onclick="togglePassword()" ><img id="eyeIcon"  src="static/images/close-eye.jfif" alt=""></div> 
         </div>
 
        
