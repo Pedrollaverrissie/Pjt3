@@ -1,13 +1,90 @@
+
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page1</title>
+       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
-<body>
+<body class="index">
+    <div class="page1">
 
-<h1>Welcome {{ username }} 🎉</h1>
+        <div class="welcome">
 
-<a href="/logout">Logout</a>
+            <h1>Welcome {{ username }} 🎉</h1>
+           
+            
+        </div>
+        <div class="header">
 
+        </div>
+
+        <div class="sidebar">
+
+            <div class="sidebar-top">
+                <img class="cancel" src="static/images/close.jfif" alt="">
+                <img class="logo" src="static/images/images (1).jfif" alt="">
+                <h3><Data>DOLLAR MINE</Data></h5>
+            </div> 
+
+            <div class="sidebar-content">
+
+                <div class="main">
+                    <p class="titles">MAIN</p>
+                    <div>
+                        <img src="static\images\dashboard.jfif" alt="">
+                        <p>Dashboard</p>
+                    </div>
+                    <div>
+                         <img src="static/images/members" alt="">
+                        <p>Team members</p>
+                    </div>
+                    <div>
+                         <img src="static/images/earn.jfif" alt="">
+                        <p>Watch to Earn</p>
+                    </div>
+
+                </div>
+
+                <div class="finance">
+                    <p class="titles">FINANCE</p>
+                    <div>
+                         <img src="static/images/withdraw.jfif" alt="">
+                        <p>Withdraw</p>
+                    </div>
+                    <div>
+                         <img src="static/images/recharge1.jfif" alt="">
+                        <p>Recharge</p>
+                    </div>
+                    
+                    <div>
+                         <img src="static/images/bonus.jfif" alt="">
+                        <p>Bonuses</p>
+                    </div>
+
+                </div>
+
+                <div class="account">
+                    <p class="titles">ACCOUNT</p>
+                    <div>
+                         <img src="static/images/profile" alt="">
+                        <p>Profile</p>
+                    </div>
+                    <div>
+                         <img src="static/images/logout.jfif" alt="">
+                        <p> <a href="/logout">Sign Out</a></p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+      
+    </div>
+  
 </body>
 </html>
