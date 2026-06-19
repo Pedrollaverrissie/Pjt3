@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
-from models import db, User
+from models import db, User, Payment
 
 app = Flask(__name__)
 app = Flask(__name__)
@@ -28,7 +28,8 @@ with app.app_context():
 # ---------------- HOME ----------------
 @app.route("/")
 def home():
-    return redirect("/login")
+    return redirect("/signup")
+
 
 # ---------------- SIGNUP ----------------
 @app.route("/signup", methods=["GET", "POST"])
@@ -49,7 +50,7 @@ def signup():
         except:
             return "Email already exists!"
 
-        return redirect("/login")
+        return redirect("/payment")
 
     return render_template("signup.html")
 
@@ -66,6 +67,29 @@ def login():
         return "Invalid credentials"
 
     return render_template("login.html")
+
+
+@app.route('/payment', methods=['GET', 'POST'])
+def payment():
+
+    if request.method == "POST":
+
+        phone = request.form['phone']
+        transaction_code = request.form['transaction_code']
+
+        payment = Payment(
+            phone=phone,
+            transaction_code=transaction_code,
+            amount=100,
+            status='pending'
+        )
+
+        db.session.add(payment)
+        db.session.commit()
+
+        return "Payment submitted successfully."
+
+    return render_template("payment.html")
 
 # ---------------- DASHBOARD ----------------
 @app.route("/dashboard")
