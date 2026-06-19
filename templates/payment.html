@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="script.js">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <form action="/pay" method="POST">
+        <div class="payment-page">
+            <div class="payment-top"> 
+                <div class="transact">
+                    <img
+                    src="{{ url_for('static', filename='images/transaction image.jfif') }}"
+                    alt="Transaction">
+                </div>
+              
+                <h4>ACTIVATE YOUR NEW ACCOUNT</h4>
+                <P>Complete M-Pesa verification to access your <span>dollar mine</span> dashboard</P>
+            </div>
+
+            <div class="payment-credentials">
+                <div class="tel">
+                    <p>PHONE NUMBER</p>
+                    <input 
+                        type="tel"
+                         name="phone"
+                         placeholder="2547XXXXXXXX"
+                       required>
+                    >
+                </div>
+                <div class="transaction-code">
+                    <label>M-Pesa Transaction Code</label>
+                    <input
+                        type="text"
+                        name="transaction_code"
+                        placeholder="e.g. SGR8K9M123"
+                        required>
+                </div>
+
+                <div class="payment-line"></div>
+
+                <div class="fee">
+                    <p>ACTIVATION FEE</p>
+                    <p class="amount">Ksh 100</p>
+
+                </div>
+            </div>
+            <button class="pay" type="submit">PAY WITH M-PESA</button>
+        </div>
+    </form>    
+</body>
+</html>
