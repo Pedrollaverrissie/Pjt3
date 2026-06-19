@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="script.js">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+   <img src="{{ url_for('static', filename='images') }}">
 </head>
 <body>
+
+
     <form action="/login" method="POST">
     <div class="login-container">
         <div class="login-header">
@@ -32,8 +35,8 @@
                 <label class="forgot">Forgot password?</label>
             </div> 
             <div class="show-password">
-                <input type="password"  id="" placeholder="••••••••" name="password" required>
-               <div class="eye" ><img src="static/images/close-eye.jfif" alt=""></div> 
+                <input type="password"  id="password" placeholder="••••••••" name="password" required>
+               <div class="eye"  onclick="togglePassword()"  ><img  id="eyeIcon" src="static/images/close-eye.jfif" alt=""></div> 
             </div>
             <div class="checkbox">
              <input type="checkbox"><p>Remember me</p>
@@ -58,5 +61,19 @@
 
     </div>
    </form> 
+   <script>
+function togglePassword() {
+    const password = document.getElementById("password");
+    const eyeIcon = document.getElementById("eyeIcon");
+
+    if (password.type === "password") {
+        password.type = "text";
+        eyeIcon.src = "{{ url_for('static', filename='images/open-eye.jfif') }}";
+    } else {
+        password.type = "password";
+        eyeIcon.src = "{{ url_for('static', filename='images/close-eye.jfif') }}";
+    }
+}
+</script>
 </body>
 </html>
