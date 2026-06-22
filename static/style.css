@@ -184,7 +184,7 @@ body{
     background-color: rgb(15, 14, 14);
 }
 .index{
-    display: block;
+
     background: white;
 }
 .login-container{
@@ -253,7 +253,7 @@ body{
     cursor: pointer;
     right: 10px;
     top: 5px;
-    background: red;
+   
     
       
 }
@@ -385,6 +385,9 @@ body{
     font-size: 8.5px;
     color: grey;
 }
+
+/* Payment pager*/
+
 .payment-page{
     background-color:rgb(24, 10, 42);
     color: white;
@@ -492,15 +495,108 @@ body{
 /*Dashboard*/
 
 .page1{
-    display: flex;
-   background: linear-gradient(1989deg, #7cd8ef, #f5f7f8, #d9dada);
+   
+ 
+  display: flex;
+   /*background: linear-gradient(1989deg, #0a0941, #051e34, #291456);*/
    flex-direction: column;
-   height: 100%;
-   width: 100%;
-
+   margin-top: 35px;
   
+   width: 100%;
+   background-color: rgb(234, 246, 249);
+}
+.welcome{
+    position: fixed;
+    top: -200px; 
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(6, 6, 6);
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    transition: top 0.6s ease;
+    z-index: 1000;
+}
+
+
+.welcome.show{
+    top: 20px;
+}
+.welcome h5{
+    margin: 0;
+}
+.dashboard-header{
+ display: flex;
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ height: 40px;
+ justify-content:space-between;
+ align-items: center;
+ vertical-align: center;
+ background-color: #010e0f;
+  z-index: 100;
+
+
+}
+
+.header-profile {
+    width: 30px;
+    height: 30px;
+   
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    text-transform: uppercase;
+    margin-right: 15px;
+    border: 1.5px solid rgb(220, 253, 6);
+    background-color: #563c11;
     
 }
+.dashboard-menu{
+    display: block;
+    justify-content: center;
+    align-items: center;
+    width: 35px;
+    margin-left: 20px;
+}
+.dashboard-menu img{
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+
+ .sidebar{
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 130px;
+    border-radius: 2px;
+    left: -150px;
+    bottom: 10px;
+    top: 0;
+    background-color: #010e0f;
+    color: white;
+    padding-left: 10px;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: lighter;
+    transition: left 0.4s ease;
+    column-gap: 30px;
+    padding-top: 15px;
+    z-index: 100;
+
+ }
+ .sidebar.active{
+    left: 0;
+}
+
 .sidebar-top{
     display: flex;
     flex-direction: row;
@@ -516,11 +612,12 @@ body{
   
    
 }
+
 .logo{
     
     width:25px;
     height: 25px;
-    border-radiu: 50%;
+    border-radius: 50%;
     
     
 }
@@ -531,37 +628,25 @@ h3{
     margin-right: 8px;
 }
 .cancel{
+    display: flex;
     position: absolute;
-    width: 16px;
-    height: 15px;
-    top: 6px;
+    width: 20px;
+    height: 20px;
+    top: -10px;
     right: 6px;
     box-shadow: 0 0 6px rgb(255, 68, 0);
     border-radius: 5px;
     cursor: pointer;
+    border: 1px solid;
+    justify-content: center;
+    align-items: center;
    
 }
-
- .sidebar{
-    display: flex;
-    flex-direction: column;
-   width: 130px;
-   border-radius: 2px;
-   border: 2px solid rgb(18, 3, 3);
-    left: 0;
-    bottom: 10px;
-    top: 50px;
-    background-color: rgb(32, 17, 48);
-    color: white;
-    padding-left: 10px;
-    font-family:Arial, Helvetica, sans-serif;
-    font-size: 10px;
-    font-weight: lighter;
+.cancel img{
+    width:15px;
+    mix-blend-mode:multiply ;
     
-    column-gap: 30px;
-    
- }
-
+}
  .sidebar-content img{
     width: 15px;
     height: 15px;
@@ -581,3 +666,377 @@ h3{
 .titles{
     color: #ffc400;
 }
+
+@media (min-width: 768px) {
+    .dashboard-menu {
+        display: block; 
+    }
+    .dashboard-header{
+        height: 60px;
+        border-bottom: 1px solid #ead07945;
+        z-index: 100;
+        background-color: #010e0f;
+    }
+  
+    .sidebar {
+        left: 0; 
+        position: fixed;
+        border: 0;
+        bottom: 0;
+        width: 180px;
+        z-index: 100;
+        border-right:1px solid #ead07945;
+        background-color: #010e0f;
+    }
+    
+    .sidebar-top{
+        position: relative;
+        display: flex;
+        height: 30px;
+        padding-top: 5px;
+        padding-bottom: 15px;
+        align-items: center;
+        vertical-align: center;
+        border-bottom:1px solid #ead07945;
+        
+    }
+    .cancel{
+        position: absolute;
+        opacity: 0;
+    }
+    .main, .finance, .account{
+    border-bottom:0;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+ }
+    .main div,.finance div,.account div{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 12px;
+ }
+    .sidebar-content img{
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    
+ }
+ .page1{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 65px;
+    margin-left: 194px;
+    margin-right: 8px;
+    background-color: azure;
+    border-radius: 5px;
+   
+
+ }
+ .index{
+    background-color:rgb(1, 1, 1);
+ }
+}
+
+
+/* BACKGROUND BLUR LAYER */
+.overlay{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0,0,0,0.2);
+    backdrop-filter: blur(0px);
+
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+
+    z-index: 5;
+}
+
+/* ACTIVE BLUR */
+.overlay.active{
+    opacity: 1;
+    visibility: visible;
+    backdrop-filter: blur(6px);
+}
+.top-content{
+    display: flex;
+   vertical-align: middle;
+    align-items: center;
+    width: 95%;
+    color: white;
+    margin: 8px;
+   
+}
+.header-profile2{
+    height: 40px;
+    width: 40px;
+    margin-right: 15px;
+    margin-left: 20px;
+    background-color: #563c11;
+    border: 1.5px solid rgb(220, 253, 6);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+.header-profile2 span{
+    font-size: 24px;
+}
+.top-content h5{
+    
+}
+
+/*PAGE CONTENT*/
+.page-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background-color: #010e0f;
+    width: 99.9%;
+    margin:0.6px;
+    border-radius: 5px;
+  
+}
+.income .bottom-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    gap: 10px;
+    width: 90%;
+    
+
+}
+.income{
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    flex-wrap: wrap;
+    width: 85%;
+}
+.income div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #08138a1d;
+    height: 50px;
+    border-radius: 10px;
+    color: white;
+    flex: 1 1 100%;
+    box-shadow: 0 -0 4px rgb(0, 255, 110);
+    
+    
+}
+
+.income p{
+    font-size: 10px;
+    margin: 0;
+}
+.income h4{
+    font-size: 14px;
+    margin: 0;
+    padding-bottom: 5px;
+}
+
+.wallet-income{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+   
+   
+}
+.wallet-income p{
+    font-size: 10px;
+     color: #b2b5b5ad;
+}
+
+.wallet-income .p1{
+    color: #f69503;
+    font-size: 12px;
+
+}
+.wallet-income h2{
+    margin: 8px;
+    color: #f4f5f5;
+}
+
+.wallet-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    color: #f4f5f5;
+    
+}
+
+.wallet-name{
+    color: #f69503;
+}
+
+.all-wallets
+{
+    display: flex;
+    width: 90%;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+
+   
+
+}
+.all-wallets div{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(25, 45, 61);
+    width: 96%;
+    border-radius: 10px;
+    padding-left: 8px;
+    padding-top: 8px;
+    position: relative;
+    flex: 1 1 100%;
+    box-shadow: 0 -0 10px rgb(6, 6, 0);
+    
+}
+.all-wallets p{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 8px;
+    display: block;
+}
+.all-wallets h4{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
+      margin: 0;
+      padding:0 10px 10px 0 ;
+    
+}
+.task-img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.earnings-img{
+    width: 40px;
+    border-radius: 50%;
+     height: 40px;
+}
+.wallets-img{
+    width: 40px;
+    border-radius: 50%;
+}
+
+.all-wallets div h6{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    width: 35px;
+    background-color: #000304;
+   
+    position: absolute;
+    top: -10px;
+    right: 6px;
+    font-size: 8px;
+    height: 15px;
+}
+@media (min-width: 768px){
+    .all-wallets div,.income div{
+        flex: 1 1 calc(30.333% - 15px);
+    }
+}
+
+.invite-link
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 -0 2px rgb(4, 243, 28);
+    width: 90%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #08138a1d;
+    color: white;
+}
+.link{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: center;
+                                           
+
+}
+.invite{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+   
+}
+
+.invite img{
+    width: 20px;
+    height: 20px;
+     box-shadow: 0 0 10px rgb(11, 138, 206);
+   
+    border-radius: 50%;
+}
+.link button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 8px;
+    width: 40%;
+    border-radius: 5px;
+    border: 1px;
+    height: 26px;
+    background-color: #2c1008;
+    color:rgb(226, 245, 251);
+    cursor: pointer;
+    box-shadow: 0 -0 10px rgb(4, 0, 0);
+}
+
+.link button:hover{
+    width: 40%;
+    background-color: #231652;
+    color: rgb(242, 195, 5);
+    
+    box-shadow: 0 -0 10px black;
+}
+.link button span{
+    display: flex;
+    text-align: center;
+    white-space: nowrap;
+ 
+}
+.link button:hover span {
+    animation: typing 1s steps(10, end) forwards;
+}
+@keyframes typing{
+    from{
+        width: 0;
+        overflow: hidden;
+    }
+    to{
+        width: 10ch;
+        overflow: visible;
+    }
+}
+
