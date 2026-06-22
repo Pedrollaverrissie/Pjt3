@@ -506,13 +506,15 @@ body{
    background-color: rgb(234, 246, 249);
 }
 .welcome{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
     top: -200px; 
     left: 50%;
     transform: translateX(-50%);
     background-color: rgb(6, 6, 6);
     color: white;
-    padding: 15px 25px;
     border-radius: 10px;
     transition: top 0.6s ease;
     z-index: 1000;
@@ -523,7 +525,11 @@ body{
     top: 20px;
 }
 .welcome h5{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0;
+    width: 100%;
 }
 .dashboard-header{
  display: flex;
