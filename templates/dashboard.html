@@ -8,25 +8,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page1</title>
        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
 </head>
 <body class="index">
+    <div class="overlay"></div>
     <div class="page1">
 
         <div class="welcome">
-
-            <h1>Welcome {{ username }} 🎉</h1>
-           
-            
-        </div>
-        <div class="header">
-
+            <h5>Welcome back {{ username }} 🎉</h5>          
         </div>
 
-        <div class="sidebar">
+        <div class="dashboard-header">
+
+            <button class="dashboard-menu" id="menuBtn"><img src="static/images/menu.svg" alt=""></button>
+
+            <div class="header-profile">
+                  <span id="profileInitial" data-username="{{ username }}"></span>
+            </div>
+        </div>
+        
+        <div class="sidebar" id="sidebar">
 
             <div class="sidebar-top">
-                <img class="cancel" src="static/images/close.jfif" alt="">
+                <button class="cancel" ><img src="static/images/close.jfif" alt=""></button>
                 <img class="logo" src="static/images/images (1).jfif" alt="">
                 <h3><Data>DOLLAR MINE</Data></h5>
             </div> 
@@ -80,8 +84,109 @@
                     </div>
 
                 </div>
+            </div>             
+
+        </div>
+
+
+        <div class="page-content">
+            
+            <div class="top-content" >
+                
+                    <div class="header-profile2">
+                      <span id="profile" data-username="{{ username }}"></span>
+                    </div>
+                    <h5 >Welcom Again <br> {{ username }}</h5> 
             </div>
 
+            <div class="wallet-income">
+                <p class="p1"> TOTAL INCOME</p>
+                <h2>Ksh. {amount}</h2>
+                <p>ALL WALLETS COMBINED</p>
+            </div>
+
+            <div class="income">
+                
+                    <div class="team-income">
+                            <h4>Ksh.{team amount}</h4>
+                            <p>TEAM</p>
+
+                    </div>
+                    <div class="withdrawm-income">
+                            <h4>Ksh.{team amount}</h4>
+                            <p>WITHDRAWN</p>
+
+                    </div>
+                    
+                    <div class="today-income">
+                        <h4>Ksh. {wtds amount}</h4>
+                        <p>TODAY</p>
+                    </div>
+
+            </div>
+         <div class="wallet-container">
+            <p class="wallet-name">YOUR WALLETS</p>
+            
+            <div class="all-wallets">    
+
+                <div class="team-earnings">
+                    <img src="static/images/team earnins.jfif" alt="" class="wallets-img">
+                     <p>TEAM EARNINGS</p>
+                     <h4>Ksh{amount }</h4>
+                    <h6>TEAM</h6>
+                </div>
+
+                <div class="main-wallet">
+                     <img src="static/images/wallet.jfif" alt="" class="wallets-img">
+                     <p>MAIN WALLET</p>
+                     <h4>Ksh{amount }</h4>
+                      <h6>MAIN</h6>
+                </div>
+
+                <div class="task-wallet">
+                     <img class="task-img" src="static/images/task wallet.jfif" alt="" class="wallets-img">
+                     <p>TASK WALLET</p>
+                     <h4>Ksh{amount }</h4>
+                      <h6>TASK</h6>
+                </div>
+
+                <div class="total-withdrawals">
+                     <img src="static/images/today earn.jfif" alt="" class="wallets-img">
+                     <p>TOTAL WITHDRAWN</p>
+                     <h4>Ksh{amount }</h4>
+                      <h6>PAID</h6>
+                </div>
+
+                <div class="today-earnings">
+                     <img class="earnings-img" src="static/images/today earnings.jfif" alt="" class="wallets-img">
+                     <p>TODAY'S EARNINGS</p>
+                     <h4>Ksh{amount }</h4>
+                      <h6>TODAY</h6>
+                </div>
+
+                <div class="commissions">
+                     <img src="static/images/commission.jfif" alt="" class="wallets-img">
+                     <p>COMMISSIONS</p>
+                     <h4>Ksh{amount }</h4>
+                      <h6>COMMS</h6>
+                </div>
+
+               
+            </div>
+
+          </div>
+           
+            
+            <div class="invite-link">
+                    <div class="invite">
+                        <img src="static/images/Link Icon Svg, Pdf, Vector, Eps, Dxf - Etsy.jfif" alt="">
+                        <p>Your Invite Link</p>
+                    </div>
+                    <div class="link">
+                        <p>https://dollarmine.com/register? ref=RE</p>
+                        <button><span placeholder="COPY LINK">COPY LINK</span></button>
+                    </div>
+            </div>
         </div>
       
     </div>
