@@ -166,26 +166,31 @@ def forgot_password():
     if request.method == "POST":
 
         email = request.form["email"]
-
         user = User.query.filter_by(email=email).first()
 
-        otp = str(random.randint(100000, 999999))
+        if user:
+            otp = str(random.randint(100000, 999999))
 
-        msg = Message(
-            "Password Reset OTP",
-            sender=app.config['MAIL_USERNAME'],
-            recipients=[email]
-        )
+            otp_store[email] = {
+                "otp": otp,
+                "time": time.time()
+            }
 
-        msg.body = f"Your OTP code is: {otp}"
+            msg = Message(
+                "Password Reset OTP",
+                sender=app.config['MAIL_USERNAME'],
+                recipients=[email]
+            )
 
-        try:
+            msg.body = f"Your OTP code is: {otp}"
+
+            print("MAIL USER:", app.config["MAIL_USERNAME"])
+            print("MAIL PASS:", app.config["MAIL_PASSWORD"])
+
             mail.send(msg)
-            return "EMAIL SENT SUCCESSFULLY"
-        except Exception as e:
-            return f"MAIL ERROR: {e}"
 
-    return render_template("forgot_password.html")
+            return redirect(f"/verify-otp/{email}")
+
     return render_template("forgot_password.html")
 
 #----------------OTP VERIFICATION------------
