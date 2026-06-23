@@ -164,7 +164,7 @@ def logout():
 def forgot_password():
 
     if request.method == "POST":
-
+        return "FORGOT PASSWORD ROUTE HIT"
         email = request.form["email"]
         user = User.query.filter_by(email=email).first()
 
