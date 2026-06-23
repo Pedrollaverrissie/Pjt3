@@ -177,8 +177,15 @@ def forgot_password():
             recipients=[email]
         )
 
-        return "Message created successfully"
+        msg.body = f"Your OTP code is: {otp}"
 
+        try:
+            mail.send(msg)
+            return "EMAIL SENT SUCCESSFULLY"
+        except Exception as e:
+            return f"MAIL ERROR: {e}"
+
+    return render_template("forgot_password.html")
     return render_template("forgot_password.html")
 
 #----------------OTP VERIFICATION------------
