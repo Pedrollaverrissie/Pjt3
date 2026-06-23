@@ -166,7 +166,8 @@ def forgot_password():
     if request.method == "POST":
 
         try:
-            return "STEP 1"
+            email = request.form["email"]
+            return f"STEP 2: {email}"
 
         except Exception as e:
             return f"ERROR: {e}"
