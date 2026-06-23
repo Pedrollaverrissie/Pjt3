@@ -184,7 +184,10 @@ def forgot_password():
 
             msg.body = f"Your OTP code is: {otp}"
 
-            mail.send(msg)
+            try:
+                mail.send(msg)
+            except Exception as e:
+                return f"MAIL ERROR: {e}
 
             return redirect(f"/verify-otp/{email}")
 
@@ -260,7 +263,10 @@ def resend_otp(email):
 
     msg.body = f"Your new OTP is: {otp}"
 
-    mail.send(msg)
+    try:
+        mail.send(msg)
+    except Exception as e:
+        return f"MAIL ERROR: {e}"
 
     return redirect(f"/verify-otp/{email}")
 
