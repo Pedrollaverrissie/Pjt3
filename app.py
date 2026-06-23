@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-import re, random ,time
+import re, random ,time, os ,ssl
 from flask_mail import Mail, Message
 
 from models import db, User, Payment
@@ -17,10 +17,14 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'petersongitonga42@gmail.com'
-app.config['MAIL_PASSWORD'] = 'elcq kybp kpvs pukm'
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
+app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 
-mail = Mail(app)
+
+mail = Mail()
+mail.init_app(app)
+
 otp_store = {}
 
 db.init_app(app)
@@ -159,7 +163,7 @@ def logout():
 
 
 
-#--------------FORGOT PASSWORD------------
+#--------------FORGOT PASSWORD-------------
 @app.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
 
@@ -184,10 +188,10 @@ def forgot_password():
 
             msg.body = f"Your OTP code is: {otp}"
 
-            print("MAIL USER:", app.config["MAIL_USERNAME"])
-            print("MAIL PASS:", app.config["MAIL_PASSWORD"])
+            print("MAIL USER:", app.config['MAIL_USERNAME'])
+            print("MAIL PASS:", app.config['MAIL_PASSWORD'])
 
-            mail.send(msg)
+            mail.send(msg) 
 
             return redirect(f"/verify-otp/{email}")
 
