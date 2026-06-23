@@ -166,7 +166,9 @@ def forgot_password():
     if request.method == "POST":
       
         email = request.form["email"]
+        
             return f"Email received: {email}"
+        
         user = User.query.filter_by(email=email).first()
 
         if user:
