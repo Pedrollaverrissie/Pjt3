@@ -94,4 +94,33 @@ document.addEventListener("DOMContentLoaded", () => {
         profile.textContent = "?";
     }
 
+})
+
+/*  OTP TIMER COUNTDOWM*/
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    let timeLeft = 300; // 5 minutes
+    const timerDisplay = document.getElementById("timer");
+
+    function updateTimer() {
+
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+
+        if (seconds < 10) seconds = "0" + seconds;
+
+        timerDisplay.textContent = minutes + ":" + seconds;
+
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            timerDisplay.textContent = "Expired";
+        }
+
+        timeLeft--;
+    }
+
+    const countdown = setInterval(updateTimer, 1000);
+    updateTimer();
 });
+
