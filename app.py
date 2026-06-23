@@ -169,10 +169,11 @@ def forgot_password():
 
         user = User.query.filter_by(email=email).first()
 
-        return f"User found = {user is not None}"
+        otp = str(random.randint(100000, 999999))
+
+        return f"OTP = {otp}"
 
     return render_template("forgot_password.html")
-    
 
 #----------------OTP VERIFICATION------------
 @app.route("/verify-otp/<email>", methods=["GET", "POST"])
