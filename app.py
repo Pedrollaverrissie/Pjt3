@@ -174,10 +174,14 @@ def forgot_password():
 
     if request.method == "POST":
 
-        email = request.form["email"]
-        user = User.query.filter_by(email=email).first()
+        try:
+            email = request.form["email"]
 
-        if user:
+            user = User.query.filter_by(email=email).first()
+
+            if not user:
+                return "Email not found"
+
             otp = str(random.randint(100000, 999999))
 
             otp_store[email] = {
@@ -193,16 +197,12 @@ def forgot_password():
 
             msg.body = f"Your OTP code is: {otp}"
 
-            print("MAIL USER:", app.config['MAIL_USERNAME'])
-            print("MAIL PASS:", app.config['MAIL_PASSWORD'])
-
-            try:
-                mail.send(msg)
-            except Exception as e:
-              print("MAIL ERROR:", e)
-              return "Email service failed on server"
+            mail.send(msg)
 
             return redirect(f"/verify-otp/{email}")
+
+        except Exception as e:
+            return f"ERROR: {str(e)}"
 
     return render_template("forgot_password.html")
 
