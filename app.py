@@ -165,14 +165,14 @@ def forgot_password():
 
     if request.method == "POST":
 
-        try:
-            email = request.form["email"]
-            return f"STEP 2: {email}"
+        email = request.form["email"]
 
-        except Exception as e:
-            return f"ERROR: {e}"
+        user = User.query.filter_by(email=email).first()
+
+        return f"User found = {user is not None}"
 
     return render_template("forgot_password.html")
+    
 
 #----------------OTP VERIFICATION------------
 @app.route("/verify-otp/<email>", methods=["GET", "POST"])
