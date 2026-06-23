@@ -167,10 +167,8 @@ def forgot_password():
       
         email = request.form["email"]
         
-        return f"Email received: {email}"
-        
         user = User.query.filter_by(email=email).first()
-
+        return f"User found: {user is not None}"
         if user:
             otp = str(random.randint(100000, 999999))
 
