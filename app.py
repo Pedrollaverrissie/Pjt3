@@ -18,12 +18,17 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USE_SSL'] = False
+
 app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
 app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 
+app.config['MAIL_DEBUG'] = True
+app.config['MAIL_SUPPRESS_SEND'] = False
+app.config['MAIL_MAX_EMAILS'] = None
+app.config['MAIL_ASCII_ATTACHMENTS'] = False
 
-mail = Mail()
-mail.init_app(app)
+
+mail = Mail(app)
 
 otp_store = {}
 
@@ -191,7 +196,11 @@ def forgot_password():
             print("MAIL USER:", app.config['MAIL_USERNAME'])
             print("MAIL PASS:", app.config['MAIL_PASSWORD'])
 
-            mail.send(msg) 
+            try:
+                mail.send(msg)
+            except Exception as e:
+              print("MAIL ERROR:", e)
+              return "Email service failed on server"
 
             return redirect(f"/verify-otp/{email}")
 
