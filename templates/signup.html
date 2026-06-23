@@ -9,56 +9,59 @@
   
 </head>
 <body>
-<form action="/signup" method="POST">    
+   
 
- <div class="signup-page">
-   <div class="login-header">
-        <div class="top2">
-            <div class="login-logo"><img src="static/images/images (1).jfif" alt=""></div>
-            <div class="web-name">
-                <h3>DOLLAR MINE</h3>
-                <p>Sign up a new account</p>
-            </div>
-        </div>
-            <div class="notice2">
-                 <img class="admin" src="static/images/admin.jfif" alt="">
-                    <p>Invented by <span>Admin</span></p>
-            </div>
-   </div> 
-     
-    <div class="identity">
-        <label for="">Username <span class="bracket"></span></label>
-        <input name="username" type="text" placeholder="Your display name" required>
-
-        <label for="">Email</label>
-        <input type="email" placeholder="yourname@gmail.com" name="email" required>
-
-        <label for="">Phone number</label>
-        <input 
+    <div class="container-signup">
+         <form class="signup-page" action="/signup" method="POST">  
+            <div class="login-header">
+                    <div class="top2">
+                        <div class="login-logo"><img src="static/images/images (1).jfif" alt=""></div>
+                        <div class="web-name">
+                            <h3>DOLLAR MINE</h3>
+                            <p>Sign up a new account</p>
+                        </div>
+                    </div>
+                        <div class="notice2">
+                            <img class="admin" src="static/images/admin.jfif" alt="">
+                                <p>Invented by <span>Admin</span></p>
+                        </div>
+            </div> 
             
-            type="tel" 
-            name="phone" 
-            placeholder="07XXXXXXXX or 01XXXXXXXX"
-            pattern="^(07|01)\d{8}$"
-            required
-            >
-          
+            <div class="identity">
+                <label for="">Username <span class="bracket"></span></label>
+                <input name="username" type="text" placeholder="Your display name" required>
 
-        <label for="">Password</label>
-        <div class="show-password2">
-               <input type="password"  id="password" placeholder="Min. 6 characters" name="password" required>
-               <div class="eye2" onclick="togglePassword()" ><img id="eyeIcon"  src="static/images/close-eye.jfif" alt=""></div> 
-        </div>
+                <label for="">Email</label>
+                <input type="email" placeholder="yourname@gmail.com" name="email" required>
 
-       
-         <div class="checkbox2">
-             <input type="checkbox">
-             <p>I agree to the <span class="signup-span">Terms of Service </span>and <span class="signup-span">No-Refund Policy</span></p>
-         </div>
-    </div>
-    <button class="create-account" type="submit">Create Account</button>
-    <div class="signup-line"></div>
-    <p class="signup-root">Already  have an account? <a href="/login" target="_blank">Sign in</a></span></p>
- </form>              
+                <label for="">Phone number</label>
+                <input 
+                    
+                    type="tel" 
+                    name="phone" 
+                    placeholder="07XXXXXXXX or 01XXXXXXXX"
+                    pattern="^(07|01)\d{8}$"
+                    required
+                    >
+                
+
+                <label for="">Password</label>
+                <div class="show-password2">
+                    <input type="password"  id="password" placeholder="Min. 6 characters" name="password" required>
+                    <div class="eye2" onclick="togglePassword()" ><img id="eyeIcon"  src="static/images/close-eye.jfif" alt=""></div> 
+                </div>
+
+            
+                <div class="checkbox2">
+                    <input type="checkbox" name="terms" require>
+                    <p>I agree to the <span class="signup-span">Terms of Service </span>and <span class="signup-span">No-Refund Policy</span></p>
+                </div>
+            </div>
+
+            <button class="create-account" type="submit">Create Account</button>
+            <div class="signup-line"></div>
+            <p class="signup-root">Already  have an account? <a href="/login" target="_blank">Sign in</a></span></p>
+        </form>    
+    </div>      
 </body>
 </html>
