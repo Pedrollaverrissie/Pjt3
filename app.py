@@ -168,15 +168,14 @@ def forgot_password():
         email = request.form["email"]
         
         user = User.query.filter_by(email=email).first()
-        return f"User found: {user is not None}"
-        if user:
-            otp = str(random.randint(100000, 999999))
+        otp = str(random.randint(100000, 999999))
 
-            otp_store[email] = {
-                "otp": otp,
-                "time": time.time()
-            }
-
+        otp_store[email] = {
+            "otp": otp,
+            "time": time.time()
+        }
+        
+        return redirect(f"/verify-otp/{email}")
             msg = Message(
                 "Password Reset OTP",
                 sender=app.config['MAIL_USERNAME'],
