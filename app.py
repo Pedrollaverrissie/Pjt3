@@ -171,7 +171,13 @@ def forgot_password():
 
         otp = str(random.randint(100000, 999999))
 
-        return f"OTP = {otp}"
+        msg = Message(
+            "Password Reset OTP",
+            sender=app.config['MAIL_USERNAME'],
+            recipients=[email]
+        )
+
+        return "Message created successfully"
 
     return render_template("forgot_password.html")
 
