@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body style="background: rgb(208, 247, 250);">
+    
+        <div class="checkbox-alert" id="alertBox" >
+            <img src="static/images/alert.jfif" alt="">
+            <p>You must agree to the terms and conditons</p>
+             <a href="/signup">
+                 <button class="alert-cancel" onclick="alertClose()">&#215</button>
+
+             </a>
+           
+        </div>
+        
+       
+        
+</body>
+</html>

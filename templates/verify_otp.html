@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify OTP</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body style="background: rgba(6, 10, 10, 0.932);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+">
+
+    <div class="verify-otp">
+                
+                <h5>ENTER THE OTP CODE SENT TO <br><br><span>{{ email }}</span></h5>
+
+            
+
+                <form method="POST">
+                    <input type="text" name="otp" placeholder="Enter OTP">
+                    <button type="submit">VERIFY</button>
+                </form>
+
+                <p>Didn't get code?</p>
+                <a href="/resend-otp/{{ email }}">Resend OTP</a>
+                <p>OTP expires in: <span id="timer">05:00</span></p>
+
+
+
+     </div>
+     <script>
+        
+document.addEventListener("DOMContentLoaded", function () {
+
+    let timeLeft = 300; // 5 minutes
+    const timerDisplay = document.getElementById("timer");
+
+    function updateTimer() {
+
+        let minutes = Math.floor(timeLeft / 60);
+        let seconds = timeLeft % 60;
+
+        if (seconds < 10) seconds = "0" + seconds;
+
+        timerDisplay.textContent = minutes + ":" + seconds;
+
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            timerDisplay.textContent = "Expired";
+        }
+
+        timeLeft--;
+    }
+
+    const countdown = setInterval(updateTimer, 1000);
+    updateTimer();
+});
+     </script>
+</body>
+</html>

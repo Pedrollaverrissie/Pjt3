@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+   <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+    <div class="otp-expired">
+           <h2>OTP Expired</h2>
+            <p>Your OTP has expired. Please request a new one.</p>
+            <a href="/forgot-password">Try again</a>
+    </div>
+</body>
+</html>
