@@ -4,3 +4,4 @@ Flask-Login
 python-dotenv
 werkzeug
 gunicorn
+Flask-Mail==0.10.0
