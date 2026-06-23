@@ -159,42 +159,17 @@ def logout():
 
 
 
-#--------------FORGOT PASSWORD-------------
-#--------------FORGOT PASSWORD-------------
+#--------------FORGOT PASSWORD------------
 @app.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
 
     if request.method == "POST":
 
-        email = request.form["email"]
-
-        user = User.query.filter_by(email=email).first()
-
-        if not user:
-            return "Email not found"
-
-        otp = str(random.randint(100000, 999999))
-
-        otp_store[email] = {
-            "otp": otp,
-            "time": time.time()
-        }
-
         try:
-            msg = Message(
-                "Password Reset OTP",
-                sender=app.config['MAIL_USERNAME'],
-                recipients=[email]
-            )
-
-            msg.body = f"Your OTP code is: {otp}"
-
-            mail.send(msg)
-
-            return redirect(f"/verify-otp/{email}")
+            return "STEP 1"
 
         except Exception as e:
-            return f"MAIL ERROR: {str(e)}"
+            return f"ERROR: {e}"
 
     return render_template("forgot_password.html")
 
