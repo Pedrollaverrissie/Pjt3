@@ -135,7 +135,6 @@ def payment():
 
         phone = request.form['phone'].strip()
 
-        # Convert 07xxxxxxxx to 2547xxxxxxxx
         if phone.startswith("0"):
             phone = "254" + phone[1:]
 
@@ -148,8 +147,11 @@ def payment():
 
             print("IntaSend Response:", response)
 
+            invoice_id = response["invoice"]["invoice_id"]
+
             payment = Payment(
                 phone=phone,
+                transaction_code=invoice_id,
                 amount=10,
                 status='pending'
             )
@@ -320,8 +322,8 @@ def webhook():
         elif state == "FAILED":
             payment.status = "failed"
 
-        elif state == "PROCESSING":
-            payment.status = "processing"
+        elif state in ["PENDING", "PROCESSING"]:
+            payment.status = state.lower()
 
         db.session.commit()
 
