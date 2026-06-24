@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from werkzeug.security import generate_password_hash, check_password_hash
 import re, random ,time
 from flask_mail import Mail, Message
-
+from flask import request, jsonify
 from models import db, User, Payment
 
 from intasend import APIService
@@ -306,8 +306,17 @@ def resend_otp(email):
 
     return redirect(f"/verify-otp/{email}")
 
+#--------------WEBHOOK------------------
 
 
+@app.route("/webhook", methods=["POST"])
+def webhook():
+    data = request.get_json()
+
+    print("WEBHOOK RECEIVED:")
+    print(data)
+
+    return jsonify({"status": "received"}), 200
 
 
 if __name__ == "__main__":
