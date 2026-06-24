@@ -208,15 +208,8 @@ def forgot_password():
 
             msg.body = f"Your OTP is {otp}"
 
-            try:
-                print("Before mail.send()")
-                mail.send(msg)
-                print("After mail.send()")
-            except Exception as e:
-                import traceback
-                traceback.print_exc()
-                print("MAIL ERROR:", repr(e))
-                return str(e)
+            print("Skipping email send")
+            return "OTP generated"
 
         except Exception as e:
             import traceback
