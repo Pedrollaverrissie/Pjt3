@@ -10,7 +10,7 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
-    <form action="/pay" method="POST">
+    <form action="/payment" method="POST">
         <div class="payment-page">
             <div class="payment-top"> 
                 <div class="transact">
@@ -31,17 +31,8 @@
                          name="phone"
                          placeholder="2547XXXXXXXX"
                        required>
-                    >
+                    
                 </div>
-                <div class="transaction-code">
-                    <label>M-Pesa Transaction Code</label>
-                    <input
-                        type="text"
-                        name="transaction_code"
-                        placeholder="e.g. SGR8K9M123"
-                        required>
-                </div>
-
                 <div class="payment-line"></div>
 
                 <div class="fee">
