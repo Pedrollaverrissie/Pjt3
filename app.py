@@ -4,8 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import re, random ,time
 from flask_mail import Mail, Message
 from flask import request, jsonify
-from models import db, User, Payment
-
+from models import db, User, Payment, PendingUser
 from intasend import APIService
 from dotenv import load_dotenv
 import os
@@ -86,14 +85,14 @@ def signup():
 
         hashed_pw = generate_password_hash(request.form["password"])
 
-        new_user = User(
+        pending_user = PendingUser(
             username=request.form["username"],
             email=email,
             phone=phone,
             password=hashed_pw
         )
-
-        db.session.add(new_user)
+        
+        db.session.add(pending_user)
         db.session.commit()
         print("USER SAVED:")
         print(new_user.username)
