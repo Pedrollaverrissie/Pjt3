@@ -1,37 +1,52 @@
 from flask import Flask, render_template, request, redirect
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-import re, random ,time, os ,ssl
+import re, random ,time
 from flask_mail import Mail, Message
 
 from models import db, User, Payment
 
+from intasend import APIService
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
 app = Flask(__name__)
 
-app.secret_key = "secret123"
+from flask import jsonify
+
+@app.route("/webhook", methods=["POST"])
+def webhook():
+
+    data = request.get_json()
+
+    print("WEBHOOK RECEIVED:")
+    print(data)
+
+    return jsonify({"status": "received"}), 200
+
+app.secret_key = os.getenv("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+INTASEND_PUBLISHABLE_KEY = os.getenv("INTASEND_PUBLISHABLE_KEY")
+INTASEND_SECRET_KEY = os.getenv("INTASEND_SECRET_KEY")
+
+service = APIService(
+    token=INTASEND_SECRET_KEY,
+    publishable_key=INTASEND_PUBLISHABLE_KEY,
+    test=False
+)
+
 # ------------MAIL CONFIGURATION---------------
-app.config['MAIL_SERVER'] = 'smtp-relay.brevo.com'
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
-
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-
+app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
 app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 
-app.config["MAIL_DEFAULT_SENDER"] = "petersongitonga02@gmail.com"
-
-app.config['MAIL_DEBUG'] = False
-app.config['MAIL_SUPPRESS_SEND'] = False
-app.config['MAIL_MAX_EMAILS'] = None
-app.config['MAIL_ASCII_ATTACHMENTS'] = False
-
-
 mail = Mail(app)
-
 otp_store = {}
 
 db.init_app(app)
@@ -39,9 +54,6 @@ db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
-
-print("MAIL_USERNAME:", os.getenv("MAIL_USERNAME"))
-print("MAIL_PASSWORD exists:", bool(os.getenv("MAIL_PASSWORD")))
 
 #-----------USER LOADER--------------
 
@@ -127,25 +139,41 @@ def login():
     return render_template("login.html")
 
 #--------------PAYMENT-----------------
+
 @app.route('/payment', methods=['GET', 'POST'])
 def payment():
 
     if request.method == "POST":
 
-        phone = request.form['phone']
-        transaction_code = request.form['transaction_code']
+        phone = request.form['phone'].strip()
 
-        payment = Payment(
-            phone=phone,
-            transaction_code=transaction_code,
-            amount=100,
-            status='approved'
-        )
+        # Convert 07xxxxxxxx to 2547xxxxxxxx
+        if phone.startswith("0"):
+            phone = "254" + phone[1:]
 
-        db.session.add(payment)
-        db.session.commit()
-        
-        return redirect("/login")
+        try:
+            response = service.collect.mpesa_stk_push(
+                phone_number=phone,
+                amount=10,
+                narrative="Account Activation"
+            )
+
+            print("IntaSend Response:", response)
+
+            payment = Payment(
+                phone=phone,
+                amount=10,
+                status='pending'
+            )
+
+            db.session.add(payment)
+            db.session.commit()
+
+            return redirect("/login")
+
+        except Exception as e:
+            print("Payment Error:", str(e))
+            return f"Payment failed: {str(e)}"
 
     return render_template("payment.html")
 
@@ -177,55 +205,30 @@ def logout():
 @app.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
 
-    print("Route entered")
-
     if request.method == "POST":
 
-        print("POST received")
+        email = request.form["email"]
+        user = User.query.filter_by(email=email).first()
 
-        try:
-            email = request.form["email"]
-            print("Email:", email)
-
-            user = User.query.filter_by(email=email).first()
-            print("User lookup done")
-
-            if not user:
-                return "Email not found"
-
+        if user:
             otp = str(random.randint(100000, 999999))
-            print("OTP generated")
 
             otp_store[email] = {
                 "otp": otp,
                 "time": time.time()
             }
 
-            print("Creating message")
-
             msg = Message(
                 "Password Reset OTP",
-                sender=app.config["MAIL_DEFAULT_SENDER"],
+                sender=app.config['MAIL_USERNAME'],
                 recipients=[email]
             )
 
-            msg.body = f"Your OTP is {otp}"
+            msg.body = f"Your OTP code is: {otp}"
 
-            print("Before mail.send()")
             mail.send(msg)
-            print("After mail.send()")
-
-            print("MAIL_SERVER =", app.config['MAIL_SERVER'])
-            print("MAIL_PORT =", app.config['MAIL_PORT'])
-            print("MAIL_USERNAME =", app.config['MAIL_USERNAME'])
 
             return redirect(f"/verify-otp/{email}")
-
-        except Exception as e:
-            import traceback
-            traceback.print_exc()
-            print("ERROR:", e)
-            return str(e)
 
     return render_template("forgot_password.html")
 
@@ -293,7 +296,7 @@ def resend_otp(email):
 
     msg = Message(
         "New OTP Code",
-        sender=app.config["MAIL_DEFAULT_SENDER"],
+        sender=app.config['MAIL_USERNAME'],
         recipients=[email]
     )
 
