@@ -362,6 +362,19 @@ def check_payment(invoice_id):
 
     return jsonify({"status": "not_found"})
 
+#-----------TENPORARY ROUT---------------
+@app.route("/all-users")
+def all_users():
+
+    users = User.query.all()
+
+    output = ""
+
+    for user in users:
+        output += f"{user.id} | {user.username} | {user.email}<br>"
+
+    return output
+
 
 if __name__ == "__main__":
     app.run(debug=True)
