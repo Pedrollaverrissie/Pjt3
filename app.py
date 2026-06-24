@@ -368,12 +368,12 @@ def all_users():
 
     users = User.query.all()
 
-    output = ""
+    result = ""
 
     for user in users:
-        output += f"{user.id} | {user.username} | {user.email}<br>"
+        result += f"{user.id} | {user.username} | {user.email}<br>"
 
-    return output
+    return result
 
 
 if __name__ == "__main__":
