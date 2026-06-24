@@ -12,20 +12,24 @@
             justify-content:center;
             align-items:center;
             height:100vh;
-            background:#f5f5f5;
+            background:#020202;
         }
 
         .container{
-            background:white;
+            background:rgb(1, 12, 19);
             padding:30px;
             border-radius:10px;
-            box-shadow:0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 4px #dcf803;
             text-align:center;
             width:350px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
         }
 
         h2{
-            color:#28a745;
+            color:#dcf803;
+        }
+        p{
+            color: rgb(249, 233, 233);
         }
 
         #status{
@@ -36,7 +40,7 @@
         .loader{
             margin:20px auto;
             border:5px solid #f3f3f3;
-            border-top:5px solid #28a745;
+            border-top:5px solid #dcf803;
             border-radius:50%;
             width:40px;
             height:40px;
@@ -107,7 +111,7 @@ setInterval(() => {
         else if (data.status === "failed") {
 
             statusElement.innerText =
-                "Payment cancelled or failed.";
+                "Payment cancelled or failed. Returning to payment page...";
 
             setTimeout(() => {
                 window.location.href = "/payment";
