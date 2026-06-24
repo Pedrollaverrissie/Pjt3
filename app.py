@@ -95,7 +95,11 @@ def signup():
 
         db.session.add(new_user)
         db.session.commit()
-
+        print("USER SAVED:")
+        print(new_user.username)
+        print(new_user.email)
+        print(new_user.phone)
+        
         return redirect("/payment")
 
     return render_template("signup.html")
