@@ -312,9 +312,14 @@ def webhook():
     invoice_id = data.get("invoice_id")
     state = data.get("state")
 
+    print("INVOICE:", invoice_id)
+    print("STATE:", state)
+
     payment = Payment.query.filter_by(
         transaction_code=invoice_id
     ).first()
+
+    print("PAYMENT FOUND:", payment)
 
     if payment:
 
@@ -329,6 +334,8 @@ def webhook():
 
         db.session.commit()
 
+        print("UPDATED STATUS TO:", payment.status)
+
     return jsonify({"status": "received"}), 200
 
 
@@ -341,10 +348,15 @@ def check_payment(invoice_id):
         transaction_code=invoice_id
     ).first()
 
-    if not payment:
-        return jsonify({"status": "not_found"})
+    print("CHECKING:", invoice_id)
 
-    return jsonify({"status": payment.status})
+    if payment:
+        print("CURRENT STATUS:", payment.status)
+        return jsonify({"status": payment.status})
+
+    print("NOT FOUND")
+
+    return jsonify({"status": "not_found"})
 
 
 if __name__ == "__main__":
