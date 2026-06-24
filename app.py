@@ -155,6 +155,7 @@ def payment():
 
             payment = Payment(
                 phone=phone,
+                email=email,
                 transaction_code=invoice_id,
                 amount=10,
                 status="pending"
@@ -327,12 +328,35 @@ def webhook():
     if payment:
 
         if state in ["COMPLETE", "COMPLETED", "SUCCESSFUL"]:
+
             payment.status = "approved"
 
+            pending_user = PendingUser.query.filter_by(
+                phone=payment.phone
+            ).first()
+
+            if pending_user:
+
+                new_user = User(
+                    username=pending_user.username,
+                    email=pending_user.email,
+                    phone=pending_user.phone,
+                    password=pending_user.password
+                )
+
+                db.session.add(new_user)
+
+                db.session.delete(pending_user)
+
+                print("USER CREATED AFTER PAYMENT:",
+                      pending_user.username)
+
         elif state == "FAILED":
+
             payment.status = "failed"
 
         elif state in ["PENDING", "PROCESSING"]:
+
             payment.status = state.lower()
 
         db.session.commit()
