@@ -174,37 +174,53 @@ def logout():
 @app.route("/forgot-password", methods=["GET", "POST"])
 def forgot_password():
 
+    print("Route entered")
+
     if request.method == "POST":
+
+        print("POST received")
 
         try:
             email = request.form["email"]
+            print("Email:", email)
 
             user = User.query.filter_by(email=email).first()
+            print("User lookup done")
 
             if not user:
                 return "Email not found"
 
             otp = str(random.randint(100000, 999999))
+            print("OTP generated")
 
             otp_store[email] = {
                 "otp": otp,
                 "time": time.time()
             }
 
+            print("Creating message")
+
             msg = Message(
                 "Password Reset OTP",
-                sender=app.config['MAIL_USERNAME'],
+                sender=app.config["MAIL_USERNAME"],
                 recipients=[email]
             )
 
-            msg.body = f"Your OTP code is: {otp}"
+            msg.body = f"Your OTP is {otp}"
+
+            print("Before mail.send()")
 
             mail.send(msg)
 
-            return redirect(f"/verify-otp/{email}")
+            print("After mail.send()")
+
+            return redirect(url_for("verify_otp"))
 
         except Exception as e:
-            return f"ERROR: {str(e)}"
+            import traceback
+            traceback.print_exc()
+            print("ERROR:", e)
+            return str(e)
 
     return render_template("forgot_password.html")
 
