@@ -135,6 +135,7 @@ def payment():
 
         phone = request.form['phone'].strip()
 
+        # Convert 07xxxxxxxx to 2547xxxxxxxx
         if phone.startswith("0"):
             phone = "254" + phone[1:]
 
@@ -153,13 +154,16 @@ def payment():
                 phone=phone,
                 transaction_code=invoice_id,
                 amount=10,
-                status='pending'
+                status="pending"
             )
 
             db.session.add(payment)
             db.session.commit()
 
-            return redirect("/login")
+            return render_template(
+                "payment_pending.html",
+                invoice_id=invoice_id
+            )
 
         except Exception as e:
             print("Payment Error:", str(e))
@@ -297,8 +301,6 @@ def resend_otp(email):
     return redirect(f"/verify-otp/{email}")
 
 #--------------WEBHOOK------------------
-
-
 @app.route("/webhook", methods=["POST"])
 def webhook():
 
@@ -316,7 +318,7 @@ def webhook():
 
     if payment:
 
-        if state == "COMPLETE":
+        if state in ["COMPLETE", "COMPLETED", "SUCCESSFUL"]:
             payment.status = "approved"
 
         elif state == "FAILED":
@@ -327,7 +329,22 @@ def webhook():
 
         db.session.commit()
 
-    return {"status": "received"}, 200
+    return jsonify({"status": "received"}), 200
+
+
+#-------------PENDING PAYMENT/ CHECK PAYMENT------------------
+
+@app.route("/check-payment/<invoice_id>")
+def check_payment(invoice_id):
+
+    payment = Payment.query.filter_by(
+        transaction_code=invoice_id
+    ).first()
+
+    if not payment:
+        return jsonify({"status": "not_found"})
+
+    return jsonify({"status": payment.status})
 
 
 if __name__ == "__main__":
