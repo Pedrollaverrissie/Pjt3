@@ -358,24 +358,35 @@ def webhook():
             payment.status = "approved"
 
             pending_user = PendingUser.query.filter_by(
-                phone=payment.phone
+                email=payment.email
             ).first()
+
+            print("PAYMENT EMAIL:", payment.email)
+            print("PENDING USER:", pending_user)
 
             if pending_user:
 
-                new_user = User(
-                    username=pending_user.username,
-                    email=pending_user.email,
-                    phone=pending_user.phone,
-                    password=pending_user.password
-                )
+                existing_user = User.query.filter_by(
+                    email=pending_user.email
+                ).first()
 
-                db.session.add(new_user)
+                if not existing_user:
+
+                    new_user = User(
+                        username=pending_user.username,
+                        email=pending_user.email,
+                        phone=pending_user.phone,
+                        password=pending_user.password
+                    )
+
+                    db.session.add(new_user)
+
+                    print(
+                        "USER CREATED:",
+                        pending_user.username
+                    )
 
                 db.session.delete(pending_user)
-
-                print("USER CREATED AFTER PAYMENT:",
-                      pending_user.username)
 
         elif state == "FAILED":
 
@@ -390,26 +401,6 @@ def webhook():
         print("UPDATED STATUS TO:", payment.status)
 
     return jsonify({"status": "received"}), 200
-
-
-#-------------PENDING PAYMENT/ CHECK PAYMENT------------------
-
-@app.route("/check-payment/<invoice_id>")
-def check_payment(invoice_id):
-
-    payment = Payment.query.filter_by(
-        transaction_code=invoice_id
-    ).first()
-
-    print("CHECKING:", invoice_id)
-
-    if payment:
-        print("CURRENT STATUS:", payment.status)
-        return jsonify({"status": payment.status})
-
-    print("NOT FOUND")
-
-    return jsonify({"status": "not_found"})
 
 #-----------TENPORARY ROUT---------------
 @app.route("/all-users")
