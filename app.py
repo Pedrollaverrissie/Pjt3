@@ -6,7 +6,6 @@ from flask_mail import Mail, Message
 
 from models import db, User, Payment
 
-
 app = Flask(__name__)
 
 app.secret_key = "secret123"
