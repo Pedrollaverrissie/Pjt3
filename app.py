@@ -368,10 +368,16 @@ def all_users():
 
     users = User.query.all()
 
-    result = ""
+    result = "<h2>Users</h2>"
 
     for user in users:
-        result += f"{user.id} | {user.username} | {user.email}<br>"
+        result += f"""
+        ID: {user.id}<br>
+        Username: {user.username}<br>
+        Email: {user.email}<br>
+        Phone: {user.phone}<br>
+        <hr>
+        """
 
     return result
 
