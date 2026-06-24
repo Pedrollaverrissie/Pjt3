@@ -17,6 +17,7 @@ class Payment(db.Model):
     transaction_code = db.Column(db.String(50), nullable=True)
     amount = db.Column(db.Integer, default=10)
     status = db.Column(db.String(20), default="pending")
+    email = db.Column(db.String(120))
 
 
 class PendingUser(db.Model):
