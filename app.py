@@ -51,6 +51,7 @@ def load_user(user_id):
 # ---------------- CREATE DB ----------------
 with app.app_context():
     db.create_all()
+    print("DATABASE TABLES CREATED")
 
 # ---------------- HOME ----------------
 @app.route("/")
@@ -65,6 +66,8 @@ def signup():
         
         email = request.form["email"]
         phone = request.form["phone"]
+        if phone.startswith("0"):
+            phone = "254" + phone[1:]
         terms = request.form.get("terms")        # email regex
         email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
 
@@ -95,9 +98,9 @@ def signup():
         db.session.add(pending_user)
         db.session.commit()
         print("USER SAVED:")
-        print(new_user.username)
-        print(new_user.email)
-        print(new_user.phone)
+        print(pending_user.username)
+        print(pending_user.email)
+        print(pending_user.phone)
         
         return redirect("/payment")
 
