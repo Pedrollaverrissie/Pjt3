@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Waiting for Payment</title>
+</head>
+<body>
+
+    <h2>STK Push Sent</h2>
+
+    <p>
+        Check your phone and enter your M-Pesa PIN.
+    </p>
+
+    <p id="status">
+        Waiting for payment...
+    </p>
+
+<script>
+
+const invoiceId = "{{ invoice_id }}";
+
+setInterval(() => {
+
+    fetch(`/check-payment/${invoiceId}`)
+    .then(response => response.json())
+    .then(data => {
+
+        document.getElementById("status").innerText =
+            "Payment Status: " + data.status;
+
+        if(data.status === "approved"){
+
+            window.location.href = "/login";
+
+        }
+
+    });
+
+}, 3000);
+
+</script>
+
+</body>
+</html>
