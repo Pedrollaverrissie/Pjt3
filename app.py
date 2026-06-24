@@ -13,13 +13,14 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # ------------MAIL CONFIGURATION---------------
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_SERVER'] = 'smtp-relay.brevo.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_TIMEOUT'] = 10
 app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
 app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
+app.config["MAIL_DEFAULT_SENDER"] = "petersongitonga02@gmail.com"
 
 app.config['MAIL_DEBUG'] = True
 app.config['MAIL_SUPPRESS_SEND'] = False
@@ -202,13 +203,17 @@ def forgot_password():
 
             msg = Message(
                 "Password Reset OTP",
-                sender=app.config["MAIL_USERNAME"],
+                sender=app.config["MAIL_DEFAULT_SENDER"],
                 recipients=[email]
             )
 
             msg.body = f"Your OTP is {otp}"
 
+            print("Before mail.send()")
             mail.send(msg)
+            print("After mail.send()")
+
+            return redirect(f"/verify-otp/{email}")
 
         except Exception as e:
             import traceback
@@ -282,7 +287,7 @@ def resend_otp(email):
 
     msg = Message(
         "New OTP Code",
-        sender=app.config['MAIL_USERNAME'],
+        sender=app.config["MAIL_DEFAULT_SENDER"],
         recipients=[email]
     )
 
