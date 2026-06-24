@@ -14,18 +14,6 @@ load_dotenv()
 
 app = Flask(__name__)
 
-from flask import jsonify
-
-@app.route("/webhook", methods=["POST"])
-def webhook():
-
-    data = request.get_json()
-
-    print("WEBHOOK RECEIVED:")
-    print(data)
-
-    return jsonify({"status": "received"}), 200
-
 app.secret_key = os.getenv("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -311,12 +299,33 @@ def resend_otp(email):
 
 @app.route("/webhook", methods=["POST"])
 def webhook():
+
     data = request.get_json()
 
     print("WEBHOOK RECEIVED:")
     print(data)
 
-    return jsonify({"status": "received"}), 200
+    invoice_id = data.get("invoice_id")
+    state = data.get("state")
+
+    payment = Payment.query.filter_by(
+        transaction_code=invoice_id
+    ).first()
+
+    if payment:
+
+        if state == "COMPLETE":
+            payment.status = "approved"
+
+        elif state == "FAILED":
+            payment.status = "failed"
+
+        elif state == "PROCESSING":
+            payment.status = "processing"
+
+        db.session.commit()
+
+    return {"status": "received"}, 200
 
 
 if __name__ == "__main__":
