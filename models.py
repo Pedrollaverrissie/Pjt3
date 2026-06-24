@@ -17,3 +17,16 @@ class Payment(db.Model):
     transaction_code = db.Column(db.String(50), nullable=True)
     amount = db.Column(db.Integer, default=10)
     status = db.Column(db.String(20), default="pending")
+
+
+class PendingUser(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    username = db.Column(db.String(100), nullable=False)
+
+    email = db.Column(db.String(120), nullable=False)
+
+    phone = db.Column(db.String(20), nullable=False)
+
+    password = db.Column(db.String(255), nullable=False)
