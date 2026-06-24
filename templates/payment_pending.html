@@ -111,11 +111,11 @@ setInterval(() => {
         else if (data.status === "failed") {
 
             statusElement.innerText =
-                "Payment cancelled or failed. Returning to payment page...";
+                "Payment cancelled or failed...";
 
             setTimeout(() => {
                 window.location.href = "/payment";
-            }, 3000);
+            }, 2000);
 
         }
 
