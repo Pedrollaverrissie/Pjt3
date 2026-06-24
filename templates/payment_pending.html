@@ -1,23 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Waiting for Payment</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Processing</title>
+
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+            background:#f5f5f5;
+        }
+
+        .container{
+            background:white;
+            padding:30px;
+            border-radius:10px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+            text-align:center;
+            width:350px;
+        }
+
+        h2{
+            color:#28a745;
+        }
+
+        #status{
+            margin-top:15px;
+            font-weight:bold;
+        }
+
+        .loader{
+            margin:20px auto;
+            border:5px solid #f3f3f3;
+            border-top:5px solid #28a745;
+            border-radius:50%;
+            width:40px;
+            height:40px;
+            animation:spin 1s linear infinite;
+        }
+
+        @keyframes spin{
+            0%{transform:rotate(0deg);}
+            100%{transform:rotate(360deg);}
+        }
+    </style>
 </head>
 <body>
 
-    <h2>STK Push Sent</h2>
+    <div class="container">
 
-    <p>
-        Check your phone and enter your M-Pesa PIN.
-    </p>
+        <h2>STK Push Sent</h2>
 
-    <p id="status">
-        Waiting for payment...
-    </p>
+        <p>
+            Check your phone and enter your M-Pesa PIN to complete payment.
+        </p>
+
+        <div class="loader"></div>
+
+        <p id="status">
+            Waiting for payment...
+        </p>
+
+    </div>
 
 <script>
 
 const invoiceId = "{{ invoice_id }}";
+
+const statusElement = document.getElementById("status");
 
 setInterval(() => {
 
@@ -25,14 +79,63 @@ setInterval(() => {
     .then(response => response.json())
     .then(data => {
 
-        document.getElementById("status").innerText =
-            "Payment Status: " + data.status;
+        if (data.status === "pending") {
 
-        if(data.status === "approved"){
-
-            window.location.href = "/login";
+            statusElement.innerText =
+                "Waiting for payment confirmation...";
 
         }
+
+        else if (data.status === "processing") {
+
+            statusElement.innerText =
+                "Processing payment...";
+
+        }
+
+        else if (data.status === "approved") {
+
+            statusElement.innerText =
+                "Payment successful! Redirecting to login...";
+
+            setTimeout(() => {
+                window.location.href = "/login";
+            }, 2000);
+
+        }
+
+        else if (data.status === "failed") {
+
+            statusElement.innerText =
+                "Payment cancelled or failed. Returning to payment page...";
+
+            setTimeout(() => {
+                window.location.href = "/payment";
+            }, 3000);
+
+        }
+
+        else if (data.status === "not_found") {
+
+            statusElement.innerText =
+                "Payment record not found.";
+
+        }
+
+        else {
+
+            statusElement.innerText =
+                "Status: " + data.status;
+
+        }
+
+    })
+    .catch(error => {
+
+        console.error(error);
+
+        statusElement.innerText =
+            "Connection error. Retrying...";
 
     });
 
