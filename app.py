@@ -61,32 +61,40 @@ def home():
 
 # ---------------- SIGNUP ----------------
 @app.route("/signup", methods=["GET", "POST"])
-def signup(): 
+def signup():
+
     if request.method == "POST":
-        
+
         email = request.form["email"]
         phone = request.form["phone"]
-        if phone.startswith("0"):
-            phone = "254" + phone[1:]
-        terms = request.form.get("terms")        # email regex
-        email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+        terms = request.form.get("terms")
 
-        # kenya phone validation
+        # Validation patterns
+        email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
         phone_pattern = r"^(07|01)\d{8}$"
 
         if not terms:
-         return render_template("checkbox_alert.html")
+            return render_template("checkbox_alert.html")
 
         if not re.match(email_pattern, email):
             return "Invalid email format!"
 
+        # Validate phone BEFORE conversion
         if not re.match(phone_pattern, phone):
             return "Invalid phone number!"
+
+        # Convert 07xxxxxxxx to 2547xxxxxxxx
+        if phone.startswith("0"):
+            phone = "254" + phone[1:]
+
         existing_user = User.query.filter_by(email=email).first()
+
         if existing_user:
             return "Email already exists! Please login."
 
-        hashed_pw = generate_password_hash(request.form["password"])
+        hashed_pw = generate_password_hash(
+            request.form["password"]
+        )
 
         pending_user = PendingUser(
             username=request.form["username"],
@@ -94,14 +102,16 @@ def signup():
             phone=phone,
             password=hashed_pw
         )
-        
+
         db.session.add(pending_user)
         db.session.commit()
+
+        print("SIGNUP PASSED VALIDATION")
         print("USER SAVED:")
         print(pending_user.username)
         print(pending_user.email)
         print(pending_user.phone)
-        
+
         return redirect("/payment")
 
     return render_template("signup.html")
