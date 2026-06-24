@@ -156,6 +156,15 @@ def payment():
             phone = "254" + phone[1:]
 
         try:
+
+            # Get latest pending user
+            pending_user = PendingUser.query.order_by(
+                PendingUser.id.desc()
+            ).first()
+
+            if not pending_user:
+                return "No pending signup found"
+
             response = service.collect.mpesa_stk_push(
                 phone_number=phone,
                 amount=10,
@@ -168,7 +177,7 @@ def payment():
 
             payment = Payment(
                 phone=phone,
-                email=email,
+                email=pending_user.email,
                 transaction_code=invoice_id,
                 amount=10,
                 status="pending"
@@ -176,6 +185,10 @@ def payment():
 
             db.session.add(payment)
             db.session.commit()
+
+            print("PAYMENT SAVED:")
+            print(payment.email)
+            print(payment.transaction_code)
 
             return render_template(
                 "payment_pending.html",
