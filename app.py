@@ -72,7 +72,7 @@ with app.app_context():
 # ---------------- HOME ----------------
 @app.route("/")
 def home():
-    return redirect("/signup")
+    return render_template("home.html")
 
 
 # ---------------- SIGNUP ----------------
