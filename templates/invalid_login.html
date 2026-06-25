@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Failed</title>
+    <style>
+        body{
+            font-family: Arial, sans-serif;
+            background:#f5f5f5;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+        }
+
+```
+    .box{
+        background:white;
+        padding:30px;
+        border-radius:10px;
+        text-align:center;
+        box-shadow:0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h2{
+        color:red;
+    }
+
+    a{
+        display:inline-block;
+        margin-top:15px;
+        text-decoration:none;
+        background:#007bff;
+        color:white;
+        padding:10px 20px;
+        border-radius:5px;
+    }
+
+    a:hover{
+        background:#0056b3;
+    }
+</style>
+```
+
+</head>
+<body>
+
+```
+<div class="box">
+    <h2>Invalid Username or Email</h2>
+    <p>The username, email, or password you entered is incorrect.</p>
+    <a href="{{ url_for('login') }}">Try Again</a>
+</div>
+```
+
+</body>
+</html>
