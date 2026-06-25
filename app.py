@@ -494,6 +494,16 @@ def payments():
     return html
 
 
+#---------------CHECKING IF DATA IS SAVED IN DB-----------------
+
+@app.route("/db-test")
+def db_test():
+    return f"""
+    Users: {User.query.count()}<br>
+    Pending Users: {PendingUser.query.count()}<br>
+    Payments: {Payment.query.count()}
+    """
+
 
 if __name__ == "__main__":
     app.run(debug=True)
