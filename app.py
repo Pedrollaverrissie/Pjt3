@@ -15,7 +15,12 @@ load_dotenv()
 
 app = Flask(__name__)
 
+app.secret_key = os.getenv("SECRET_KEY")
+
 database_url = os.getenv("DATABASE_URL")
+
+if not database_url:
+    raise Exception("DATABASE_URL environment variable is missing!")
 
 if database_url.startswith("postgres://"):
     database_url = database_url.replace(
@@ -24,13 +29,9 @@ if database_url.startswith("postgres://"):
         1
     )
 
-db = SQLAlchemy(app)
-
-app.secret_key = os.getenv("SECRET_KEY")
-
-
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db.init_app(app)
 
 INTASEND_PUBLISHABLE_KEY = os.getenv("INTASEND_PUBLISHABLE_KEY")
 INTASEND_SECRET_KEY = os.getenv("INTASEND_SECRET_KEY")
@@ -51,7 +52,7 @@ app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
 mail = Mail(app)
 otp_store = {}
 
-db.init_app(app)
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
