@@ -80,16 +80,23 @@ def home():
 # ---------------- SIGNUP ----------------
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+    # Get referral code from URL, e.g. /signup?ref=SN1
     ref = request.args.get("ref")
+
+    # Validate referral code
+    if ref:
+        referrer = User.query.filter_by(referral_code=ref).first()
+        if not referrer:
+            ref = None
+
     if request.method == "POST":
 
-        referral_code = request.form.get("referral_code")
         email = request.form["email"]
         phone = request.form["phone"]
         terms = request.form.get("terms")
-        
-        print("REFERRAL CODE:", referral_code)
-        
+
+        print("REFERRAL CODE:", ref)
+
         # Validation patterns
         email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
         phone_pattern = r"^(07|01)\d{8}$"
@@ -100,7 +107,6 @@ def signup():
         if not re.match(email_pattern, email):
             return "Invalid email format!"
 
-        # Validate phone BEFORE conversion
         if not re.match(phone_pattern, phone):
             return "Invalid phone number!"
 
@@ -117,12 +123,13 @@ def signup():
             request.form["password"]
         )
 
+        # Save pending user together with who referred them
         pending_user = PendingUser(
             username=request.form["username"],
             email=email,
             phone=phone,
             password=hashed_pw,
-            referred_by=referral_code
+            referred_by=ref
         )
 
         db.session.add(pending_user)
@@ -133,6 +140,7 @@ def signup():
         print(pending_user.username)
         print(pending_user.email)
         print(pending_user.phone)
+        print("REFERRED BY:", ref)
 
         return redirect("/payment")
 
@@ -421,15 +429,21 @@ def webhook():
                         username=pending_user.username,
                         email=pending_user.email,
                         phone=pending_user.phone,
-                        password=pending_user.password
+                        password=pending_user.password,
+                        referred_by=pending_user.referred_by
                     )
 
                     db.session.add(new_user)
 
-                    print(
-                        "USER CREATED:",
-                        pending_user.username
-                    )
+                    # Save first so PostgreSQL assigns an ID
+                    db.session.flush()
+
+                    # Generate referral code
+                    new_user.referral_code = f"SN{new_user.id}"
+
+                    print("USER CREATED:", pending_user.username)
+                    print("REFERRAL CODE:", new_user.referral_code)
+                    print("REFERRED BY:", new_user.referred_by)
 
                 db.session.delete(pending_user)
 
