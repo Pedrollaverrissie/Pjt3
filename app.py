@@ -138,7 +138,7 @@ def login():
             login_user(user)
             return redirect("/dashboard")
 
-        return "Invalid username/email or password"
+        return render_template("invalid_login.html")
 
     return render_template("login.html")
 
