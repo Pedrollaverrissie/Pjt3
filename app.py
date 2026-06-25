@@ -83,10 +83,13 @@ def signup():
     ref = request.args.get("ref")
     if request.method == "POST":
 
+        referral_code = request.form.get("referral_code")
         email = request.form["email"]
         phone = request.form["phone"]
         terms = request.form.get("terms")
-
+        
+        print("REFERRAL CODE:", referral_code)
+        
         # Validation patterns
         email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
         phone_pattern = r"^(07|01)\d{8}$"
@@ -119,6 +122,7 @@ def signup():
             email=email,
             phone=phone,
             password=hashed_pw
+            referred_by=referral_code
         )
 
         db.session.add(pending_user)
