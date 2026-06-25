@@ -5,9 +5,11 @@ import re, random ,time
 from flask_mail import Mail, Message
 from flask import request, jsonify
 from models import db, User, Payment, PendingUser
+from flask_sqlalchemy import SQLAlchemy
 from intasend import APIService
 from dotenv import load_dotenv
 import os
+
 
 load_dotenv()
 
