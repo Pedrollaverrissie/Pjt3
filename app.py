@@ -228,14 +228,30 @@ def payment():
 @login_required
 def dashboard():
 
-    payments = Payment.query.filter_by(phone=current_user.phone).all()
+    payments = Payment.query.filter_by(
+        phone=current_user.phone
+    ).all()
 
-    total_paid = sum(p.amount for p in payments if p.status == "approved")
+    total_paid = sum(
+        p.amount for p in payments
+        if p.status == "approved"
+    )
+
+    referral_link = (
+        f"https://pjt3.onrender.com/signup?ref="
+        f"{current_user.referral_code}"
+    )
+
+    total_referrals = User.query.filter_by(
+        referred_by=current_user.referral_code
+    ).count()
 
     return render_template(
         "dashboard.html",
         username=current_user.username,
-        main_amount=total_paid
+        main_amount=total_paid,
+        referral_link=referral_link,
+        total_referrals=total_referrals
     )
 
 # ---------------- LOGOUT ----------------
