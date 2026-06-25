@@ -1,4 +1,4 @@
-```python
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 import uuid
@@ -51,4 +51,4 @@ class PendingUser(db.Model):
         db.String(20),
         nullable=True
     )
-```
+
