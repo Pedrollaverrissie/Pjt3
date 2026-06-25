@@ -121,7 +121,7 @@ def signup():
             username=request.form["username"],
             email=email,
             phone=phone,
-            password=hashed_pw
+            password=hashed_pw,
             referred_by=referral_code
         )
 
