@@ -425,24 +425,23 @@ def check_payment(invoice_id):
 
 
 #-----------TENPORARY ROUT---------------
-@app.route("/all-users")
-def all_users():
+@app.route("/users")
+def users():
+    all_users = User.query.all()
 
-    users = User.query.all()
+    html = ""
 
-    result = "<h2>Users</h2>"
-
-    for user in users:
-        result += f"""
-        ID: {user.id}<br>
-        Username: {user.username}<br>
-        Email: {user.email}<br>
-        Phone: {user.phone}<br>
-        <hr>
+    for user in all_users:
+        html += f"""
+        <p>
+        {user.id} |
+        {user.username} |
+        {user.email} |
+        {user.phone}
+        </p>
         """
 
-    return result
-
+    return html
 
 if __name__ == "__main__":
     app.run(debug=True)
