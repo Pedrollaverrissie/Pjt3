@@ -1,14 +1,29 @@
+```python
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+import uuid
 
 db = SQLAlchemy()
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
     username = db.Column(db.String(150))
     email = db.Column(db.String(150), unique=True)
     phone = db.Column(db.String(20))
     password = db.Column(db.String(200))
+
+    # Referral System
+    referral_code = db.Column(
+        db.String(20),
+        unique=True,
+        default=lambda: str(uuid.uuid4())[:8]
+    )
+
+    referred_by = db.Column(
+        db.String(20),
+        nullable=True
+    )
 
 
 class Payment(db.Model):
@@ -31,3 +46,9 @@ class PendingUser(db.Model):
     phone = db.Column(db.String(20), nullable=False)
 
     password = db.Column(db.String(255), nullable=False)
+
+    referred_by = db.Column(
+        db.String(20),
+        nullable=True
+    )
+```
