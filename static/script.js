@@ -125,18 +125,28 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /*----------------COPYING LINK--------------------*/
-    function copyReferralLink() {
+  function copyReferralLink() {
 
-    const link = document.getElementById("referralLink");
+    const input = document.getElementById("referralLink");
 
-    navigator.clipboard.writeText(link.value)
+    if (!input) {
+        alert("Referral link not found.");
+        return;
+    }
+
+    navigator.clipboard.writeText(input.value)
         .then(() => {
             alert("Referral link copied!");
         })
         .catch(err => {
             console.error(err);
-            alert("Failed to copy link.");
-        });
 
+            // Fallback for browsers where Clipboard API isn't available
+            input.select();
+            input.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+
+            alert("Referral link copied!");
+        });
 }
 
