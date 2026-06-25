@@ -124,3 +124,19 @@ document.addEventListener("DOMContentLoaded", function () {
     updateTimer();
 });
 
+/*----------------COPYING LINK--------------------*/
+    function copyReferralLink() {
+
+    const link = document.getElementById("referralLink");
+
+    navigator.clipboard.writeText(link.value)
+        .then(() => {
+            alert("Referral link copied!");
+        })
+        .catch(err => {
+            console.error(err);
+            alert("Failed to copy link.");
+        });
+
+}
+
