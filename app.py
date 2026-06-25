@@ -460,6 +460,26 @@ def debug_pending():
 
     return output
 
+#-----------------SEE PAYMENTS-----------------------------
+@app.route("/payments")
+def payments():
+    payments = Payment.query.all()
+
+    html = ""
+
+    for p in payments:
+        html += f"""
+        <p>
+        {p.id} |
+        {p.email} |
+        {p.phone} |
+        {p.transaction_code} |
+        {p.status}
+        </p>
+        """
+
+    return html
+
 
 
 if __name__ == "__main__":
