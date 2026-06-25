@@ -9,6 +9,7 @@ from flask_sqlalchemy import SQLAlchemy
 from intasend import APIService
 from dotenv import load_dotenv
 import os
+from datetime import timedelta
 
 
 load_dotenv()
@@ -32,6 +33,7 @@ if database_url.startswith("postgres://"):
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db.init_app(app)
+app.config["REMEMBER_COOKIE_DURATION"] = timedelta(days=30)
 
 INTASEND_PUBLISHABLE_KEY = os.getenv("INTASEND_PUBLISHABLE_KEY")
 INTASEND_SECRET_KEY = os.getenv("INTASEND_SECRET_KEY")
@@ -151,7 +153,11 @@ def login():
         ).first()
 
         if user and check_password_hash(user.password, request.form["password"]):
-            login_user(user)
+
+            remember = request.form.get("remember_me") == "on"
+
+            login_user(user, remember=remember)
+
             return redirect("/dashboard")
 
         return render_template("invalid_login.html")
