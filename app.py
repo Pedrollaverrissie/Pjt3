@@ -442,6 +442,25 @@ def users():
         """
 
     return html
+#--------------debugging-------------------------
+@app.route("/debug-pending")
+def debug_pending():
+
+    pending_users = PendingUser.query.all()
+
+    output = ""
+
+    for user in pending_users:
+        output += f"""
+        ID: {user.id}<br>
+        Username: {user.username}<br>
+        Email: {user.email}<br>
+        Phone: {user.phone}<br><hr>
+        """
+
+    return output
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
