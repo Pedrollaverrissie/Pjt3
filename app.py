@@ -80,7 +80,7 @@ def home():
 # ---------------- SIGNUP ----------------
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-
+    ref = request.args.get("ref")
     if request.method == "POST":
 
         email = request.form["email"]
@@ -132,7 +132,10 @@ def signup():
 
         return redirect("/payment")
 
-    return render_template("signup.html")
+    return render_template(
+        "signup.html",
+        ref=ref
+    )
 
 #............CHECHBOX ALERT..............
 
