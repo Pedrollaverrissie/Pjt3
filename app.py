@@ -402,6 +402,28 @@ def webhook():
 
     return jsonify({"status": "received"}), 200
 
+
+#--------------PENDING PAYMENT/ CHECK PAYMENT--------------------
+@app.route("/check-payment/<invoice_id>")
+def check_payment(invoice_id):
+
+    print("CHECKING:", invoice_id)
+
+    payment = Payment.query.filter_by(
+        transaction_code=invoice_id
+    ).first()
+
+    if not payment:
+        print("PAYMENT NOT FOUND")
+        return jsonify({"status": "not_found"})
+
+    print("CURRENT STATUS:", payment.status)
+
+    return jsonify({
+        "status": payment.status
+    })
+
+
 #-----------TENPORARY ROUT---------------
 @app.route("/all-users")
 def all_users():
