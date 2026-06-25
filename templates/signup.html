@@ -61,7 +61,12 @@
             <button class="create-account" type="submit">Create Account</button>
             <div class="signup-line"></div>
             <p class="signup-root">Already  have an account? <a href="/login" target="_blank">Sign in</a></span></p>
-        </form>    
+                <input
+                    type="hidden"
+                    name="referral_code"
+                    value="{{ ref }}"
+                >
+         </form>    
     </div>      
 </body>
 </html>
