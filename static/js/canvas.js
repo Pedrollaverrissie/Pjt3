@@ -67,3 +67,104 @@ function drawGrid(){
     }
 
 }
+//-------------GRAPH DRWING
+function drawGraph(){
+
+    ctx.beginPath();
+
+    ctx.strokeStyle="#00F5A0";
+
+    ctx.shadowBlur=20;
+    ctx.shadowColor="#00F5A0";
+
+    ctx.lineWidth=5;
+
+    ctx.moveTo(50,canvas.height-40);
+
+    for(let i=0;i<=progress;i++){
+
+        let x=50+i;
+
+        let y=canvas.height-40-Math.pow(i/18,1.5);
+
+        ctx.lineTo(x,y);
+
+    }
+
+    ctx.stroke();
+
+}
+//--------------------DRAW THE PLANE---------------
+function drawPlane(){
+
+    let x=50+progress;
+
+    let y=canvas.height-40-Math.pow(progress/18,1.5);
+
+    ctx.font="34px Arial";
+
+    ctx.fillText("✈️",x,y);
+
+}
+//---------------DRAW THE MULTIPLIER------------
+function drawMultiplier(){
+
+    document.getElementById("multiplier").textContent =
+        multiplier.toFixed(2)+"x";
+
+}
+//----------------------ANIMATION LOOP--------------
+function animate(){
+
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    drawGrid();
+
+    drawGraph();
+
+    drawPlane();
+
+    if(!crashed){
+
+        multiplier+=0.01;
+
+        progress+=2;
+
+        drawMultiplier();
+
+    }
+
+    if(multiplier>=crashPoint){
+
+        crashed=true;
+
+        document.getElementById("multiplier").textContent=
+        "💥 "+crashPoint.toFixed(2)+"x";
+
+        document.getElementById("gameStatus").textContent=
+        "CRASHED";
+
+        setTimeout(resetRound,3000);
+
+    }
+
+    requestAnimationFrame(animate);
+
+}
+//--------------------RESET THE ROUND-------------
+function resetRound(){
+
+    multiplier=1.00;
+
+    progress=0;
+
+    crashed=false;
+
+    crashPoint=randomCrash();
+
+    document.getElementById("gameStatus").textContent=
+    "Flying...";
+
+}
+//---------------------START THE ENGINE------------------
+animate();
