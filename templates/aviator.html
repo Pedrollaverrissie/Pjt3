@@ -1,56 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supernova Aviator</title>
 
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Supernova Aviator</title>
-
-<link rel="stylesheet"
-href="{{ url_for('static', filename='css/aviator.css') }}">
-
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/aviator.css') }}">
 </head>
-
 <body>
 
 <div class="container">
 
-    <header>
+    <!-- HEADER -->
+    <header class="header">
 
         <div class="logo">
-
             🚀 SUPERNOVA AVIATOR
-
         </div>
 
-        <div class="profile">
+        <div class="user-info">
 
-            Welcome {{ username }}
+            <div class="balance">
+                <small>Balance</small>
+                <h3>KSh {{ balance or 0 }}</h3>
+            </div>
+
+            <div class="profile">
+                {{ username[0]|upper }}
+            </div>
 
         </div>
 
     </header>
 
+    <!-- HISTORY -->
+
     <section class="history">
 
-        <div class="pill red">1.08x</div>
-
-        <div class="pill green">5.40x</div>
-
-        <div class="pill green">12.60x</div>
-
-        <div class="pill red">1.13x</div>
-
-        <div class="pill green">7.85x</div>
+        <span class="green">8.44x</span>
+        <span class="red">1.08x</span>
+        <span class="green">15.22x</span>
+        <span class="green">5.66x</span>
+        <span class="red">1.02x</span>
+        <span class="green">10.55x</span>
 
     </section>
 
-    <main>
+    <!-- GAME -->
 
-        <div class="game-area">
+    <section class="game">
+
+        <div class="multiplier">
 
             <h1>1.00x</h1>
 
@@ -58,30 +59,88 @@ href="{{ url_for('static', filename='css/aviator.css') }}">
 
         </div>
 
+    </section>
+
+    <!-- BOTTOM -->
+
+    <section class="bottom">
+
+        <!-- PLAYERS -->
+
+        <div class="players">
+
+            <h2>Live Players</h2>
+
+            <div class="player-card">
+
+                <div>
+                    <strong>Peter</strong><br>
+                    KSh 100
+                </div>
+
+                <span>Playing</span>
+
+            </div>
+
+            <div class="player-card">
+
+                <div>
+                    <strong>Brian</strong><br>
+                    KSh 500
+                </div>
+
+                <span>Playing</span>
+
+            </div>
+
+            <div class="player-card">
+
+                <div>
+                    <strong>Alice</strong><br>
+                    KSh 300
+                </div>
+
+                <span>Cashed Out</span>
+
+            </div>
+
+        </div>
+
+        <!-- BET PANEL -->
+
         <div class="bet-panel">
 
             <h2>Place Bet</h2>
 
-            <input
-            type="number"
-            placeholder="Bet Amount">
+            <label>Bet Amount</label>
 
             <input
-            type="number"
-            placeholder="Auto Cashout">
+                type="number"
+                placeholder="100">
 
-            <button>
+            <label>Auto Cashout</label>
+
+            <input
+                type="number"
+                placeholder="2.00">
+
+            <button class="bet-btn">
 
                 PLACE BET
 
             </button>
 
+            <button class="cash-btn">
+
+                CASH OUT
+
+            </button>
+
         </div>
 
-    </main>
+    </section>
 
 </div>
 
 </body>
-
 </html>
