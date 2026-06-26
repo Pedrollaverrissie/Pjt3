@@ -381,11 +381,14 @@ body{
 
     left:60px;
 
-    font-size:40px;
+    font-size:42px;
 
-    transition:all .2s linear;
+    z-index:100;
 
-    z-index:20;
+    transition:.05s linear;
+
+    filter:drop-shadow(0 0 10px white);
+
 }
 
 /* Decorative stars */
