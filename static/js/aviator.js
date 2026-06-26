@@ -1,62 +1,63 @@
-const multiplier = document.getElementById("multiplier");
-const gameStatus = document.getElementById("gameStatus");
-const plane = document.getElementById("plane");
+document.addEventListener("DOMContentLoaded", function () {
 
-let current = 1.00;
-let animation = null;
+    const multiplier = document.getElementById("multiplier");
+    const gameStatus = document.getElementById("gameStatus");
+    const plane = document.getElementById("plane");
 
-function startRound() {
+    console.log(multiplier);
+    console.log(gameStatus);
+    console.log(plane);
 
-    current = 1.00;
+    let current = 1.00;
+    let animation = null;
 
-    multiplier.innerHTML = current.toFixed(2) + "x";
+    function startRound() {
 
-    gameStatus.innerHTML = "Flying...";
-
-    plane.style.left = "60px";
-    plane.style.bottom = "70px";
-
-    // Random crash point (temporary)
-    const crashPoint = (Math.random() * 9 + 1).toFixed(2);
-
-    let left = 60;
-    let bottom = 70;
-
-    animation = setInterval(() => {
-
-        current += 0.02;
+        current = 1.00;
 
         multiplier.innerHTML = current.toFixed(2) + "x";
+        gameStatus.innerHTML = "Flying...";
 
-        left += 3;
-        bottom += 1.8;
+        plane.style.left = "60px";
+        plane.style.bottom = "70px";
 
-        plane.style.left = left + "px";
-        plane.style.bottom = bottom + "px";
+        const crashPoint = Number((Math.random() * 9 + 1).toFixed(2));
 
-        if(current >= crashPoint){
+        let left = 60;
+        let bottom = 70;
 
-            clearInterval(animation);
+        animation = setInterval(() => {
 
-            multiplier.innerHTML =
-            "💥 " + crashPoint + "x";
+            current += 0.02;
 
-            gameStatus.innerHTML =
-            "CRASHED";
+            multiplier.innerHTML = current.toFixed(2) + "x";
 
-            setTimeout(() => {
+            left += 3;
+            bottom += 1.8;
 
-                gameStatus.innerHTML =
-                "Next round starting...";
+            plane.style.left = left + "px";
+            plane.style.bottom = bottom + "px";
 
-                setTimeout(startRound,3000);
+            if (current >= crashPoint) {
 
-            },2000);
+                clearInterval(animation);
 
-        }
+                multiplier.innerHTML = "💥 " + crashPoint.toFixed(2) + "x";
+                gameStatus.innerHTML = "CRASHED";
 
-    },40);
+                setTimeout(() => {
 
-}
+                    gameStatus.innerHTML = "Next round starting...";
 
-setTimeout(startRound,3000);
+                    setTimeout(startRound, 3000);
+
+                }, 2000);
+            }
+
+        }, 40);
+
+    }
+
+    setTimeout(startRound, 3000);
+
+});
