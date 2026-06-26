@@ -1111,19 +1111,6 @@ h3{
     white-space: nowrap;
  
 }
-.link button:hover span {
-    animation: typing 1s steps(10, end) forwards;
-}
-@keyframes typing{
-    from{
-        width: 0;
-        overflow: hidden;
-    }
-    to{
-        width: 10ch;
-        overflow: visible;
-    }
-}
 
 .checkbox-alert{
     display: flex;
