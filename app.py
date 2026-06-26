@@ -584,20 +584,34 @@ def game_state():
 @login_required
 def admin_game():
 
-    if not current_user.is_admin:
-        return "Unauthorized",403
+    if current_user.email != "petersongitonga02@gmail.com":
+        return "Unauthorized", 403
 
     return jsonify({
 
-        "current": game.current_crash,
-
-        "next": game.next_crash,
+        "round": game.round_id,
 
         "status": game.status,
 
-        "round": game.round_id
+        "current": round(game.multiplier,2),
+
+        "next": game.next_crash
 
     })
+
+
+//--------------------                -----------------------
+
+
+@app.route("/admin/aviator")
+@login_required
+def admin_aviator():
+
+    if current_user.email != "petersongitonga02@gmail.com":
+        return "Unauthorized", 403
+
+    return render_template("admin_aviator.html")
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
