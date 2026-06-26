@@ -12,6 +12,9 @@ from intasend import APIService
 from dotenv import load_dotenv
 import os
 from datetime import timedelta
+from flask_migrate import Migrate
+
+
 
 
 load_dotenv()
@@ -19,7 +22,7 @@ load_dotenv()
 app = Flask(__name__)
 
 app.secret_key = os.getenv("SECRET_KEY")
-
+migrate = Migrate(app, db)
 database_url = os.getenv("DATABASE_URL")
 
 if not database_url:
