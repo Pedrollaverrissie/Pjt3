@@ -1,183 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucky Aviator</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='aviator.css') }}">
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Supernova Aviator</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='css/aviator.css') }}">
+
 </head>
+
 <body>
 
-<div class="topbar">
+<div class="container">
 
-    <div class="logo">
-        🚀 Lucky Aviator
-    </div>
+    <header>
 
-    <div class="wallet">
+        <div class="logo">
 
-        Balance
+            🚀 SUPERNOVA AVIATOR
 
-        <h2>KSh {{ balance }}</h2>
+        </div>
 
-    </div>
+        <div class="profile">
 
-</div>
+            Welcome {{ username }}
 
+        </div>
 
-<div class="history">
+    </header>
 
-    <span class="red">1.12x</span>
-    <span class="green">5.44x</span>
-    <span class="green">18.90x</span>
-    <span class="red">1.09x</span>
-    <span class="green">7.55x</span>
-    <span class="red">1.42x</span>
-    <span class="green">12.80x</span>
+    <section class="history">
 
-</div>
+        <div class="pill red">1.08x</div>
 
+        <div class="pill green">5.40x</div>
 
-<div class="game-container">
+        <div class="pill green">12.60x</div>
 
-    <div class="game-screen">
+        <div class="pill red">1.13x</div>
 
-        <div class="multiplier">
+        <div class="pill green">7.85x</div>
 
-            <h1 id="multiplier">1.00x</h1>
+    </section>
+
+    <main>
+
+        <div class="game-area">
+
+            <h1>1.00x</h1>
 
             <p>Waiting for next round...</p>
 
         </div>
 
-        <div class="rocket">
+        <div class="bet-panel">
 
-            🚀
+            <h2>Place Bet</h2>
+
+            <input
+            type="number"
+            placeholder="Bet Amount">
+
+            <input
+            type="number"
+            placeholder="Auto Cashout">
+
+            <button>
+
+                PLACE BET
+
+            </button>
 
         </div>
 
-    </div>
-
-</div>
-
-
-<div class="bet-panel">
-
-    <div class="bet-card">
-
-        <h3>Bet Amount</h3>
-
-        <input
-            type="number"
-            placeholder="100">
-
-    </div>
-
-    <div class="bet-card">
-
-        <h3>Auto Cashout</h3>
-
-        <input
-            type="number"
-            placeholder="2.00">
-
-    </div>
-
-</div>
-
-
-<div class="buttons">
-
-    <button class="bet-btn">
-
-        PLACE BET
-
-    </button>
-
-    <button class="cash-btn">
-
-        CASH OUT
-
-    </button>
-
-</div>
-
-
-<div class="players">
-
-    <h2>Players This Round</h2>
-
-    <table>
-
-        <tr>
-
-            <th>Player</th>
-
-            <th>Bet</th>
-
-            <th>Status</th>
-
-        </tr>
-
-        <tr>
-
-            <td>Peter</td>
-
-            <td>200</td>
-
-            <td>Playing</td>
-
-        </tr>
-
-        <tr>
-
-            <td>James</td>
-
-            <td>500</td>
-
-            <td>Playing</td>
-
-        </tr>
-
-        <tr>
-
-            <td>Alice</td>
-
-            <td>100</td>
-
-            <td>Cashed Out</td>
-
-        </tr>
-
-    </table>
-
-</div>
-
-
-<div class="bottom-menu">
-
-    <div>
-        🏠
-        <p>Home</p>
-    </div>
-
-    <div>
-        💰
-        <p>Wallet</p>
-    </div>
-
-    <div>
-        🏆
-        <p>Leaderboard</p>
-    </div>
-
-    <div>
-        👤
-        <p>Profile</p>
-    </div>
+    </main>
 
 </div>
 
 </body>
+
 </html>
