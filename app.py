@@ -1,3 +1,5 @@
+from game_engine import game
+from flask import jsonify
 from flask import Flask, render_template, request, redirect
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -559,7 +561,43 @@ def db_url():
 @login_required
 def aviator():
     return render_template("aviator.html", username=current_user.username)
-    
+
+
+#------------------CREATE API ROUTE GAME--------------
+@app.route("/game-state")
+def game_state():
+
+    return jsonify({
+
+        "round": game.round_id,
+
+        "status": game.status,
+
+        "multiplier": round(game.multiplier,2),
+
+        "countdown": game.countdown
+
+    })
+
+#----------------CREATE ADMIN API------------------
+@app.route("/admin/game-state")
+@login_required
+def admin_game():
+
+    if not current_user.is_admin:
+        return "Unauthorized",403
+
+    return jsonify({
+
+        "current": game.current_crash,
+
+        "next": game.next_crash,
+
+        "status": game.status,
+
+        "round": game.round_id
+
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)
