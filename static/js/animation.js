@@ -1,27 +1,46 @@
-function movePlane(x, y) {
-    const plane = document.getElementById("plane");
-    plane.style.left = x + "px";
-    plane.style.top = y + "px";
-}
+const plane = document.getElementById("plane");
+const path = document.getElementById("flightPath");
+const multiplier = document.getElementById("multiplier");
 
-function updateMultiplier(value) {
-    document.getElementById("multiplier").textContent =
-        value.toFixed(2) + "x";
-}
+let progress = 0;
+let currentMultiplier = 1.00;
+let animationInterval = null;
 
-function drawGraph(progress) {
+function animateFlight(crashPoint) {
 
-    const path = document.getElementById("flightPath");
+    progress = 0;
+    currentMultiplier = 1.00;
 
-    const x = 50 + progress;
+    clearInterval(animationInterval);
 
-    // Curved flight path
-    const y = 400 - Math.pow(progress / 18, 1.5);
+    animationInterval = setInterval(() => {
 
-    path.setAttribute(
-        "d",
-        `M50 400 Q${50 + progress / 2} ${400 - progress / 4} ${x} ${y}`
-    );
+        progress += 4;
+        currentMultiplier += 0.02;
 
-    movePlane(x, y);
+        multiplier.textContent = currentMultiplier.toFixed(2) + "x";
+
+        // Plane position
+        let x = 50 + progress;
+        let y = 400 - Math.pow(progress / 18, 1.5);
+
+        plane.style.left = x + "px";
+        plane.style.top = y + "px";
+
+        // Draw graph
+        path.setAttribute(
+            "d",
+            `M50 400 Q${50 + progress / 2} ${400 - progress / 4} ${x} ${y}`
+        );
+
+        if (currentMultiplier >= crashPoint) {
+
+            clearInterval(animationInterval);
+
+            crashRound(crashPoint);
+
+        }
+
+    }, 40);
+
 }
