@@ -553,5 +553,13 @@ def db_test():
 def db_url():
     return app.config["SQLALCHEMY_DATABASE_URI"]
 
+
+#------------AVIATOR GAME---------------------
+@app.route("/aviator")
+@login_required
+def aviator():
+    return render_template("aviator.html", username=current_user.username)
+    
+
 if __name__ == "__main__":
     app.run(debug=True)
