@@ -1,17 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lucky Aviator</title>
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='aviator.css') }}">
-</head>
-<body>
-
 <div class="container">
 
-    <!-- Top Bar -->
     <header>
 
         <div class="logo">
@@ -25,54 +13,100 @@
 
     </header>
 
-    <!-- Game Section -->
-    <div class="game-area">
+    <div class="history-bar">
 
-        <div class="multiplier">
-
-            <h1 id="multiplier">
-                1.00x
-            </h1>
-
-        </div>
+        <span>1.04x</span>
+        <span>2.66x</span>
+        <span>15.88x</span>
+        <span>1.21x</span>
+        <span>6.42x</span>
+        <span>3.11x</span>
+        <span>1.09x</span>
 
     </div>
 
-    <!-- Betting -->
-    <div class="bet-box">
+    <div class="game-screen">
 
-        <input type="number"
-               placeholder="Bet Amount">
+        <canvas id="graph"></canvas>
 
-        <input type="number"
-               placeholder="Auto Cashout">
+        <div class="rocket">
+
+            🚀
+
+        </div>
+
+        <h1 id="multiplier">
+
+            1.00x
+
+        </h1>
+
+    </div>
+
+    <div class="controls">
+
+        <input
+            type="number"
+            placeholder="Bet Amount">
+
+        <input
+            type="number"
+            placeholder="Auto Cashout">
 
         <button id="betBtn">
+
             PLACE BET
+
+        </button>
+
+        <button id="cashBtn">
+
+            CASH OUT
+
         </button>
 
     </div>
 
-    <!-- History -->
-    <div class="history">
+    <div class="players">
 
-        <h3>Previous Rounds</h3>
+        <h3>Players</h3>
 
-        <div class="rounds">
+        <table>
 
-            <span>1.22x</span>
-            <span>5.81x</span>
-            <span>2.30x</span>
-            <span>1.08x</span>
-            <span>9.44x</span>
+            <tr>
 
-        </div>
+                <th>Player</th>
+
+                <th>Bet</th>
+
+            </tr>
+
+            <tr>
+
+                <td>Peter</td>
+
+                <td>200</td>
+
+            </tr>
+
+            <tr>
+
+                <td>James</td>
+
+                <td>500</td>
+
+            </tr>
+
+            <tr>
+
+                <td>Alice</td>
+
+                <td>100</td>
+
+            </tr>
+
+        </table>
 
     </div>
 
 </div>
-
-<script src="{{ url_for('static', filename='aviator.js') }}"></script>
-
-</body>
-</html>
