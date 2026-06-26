@@ -1,0 +1,135 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    background:#0b1020;
+
+    color:white;
+
+    font-family:Arial,sans-serif;
+}
+
+header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:20px;
+
+    background:#161b22;
+}
+
+.logo{
+
+    font-size:28px;
+
+    color:#00ff88;
+
+    font-weight:bold;
+}
+
+.balance{
+
+    text-align:right;
+}
+
+.game-area{
+
+    width:90%;
+
+    height:420px;
+
+    margin:30px auto;
+
+    background:#161b22;
+
+    border-radius:20px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+.multiplier{
+
+    font-size:60px;
+
+    color:#00ff88;
+}
+
+.bet-box{
+
+    width:90%;
+
+    margin:auto;
+
+    display:flex;
+
+    gap:15px;
+
+    margin-bottom:25px;
+}
+
+.bet-box input{
+
+    flex:1;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:10px;
+
+    font-size:18px;
+}
+
+.bet-box button{
+
+    padding:15px 35px;
+
+    background:#00ff88;
+
+    border:none;
+
+    border-radius:10px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+}
+
+.history{
+
+    width:90%;
+
+    margin:auto;
+}
+
+.rounds{
+
+    display:flex;
+
+    gap:12px;
+
+    margin-top:15px;
+
+    flex-wrap:wrap;
+}
+
+.rounds span{
+
+    background:#222;
+
+    padding:10px 18px;
+
+    border-radius:20px;
+}
