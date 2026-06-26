@@ -1,11 +1,14 @@
-function placeBet() {
+const betButton = document.querySelector(".bet-btn");
+const cashButton = document.querySelector(".cash-btn");
 
-    console.log("Bet placed");
+betButton.addEventListener("click", () => {
 
-}
+    alert("Bet placed (temporary)");
 
-function cashOut() {
+});
 
-    console.log("Cash Out");
+cashButton.addEventListener("click", () => {
 
-}
+    alert("Cash out (temporary)");
+
+});
