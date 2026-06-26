@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    console.log("Supernova Aviator Loaded");
+    console.log("🚀 Supernova Aviator Loaded");
 
-    startRound();
+    // Start first round after 3 seconds
+    setTimeout(startRound, 3000);
 
 });
