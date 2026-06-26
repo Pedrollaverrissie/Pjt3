@@ -4,40 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucky Aviator</title>
-    <script src="{{ url_for('static', filename='aviator.js') }}"></script>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='aviator.css') }}">
 </head>
 <body>
-    <div class="container">
 
-    <header>
+<div class="topbar">
 
-        <div class="logo">
-            🚀 Lucky Aviator
-        </div>
+    <div class="logo">
+        🚀 Lucky Aviator
+    </div>
 
-        <div class="balance">
-            Balance
-            <h2>KSh {{ balance }}</h2>
-        </div>
+    <div class="wallet">
 
-    </header>
+        Balance
 
-    <div class="history-bar">
-
-        <span>1.04x</span>
-        <span>2.66x</span>
-        <span>15.88x</span>
-        <span>1.21x</span>
-        <span>6.42x</span>
-        <span>3.11x</span>
-        <span>1.09x</span>
+        <h2>KSh {{ balance }}</h2>
 
     </div>
 
+</div>
+
+
+<div class="history">
+
+    <span class="red">1.12x</span>
+    <span class="green">5.44x</span>
+    <span class="green">18.90x</span>
+    <span class="red">1.09x</span>
+    <span class="green">7.55x</span>
+    <span class="red">1.42x</span>
+    <span class="green">12.80x</span>
+
+</div>
+
+
+<div class="game-container">
+
     <div class="game-screen">
 
-        <canvas id="graph"></canvas>
+        <div class="multiplier">
+
+            <h1 id="multiplier">1.00x</h1>
+
+            <p>Waiting for next round...</p>
+
+        </div>
 
         <div class="rocket">
 
@@ -45,78 +57,124 @@
 
         </div>
 
-        <h1 id="multiplier">
-
-            1.00x
-
-        </h1>
-
     </div>
 
-    <div class="controls">
+</div>
+
+
+<div class="bet-panel">
+
+    <div class="bet-card">
+
+        <h3>Bet Amount</h3>
 
         <input
             type="number"
-            placeholder="Bet Amount">
-
-        <input
-            type="number"
-            placeholder="Auto Cashout">
-
-        <button id="betBtn">
-
-            PLACE BET
-
-        </button>
-
-        <button id="cashBtn">
-
-            CASH OUT
-
-        </button>
+            placeholder="100">
 
     </div>
 
-    <div class="players">
+    <div class="bet-card">
 
-        <h3>Players</h3>
+        <h3>Auto Cashout</h3>
 
-        <table>
+        <input
+            type="number"
+            placeholder="2.00">
 
-            <tr>
+    </div>
 
-                <th>Player</th>
+</div>
 
-                <th>Bet</th>
 
-            </tr>
+<div class="buttons">
 
-            <tr>
+    <button class="bet-btn">
 
-                <td>Peter</td>
+        PLACE BET
 
-                <td>200</td>
+    </button>
 
-            </tr>
+    <button class="cash-btn">
 
-            <tr>
+        CASH OUT
 
-                <td>James</td>
+    </button>
 
-                <td>500</td>
+</div>
 
-            </tr>
 
-            <tr>
+<div class="players">
 
-                <td>Alice</td>
+    <h2>Players This Round</h2>
 
-                <td>100</td>
+    <table>
 
-            </tr>
+        <tr>
 
-        </table>
+            <th>Player</th>
 
+            <th>Bet</th>
+
+            <th>Status</th>
+
+        </tr>
+
+        <tr>
+
+            <td>Peter</td>
+
+            <td>200</td>
+
+            <td>Playing</td>
+
+        </tr>
+
+        <tr>
+
+            <td>James</td>
+
+            <td>500</td>
+
+            <td>Playing</td>
+
+        </tr>
+
+        <tr>
+
+            <td>Alice</td>
+
+            <td>100</td>
+
+            <td>Cashed Out</td>
+
+        </tr>
+
+    </table>
+
+</div>
+
+
+<div class="bottom-menu">
+
+    <div>
+        🏠
+        <p>Home</p>
+    </div>
+
+    <div>
+        💰
+        <p>Wallet</p>
+    </div>
+
+    <div>
+        🏆
+        <p>Leaderboard</p>
+    </div>
+
+    <div>
+        👤
+        <p>Profile</p>
     </div>
 
 </div>
