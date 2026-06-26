@@ -377,17 +377,19 @@ body{
 
     position:absolute;
 
-    bottom:70px;
-
-    left:60px;
-
     font-size:42px;
 
-    z-index:100;
+    left:50px;
 
-    transition:.05s linear;
+    top:400px;
 
-    filter:drop-shadow(0 0 10px white);
+    z-index:20;
+
+    transform:rotate(-20deg);
+
+    transition:none;
+
+    filter:drop-shadow(0 0 12px white);
 
 }
 
