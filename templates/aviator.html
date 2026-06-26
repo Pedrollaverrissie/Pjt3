@@ -1,13 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lucky Aviator</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='aviator.css') }}">
 </head>
-<body style="background:#0d1117;color:white;text-align:center;font-family:Arial;">
+<body>
 
-    <h1>🚀 Lucky Aviator</h1>
+<div class="container">
 
-    <h3>Coming Soon...</h3>
+    <!-- Top Bar -->
+    <header>
+
+        <div class="logo">
+            🚀 Lucky Aviator
+        </div>
+
+        <div class="balance">
+            Balance
+            <h2>KSh {{ balance }}</h2>
+        </div>
+
+    </header>
+
+    <!-- Game Section -->
+    <div class="game-area">
+
+        <div class="multiplier">
+
+            <h1 id="multiplier">
+                1.00x
+            </h1>
+
+        </div>
+
+    </div>
+
+    <!-- Betting -->
+    <div class="bet-box">
+
+        <input type="number"
+               placeholder="Bet Amount">
+
+        <input type="number"
+               placeholder="Auto Cashout">
+
+        <button id="betBtn">
+            PLACE BET
+        </button>
+
+    </div>
+
+    <!-- History -->
+    <div class="history">
+
+        <h3>Previous Rounds</h3>
+
+        <div class="rounds">
+
+            <span>1.22x</span>
+            <span>5.81x</span>
+            <span>2.30x</span>
+            <span>1.08x</span>
+            <span>9.44x</span>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='aviator.js') }}"></script>
 
 </body>
 </html>
