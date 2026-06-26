@@ -1,52 +1,34 @@
 function startRound() {
 
-    let current = 1.00;
-    let left = 60;
-    let top = 350;
-
-    const gameStatus = document.getElementById("gameStatus");
-    const multiplier = document.getElementById("multiplier");
-
-    gameStatus.innerHTML = "Flying...";
+    let current = 1;
+    let progress = 0;
 
     const crashPoint = Number((Math.random() * 8 + 2).toFixed(2));
+
+    document.getElementById("gameStatus").textContent = "Flying...";
 
     const timer = setInterval(() => {
 
         current += 0.02;
+        progress += 4;
 
-        // Update multiplier
         updateMultiplier(current);
+        drawGraph(progress);
 
-        // Move plane
-        left += 3;
-        top -= 1.4;
-
-        movePlane(left, top);
-
-        // Crash
         if (current >= crashPoint) {
 
             clearInterval(timer);
 
-            multiplier.innerHTML = "💥 " + crashPoint.toFixed(2) + "x";
+            document.getElementById("multiplier").textContent =
+                "💥 " + crashPoint.toFixed(2) + "x";
 
-            gameStatus.innerHTML = "CRASHED";
+            document.getElementById("gameStatus").textContent =
+                "CRASHED";
 
             addHistory(crashPoint);
 
-            setTimeout(() => {
-
-                gameStatus.innerHTML = "Next Round...";
-
-                setTimeout(startRound, 3000);
-
-            }, 2000);
+            setTimeout(startRound, 3000);
         }
 
     }, 40);
-}
-
-function crashRound() {
-    console.log("Round Crashed");
 }
