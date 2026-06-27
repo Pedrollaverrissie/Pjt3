@@ -657,7 +657,7 @@ def start_round():
 @login_required
 def crash_round():
 
-    if current_user.email != "YOUR_EMAIL@gmail.com":
+    if current_user.email != "petersongitonga02@gmail.com":
         return "Unauthorized", 403
 
     game["status"] = "crashed"
