@@ -643,7 +643,7 @@ import random
 @login_required
 def start_round():
 
-    if current_user.email != "YOUR_EMAIL@gmail.com":
+    if current_user.email != "petersongitonga02@gmail.com":
         return "Unauthorized", 403
 
     game["status"] = "flying"
