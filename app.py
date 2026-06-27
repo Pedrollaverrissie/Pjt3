@@ -14,6 +14,17 @@ import os
 from datetime import timedelta
 from flask_migrate import Migrate
 
+# ==========================
+# AVIATOR GAME STATE
+# ==========================
+
+game = {
+    "status": "waiting",      # waiting | flying | crashed
+    "multiplier": 1.00,
+    "crash_point": 0,
+    "players": [],
+    "total_bets": 0
+}
 
 
 
@@ -614,6 +625,47 @@ def admin_aviator():
         return "Unauthorized", 403
 
     return render_template("admin_aviator.html")
+
+
+#----------------game stae---------------
+from flask import jsonify
+
+@app.route("/game-state")
+@login_required
+def game_state():
+    return jsonify(game)
+
+
+#-------------------admin control route-----------------------
+import random
+
+@app.route("/admin/start-round", methods=["POST"])
+@login_required
+def start_round():
+
+    if current_user.email != "YOUR_EMAIL@gmail.com":
+        return "Unauthorized", 403
+
+    game["status"] = "flying"
+    game["multiplier"] = 1.00
+    game["crash_point"] = round(random.uniform(1.20, 15.00), 2)
+
+    return jsonify({"success": True})
+
+#------------------crash route-------------------
+@app.route("/admin/crash-round", methods=["POST"])
+@login_required
+def crash_round():
+
+    if current_user.email != "YOUR_EMAIL@gmail.com":
+        return "Unauthorized", 403
+
+    game["status"] = "crashed"
+
+    return jsonify({"success": True})
+
+
+#-----------------------------------------------
     
 
 if __name__ == "__main__":
