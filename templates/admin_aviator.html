@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supernova Admin</title>
 
+    <style>
+
+        body{
+            background:#0b1220;
+            color:white;
+            font-family:Arial,sans-serif;
+            padding:30px;
+        }
+
+        .card{
+
+            background:#16213e;
+            padding:25px;
+            border-radius:12px;
+            margin-bottom:20px;
+
+        }
+
+        h1{
+
+            color:#00F5A0;
+
+        }
+
+        h2{
+
+            margin:10px 0;
+
+        }
+
+    </style>
+
+</head>
+<body>
+
+<h1>🚀 Supernova Aviator Admin</h1>
+
+<div class="card">
+
+    <h2>Round:
+        <span id="round">-</span>
+    </h2>
+
+    <h2>Status:
+        <span id="status">-</span>
+    </h2>
+
+    <h2>Current Multiplier:
+        <span id="current">-</span>
+    </h2>
+
+    <h2>Next Crash:
+        <span id="next">-</span>
+    </h2>
+
+</div>
+
+<script>
+
+async function loadAdmin(){
+
+    const response = await fetch("/admin/game-state");
+
+    const data = await response.json();
+
+    document.getElementById("round").textContent = data.round;
+
+    document.getElementById("status").textContent = data.status;
+
+    document.getElementById("current").textContent = data.current + "x";
+
+    document.getElementById("next").textContent = data.next + "x";
+
+}
+
+setInterval(loadAdmin,1000);
+
+loadAdmin();
+
+</script>
+
+</body>
+</html>
