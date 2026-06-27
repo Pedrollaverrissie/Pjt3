@@ -14,18 +14,6 @@ import os
 from datetime import timedelta
 from flask_migrate import Migrate
 
-# ==========================
-# AVIATOR GAME STATE
-# ==========================
-
-game = {
-    "status": "waiting",      # waiting | flying | crashed
-    "multiplier": 1.00,
-    "crash_point": 0,
-    "players": [],
-    "total_bets": 0
-}
-
 
 
 load_dotenv()
@@ -626,14 +614,6 @@ def admin_aviator():
 
     return render_template("admin_aviator.html")
 
-
-#----------------game stae---------------
-from flask import jsonify
-
-@app.route("/game-state")
-@login_required
-def game_state():
-    return jsonify(game)
 
 
 #-------------------admin control route-----------------------
