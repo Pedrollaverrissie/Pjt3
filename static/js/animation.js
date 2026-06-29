@@ -2,45 +2,32 @@ const plane = document.getElementById("plane");
 const path = document.getElementById("flightPath");
 const multiplier = document.getElementById("multiplier");
 
-let progress = 0;
-let currentMultiplier = 1.00;
-let animationInterval = null;
+let lastMultiplier = 1.00;
 
-function animateFlight(crashPoint) {
+function drawFlight(mult) {
 
-    progress = 0;
-    currentMultiplier = 1.00;
+    multiplier.textContent = mult.toFixed(2) + "x";
 
-    clearInterval(animationInterval);
+    const progress = (mult - 1) * 120;
 
-    animationInterval = setInterval(() => {
+    const x = 50 + progress;
 
-        progress += 4;
-        currentMultiplier += 0.02;
+    const y = 400 - Math.pow(progress / 18, 1.5);
 
-        multiplier.textContent = currentMultiplier.toFixed(2) + "x";
+    plane.style.left = x + "px";
+    plane.style.top = y + "px";
 
-        // Plane position
-        let x = 50 + progress;
-        let y = 400 - Math.pow(progress / 18, 1.5);
+    path.setAttribute(
+        "d",
+        `M50 400 Q${50 + progress / 2} ${400 - progress / 4} ${x} ${y}`
+    );
 
-        plane.style.left = x + "px";
-        plane.style.top = y + "px";
+    lastMultiplier = mult;
 
-        // Draw graph
-        path.setAttribute(
-            "d",
-            `M50 400 Q${50 + progress / 2} ${400 - progress / 4} ${x} ${y}`
-        );
+}
 
-        if (currentMultiplier >= crashPoint) {
+function drawCrash(mult) {
 
-            clearInterval(animationInterval);
-
-            crashRound(crashPoint);
-
-        }
-
-    }, 40);
+    multiplier.textContent = "💥 " + mult.toFixed(2) + "x";
 
 }
