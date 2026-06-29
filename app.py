@@ -319,6 +319,10 @@ def forgot_password():
 
             print("Sending email...")
 
+            print("MAIL SERVER:", app.config["MAIL_SERVER"])
+            print("MAIL USERNAME:", app.config["MAIL_USERNAME"])
+            print("MAIL PASSWORD EXISTS:", bool(app.config["MAIL_PASSWORD"]))
+
             mail.send(msg)
 
             print("Email sent successfully!")
