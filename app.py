@@ -587,15 +587,9 @@ def admin_game():
         return "Unauthorized", 403
 
     return jsonify({
-
         "round": game.round_id,
-
         "status": game.status,
-
-        "current": round(game.multiplier,2),
-
-        "next": game.next_crash
-
+        "current": round(game.multiplier, 2)
     })
 #---------------------------------------------------------------
 # START ROUND
