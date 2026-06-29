@@ -293,11 +293,15 @@ def logout():
 def forgot_password():
 
     if request.method == "POST":
+        try:
+            email = request.form["email"]
+            print("Email entered:", email)
 
-        email = request.form["email"]
-        user = User.query.filter_by(email=email).first()
+            user = User.query.filter_by(email=email).first()
 
-        if user:
+            if not user:
+                return "No account found with that email."
+
             otp = str(random.randint(100000, 999999))
 
             otp_store[email] = {
@@ -307,15 +311,24 @@ def forgot_password():
 
             msg = Message(
                 "Password Reset OTP",
-                sender=app.config['MAIL_USERNAME'],
+                sender=app.config["MAIL_USERNAME"],
                 recipients=[email]
             )
 
             msg.body = f"Your OTP code is: {otp}"
 
+            print("Sending email...")
+
             mail.send(msg)
 
+            print("Email sent successfully!")
+
             return redirect(f"/verify-otp/{email}")
+
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return f"<pre>{traceback.format_exc()}</pre>"
 
     return render_template("forgot_password.html")
 
