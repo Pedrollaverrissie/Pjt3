@@ -623,9 +623,9 @@ def start_round():
     if current_user.email != "petersongitonga02@gmail.com":
         return "Unauthorized", 403
 
-    game["status"] = "flying"
-    game["multiplier"] = 1.00
-    game["crash_point"] = round(random.uniform(1.20, 15.00), 2)
+    game.status = "flying"
+    game.multiplier = 1.00
+    game.current_crash = round(random.uniform(1.20, 15.00), 2)
 
     return jsonify({"success": True})
 
@@ -637,7 +637,7 @@ def crash_round():
     if current_user.email != "petersongitonga02@gmail.com":
         return "Unauthorized", 403
 
-    game["status"] = "crashed"
+    game.status = "crashed"
 
     return jsonify({"success": True})
 
