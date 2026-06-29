@@ -1,16 +1,14 @@
 from game_engine import game
-from flask import jsonify
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect,jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-import re, random ,time
+import re, random ,time,os
 from flask_mail import Mail, Message
-from flask import request, jsonify
 from models import db, User, Payment, PendingUser
 from flask_sqlalchemy import SQLAlchemy
 from intasend import APIService
 from dotenv import load_dotenv
-import os
+
 from datetime import timedelta
 from flask_migrate import Migrate
 
@@ -21,7 +19,7 @@ load_dotenv()
 app = Flask(__name__)
 
 app.secret_key = os.getenv("SECRET_KEY")
-migrate = Migrate(app, db)
+
 database_url = os.getenv("DATABASE_URL")
 
 if not database_url:
@@ -617,7 +615,6 @@ def admin_aviator():
 
 
 #-------------------admin control route-----------------------
-import random
 
 @app.route("/admin/start-round", methods=["POST"])
 @login_required
