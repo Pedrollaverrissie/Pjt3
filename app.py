@@ -571,11 +571,9 @@ def game_state():
     return jsonify({
 
         "round": game.round_id,
-
         "status": game.status,
-
-        "multiplier": round(game.multiplier,2),
-
+        "multiplier": round(game.multiplier, 2),
+        "current_crash": game.current_crash,
         "countdown": game.countdown
 
     })
