@@ -585,8 +585,15 @@ def db_test():
 def db_url():
     return app.config["SQLALCHEMY_DATABASE_URI"]
 
-
-
+#-======================================================
+@app.route("/mail-test")
+def mail_test():
+    return {
+        "server": app.config["MAIL_SERVER"],
+        "port": app.config["MAIL_PORT"],
+        "username": app.config["MAIL_USERNAME"],
+        "password_set": bool(app.config["MAIL_PASSWORD"]),
+    } 
     
 
 if __name__ == "__main__":
