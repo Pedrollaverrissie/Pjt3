@@ -31,3 +31,19 @@ function drawCrash(mult) {
     multiplier.textContent = "💥 " + mult.toFixed(2) + "x";
 
 }
+
+function resetFlight() {
+
+    multiplier.textContent = "1.00x";
+
+    plane.style.left = "50px";
+    plane.style.top = "400px";
+
+    path.setAttribute(
+        "d",
+        "M50 400"
+    );
+
+    lastMultiplier = 1.00;
+
+}
