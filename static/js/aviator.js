@@ -11,7 +11,7 @@ async function updateGame() {
         if (game.status === "waiting") {
 
             started = false;
-
+            resetFlight();
             gameStatus.textContent =
                 "Next round in " + game.countdown + "s";
 
@@ -24,7 +24,7 @@ async function updateGame() {
 
                 started = true;
 
-                animateFlight(game.current_crash);
+                drawFlight(game.multiplier);
 
             }
 
@@ -32,11 +32,13 @@ async function updateGame() {
 
         // Crashed
         else if (game.status === "crashed") {
-
+        
             started = false;
-
+        
+            drawCrash(game.multiplier);
+        
             gameStatus.textContent = "💥 CRASHED";
-
+        
         }
 
     }
