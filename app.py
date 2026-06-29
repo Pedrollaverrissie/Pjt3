@@ -2,7 +2,7 @@ from game_engine import game
 from flask import Flask, render_template, request, redirect,jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-import re, random ,time,os
+import re, random ,time,os,requests
 from flask_mail import Mail, Message
 from models import db, User, Payment, PendingUser
 from flask_sqlalchemy import SQLAlchemy
