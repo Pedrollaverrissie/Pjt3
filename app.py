@@ -597,8 +597,60 @@ def admin_game():
         "next": game.next_crash
 
     })
-
 #---------------------------------------------------------------
+# START ROUND
+@app.route("/admin/start-round", methods=["POST"])
+@login_required
+def start_round():
+
+    if current_user.email != "petersongitonga02@gmail.com":
+        return "Unauthorized", 403
+
+    game.status = "flying"
+    game.multiplier = 1.00
+
+    return jsonify(success=True)
+#---------------------------------------------------------------
+#--------------------------increase multiplier-------------------
+@app.route("/admin/increase", methods=["POST"])
+@login_required
+def increase():
+
+    if current_user.email != "petersongitonga02@gmail.com":
+        return "Unauthorized", 403
+
+    if game.status == "flying":
+        game.multiplier += 0.10
+
+    return jsonify(multiplier=game.multiplier)
+
+#------------------------decreasing multiplier---------------------
+@app.route("/admin/decrease", methods=["POST"])
+@login_required
+def decrease():
+
+    if current_user.email != "petersongitonga02@gmail.com":
+        return "Unauthorized", 403
+
+    if game.status == "flying" and game.multiplier > 1:
+        game.multiplier -= 0.10
+
+    return jsonify(multiplier=game.multiplier)
+
+#-------------------------crash------------------------
+@app.route("/admin/crash-round", methods=["POST"])
+@login_required
+def crash_round():
+
+    if current_user.email != "petersongitonga02@gmail.com":
+        return "Unauthorized", 403
+
+    game.status = "crashed"
+
+    return jsonify(success=True)
+
+#--------------------=================---------------------
+
 
 
 @app.route("/admin/aviator")
