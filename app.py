@@ -593,7 +593,26 @@ def mail_test():
         "port": app.config["MAIL_PORT"],
         "username": app.config["MAIL_USERNAME"],
         "password_set": bool(app.config["MAIL_PASSWORD"]),
+
+    
     } 
+
+#====================================================
+import smtplib
+
+@app.route("/smtp-test")
+def smtp_test():
+    try:
+        server = smtplib.SMTP("smtp-relay.brevo.com", 587, timeout=10)
+        server.starttls()
+        server.login(
+            app.config["MAIL_USERNAME"],
+            app.config["MAIL_PASSWORD"]
+        )
+        server.quit()
+        return "SMTP LOGIN SUCCESS"
+    except Exception as e:
+        return f"<pre>{e}</pre>"
     
 
 if __name__ == "__main__":
