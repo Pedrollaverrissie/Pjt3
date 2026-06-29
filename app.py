@@ -293,46 +293,65 @@ def logout():
 def forgot_password():
 
     if request.method == "POST":
+
+        email = request.form["email"]
+        user = User.query.filter_by(email=email).first()
+
+        if not user:
+            return "No account found with that email."
+
+        otp = str(random.randint(100000, 999999))
+
+        otp_store[email] = {
+            "otp": otp,
+            "time": time.time()
+        }
+
+        url = "https://api.brevo.com/v3/smtp/email"
+
+        headers = {
+            "accept": "application/json",
+            "api-key": os.getenv("BREVO_API_KEY"),
+            "content-type": "application/json"
+        }
+
+        payload = {
+            "sender": {
+                "name": "Dollar Mine",
+                "email": "petersongitonga02@gmail.com"
+            },
+            "to": [
+                {
+                    "email": email
+                }
+            ],
+            "subject": "Password Reset OTP",
+            "htmlContent": f"""
+                <h2>Password Reset</h2>
+                <p>Your OTP code is:</p>
+                <h1>{otp}</h1>
+                <p>This code expires in 5 minutes.</p>
+            """
+        }
+
         try:
-            email = request.form["email"]
-            print("Email entered:", email)
-
-            user = User.query.filter_by(email=email).first()
-
-            if not user:
-                return "No account found with that email."
-
-            otp = str(random.randint(100000, 999999))
-
-            otp_store[email] = {
-                "otp": otp,
-                "time": time.time()
-            }
-
-            msg = Message(
-                "Password Reset OTP",
-                sender=app.config["MAIL_USERNAME"],
-                recipients=[email]
+            response = requests.post(
+                url,
+                json=payload,
+                headers=headers,
+                timeout=15
             )
 
-            msg.body = f"Your OTP code is: {otp}"
+            print("Brevo Status:", response.status_code)
+            print("Brevo Response:", response.text)
 
-            print("Sending email...")
-
-            print("MAIL SERVER:", app.config["MAIL_SERVER"])
-            print("MAIL USERNAME:", app.config["MAIL_USERNAME"])
-            print("MAIL PASSWORD EXISTS:", bool(app.config["MAIL_PASSWORD"]))
-
-            mail.send(msg)
-
-            print("Email sent successfully!")
-
-            return redirect(f"/verify-otp/{email}")
+            if response.status_code in [200, 201]:
+                return redirect(f"/verify-otp/{email}")
+            else:
+                return f"Brevo Error:<br>{response.text}"
 
         except Exception as e:
-            import traceback
-            traceback.print_exc()
-            return f"<pre>{traceback.format_exc()}</pre>"
+            return f"Error sending email: {e}"
 
     return render_template("forgot_password.html")
 
