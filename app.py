@@ -317,22 +317,30 @@ def forgot_password():
 
         payload = {
             "sender": {
-                "name": "Dollar Mine",
+                "name": "SUPERNOVA EARN",
                 "email": "petersongitonga02@gmail.com"
             },
-            "to": [
-                {
-                    "email": email
-                }
-            ],
-            "subject": "Password Reset OTP",
+            "to": [{"email": email}],
+            "subject": "SUPERNOVE EARN Password Reset Code",
             "htmlContent": f"""
-                <h2>Password Reset</h2>
-                <p>Your OTP code is:</p>
-                <h1>{otp}</h1>
-                <p>This code expires in 5 minutes.</p>
+            <div style="font-family:Arial,sans-serif;padding:20px;">
+                <h2>SUPERNOVA EARN</h2>
+                <p>Hello,</p>
+        
+                <p>You requested to reset your password.</p>
+        
+                <h1 style="letter-spacing:5px;">{otp}</h1>
+        
+                <p>This code expires in <strong>5 minutes</strong>.</p>
+        
+                <p>If you didn't request this, simply ignore this email.</p>
+        
+                <hr>
+        
+                <small>© supernova earn</small>
+            </div>
             """
-        }
+}
 
         try:
             response = requests.post(
