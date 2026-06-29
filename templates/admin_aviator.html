@@ -1,154 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supernova Admin</title>
 
-    <style>
+<title>Admin Panel</title>
 
-        body{
-            background:#0b1220;
-            color:white;
-            font-family:Arial,sans-serif;
-            padding:30px;
-        }
+<style>
 
-        .card{
+body{
+background:#0b1220;
+color:white;
+font-family:Arial;
+padding:40px;
+text-align:center;
+}
 
-            background:#16213e;
-            padding:25px;
-            border-radius:12px;
-            margin-bottom:20px;
+button{
 
-        }
-
-        h1{
-
-            color:#00F5A0;
-
-        }
-
-        h2{
-
-            margin:10px 0;
-
-        }
-        button{
-
-    padding:15px 30px;
-
-    margin:10px;
-
-    font-size:18px;
-
-    border:none;
-
-    border-radius:8px;
-
-    cursor:pointer;
-
-    font-weight:bold;
+padding:15px 30px;
+font-size:18px;
+margin:10px;
+cursor:pointer;
 
 }
 
-button:first-child{
+#mult{
 
-    background:#00c853;
-    color:white;
-
-}
-
-button:last-child{
-
-    background:#d50000;
-    color:white;
+font-size:60px;
+margin:30px;
 
 }
 
-button:hover{
-
-    opacity:.9;
-
-}
-
-    </style>
+</style>
 
 </head>
+
 <body>
 
-<h1>🚀 Supernova Aviator Admin</h1>
+<h1>SUPERNOVA ADMIN</h1>
 
-<div class="card">
+<h2>Status:
+<span id="status"></span>
+</h2>
 
-    <h2>Round:
-        <span id="round">-</span>
-    </h2>
-
-    <h2>Status:
-        <span id="status">-</span>
-    </h2>
-
-    <h2>Current Multiplier:
-        <span id="current">-</span>
-    </h2>
-
-    <h2>Next Crash:
-        <span id="next">-</span>
-    </h2>
-
+<div id="mult">
+1.00x
 </div>
-    <div class="card">
 
-    <button onclick="startRound()">▶ Start Round</button>
+<button onclick="startRound()">
+START
+</button>
 
-    <button onclick="crashRound()">💥 Crash Round</button>
+<button onclick="increase()">
++
+</button>
 
-</div>
+<button onclick="decrease()">
+-
+</button>
+
+<button onclick="crash()">
+CRASH
+</button>
 
 <script>
 
-async function loadAdmin(){
+async function refresh(){
 
-    const response = await fetch("/admin/game-state");
+const r=await fetch("/admin/game-state");
 
-    const data = await response.json();
+const d=await r.json();
 
-    document.getElementById("round").textContent = data.round;
+document.getElementById("status").innerHTML=d.status;
 
-    document.getElementById("status").textContent = data.status;
-
-    document.getElementById("current").textContent = data.current + "x";
-
-    document.getElementById("next").textContent = data.next + "x";
+document.getElementById("mult").innerHTML=d.current.toFixed(2)+"x";
 
 }
+
+setInterval(refresh,200);
+
+refresh();
+
 
 async function startRound(){
 
-    await fetch("/admin/start-round",{
+await fetch("/admin/start-round",{
 
-        method:"POST"
+method:"POST"
 
-    });
-
-}
-
-async function crashRound(){
-
-    await fetch("/admin/crash-round",{
-
-        method:"POST"
-
-    });
+});
 
 }
 
-setInterval(loadAdmin,1000);
+async function increase(){
 
-loadAdmin();
+await fetch("/admin/increase",{
+
+method:"POST"
+
+});
+
+}
+
+async function decrease(){
+
+await fetch("/admin/decrease",{
+
+method:"POST"
+
+});
+
+}
+
+async function crash(){
+
+await fetch("/admin/crash-round",{
+
+method:"POST"
+
+});
+
+}
 
 </script>
 
 </body>
+
 </html>
