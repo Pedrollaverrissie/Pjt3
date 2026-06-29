@@ -1209,42 +1209,204 @@ h3{
 
 }
 .verify-otp{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(22, 21, 32, 0.991);
-    align-self: center;
-    width: 80%;
-    text-align: center;
-    height: 68%;
-    border-radius: 10px;
+
+width:400px;
+
+padding:40px;
+
+background:#0a1125;
+
+border-radius:18px;
+
+box-shadow:0 -0 20px rgb(0, 0, 0);
+
+text-align:center;
+
+animation:fade .5s ease;
+
+border:1px solid rgba(255,255,255,.08);
+
+}
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+
+transform:translateY(20px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+}
+
+.verify-otp h2{
+
+color:#ffffff;
+
+margin-bottom:20px;
+
+}
+
+.verify-otp h5{
+
+color:#feffff;
+
+font-size:15px;
+
+font-weight:500;
+
+line-height:1.7;
+
+margin-bottom:25px;
+
+}
+
+.verify-otp h5 span{
+
+color:#0dc900;
+
+font-weight:bold;
+
+font-size:12px;
+font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+
+word-break:break-word;
+
+}
+
+.verify-otp input{
+
+width:80%;
+
+padding:8px 5px;
+
+font-size:14px;
+
+letter-spacing:5px;
+
+text-align:center;
+
+border:none;
+
+outline:none;
+
+border-radius:5px;
+
+background:#f0f3f5;
+
+color:rgb(2, 2, 2);
+
+margin-bottom:20px;
+
+box-sizing:border-box;
+
+}
+
+.verify-otp input:focus{
+
+box-shadow:0 0 5px #f6a000;
+
+}
+
+.verify-otp button{
+
+width:50%;
+
+padding:8px 5px;
+
+background:#050202;
+
+border:none;
+
+border-radius:6px;
+
+font-size:14px;
+
+font-weight:bold;
+
+color:rgb(255, 170, 0);
+
+cursor:pointer;
+
+transition:.3s;
+box-shadow: 0 -0 10px rgb(107, 0, 68);
+
+}
+
+.verify-otp button:hover{
+
+background:#000000;
+
+transform:translateY(-2px);
+
+}
+
+.small-text{
+
+margin-top:25px;
+
+color:#ffffff;
+
+font-size:14px;
+
+}
+
+.resend-btn{
+
+display:inline-block;
+
+margin-top:10px;
+
+text-decoration:none;
+
+color:#00d084;
+
+font-weight:bold;
+
+transition:.3s;
+
+}
+
+.resend-btn:hover{
+
+color:#3dffb2;
+
+}
+
+.timer{
+
+margin-top:30px;
+
+color:#d4d4d4;
+
+font-size:15px;
+
+}
+
+.verify-otp p{
     color: white;
-    box-shadow: 0 0 10px rgb(7, 7, 7);
+}
+
+#timer{
+
+display:block;
+
+font-size:28px;
+
+font-weight:bold;
+
+color:#11d000;
+
+margin-top:8px;
 
 }
- .verify-otp input{
-    border: 0;
-    box-shadow: 0 0 10px rgb(19, 21, 32);
-    border-radius: 5px;
-    height: 25px;
-    padding-left: 10px;
- }
- .verify-otp button{
-    height: 28px;
-    border-radius: 5px;
-    border: 1px;
-    background-color: #121110;
-    margin-left: 8PX;
-    color: rgb(21, 255, 0);
-    box-shadow: 0 0 4px rgb(252, 1, 1);
-    cursor: pointer;
-}
- .verify-otp span{
-    margin-top: 5px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-weight: lighter;
-    color: #fe9e03;
- }
-
  /* AVIATOR GAME*/
