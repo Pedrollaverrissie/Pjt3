@@ -626,6 +626,9 @@ def start_round():
     game.current_crash = round(random.uniform(1.20, 15.00), 2)
 
     return jsonify({"success": True})
+    print("ADMIN STARTED ROUND")
+    print(game.status)
+    print(game.current_crash)
 
 #------------------crash route-------------------
 @app.route("/admin/crash-round", methods=["POST"])
