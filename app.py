@@ -603,17 +603,21 @@ import smtplib
 @app.route("/smtp-test")
 def smtp_test():
     try:
-        server = smtplib.SMTP("smtp-relay.brevo.com", 587, timeout=10)
-        server.starttls()
+        server = smtplib.SMTP_SSL(
+            "smtp-relay.brevo.com",
+            465,
+            timeout=10
+        )
         server.login(
             app.config["MAIL_USERNAME"],
             app.config["MAIL_PASSWORD"]
         )
         server.quit()
         return "SMTP LOGIN SUCCESS"
-    except Exception as e:
-        return f"<pre>{e}</pre>"
-    
 
+    except Exception as e:
+        return str(e)
+    
+#===========================================================
 if __name__ == "__main__":
     app.run(debug=True)
