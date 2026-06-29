@@ -599,19 +599,7 @@ def admin_game():
         "status": game.status,
         "current": round(game.multiplier, 2)
     })
-#---------------------------------------------------------------
-# START ROUND
-@app.route("/admin/start-round", methods=["POST"])
-@login_required
-def start_round():
 
-    if current_user.email != "petersongitonga02@gmail.com":
-        return "Unauthorized", 403
-
-    game.status = "flying"
-    game.multiplier = 1.00
-
-    return jsonify(success=True)
 #---------------------------------------------------------------
 #--------------------------increase multiplier-------------------
 @app.route("/admin/increase", methods=["POST"])
