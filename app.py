@@ -388,7 +388,7 @@ def resend_otp(email):
     try:
         mail.send(msg)
         print("Email sent successfully")
-   except Exception as e:
+    except Exception as e:
         print("SMTP ERROR:", e)
         return f"SMTP ERROR: {e}"
 
