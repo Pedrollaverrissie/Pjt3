@@ -17,17 +17,16 @@ async function updateGame() {
 
         }
 
+
         // Flying
         else if (game.status === "flying") {
-
-            if (!started) {
-
-                started = true;
-
-                drawFlight(game.multiplier);
-
-            }
-
+        
+            started = true;
+        
+            drawFlight(game.multiplier);
+        
+            gameStatus.textContent = "✈️ Flying...";
+        
         }
 
         // Crashed
