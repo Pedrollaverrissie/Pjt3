@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>My Profile</title>
 
     <link rel="stylesheet"
@@ -13,6 +12,8 @@
 <body class="profile-body">
 
 <div class="profile-container">
+
+    <!-- ================= PROFILE HEADER ================= -->
 
     <div class="profile-top">
 
@@ -25,14 +26,36 @@
         <p>{{ user.email }}</p>
 
         <div class="member-badge">
-            Bronze Member
+            🥉 Bronze Member
+        </div>
+
+        <div class="profile-level">
+
+            <div class="level-item">
+                <h3>Ksh {{ total_income }}</h3>
+                <p>Total Income</p>
+            </div>
+
+            <div class="level-item">
+                <h3>{{ total_referrals }}</h3>
+                <p>Referrals</p>
+            </div>
+
+            <div class="level-item">
+                <h3>{{ active_tasks }}</h3>
+                <p>Tasks</p>
+            </div>
+
         </div>
 
     </div>
 
+
+    <!-- ================= ACCOUNT INFORMATION ================= -->
+
     <div class="profile-card">
 
-        <h3>Account Information</h3>
+        <h3>👤 Account Information</h3>
 
         <div class="info-row">
             <strong>Username</strong>
@@ -56,16 +79,116 @@
 
     </div>
 
+
+    <!-- ================= WALLET SUMMARY ================= -->
+
+    <div class="profile-card">
+
+        <h3>💰 Wallet Summary</h3>
+
+        <div class="info-row">
+            <strong>Main Wallet</strong>
+            <span>Ksh {{ main_wallet }}</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Task Wallet</strong>
+            <span>Ksh {{ task_wallet }}</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Team Earnings</strong>
+            <span>Ksh {{ team_wallet }}</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Total Withdrawn</strong>
+            <span>Ksh {{ withdrawn }}</span>
+        </div>
+
+    </div>
+
+
+    <!-- ================= ACHIEVEMENTS ================= -->
+
+    <div class="profile-card">
+
+        <h3>🏆 Achievements</h3>
+
+        <div class="achievement-grid">
+
+            <div class="achievement-box">
+                <h2>🎁</h2>
+                <p>First Deposit</p>
+            </div>
+
+            <div class="achievement-box">
+                <h2>👥</h2>
+                <p>10 Referrals</p>
+            </div>
+
+            <div class="achievement-box">
+                <h2>💰</h2>
+                <p>Ksh 5,000 Earned</p>
+            </div>
+
+            <div class="achievement-box">
+                <h2>⭐</h2>
+                <p>Bronze VIP</p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= RECENT ACTIVITY ================= -->
+
+    <div class="profile-card">
+
+        <h3>📜 Recent Activity</h3>
+
+        <ul class="activity-list">
+
+            <li>✅ Account Created</li>
+
+            <li>💰 Latest Deposit</li>
+
+            <li>👥 New Referral Joined</li>
+
+            <li>🎁 Referral Bonus Earned</li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- ================= ACTION BUTTONS ================= -->
+
     <div class="profile-actions">
+
         <a href="/dashboard">
-            <button>← Dashboard</button>
+            <button>🏠 Dashboard</button>
         </a>
+
         <a href="/edit-profile">
-            <button>Edit Profile</button>
+            <button>✏ Edit Profile</button>
         </a>
 
         <a href="/change-password">
-            <button>Change Password</button>
+            <button>🔒 Change Password</button>
+        </a>
+
+        <a href="/withdraw">
+            <button>💳 Withdraw</button>
+        </a>
+
+        <a href="/payment">
+            <button>💰 Recharge</button>
+        </a>
+
+        <a href="/logout">
+            <button class="logout-btn">🚪 Logout</button>
         </a>
 
     </div>
