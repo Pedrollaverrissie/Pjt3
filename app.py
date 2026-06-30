@@ -8,7 +8,7 @@ from models import db, User, Payment, PendingUser
 from flask_sqlalchemy import SQLAlchemy
 from intasend import APIService
 from dotenv import load_dotenv
-
+from datetime import datetime
 from datetime import timedelta
 from flask_migrate import Migrate
 
@@ -668,5 +668,22 @@ def edit_profile():
 
     return render_template("edit_profile.html", user=current_user)    
 #===========================================================
+#===================notification route=====================
+@app.route("/notifications")
+@login_required
+def notifications():
+
+    notes = Notification.query.filter_by(
+        user_id=current_user.id
+    ).order_by(
+        Notification.created_at.desc()
+    ).all()
+
+    return render_template(
+        "notifications.html",
+        notes=notes
+    )
+
+#========================================================================
 if __name__ == "__main__":
     app.run(debug=True)
