@@ -653,7 +653,7 @@ def profile():
     return render_template("profile.html", user=current_user)
 
 #============================================================
- @app.route("/edit-profile", methods=["GET", "POST"])
+@app.route("/edit-profile", methods=["GET", "POST"])
 @login_required
 def edit_profile():
 
