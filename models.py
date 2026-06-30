@@ -24,6 +24,12 @@ class User(UserMixin, db.Model):
         db.String(20),
         nullable=True
     )
+    
+    notifications = db.relationship(
+        "Notification",
+        backref="user",
+        lazy=True
+    )
 
 
 class Payment(db.Model):
@@ -51,4 +57,24 @@ class PendingUser(db.Model):
         db.String(20),
         nullable=True
     )
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False
+    )
+
+    title = db.Column(db.String(100))
+
+    message = db.Column(db.Text)
+
+    is_read = db.Column(db.Boolean, default=False)
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
 
