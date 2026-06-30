@@ -650,7 +650,36 @@ def smtp_test():
 @app.route("/profile")
 @login_required
 def profile():
-    return render_template("profile.html", user=current_user)
+
+    # Count successful payments made by this user
+    total_income = Payment.query.filter_by(
+        email=current_user.email,
+        status="approved"
+    ).with_entities(db.func.sum(Payment.amount)).scalar() or 0
+
+    # Number of users referred by this user
+    total_referrals = User.query.filter_by(
+        referred_by=current_user.referral_code
+    ).count()
+
+    # Placeholder values until wallet tables are added
+    active_tasks = 0
+    main_wallet = total_income
+    task_wallet = 0
+    team_wallet = 0
+    withdrawn = 0
+
+    return render_template(
+        "profile.html",
+        user=current_user,
+        total_income=total_income,
+        total_referrals=total_referrals,
+        active_tasks=active_tasks,
+        main_wallet=main_wallet,
+        task_wallet=task_wallet,
+        team_wallet=team_wallet,
+        withdrawn=withdrawn
+    )
 
 #============================================================
 @app.route("/edit-profile", methods=["GET", "POST"])
