@@ -102,4 +102,40 @@ class Notification(db.Model):
         default=datetime.utcnow
     )
 
+class Transaction(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False
+    )
+
+    transaction_type = db.Column(db.String(30))
+    # deposit
+    # withdrawal
+    # referral_bonus
+    # task_reward
+    # aviator_win
+    # aviator_loss
+
+    amount = db.Column(db.Float, nullable=False)
+
+    wallet = db.Column(db.String(20))
+    # main
+    # task
+    # team
+
+    status = db.Column(
+        db.String(20),
+        default="Completed"
+    )
+
+    description = db.Column(db.String(255))
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
 
