@@ -274,7 +274,7 @@ def dashboard():
     return render_template(
         "dashboard.html",
         username=current_user.username,
-        main_amount=total_paid,
+        main_amount=current_user.main_wallet,
         referral_link=referral_link,
         total_referrals=total_referrals
     )
@@ -452,7 +452,7 @@ def webhook():
     print(data)
 
     invoice_id = data.get("invoice_id")
-    state = data.get("state")
+    state = data.get("state", "").upper()
 
     print("INVOICE:", invoice_id)
     print("STATE:", state)
@@ -528,7 +528,7 @@ def webhook():
                                 f"Referral bonus from {new_user.username}"
                             )
                     
-                            referrer.commissions += refferral_bonus
+                            referrer.commissions += referral_bonus
                     
                             print(
                                 f"Referral bonus awarded to {referrer.username}"
@@ -706,7 +706,7 @@ def profile():
         main_wallet=current_user.main_wallet,
         task_wallet=current_user.task_wallet,
         team_wallet=current_user.team_wallet,
-        withdrawn=current_user.withdrawn
+        withdrawn=current_user.total_withdrawn
     )
 
 #============================================================
