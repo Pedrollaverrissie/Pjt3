@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="profile-body">
+
+<div class="profile-container">
+
+    <div class="profile-top">
+
+        <div class="profile-picture">
+            <span>{{ user.username[0]|upper }}</span>
+        </div>
+
+        <h2>{{ user.username }}</h2>
+
+        <p>{{ user.email }}</p>
+
+        <div class="member-badge">
+            Bronze Member
+        </div>
+
+    </div>
+
+    <div class="profile-card">
+
+        <h3>Account Information</h3>
+
+        <div class="info-row">
+            <strong>Username</strong>
+            <span>{{ user.username }}</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Email</strong>
+            <span>{{ user.email }}</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Phone</strong>
+            <span>{{ user.phone }}</span>
+        </div>
+
+        <div class="info-row">
+            <strong>Referral Code</strong>
+            <span>{{ user.referral_code }}</span>
+        </div>
+
+    </div>
+
+    <div class="profile-actions">
+
+        <a href="/edit-profile">
+            <button>Edit Profile</button>
+        </a>
+
+        <a href="/change-password">
+            <button>Change Password</button>
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
