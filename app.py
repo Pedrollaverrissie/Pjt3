@@ -520,13 +520,15 @@ def webhook():
                     
                         if referrer:
                     
+                            referral_bonus = payment.amount * 0.20  # 20%
+                            
                             add_to_team_wallet(
                                 referrer,
-                                150,
+                                referral_bonus,
                                 f"Referral bonus from {new_user.username}"
                             )
                     
-                            referrer.commissions += 150
+                            referrer.commissions += refferral_bonus
                     
                             print(
                                 f"Referral bonus awarded to {referrer.username}"
