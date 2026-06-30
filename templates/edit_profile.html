@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Edit Profile</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body class="profile-body">
+
+<div class="edit-profile">
+
+<h2>Edit Profile</h2>
+
+<form method="POST">
+
+<label>Username</label>
+
+<input
+type="text"
+name="username"
+value="{{ user.username }}"
+required>
+
+<label>Phone Number</label>
+
+<input
+type="text"
+name="phone"
+value="{{ user.phone }}"
+required>
+
+<button type="submit">
+
+Save Changes
+
+</button>
+
+</form>
+
+</div>
+
+</body>
+
+</html>
