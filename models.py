@@ -24,14 +24,39 @@ class User(UserMixin, db.Model):
         db.String(20),
         nullable=True
     )
-    
+
+    # ================= WALLETS =================
+
+    main_wallet = db.Column(db.Float, default=0)
+
+    task_wallet = db.Column(db.Float, default=0)
+
+    team_wallet = db.Column(db.Float, default=0)
+
+    withdrawn = db.Column(db.Float, default=0)
+
+    # ================= ACCOUNT =================
+
+    vip_level = db.Column(
+        db.String(20),
+        default="Bronze"
+    )
+
+    profile_image = db.Column(
+        db.String(255),
+        nullable=True
+    )
+
+    joined_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
     notifications = db.relationship(
         "Notification",
         backref="user",
         lazy=True
     )
-
-
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     phone = db.Column(db.String(20), nullable=False)
