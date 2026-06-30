@@ -26,14 +26,18 @@ class User(UserMixin, db.Model):
     )
 
     # ================= WALLETS =================
-
+    
     main_wallet = db.Column(db.Float, default=0)
-
+    
     task_wallet = db.Column(db.Float, default=0)
-
+    
     team_wallet = db.Column(db.Float, default=0)
-
+    
     withdrawn = db.Column(db.Float, default=0)
+    
+    today_earnings = db.Column(db.Float, default=0)
+    
+    commissions = db.Column(db.Float, default=0)
 
     # ================= ACCOUNT =================
 
