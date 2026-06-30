@@ -653,7 +653,20 @@ def profile():
     return render_template("profile.html", user=current_user)
 
 #============================================================
-    
+ @app.route("/edit-profile", methods=["GET", "POST"])
+@login_required
+def edit_profile():
+
+    if request.method == "POST":
+
+        current_user.username = request.form["username"]
+        current_user.phone = request.form["phone"]
+
+        db.session.commit()
+
+        return redirect("/profile")
+
+    return render_template("edit_profile.html", user=current_user)    
 #===========================================================
 if __name__ == "__main__":
     app.run(debug=True)
