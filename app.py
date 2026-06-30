@@ -706,7 +706,7 @@ def profile():
         main_wallet=current_user.main_wallet,
         task_wallet=current_user.task_wallet,
         team_wallet=current_user.team_wallet,
-        withdrawn=current_user.total_withdrawn
+        withdrawn=current_user.withdrawn
     )
 
 #============================================================
