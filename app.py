@@ -496,8 +496,7 @@ def webhook():
                         task_wallet=0,
                         team_wallet=0,
                         withdrawn=0,
-                        today_earnings=0,
-                        commissions=0
+
                     )
                     
                     db.session.add(new_user)
