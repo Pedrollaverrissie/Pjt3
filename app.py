@@ -484,57 +484,57 @@ def webhook():
 
                 if not existing_user:
 
-                new_user = User(
-                    username=pending_user.username,
-                    email=pending_user.email,
-                    phone=pending_user.phone,
-                    password=pending_user.password,
-                    referred_by=pending_user.referred_by,
-                
-                    # Wallets
-                    main_wallet=0,
-                    task_wallet=0,
-                    team_wallet=0,
-                    total_withdrawn=0,
-                    today_earnings=0,
-                    commissions=0
-                )
-                
-                db.session.add(new_user)
-                
-                # Get user ID
-                db.session.flush()
-                
-                # Referral code
-                new_user.referral_code = f"SN{new_user.id}"
-                
-                # -----------------------------------------
-                # Give referral commission
-                # -----------------------------------------
-                
-                if new_user.referred_by:
-                
-                    referrer = User.query.filter_by(
-                        referral_code=new_user.referred_by
-                    ).first()
-                
-                    if referrer:
-                
-                        add_to_team_wallet(
-                            referrer,
-                            150,
-                            f"Referral bonus from {new_user.username}"
-                        )
-                
-                        referrer.commissions += 150
-                
-                        print(
-                            f"Referral bonus awarded to {referrer.username}"
-                        )
-                
-                print("USER CREATED:", pending_user.username)
-                print("REFERRAL CODE:", new_user.referral_code)
-                print("REFERRED BY:", new_user.referred_by)
+                    new_user = User(
+                        username=pending_user.username,
+                        email=pending_user.email,
+                        phone=pending_user.phone,
+                        password=pending_user.password,
+                        referred_by=pending_user.referred_by,
+                    
+                        # Wallets
+                        main_wallet=0,
+                        task_wallet=0,
+                        team_wallet=0,
+                        total_withdrawn=0,
+                        today_earnings=0,
+                        commissions=0
+                    )
+                    
+                    db.session.add(new_user)
+                    
+                    # Get user ID
+                    db.session.flush()
+                    
+                    # Referral code
+                    new_user.referral_code = f"SN{new_user.id}"
+                    
+                    # -----------------------------------------
+                    # Give referral commission
+                    # -----------------------------------------
+                    
+                    if new_user.referred_by:
+                    
+                        referrer = User.query.filter_by(
+                            referral_code=new_user.referred_by
+                        ).first()
+                    
+                        if referrer:
+                    
+                            add_to_team_wallet(
+                                referrer,
+                                150,
+                                f"Referral bonus from {new_user.username}"
+                            )
+                    
+                            referrer.commissions += 150
+                    
+                            print(
+                                f"Referral bonus awarded to {referrer.username}"
+                            )
+                    
+                    print("USER CREATED:", pending_user.username)
+                    print("REFERRAL CODE:", new_user.referral_code)
+                    print("REFERRED BY:", new_user.referred_by)
 
                 db.session.delete(pending_user)
 
