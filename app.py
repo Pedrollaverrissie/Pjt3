@@ -495,7 +495,7 @@ def webhook():
                         main_wallet=0,
                         task_wallet=0,
                         team_wallet=0,
-                        total_withdrawn=0,
+                        withdrawn=0,
                         today_earnings=0,
                         commissions=0
                     )
