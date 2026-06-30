@@ -4,6 +4,57 @@ body{
     align-items: center;    
     background-color: rgb(15, 14, 14);
 }
+.header-icons{
+
+display:flex;
+
+align-items:center;
+
+gap:15px;
+
+margin-right:15px;
+
+}
+
+.notification-icon{
+
+position:relative;
+
+font-size:22px;
+
+cursor:pointer;
+
+}
+
+.badge{
+
+position:absolute;
+
+top:-8px;
+
+right:-8px;
+
+background:red;
+
+color:white;
+
+width:18px;
+
+height:18px;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-size:10px;
+
+font-weight:bold;
+
+}
 
 /*signup page*/
 .container-signup{
