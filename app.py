@@ -1,4 +1,4 @@
-from game_engine import game
+ from game_engine import game
 from flask import Flask, render_template, request, redirect,jsonify
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -644,6 +644,15 @@ def smtp_test():
 
     except Exception as e:
         return str(e)
+
+
+#============================profile=========================
+@app.route("/profile")
+@login_required
+def profile():
+    return render_template("profile.html", user=current_user)
+
+#============================================================
     
 #===========================================================
 if __name__ == "__main__":
