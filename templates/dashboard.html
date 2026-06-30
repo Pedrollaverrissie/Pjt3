@@ -217,7 +217,12 @@
                     <div class="link">
                         <h4>Total Referrals: {{ total_referrals }}</h4>
                         
-                        <p   type="text" id="referralLink"   > value="{{ referral_link }}"</p>
+                            <input
+                                type="text"
+                                id="referralLink"
+                                value="{{ referral_link }}"
+                                readonly
+                            >
                         <button><span placeholder="COPY LINK" onclick="copyReferralLink()">COPY LINK</span></button>
                     </div>
             </div>
