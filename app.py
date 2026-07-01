@@ -227,7 +227,8 @@ def payment():
                 email=pending_user.email,
                 transaction_code=invoice_id,
                 amount=10,
-                status="pending"
+                status="pending",
+                payment_type="registration"
             )
 
             db.session.add(payment)
