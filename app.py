@@ -249,6 +249,50 @@ def payment():
 
     return render_template("payment.html")
 
+
+#-----------------RECHARGE ROUTE-----------------
+
+@app.route("/recharge", methods=["GET", "POST"])
+@login_required
+def recharge():
+
+    if request.method == "POST":
+
+        amount = float(request.form["amount"])
+
+        try:
+
+            response = service.collect.mpesa_stk_push(
+                phone_number=current_user.phone,
+                amount=amount,
+                narrative="Wallet Recharge"
+            )
+
+            invoice_id = response["invoice"]["invoice_id"]
+
+            payment = Payment(
+                phone=current_user.phone,
+                email=current_user.email,
+                transaction_code=invoice_id,
+                amount=amount,
+                status="pending",
+                payment_type="recharge",
+                user_id=current_user.id
+            )
+
+            db.session.add(payment)
+            db.session.commit()
+
+            return render_template(
+                "payment_pending.html",
+                invoice_id=invoice_id
+            )
+
+        except Exception as e:
+            return str(e)
+
+    return render_template("recharge.html")
+
 # ---------------- DASHBOARD --------s--------
 @app.route("/dashboard")
 @login_required
