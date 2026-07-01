@@ -64,6 +64,8 @@ class Payment(db.Model):
     amount = db.Column(db.Integer, default=10)
     status = db.Column(db.String(20), default="pending")
     email = db.Column(db.String(120))
+    payment_type = db.Column(db.String(20),default="registration")
+    user_id = db.Column(db.Integer,db.ForeignKey("user.id"),nullable=True)
 
 
 class PendingUser(db.Model):
