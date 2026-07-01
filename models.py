@@ -59,13 +59,32 @@ class User(UserMixin, db.Model):
     )
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
     phone = db.Column(db.String(20), nullable=False)
+
     transaction_code = db.Column(db.String(50), nullable=True)
-    amount = db.Column(db.Integer, default=10)
-    status = db.Column(db.String(20), default="pending")
+
+    amount = db.Column(db.Float, nullable=False)
+
+    status = db.Column(
+        db.String(20),
+        default="pending"
+    )
+
     email = db.Column(db.String(120))
-    payment_type = db.Column(db.String(20),default="registration")
-    user_id = db.Column(db.Integer,db.ForeignKey("user.id"),nullable=True)
+
+    # NEW
+    payment_type = db.Column(
+        db.String(20),
+        default="registration"
+    )
+
+    # NEW
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=True
+    )
 
 
 class PendingUser(db.Model):
