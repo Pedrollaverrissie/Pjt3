@@ -514,6 +514,35 @@ def webhook():
 
             payment.status = "approved"
 
+            # =========================
+            # RECHARGE PAYMENT
+            # =========================
+            if payment.payment_type == "recharge":
+
+                user = User.query.get(payment.user_id)
+
+                if user:
+
+                    add_to_main_wallet(
+                        user,
+                        payment.amount,
+                        "Wallet Recharge"
+                    )
+
+                    notification = Notification(
+                        user_id=user.id,
+                        title="Recharge Successful",
+                        message=f"KES {payment.amount} has been added to your Main Wallet."
+                    )
+
+                    db.session.add(notification)
+
+                db.session.commit()
+
+                print(f"Wallet recharged for {user.username}")
+
+                return jsonify({"status": "received"}), 200
+
             pending_user = PendingUser.query.filter_by(
                 email=payment.email
             ).first()
@@ -618,7 +647,50 @@ def check_payment(invoice_id):
     return jsonify({
         "status": payment.status
     })
+#========================recharge route==================
+@app.route("/recharge", methods=["GET", "POST"])
+@login_required
+def recharge():
 
+    if request.method == "POST":
+
+        phone = request.form["phone"].strip()
+        amount = float(request.form["amount"])
+
+        if phone.startswith("0"):
+            phone = "254" + phone[1:]
+
+        try:
+
+            response = service.collect.mpesa_stk_push(
+                phone_number=phone,
+                amount=amount,
+                narrative="Wallet Recharge"
+            )
+
+            invoice_id = response["invoice"]["invoice_id"]
+
+            payment = Payment(
+                phone=phone,
+                transaction_code=invoice_id,
+                amount=amount,
+                status="pending",
+                payment_type="recharge",
+                user_id=current_user.id
+            )
+
+            db.session.add(payment)
+            db.session.commit()
+
+            return render_template(
+                "payment_pending.html",
+                invoice_id=invoice_id
+            )
+
+        except Exception as e:
+            return f"Recharge failed: {e}"
+
+    return render_template("recharge.html")
 
 #-----------TENPORARY ROUT---------------
 @app.route("/users")
