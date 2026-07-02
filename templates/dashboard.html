@@ -133,25 +133,25 @@
 
             <div class="wallet-income">
                 <p class="p1"> TOTAL INCOME</p>
-                <h2>Ksh. {amount}</h2>
+                <h2>Ksh. {{ total_income }}</h2>
                 <p>ALL WALLETS COMBINED</p>
             </div>
 
             <div class="income">
                 
                     <div class="team-income">
-                            <h4>Ksh.{team amount}</h4>
+                            <h4>Ksh. {{ team_wallet }}</h4>
                             <p>TEAM</p>
 
                     </div>
                     <div class="withdrawm-income">
-                            <h4>Ksh.{team amount}</h4>
+                            <h4>Ksh. {{ withdrawn }}</h4>
                             <p>WITHDRAWN</p>
 
                     </div>
                     
                     <div class="today-income">
-                        <h4>Ksh. {wtds amount}</h4>
+                        <h4>Ksh. 0</h4>
                         <p>TODAY</p>
                     </div>
 
@@ -164,42 +164,42 @@
                 <div class="team-earnings">
                     <img src="static/images/team earnins.jfif" alt="" class="wallets-img">
                      <p>TEAM EARNINGS</p>
-                     <h4>Ksh{amount }</h4>
+                     <h4>Ksh. {{ team_wallet }}</h4>
                     <h6>TEAM</h6>
                 </div>
 
                 <div class="main-wallet">
                      <img src="static/images/wallet.jfif" alt="" class="wallets-img">
                      <p>MAIN WALLET</p>
-                     <h4>Ksh{amount }</h4>
+                     <h4>Ksh. {{ main_wallet }}</h4>
                       <h6>MAIN</h6>
                 </div>
 
                 <div class="task-wallet">
                      <img class="task-img" src="static/images/task wallet.jfif" alt="" class="wallets-img">
                      <p>TASK WALLET</p>
-                     <h4>Ksh{amount }</h4>
+                     <h4>Ksh. {{ task_wallet }}</h4>
                       <h6>TASK</h6>
                 </div>
 
                 <div class="total-withdrawals">
                      <img src="static/images/today earn.jfif" alt="" class="wallets-img">
                      <p>TOTAL WITHDRAWN</p>
-                     <h4>Ksh{amount }</h4>
+                     <h4>Ksh. {{ withdrawn }}</h4>
                       <h6>PAID</h6>
                 </div>
 
                 <div class="today-earnings">
                      <img class="earnings-img" src="static/images/today earnings.jfif" alt="" class="wallets-img">
                      <p>TODAY'S EARNINGS</p>
-                     <h4>Ksh{amount }</h4>
+                     <h4>Ksh. 0</h4>
                       <h6>TODAY</h6>
                 </div>
 
                 <div class="commissions">
                      <img src="static/images/commission.jfif" alt="" class="wallets-img">
                      <p>COMMISSIONS</p>
-                     <h4>Ksh{amount }</h4>
+                     <h4>Ksh. {{ commissions }}</h4>
                       <h6>COMMS</h6>
                 </div>
 

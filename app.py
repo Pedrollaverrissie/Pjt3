@@ -250,7 +250,7 @@ def payment():
     return render_template("payment.html")
 
 
-# ---------------- DASHBOARD --------s--------
+# ---------------- DASHBOARD ----------------
 @app.route("/dashboard")
 @login_required
 def dashboard():
@@ -273,14 +273,31 @@ def dashboard():
         referred_by=current_user.referral_code
     ).count()
 
+    total_income = (
+        current_user.main_wallet +
+        current_user.task_wallet +
+        current_user.team_wallet
+    )
+
     return render_template(
         "dashboard.html",
         username=current_user.username,
-        main_amount=current_user.main_wallet,
+
+        # Wallets
+        main_wallet=current_user.main_wallet,
+        task_wallet=current_user.task_wallet,
+        team_wallet=current_user.team_wallet,
+        withdrawn=current_user.withdrawn,
+        commissions=current_user.commissions,
+
+        # Totals
+        total_income=total_income,
+        total_paid=total_paid,
+
+        # Referral
         referral_link=referral_link,
         total_referrals=total_referrals
     )
-
 # ---------------- LOGOUT ----------------
 @app.route("/logout")
 @login_required
