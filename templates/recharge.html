@@ -1,39 +1,363 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Recharge Wallet</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+
+background:#050816;
+overflow:hidden;
+
+}
+
+/* background glow */
+
+body::before{
+
+content:"";
+position:absolute;
+width:400px;
+height:400px;
+background:#00f7ff;
+filter:blur(160px);
+left:-100px;
+top:-100px;
+opacity:.4;
+
+}
+
+body::after{
+
+content:"";
+position:absolute;
+width:350px;
+height:350px;
+background:#ff00d4;
+filter:blur(160px);
+right:-80px;
+bottom:-80px;
+opacity:.4;
+
+}
+
+.container{
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+}
+
+/* CARD */
+
+.card{
+
+position:relative;
+
+width:370px;
+height:95px;
+
+border-radius:25px;
+
+overflow:hidden;
+
+transition:.7s cubic-bezier(.17,.84,.44,1);
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(18px);
+
+box-shadow:
+
+0 0 40px rgba(0,0,0,.4);
+
+}
+
+/* EXPAND */
+
+.card:hover,
+.card.active{
+    height:430px;
+}
+
+/* Animated border */
+
+.card::before{
+
+content:"";
+
+position:absolute;
+
+inset:-3px;
+
+background:
+
+linear-gradient(
+45deg,
+#00e5ff,
+#00ff88,
+#8a2be2,
+#ff00ff,
+#00e5ff);
+
+background-size:500%;
+
+animation:border 6s linear infinite;
+
+z-index:-2;
+
+}
+
+.card::after{
+
+content:"";
+
+position:absolute;
+
+inset:2px;
+
+background:#0b1128;
+
+border-radius:23px;
+
+z-index:-1;
+
+}
+
+@keyframes border{
+
+0%{
+
+background-position:0%;
+
+}
+
+100%{
+
+background-position:500%;
+
+}
+
+}
+
+/* HEADER */
+
+.cover{
+
+height:95px;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+align-items:center;
+
+color:white;
+
+}
+
+.cover h2{
+
+margin-top:5px;
+
+font-size:23px;
+
+}
+
+.cover p{
+
+font-size:13px;
+
+color:#bbb;
+
+}
+
+/* ICON */
+
+.icon{
+
+font-size:32px;
+
+animation:float 2s infinite ease-in-out;
+
+}
+
+@keyframes float{
+
+50%{
+
+transform:translateY(-5px);
+
+}
+
+}
+
+/* CONTENT */
+
+.content{
+
+padding:30px;
+
+opacity:0;
+
+transform:translateY(50px);
+
+transition:.45s;
+
+transition-delay:0s;
+
+}
+
+.card:hover .content{
+
+opacity:1;
+
+transform:translateY(0);
+
+transition-delay:.25s;
+
+}
+
+.content input{
+
+width:100%;
+
+margin-bottom:18px;
+
+padding:15px;
+
+border:none;
+
+outline:none;
+
+border-radius:12px;
+
+background:#17264a;
+
+color:white;
+
+font-size:15px;
+
+transition:.3s;
+
+}
+
+.content input:focus{
+
+box-shadow:0 0 20px #00e5ff;
+
+transform:scale(1.02);
+
+}
+
+button{
+
+width:100%;
+
+padding:15px;
+
+border:none;
+
+border-radius:12px;
+
+font-size:17px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+color:white;
+
+background:
+
+linear-gradient(90deg,#00c6ff,#8a2be2);
+
+transition:.3s;
+
+}
+
+button:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 15px 30px rgba(0,255,255,.35);
+
+}
+    </style>
 </head>
 <body>
 
-<h2>Recharge Wallet</h2>
+<div class="container">
 
-<form method="POST">
+    <div class="card">
 
-    <input
-        type="number"
-        name="amount"
-        placeholder="Amount"
-        min="10"
-        required
-    >
+        <div class="cover">
 
-    <br><br>
+            <div class="icon">💳</div>
 
-    <input
-        type="text"
-        name="phone"
-        value="{{ current_user.phone }}"
-        placeholder="Phone Number"
-        required
-    >
+            <h2>Recharge Wallet</h2>
 
-    <br><br>
+            <p>Hover to Recharge</p>
 
-    <button type="submit">
-        Recharge
-    </button>
+        </div>
 
-</form>
+        <div class="content">
 
+            <form method="POST">
+
+                <input
+                    type="number"
+                    name="amount"
+                    placeholder="Enter Amount"
+                        min="10"
+                        step="10"
+                        value="10"
+                    required
+                >
+
+                <input
+                    type="text"
+                    name="phone"
+                    value="{{ current_user.phone }}"
+                    placeholder="Phone Number"
+                    required
+                >
+
+                <button type="submit">
+                    Recharge Now
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+    const card = document.querySelector(".card");
+
+card.addEventListener("click", () => {
+    if (window.innerWidth <= 768) {
+        card.classList.toggle("active");
+    }
+});
+</script>
 </body>
 </html>

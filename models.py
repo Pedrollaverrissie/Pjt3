@@ -12,7 +12,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(150), unique=True)
     phone = db.Column(db.String(20))
     password = db.Column(db.String(200))
-
+    
     # Referral System
     referral_code = db.Column(
         db.String(20),
@@ -34,7 +34,7 @@ class User(UserMixin, db.Model):
     team_wallet = db.Column(db.Float, default=0)
     
     withdrawn = db.Column(db.Float, default=0)
-
+    commissions = db.Column(db.Float, default=0)
     # ================= ACCOUNT =================
 
     vip_level = db.Column(
