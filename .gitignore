@@ -1,3 +1,5 @@
-(venv) PS C:\Users\ADMN\Desktop\Pjt3> git rm --cached .env
-fatal: pathspec '.env' did not match any files
-(venv) PS C:\Users\ADMN\Desktop\Pjt3> #
+.env
+venv/
+__pycache__/
+instance/
+*.pyc
