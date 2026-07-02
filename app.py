@@ -643,7 +643,8 @@ def recharge():
 
             return render_template(
                 "payment_pending.html",
-                invoice_id=invoice_id
+                invoice_id=invoice_id,
+                payment_type="recharge"
             )
 
         except Exception as e:
