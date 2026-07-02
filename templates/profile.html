@@ -1,199 +1,1161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Profile</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>My Profile</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+background:
+linear-gradient(135deg,#0f172a,#1e3a8a,#2563eb);
+
+background-size:300% 300%;
+
+animation:bgMove 12s ease infinite;
+
+min-height:100vh;
+
+padding:35px;
+
+}
+
+@keyframes bgMove{
+
+0%{background-position:0% 50%;}
+
+50%{background-position:100% 50%;}
+
+100%{background-position:0% 50%;}
+
+}
+
+.profile-container{
+
+max-width:1200px;
+
+margin:auto;
+
+}
+
+.profile-top{
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(25px);
+
+border:1px solid rgba(255,255,255,.15);
+
+border-radius:30px;
+
+padding:45px;
+
+text-align:center;
+
+color:white;
+
+box-shadow:
+
+0 20px 45px rgba(0,0,0,.35);
+
+margin-bottom:30px;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.profile-top::before{
+
+content:"";
+
+position:absolute;
+
+width:280px;
+
+height:280px;
+
+background:rgba(255,255,255,.08);
+
+border-radius:50%;
+
+top:-130px;
+
+right:-100px;
+
+}
+
+.profile-top::after{
+
+content:"";
+
+position:absolute;
+
+width:220px;
+
+height:220px;
+
+background:rgba(255,255,255,.05);
+
+border-radius:50%;
+
+bottom:-120px;
+
+left:-80px;
+
+}
+
+.profile-picture{
+
+width:145px;
+
+height:145px;
+
+border-radius:50%;
+
+background:linear-gradient(135deg,#38bdf8,#2563eb);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+margin:auto;
+
+font-size:60px;
+
+font-weight:bold;
+
+color:white;
+
+border:7px solid rgba(255,255,255,.25);
+
+box-shadow:
+
+0 0 35px rgba(56,189,248,.55);
+
+transition:.4s;
+
+position:relative;
+
+z-index:2;
+
+}
+
+.profile-picture:hover{
+
+transform:scale(1.08) rotate(4deg);
+
+}
+
+.profile-top h2{
+
+margin-top:20px;
+
+font-size:34px;
+
+font-weight:700;
+
+position:relative;
+
+z-index:2;
+
+}
+
+.profile-top p{
+
+margin-top:8px;
+
+font-size:15px;
+
+opacity:.85;
+
+position:relative;
+
+z-index:2;
+
+}
+
+.member-badge{
+
+display:inline-block;
+
+margin-top:18px;
+
+padding:10px 24px;
+
+border-radius:40px;
+
+background:linear-gradient(90deg,#f59e0b,#fbbf24);
+
+font-weight:600;
+
+color:white;
+
+box-shadow:
+
+0 8px 20px rgba(251,191,36,.35);
+
+position:relative;
+
+z-index:2;
+
+}
+
+.profile-level{
+
+display:grid;
+
+grid-template-columns:repeat(3,1fr);
+
+gap:20px;
+
+margin-top:40px;
+
+position:relative;
+
+z-index:2;
+
+}
+
+.level-item{
+
+background:rgba(255,255,255,.08);
+
+border-radius:20px;
+
+padding:25px;
+
+transition:.35s;
+
+border:1px solid rgba(255,255,255,.12);
+
+}
+
+.level-item:hover{
+
+transform:translateY(-8px);
+
+background:rgba(255,255,255,.15);
+
+}
+
+.level-item h3{
+
+font-size:28px;
+
+margin-bottom:8px;
+
+color:#fff;
+
+}
+
+.level-item p{
+
+font-size:15px;
+
+color:#dbeafe;
+
+}
+
+.profile-card{
+
+background:white;
+
+border-radius:24px;
+
+padding:30px;
+
+margin-bottom:25px;
+
+box-shadow:
+
+0 12px 35px rgba(0,0,0,.08);
+
+transition:.35s;
+
+}
+
+.profile-card:hover{
+
+transform:translateY(-6px);
+
+}
+
+.profile-card h3{
+
+margin-bottom:25px;
+
+font-size:24px;
+
+color:#1e3a8a;
+
+padding-bottom:12px;
+
+border-bottom:2px solid #eef2ff;
+
+}
+
+.info-row{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:16px 0;
+
+border-bottom:1px solid #edf2f7;
+
+}
+
+.info-row:last-child{
+
+border-bottom:none;
+
+}
+
+.info-row strong{
+
+color:#334155;
+
+font-size:15px;
+
+}
+
+.info-row span{
+
+font-weight:600;
+
+color:#2563eb;
+
+}
+
+@media(max-width:900px){
+
+.profile-level{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+@media(max-width:600px){
+
+body{
+
+padding:15px;
+
+}
+
+.profile-top{
+
+padding:30px 20px;
+
+}
+
+.profile-picture{
+
+width:110px;
+
+height:110px;
+
+font-size:42px;
+
+}
+
+.profile-top h2{
+
+font-size:28px;
+
+}
+
+.profile-card{
+
+padding:20px;
+
+}
+
+.info-row{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:6px;
+
+}
+
+}
+
+</style>
+
 </head>
 
-<body class="profile-body">
+<body>
 
 <div class="profile-container">
 
-    <!-- ================= PROFILE HEADER ================= -->
+<!-- ================= PROFILE HEADER ================= -->
 
-    <div class="profile-top">
+<div class="profile-top">
 
-        <div class="profile-picture">
-            <span>{{ user.username[0]|upper }}</span>
-        </div>
+<div class="profile-picture">
+<span>{{ user.username[0]|upper }}</span>
+</div>
 
-        <h2>{{ user.username }}</h2>
+<h2>{{ user.username }}</h2>
 
-        <p>{{ user.email }}</p>
+<p>{{ user.email }}</p>
 
-        <div class="member-badge">
-            🥉 Bronze Member
-        </div>
+<div class="member-badge">
+🥉 Bronze Member
+</div>
 
-        <div class="profile-level">
+<div class="profile-level">
 
-            <div class="level-item">
-                <h3>Ksh {{ total_income }}</h3>
-                <p>Total Income</p>
-            </div>
+<div class="level-item">
+<h3>Ksh {{ total_income }}</h3>
+<p>Total Income</p>
+</div>
 
-            <div class="level-item">
-                <h3>{{ total_referrals }}</h3>
-                <p>Referrals</p>
-            </div>
+<div class="level-item">
+<h3>{{ total_referrals }}</h3>
+<p>Total Referrals</p>
+</div>
 
-            <div class="level-item">
-                <h3>{{ active_tasks }}</h3>
-                <p>Tasks</p>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ================= ACCOUNT INFORMATION ================= -->
-
-    <div class="profile-card">
-
-        <h3>👤 Account Information</h3>
-
-        <div class="info-row">
-            <strong>Username</strong>
-            <span>{{ user.username }}</span>
-        </div>
-
-        <div class="info-row">
-            <strong>Email</strong>
-            <span>{{ user.email }}</span>
-        </div>
-
-        <div class="info-row">
-            <strong>Phone</strong>
-            <span>{{ user.phone }}</span>
-        </div>
-
-        <div class="info-row">
-            <strong>Referral Code</strong>
-            <span>{{ user.referral_code }}</span>
-        </div>
-
-    </div>
-
-
-    <!-- ================= WALLET SUMMARY ================= -->
-
-    <div class="profile-card">
-
-        <h3>💰 Wallet Summary</h3>
-
-        <div class="info-row">
-            <strong>Main Wallet</strong>
-            <span>Ksh {{ main_wallet }}</span>
-        </div>
-
-        <div class="info-row">
-            <strong>Task Wallet</strong>
-            <span>Ksh {{ task_wallet }}</span>
-        </div>
-
-        <div class="info-row">
-            <strong>Team Earnings</strong>
-            <span>Ksh {{ team_wallet }}</span>
-        </div>
-
-        <div class="info-row">
-            <strong>Total Withdrawn</strong>
-            <span>Ksh {{ withdrawn }}</span>
-        </div>
-
-    </div>
-
-
-    <!-- ================= ACHIEVEMENTS ================= -->
-
-    <div class="profile-card">
-
-        <h3>🏆 Achievements</h3>
-
-        <div class="achievement-grid">
-
-            <div class="achievement-box">
-                <h2>🎁</h2>
-                <p>First Deposit</p>
-            </div>
-
-            <div class="achievement-box">
-                <h2>👥</h2>
-                <p>10 Referrals</p>
-            </div>
-
-            <div class="achievement-box">
-                <h2>💰</h2>
-                <p>Ksh 5,000 Earned</p>
-            </div>
-
-            <div class="achievement-box">
-                <h2>⭐</h2>
-                <p>Bronze VIP</p>
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ================= RECENT ACTIVITY ================= -->
-
-    <div class="profile-card">
-
-        <h3>📜 Recent Activity</h3>
-
-        <ul class="activity-list">
-
-            <li>✅ Account Created</li>
-
-            <li>💰 Latest Deposit</li>
-
-            <li>👥 New Referral Joined</li>
-
-            <li>🎁 Referral Bonus Earned</li>
-
-        </ul>
-
-    </div>
-
-
-    <!-- ================= ACTION BUTTONS ================= -->
-
-    <div class="profile-actions">
-
-        <a href="/dashboard">
-            <button>🏠 Dashboard</button>
-        </a>
-
-        <a href="/edit-profile">
-            <button>✏ Edit Profile</button>
-        </a>
-
-        <a href="/change-password">
-            <button>🔒 Change Password</button>
-        </a>
-
-        <a href="/withdraw">
-            <button>💳 Withdraw</button>
-        </a>
-
-        <a href="/recharge">
-            <button>💰 Recharge</button>
-        </a>
-
-        <a href="/logout">
-            <button class="logout-btn">🚪 Logout</button>
-        </a>
-
-    </div>
+<div class="level-item">
+<h3>{{ active_tasks }}</h3>
+<p>Completed Tasks</p>
+</div>
 
 </div>
+
+</div>
+
+<!-- ================= ACCOUNT INFORMATION ================= -->
+
+<div class="profile-card">
+
+<h3>👤 Account Information</h3>
+
+<div class="info-row">
+<strong>Username</strong>
+<span>{{ user.username }}</span>
+</div>
+
+<div class="info-row">
+<strong>Email</strong>
+<span>{{ user.email }}</span>
+</div>
+
+<div class="info-row">
+<strong>Phone</strong>
+<span>{{ user.phone }}</span>
+</div>
+
+<div class="info-row">
+<strong>Referral Code</strong>
+<span>{{ user.referral_code }}</span>
+</div>
+
+</div>
+<!-- ================= WALLET SUMMARY ================= -->
+
+<div class="profile-card">
+
+<h3>💰 Wallet Summary</h3>
+
+<div class="wallet-grid">
+
+<div class="wallet-box main-wallet">
+
+<div class="wallet-icon">💳</div>
+
+<h4>Main Wallet</h4>
+
+<h2>Ksh {{ main_wallet }}</h2>
+
+</div>
+
+<div class="wallet-box task-wallet">
+
+<div class="wallet-icon">🎯</div>
+
+<h4>Task Wallet</h4>
+
+<h2>Ksh {{ task_wallet }}</h2>
+
+</div>
+
+<div class="wallet-box team-wallet">
+
+<div class="wallet-icon">👥</div>
+
+<h4>Team Earnings</h4>
+
+<h2>Ksh {{ team_wallet }}</h2>
+
+</div>
+
+<div class="wallet-box withdrawn-wallet">
+
+<div class="wallet-icon">🏦</div>
+
+<h4>Total Withdrawn</h4>
+
+<h2>Ksh {{ withdrawn }}</h2>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ================= ACHIEVEMENTS ================= -->
+
+<div class="profile-card">
+
+<h3>🏆 Achievements</h3>
+
+<div class="achievement-grid">
+
+<div class="achievement-box">
+
+<div class="achievement-icon">🎁</div>
+
+<h4>First Deposit</h4>
+
+<p>Unlocked</p>
+
+</div>
+
+<div class="achievement-box">
+
+<div class="achievement-icon">👥</div>
+
+<h4>10 Referrals</h4>
+
+<p>Milestone</p>
+
+</div>
+
+<div class="achievement-box">
+
+<div class="achievement-icon">💰</div>
+
+<h4>Ksh 5,000 Earned</h4>
+
+<p>Income Goal</p>
+
+</div>
+
+<div class="achievement-box">
+
+<div class="achievement-icon">⭐</div>
+
+<h4>Bronze VIP</h4>
+
+<p>Current Level</p>
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<!-- ================= RECENT ACTIVITY ================= -->
+
+<div class="profile-card">
+
+<h3>📜 Recent Activity</h3>
+
+<ul class="activity-list">
+
+<li>
+
+<div class="activity-icon">✅</div>
+
+<div>
+
+<strong>Account Created</strong>
+
+<p>Your account was successfully created.</p>
+
+</div>
+
+</li>
+
+<li>
+
+<div class="activity-icon">💰</div>
+
+<div>
+
+<strong>Latest Deposit</strong>
+
+<p>Your most recent recharge appears here.</p>
+
+</div>
+
+</li>
+
+<li>
+
+<div class="activity-icon">👥</div>
+
+<div>
+
+<strong>Referral Joined</strong>
+
+<p>One of your invited members joined.</p>
+
+</div>
+
+</li>
+
+<li>
+
+<div class="activity-icon">🎁</div>
+
+<div>
+
+<strong>Referral Bonus</strong>
+
+<p>Your latest referral commission appears here.</p>
+
+</div>
+
+</li>
+
+</ul>
+
+</div>
+
+
+<style>
+
+.wallet-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+gap:20px;
+
+margin-top:20px;
+
+}
+
+.wallet-box{
+
+padding:25px;
+
+border-radius:22px;
+
+color:white;
+
+text-align:center;
+
+transition:.35s;
+
+cursor:pointer;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.wallet-box::before{
+
+content:"";
+
+position:absolute;
+
+width:160px;
+
+height:160px;
+
+background:rgba(255,255,255,.12);
+
+border-radius:50%;
+
+top:-70px;
+
+right:-60px;
+
+}
+
+.wallet-box:hover{
+
+transform:translateY(-10px) scale(1.03);
+
+}
+
+.wallet-icon{
+
+font-size:42px;
+
+margin-bottom:15px;
+
+}
+
+.wallet-box h4{
+
+font-weight:500;
+
+margin-bottom:10px;
+
+}
+
+.wallet-box h2{
+
+font-size:30px;
+
+font-weight:700;
+
+}
+
+.main-wallet{
+
+background:linear-gradient(135deg,#2563eb,#3b82f6);
+
+}
+
+.task-wallet{
+
+background:linear-gradient(135deg,#10b981,#34d399);
+
+}
+
+.team-wallet{
+
+background:linear-gradient(135deg,#9333ea,#c084fc);
+
+}
+
+.withdrawn-wallet{
+
+background:linear-gradient(135deg,#f59e0b,#fbbf24);
+
+}
+
+.achievement-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+gap:20px;
+
+}
+
+.achievement-box{
+
+padding:25px;
+
+border-radius:20px;
+
+background:#f8fafc;
+
+text-align:center;
+
+transition:.35s;
+
+border:1px solid #e5e7eb;
+
+}
+
+.achievement-box:hover{
+
+transform:translateY(-8px);
+
+box-shadow:0 20px 35px rgba(37,99,235,.15);
+
+}
+
+.achievement-icon{
+
+font-size:48px;
+
+margin-bottom:15px;
+
+}
+
+.achievement-box h4{
+
+margin-bottom:8px;
+
+color:#1e3a8a;
+
+}
+
+.achievement-box p{
+
+color:#64748b;
+
+}
+
+.activity-list{
+
+list-style:none;
+
+padding:0;
+
+}
+
+.activity-list li{
+
+display:flex;
+
+gap:18px;
+
+padding:18px;
+
+border-radius:18px;
+
+margin-bottom:15px;
+
+background:#f8fafc;
+
+transition:.3s;
+
+align-items:center;
+
+}
+
+.activity-list li:hover{
+
+background:#eff6ff;
+
+transform:translateX(8px);
+
+}
+
+.activity-icon{
+
+width:55px;
+
+height:55px;
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:24px;
+
+border-radius:50%;
+
+background:#2563eb;
+
+color:white;
+
+flex-shrink:0;
+
+}
+
+.activity-list strong{
+
+color:#1e3a8a;
+
+font-size:17px;
+
+}
+
+.activity-list p{
+
+margin-top:4px;
+
+color:#64748b;
+
+font-size:14px;
+
+}
+
+</style>
+<!-- ================= ACTION BUTTONS ================= -->
+
+<div class="profile-card">
+
+<h3>⚡ Quick Actions</h3>
+
+<div class="profile-actions">
+
+<a href="/dashboard" class="action-btn blue">
+<span>🏠</span>
+<div>
+<h4>Dashboard</h4>
+<p>Return to home dashboard</p>
+</div>
+</a>
+
+<a href="/edit-profile" class="action-btn cyan">
+<span>✏</span>
+<div>
+<h4>Edit Profile</h4>
+<p>Update your information</p>
+</div>
+</a>
+
+<a href="/change-password" class="action-btn purple">
+<span>🔒</span>
+<div>
+<h4>Change Password</h4>
+<p>Improve account security</p>
+</div>
+</a>
+
+<a href="/withdraw" class="action-btn green">
+<span>💳</span>
+<div>
+<h4>Withdraw</h4>
+<p>Transfer money to M-Pesa</p>
+</div>
+</a>
+
+<a href="/recharge" class="action-btn orange">
+<span>💰</span>
+<div>
+<h4>Recharge Wallet</h4>
+<p>Add money instantly</p>
+</div>
+</a>
+
+<a href="/logout" class="action-btn red">
+<span>🚪</span>
+<div>
+<h4>Logout</h4>
+<p>Sign out of your account</p>
+</div>
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<style>
+
+.profile-actions{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+gap:20px;
+
+margin-top:20px;
+
+}
+
+.action-btn{
+
+position:relative;
+
+overflow:hidden;
+
+display:flex;
+
+align-items:center;
+
+gap:20px;
+
+padding:22px;
+
+border-radius:22px;
+
+text-decoration:none;
+
+color:white;
+
+transition:.35s;
+
+box-shadow:0 12px 25px rgba(0,0,0,.18);
+
+}
+
+.action-btn::before{
+
+content:"";
+
+position:absolute;
+
+top:0;
+
+left:-120%;
+
+width:70%;
+
+height:100%;
+
+background:rgba(255,255,255,.25);
+
+transform:skewX(-25deg);
+
+transition:.7s;
+
+}
+
+.action-btn:hover::before{
+
+left:140%;
+
+}
+
+.action-btn:hover{
+
+transform:translateY(-8px) scale(1.03);
+
+box-shadow:0 18px 35px rgba(0,0,0,.25);
+
+}
+
+.action-btn span{
+
+width:70px;
+
+height:70px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.18);
+
+display:flex;
+
+align-items:center;
+
+justify-content:center;
+
+font-size:34px;
+
+flex-shrink:0;
+
+transition:.35s;
+
+}
+
+.action-btn:hover span{
+
+transform:rotate(12deg) scale(1.15);
+
+background:rgba(255,255,255,.28);
+
+}
+
+.action-btn h4{
+
+font-size:20px;
+
+margin-bottom:5px;
+
+font-weight:600;
+
+}
+
+.action-btn p{
+
+font-size:14px;
+
+opacity:.9;
+
+}
+
+.blue{
+
+background:linear-gradient(135deg,#2563eb,#60a5fa);
+
+}
+
+.cyan{
+
+background:linear-gradient(135deg,#0891b2,#22d3ee);
+
+}
+
+.purple{
+
+background:linear-gradient(135deg,#7c3aed,#c084fc);
+
+}
+
+.green{
+
+background:linear-gradient(135deg,#16a34a,#4ade80);
+
+}
+
+.orange{
+
+background:linear-gradient(135deg,#ea580c,#fb923c);
+
+}
+
+.red{
+
+background:linear-gradient(135deg,#dc2626,#f87171);
+
+}
+
+@media(max-width:768px){
+
+.profile-actions{
+
+grid-template-columns:1fr;
+
+}
+
+.action-btn{
+
+padding:18px;
+
+}
+
+.action-btn span{
+
+width:60px;
+
+height:60px;
+
+font-size:28px;
+
+}
+
+.action-btn h4{
+
+font-size:18px;
+
+}
+
+}
+
+</style>
 
 </body>
 </html>
