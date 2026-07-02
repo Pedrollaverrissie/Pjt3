@@ -76,7 +76,7 @@
 const invoiceId = "{{ invoice_id }}";
 
 const statusElement = document.getElementById("status");
-
+const paymentType = "{{ payment_type }}";
 setInterval(() => {
 
     fetch(`/check-payment/${invoiceId}`)
@@ -99,12 +99,25 @@ setInterval(() => {
 
         else if (data.status === "approved") {
 
-            statusElement.innerText =
-                "Payment successful! Redirecting to login...";
+            if (paymentType === "recharge") {
 
-            setTimeout(() => {
-                window.location.href = "/login";
-            }, 2000);
+                statusElement.innerText =
+                    "Recharge successful! Redirecting...";
+
+                setTimeout(() => {
+                    window.location.href = "/dashboard";
+                }, 2000);
+
+            } else {
+
+                statusElement.innerText =
+                    "Payment successful! Redirecting to login...";
+
+                setTimeout(() => {
+                    window.location.href = "/login";
+                }, 2000);
+
+            }
 
         }
 
