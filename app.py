@@ -624,7 +624,9 @@ def recharge():
                 amount=amount,
                 narrative="Wallet Recharge"
             )
-
+            print("PHONE:", phone)
+            print("AMOUNT:", amount)
+            print("INTASEND RESPONSE:", response)
             invoice_id = response["invoice"]["invoice_id"]
 
             payment = Payment(
