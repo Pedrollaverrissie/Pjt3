@@ -37,7 +37,7 @@
                 align-items: center;
                 max-width:600px;
                 gap: 20px;
-                background:#3b5c7e;
+                background:#2531438c;
                 margin-top: 20px;
                 margin-bottom: 20px;
                 border-radius:5px;
@@ -49,15 +49,18 @@
             }
 
             .profile-top{
-
+                width: 80%;
+                max-width: 400px;
                 background:#0e1114;
                 margin-top: 20px;
                 text-align:center;
                 color:white;
                 padding:35px;
-                border:1px solid rgb(0, 255, 68);
+                border:1px solid rgb(230, 249, 221);
                 margin-left: 20px;
                 margin-right: 20px;
+                border-radius: 20px ;
+                box-shadow: 0 -0 10px rgb(238, 237, 237);
 
             }
 
@@ -109,17 +112,22 @@
 
             }
 
-            .profile-card{
-
+            .profile-card, .profile-card2{
+                width: 80%;
                 padding:20px;font-size: 12px;
                 border-radius: 18px;
                 color:white;
                 background:#0e1114;
                  box-shadow: 0 -0 10px rgb(23, 16, 0);
+                 max-width: 350px;
 
             }
+            .profile-card2{
+                width: 85%;
+            }
 
-            .profile-card h3{
+
+            .profile-card h3,.profile-card2 .h3{
 
                 color:#ffc107;
 
@@ -169,12 +177,12 @@
                     gap:15px;
                   
                     border-radius: 25% 10%;
-                    box-shadow: 0 -0 5px rgb(77, 255, 0);
+                    box-shadow: 0 -0 20px rgb(187, 189, 186);
 
                 }
 
                 .profile-actions button{
-                    box-shadow: 0 -0 3px rgb(77, 255, 0);
+                    box-shadow: 0 -0 3px rgb(247, 248, 246);
                     width:200px;
 
                     height:45px;
@@ -354,9 +362,9 @@
 
     <!-- ================= WALLET SUMMARY ================= -->
 
-    <div class="profile-card">
+    <div class="profile-card2">
 
-        <h3>💰 Wallet Summary</h3>
+        <h3 class="h3">💰 Wallet Summary</h3>
 
         <div class="info-row">
             <strong>Main Wallet</strong>
@@ -386,27 +394,27 @@
     <div class="profile-actions">
 
         <a href="/dashboard">
-            <button>🏠 Dashboard</button>
+            <button>Dashboard</button>
         </a>
 
         <a href="/edit-profile">
-            <button>✏ Edit Profile</button>
+            <button>Edit Profile</button>
         </a>
 
         <a href="/change-password">
-            <button>🔒 Change Password</button>
+            <button>Change Password</button>
         </a>
 
         <a href="/withdraw">
-            <button>💳 Withdraw</button>
+            <button>Withdraw</button>
         </a>
 
         <a href="/recharge">
-            <button>💰 Recharge</button>
+            <button>Recharge</button>
         </a>
 
         <a href="/logout">
-            <button class="logout-btn">🚪 Logout</button>
+            <button class="logout-btn">Logout</button>
         </a>
 
     </div>
