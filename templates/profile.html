@@ -12,7 +12,7 @@
 
             .profile-body{
 
-                background:#5c5c5c;
+                background:#555859e8;
 
                 display:flex;
 
@@ -37,14 +37,12 @@
                 align-items: center;
                 max-width:600px;
                 gap: 20px;
-                background:#2531438c;
+             
                 margin-top: 20px;
                 margin-bottom: 20px;
                 border-radius:5px;
 
                 overflow:hidden;
-
-                box-shadow:0 -0 20px rgba(0,0,0,.5);
 
             }
 
@@ -56,8 +54,8 @@
                 text-align:center;
                 color:white;
                 padding:35px;
-                border-radius: 40px ;
-                box-shadow: 0 -0 10px rgb(165, 164, 164);
+                border-radius: 20px 10px;
+                box-shadow: 0 -0 20px rgb(165, 164, 164);
 
             }
 
@@ -309,18 +307,21 @@
         <div class="profile-level">
 
             <div class="level-item">
-                <h3>Ksh {{ total_income }}</h3>
                 <p>Total Income</p>
+                <h3>Ksh {{ total_income }}</h3>
+                
             </div>
 
             <div class="level-item">
-                <h3>{{ total_referrals }}</h3>
                 <p>Referrals</p>
+                <h3>{{ total_referrals }}</h3>
+                
             </div>
 
             <div class="level-item">
-                <h3>{{ active_tasks }}</h3>
                 <p>Tasks</p>
+                <h3>{{ active_tasks }}</h3>
+                
             </div>
 
         </div>
