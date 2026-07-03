@@ -925,9 +925,9 @@ def upgrade_vip(plan):
 
     VIP_PLANS = {
         "Silver": 10,
-        "Gold": 1500,
-        "Platinum": 5000,
-        "Diamond": 10000
+        "Gold": 15,
+        "Platinum": 50,
+        "Diamond": 100
     }
 
     if plan not in VIP_PLANS:
