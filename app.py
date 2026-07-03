@@ -898,9 +898,61 @@ def add_to_team_wallet(user, amount, description):
 
     db.session.add(transaction)
 
+#------------------VIP TASK ROUTE---------------------
+@app.route("/vip")
+@login_required
+def vip():
 
+    plans = [
+        {"name": "Silver", "price": 500, "daily_income": 50, "tasks": 5},
+        {"name": "Gold", "price": 1500, "daily_income": 180, "tasks": 10},
+        {"name": "Platinum", "price": 5000, "daily_income": 700, "tasks": 20},
+        {"name": "Diamond", "price": 10000, "daily_income": 1500, "tasks": 30},
+    ]
 
+    return render_template(
+        "vip.html",
+        plans=plans,
+        current_user=current_user
+    )
+#--------------VIP UPGRADE ROUTE---------------
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
-#========================================================================
+@app.route("/upgrade-vip/<plan>", methods=["POST"])
+@login_required
+def upgrade_vip(plan):
+
+    VIP_PLANS = {
+        "Silver": 500,
+        "Gold": 1500,
+        "Platinum": 5000,
+        "Diamond": 10000
+    }
+
+    if plan not in VIP_PLANS:
+        return "Invalid plan"
+
+    price = VIP_PLANS[plan]
+
+    if current_user.main_wallet < price:
+        return "Insufficient balance"
+
+    now = datetime.utcnow()
+
+    if current_user.vip_expires_at and current_user.vip_expires_at > now:
+        current_user.vip_expires_at += relativedelta(months=6)
+    else:
+        current_user.vip_started_at = now
+        current_user.vip_expires_at = now + relativedelta(months=6)
+
+    current_user.vip_level = plan
+    current_user.main_wallet -= price
+
+    db.session.commit()
+
+    return redirect("/vip")
+#------------------------------------------------------
+#======================================================
 if __name__ == "__main__":
     app.run(debug=True)

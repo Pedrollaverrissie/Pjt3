@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>VIP Plans</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+            body {
+                font-family: Arial, sans-serif;
+                background: #0f172a;
+                color: white;
+                margin: 0;
+                padding: 0;
+            }
+
+    </style>
+</head>
+
+<body>
+
+<div class="vip-container">
+
+    <h2 class="vip-title">Choose Your VIP Plan</h2>
+
+    <div class="vip-grid">
+
+        {% for plan in plans %}
+
+        <div class="vip-card">
+
+            <h3>{{ plan.name }}</h3>
+
+            <p>KES {{ plan.price }}</p>
+
+            <p>Daily Income: {{ plan.daily_income }}</p>
+
+            <p>Tasks: {{ plan.tasks }}</p>
+
+            {% if current_user.vip_level == plan.name %}
+
+                <button class="vip-btn disabled" disabled>
+                    Current Plan
+                </button>
+
+            {% else %}
+
+                <form action="{{ url_for('upgrade_vip', plan=plan.name) }}" method="POST">
+
+                    <button class="vip-btn" type="submit">
+                        Upgrade
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
