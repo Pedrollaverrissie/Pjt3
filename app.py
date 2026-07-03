@@ -505,7 +505,7 @@ def webhook():
                         "Wallet Recharge"
                     )
 
-                    referrer.commissions += referral_bonus
+                 
 
                     # ==========================
                     # Give 10% referral commission
