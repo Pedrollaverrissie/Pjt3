@@ -688,17 +688,22 @@ def recharge():
 #-----------TENPORARY ROUT---------------
 @app.route("/users")
 def users():
-    all_users = User.query.all()
+    users = User.query.all()
 
     html = ""
 
-    for user in all_users:
+    for u in users:
         html += f"""
         <p>
-        {user.id} |
-        {user.username} |
-        {user.email} |
-        {user.phone}
+        ID: {u.id}<br>
+        Username: {u.username}<br>
+        Email: {u.email}<br>
+        Referral Code: {u.referral_code}<br>
+        Referred By: {u.referred_by}<br>
+        Main Wallet: {u.main_wallet}<br>
+        Team Wallet: {u.team_wallet}<br>
+        Commissions: {u.commissions}<br>
+        <hr>
         </p>
         """
 
