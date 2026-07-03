@@ -924,7 +924,7 @@ from dateutil.relativedelta import relativedelta
 def upgrade_vip(plan):
 
     VIP_PLANS = {
-        "Silver": 500,
+        "Silver": 10,
         "Gold": 1500,
         "Platinum": 5000,
         "Diamond": 10000
