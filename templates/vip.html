@@ -6,13 +6,360 @@
     <title>VIP Plans</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
-            body {
-                font-family: Arial, sans-serif;
-                background: #0f172a;
-                color: white;
-                margin: 0;
-                padding: 0;
-            }
+
+        *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:"Segoe UI",sans-serif;
+        }
+
+        body{
+
+        background:
+        linear-gradient(135deg,#071224,#0f172a,#142b54);
+
+        min-height:100vh;
+
+        padding:40px 20px;
+
+        color:white;
+
+        overflow-x:hidden;
+
+        }
+
+
+        /* Background Glow */
+
+        body::before{
+
+        content:"";
+
+        position:fixed;
+
+        width:350px;
+        height:350px;
+
+        background:#2563eb;
+
+        filter:blur(180px);
+
+        top:-100px;
+        left:-100px;
+
+        opacity:.35;
+
+        z-index:-2;
+
+        }
+
+        body::after{
+
+        content:"";
+
+        position:fixed;
+
+        width:350px;
+        height:350px;
+
+        background:#38bdf8;
+
+        filter:blur(180px);
+
+        bottom:-120px;
+        right:-120px;
+
+        opacity:.25;
+
+        z-index:-2;
+
+        }
+
+        /* Container */
+
+        .vip-container{
+
+        max-width:1350px;
+
+        margin:auto;
+
+        }
+
+        /* Title */
+
+        .vip-title{
+
+        text-align:center;
+
+        font-size:38px;
+
+        font-weight:700;
+
+        margin-bottom:45px;
+
+        letter-spacing:1px;
+
+        }
+
+        .vip-title::after{
+
+        content:"";
+
+        display:block;
+
+        width:90px;
+
+        height:5px;
+
+        margin:15px auto;
+
+        border-radius:50px;
+
+        background:linear-gradient(90deg,#3b82f6,#38bdf8);
+
+        }
+
+        /* Grid */
+
+        .vip-grid{
+
+        display:grid;
+
+        grid-template-columns:
+        repeat(auto-fit,minmax(290px,1fr));
+
+        gap:28px;
+
+        }
+
+        /* Card */
+
+        .vip-card{
+
+        position:relative;
+
+        padding:30px;
+
+        border-radius:24px;
+
+        background:rgba(255,255,255,.08);
+
+        backdrop-filter:blur(18px);
+
+        border:1px solid rgba(255,255,255,.12);
+
+        box-shadow:
+
+        0 12px 35px rgba(0,0,0,.30);
+
+        transition:.35s;
+
+        overflow:hidden;
+
+        }
+
+        /* Hover */
+
+        .vip-card:hover{
+
+        transform:translateY(-10px) scale(1.02);
+
+        box-shadow:
+
+        0 20px 45px rgba(37,99,235,.35);
+
+        }
+
+        /* Shine */
+
+        .vip-card::before{
+
+        content:"";
+
+        position:absolute;
+
+        top:-150%;
+
+        left:-60%;
+
+        width:60%;
+
+        height:300%;
+
+        background:
+
+        rgba(255,255,255,.18);
+
+        transform:rotate(25deg);
+
+        transition:.8s;
+
+        }
+
+        .vip-card:hover::before{
+
+        left:140%;
+
+        }
+
+        /* VIP Badge */
+
+        .vip-card::after{
+
+        content:"VIP";
+
+        position:absolute;
+
+        top:18px;
+
+        right:-35px;
+
+        background:
+
+        linear-gradient(45deg,#fbbf24,#f59e0b);
+
+        color:#111;
+
+        font-size:12px;
+
+        font-weight:bold;
+
+        padding:8px 40px;
+
+        transform:rotate(45deg);
+
+        }
+
+        /* Name */
+
+        .vip-card h3{
+
+        font-size:27px;
+
+        margin-bottom:20px;
+
+        text-align:center;
+
+        }
+
+        /* Price */
+
+        .vip-card p:first-of-type{
+
+        font-size:34px;
+
+        font-weight:bold;
+
+        color:#38bdf8;
+
+        margin-bottom:18px;
+
+        text-align:center;
+
+        }
+
+        /* Details */
+
+        .vip-card p{
+
+        font-size:16px;
+
+        margin:12px 0;
+
+        display:flex;
+
+        justify-content:space-between;
+
+        padding:12px 0;
+
+        border-bottom:
+
+        1px solid rgba(255,255,255,.08);
+
+        }
+
+        /* Button */
+
+        .vip-btn{
+
+        width:100%;
+
+        margin-top:25px;
+
+        padding:15px;
+
+        border:none;
+
+        border-radius:12px;
+
+        font-size:17px;
+
+        font-weight:bold;
+
+        cursor:pointer;
+
+        color:white;
+
+        background:
+
+        linear-gradient(135deg,#2563eb,#38bdf8);
+
+        transition:.35s;
+
+        }
+
+        .vip-btn:hover{
+
+        transform:translateY(-3px);
+
+        box-shadow:
+
+        0 12px 28px rgba(59,130,246,.45);
+
+        }
+
+        /* Disabled */
+
+        .disabled{
+
+        background:#334155 !important;
+
+        cursor:not-allowed;
+
+        opacity:.7;
+
+        }
+
+        /* Mobile */
+
+        @media(max-width:768px){
+
+        .vip-title{
+
+        font-size:30px;
+
+        }
+
+        .vip-card{
+
+        padding:24px;
+
+        }
+
+        .vip-card h3{
+
+        font-size:23px;
+
+        }
+
+        .vip-card p:first-of-type{
+
+        font-size:30px;
+
+        }
+
+        }
 
     </style>
 </head>
