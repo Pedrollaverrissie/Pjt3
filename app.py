@@ -485,8 +485,10 @@ def webhook():
     if payment:
 
         if state in ["COMPLETE", "COMPLETED", "SUCCESSFUL"]:
-
+            
             payment.status = "approved"
+
+            
 
             # =========================
             # RECHARGE PAYMENT
@@ -502,6 +504,44 @@ def webhook():
                         payment.amount,
                         "Wallet Recharge"
                     )
+
+                    referrer.commissions += referral_bonus
+
+                    # ==========================
+                    # Give 10% referral commission
+                    # ==========================
+                    if user.referred_by:
+
+                        referrer = User.query.filter_by(
+                            referral_code=user.referred_by
+                        ).first()
+
+                        if referrer:
+
+                            referral_bonus = payment.amount * 0.10
+
+                            # Add commission directly to Main Wallet
+                            add_to_main_wallet(
+                                referrer,
+                                referral_bonus,
+                                f"10% Referral commission from {user.username}'s recharge"
+                            )
+
+                            # Track total commissions earned
+                            referrer.commissions += referral_bonus
+
+                            # Notify the referrer
+                            notification = Notification(
+                                user_id=referrer.id,
+                                title="Referral Commission",
+                                message=f"You earned KES {referral_bonus:.2f} because {user.username} recharged KES {payment.amount:.2f}."
+                            )
+
+                            db.session.add(notification)
+
+                            print(
+                                f"Referral commission of KES {referral_bonus:.2f} awarded to {referrer.username}"
+                            )
 
                     notification = Notification(
                         user_id=user.id,
@@ -544,6 +584,7 @@ def webhook():
                         task_wallet=0,
                         team_wallet=0,
                         withdrawn=0,
+                        commissions=0,
 
                     )
                     
@@ -554,32 +595,7 @@ def webhook():
                     
                     # Referral code
                     new_user.referral_code = f"SN{new_user.id}"
-                    
-                    # -----------------------------------------
-                    # Give referral commission
-                    # -----------------------------------------
-                    
-                    if new_user.referred_by:
-                    
-                        referrer = User.query.filter_by(
-                            referral_code=new_user.referred_by
-                        ).first()
-                    
-                        if referrer:
-                    
-                            referral_bonus = payment.amount * 0.20  # 20%
-                            
-                            add_to_team_wallet(
-                                referrer,
-                                referral_bonus,
-                                f"Referral bonus from {new_user.username}"
-                            )
-                    
-                            referrer.commissions += referral_bonus
-                    
-                            print(
-                                f"Referral bonus awarded to {referrer.username}"
-                            )
+    
                     
                     print("USER CREATED:", pending_user.username)
                     print("REFERRAL CODE:", new_user.referral_code)
