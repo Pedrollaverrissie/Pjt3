@@ -91,7 +91,7 @@ def home():
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     # Get referral code from URL, e.g. /signup?ref=SN1
-    ref = request.args.get("ref")
+    ref = request.args.get("ref") or request.form.get("referral_code")
 
     # Validate referral code
     if ref:
