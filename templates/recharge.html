@@ -5,299 +5,212 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Poppins,sans-serif;
+       *{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
 }
 
 body{
 
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
 
-background:#050816;
-overflow:hidden;
+  background:#414141e8;
 
-}
-
-/* background glow */
-
-body::before{
-
-content:"";
-position:absolute;
-width:400px;
-height:400px;
-background:#00f7ff;
-filter:blur(160px);
-left:-100px;
-top:-100px;
-opacity:.4;
+    padding:20px;
 
 }
 
-body::after{
-
-content:"";
-position:absolute;
-width:350px;
-height:350px;
-background:#ff00d4;
-filter:blur(160px);
-right:-80px;
-bottom:-80px;
-opacity:.4;
-
-}
+/* Container */
 
 .container{
 
-display:flex;
-justify-content:center;
-align-items:center;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
 
 }
 
-/* CARD */
+/* Card */
 
 .card{
 
-position:relative;
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+  
+    justify-content: center;
+    align-items: center;
+    background:#0e1114;
+    border-radius:25px;
 
-width:370px;
-height:95px;
+    padding:15px;
 
-border-radius:25px;
-
-overflow:hidden;
-
-transition:.7s cubic-bezier(.17,.84,.44,1);
-
-background:rgba(255,255,255,.08);
-
-backdrop-filter:blur(18px);
-
-box-shadow:
-
-0 0 40px rgba(0,0,0,.4);
+   box-shadow: 0 -0 6px rgb(187, 189, 186);
 
 }
 
-/* EXPAND */
-
-.card:hover,
-.card.active{
-    height:430px;
-}
-
-/* Animated border */
-
-.card::before{
-
-content:"";
-
-position:absolute;
-
-inset:-3px;
-
-background:
-
-linear-gradient(
-45deg,
-#00e5ff,
-#00ff88,
-#8a2be2,
-#ff00ff,
-#00e5ff);
-
-background-size:500%;
-
-animation:border 6s linear infinite;
-
-z-index:-2;
-
-}
-
-.card::after{
-
-content:"";
-
-position:absolute;
-
-inset:2px;
-
-background:#0b1128;
-
-border-radius:23px;
-
-z-index:-1;
-
-}
-
-@keyframes border{
-
-0%{
-
-background-position:0%;
-
-}
-
-100%{
-
-background-position:500%;
-
-}
-
-}
-
-/* HEADER */
+/* Header */
 
 .cover{
 
-height:95px;
+    text-align:center;
+    margin-bottom:10px;
 
-display:flex;
+}
 
-flex-direction:column;
+.icon{
 
-justify-content:center;
-
-align-items:center;
-
-color:white;
+    font-size:55px;
+    margin-bottom:10px;
 
 }
 
 .cover h2{
 
-margin-top:5px;
-
-font-size:23px;
+    font-size:28px;
+    color:white;
+    margin-bottom:8px;
 
 }
 
 .cover p{
 
-font-size:13px;
-
-color:#bbb;
-
-}
-
-/* ICON */
-
-.icon{
-
-font-size:32px;
-
-animation:float 2s infinite ease-in-out;
+    color:#b8c5d6;
+    font-size:15px;
 
 }
 
-@keyframes float{
-
-50%{
-
-transform:translateY(-5px);
-
-}
-
-}
-
-/* CONTENT */
+/* Content */
 
 .content{
 
-padding:30px;
-
-opacity:0;
-
-transform:translateY(50px);
-
-transition:.45s;
-
-transition-delay:0s;
+    width:100%;
 
 }
 
-.card:hover .content{
-
-opacity:1;
-
-transform:translateY(0);
-
-transition-delay:.25s;
-
-}
+/* Inputs */
 
 .content input{
 
-width:100%;
+    width:90%;
 
-margin-bottom:18px;
+    padding:12px;
 
-padding:15px;
+    margin-bottom:18px;
 
-border:none;
+    border:none;
 
-outline:none;
+    border-radius:14px;
 
-border-radius:12px;
+    background:rgba(255,255,255,.10);
 
-background:#17264a;
+    color:white;
 
-color:white;
+    font-size:15px;
 
-font-size:15px;
+    outline:none;
 
-transition:.3s;
+    transition:.3s;
+    margin-bottom: 30px;
+
+}
+
+.content input::placeholder{
+
+    color:#d1d5db;
 
 }
 
 .content input:focus{
 
-box-shadow:0 0 20px #00e5ff;
+    border:1px solid #38bdf8;
 
-transform:scale(1.02);
+    box-shadow:
+    0 0 12px rgba(56,189,248,.4);
+
+}
+
+/* Button */
+
+button{
+     box-shadow: 0 -0 3px rgb(247, 248, 246);
+                   
+
+    width:70%;
+
+    padding:12px;
+
+    border:none;
+
+    border-radius:14px 9px;
+
+    background:rgba(75, 78, 80, 0);
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+    margin-top: 10px;
+
+}
+
+button:hover{
+    
+    transform:translateY(-2px);
+    
+    background:rgba(54, 54, 54, 0);
+
+
+
+
+}
+
+/* Mobile */
+
+@media(max-width:480px){
+
+.card{
+
+    padding:25px;
+
+}
+
+.cover h2{
+
+    font-size:23px;
+
+}
+
+.icon{
+
+    font-size:45px;
 
 }
 
 button{
 
-width:100%;
-
-padding:15px;
-
-border:none;
-
-border-radius:12px;
-
-font-size:17px;
-
-font-weight:bold;
-
-cursor:pointer;
-
-color:white;
-
-background:
-
-linear-gradient(90deg,#00c6ff,#8a2be2);
-
-transition:.3s;
+    padding:11px;
 
 }
 
-button:hover{
-
-transform:translateY(-3px);
-
-box-shadow:0 15px 30px rgba(0,255,255,.35);
-
+}
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    width: 100%;
 }
     </style>
 </head>
@@ -350,14 +263,6 @@ box-shadow:0 15px 30px rgba(0,255,255,.35);
     </div>
 
 </div>
-<script>
-    const card = document.querySelector(".card");
 
-card.addEventListener("click", () => {
-    if (window.innerWidth <= 768) {
-        card.classList.toggle("active");
-    }
-});
-</script>
 </body>
 </html>
