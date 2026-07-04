@@ -5,7 +5,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import re, random ,time,os,requests
 from flask_mail import Mail, Message
 
-from models import db, User, Payment, PendingUser,Notification,Transaction,Task,UserTask
+from models import (
+    db,
+    User,
+    Payment,
+    PendingUser,
+    Notification,
+    Transaction,
+    TaskSession
+)
 
 
 from flask_sqlalchemy import SQLAlchemy
@@ -960,49 +968,6 @@ def upgrade_vip(plan):
 @login_required
 def tasks():
 
-    VIPS = {
-        "Bronze": {"tasks": 0, "income": 0},
-        "Silver": {"tasks": 5, "income": 50},
-        "Gold": {"tasks": 10, "income": 180},
-        "Platinum": {"tasks": 20, "income": 700},
-        "Diamond": {"tasks": 30, "income": 1500},
-    }
-
-    vip = VIPS.get(
-        current_user.vip_level,
-        VIPS["Bronze"]
-    )
-
-    return render_template(
-        "tasks.html",
-        max_tasks=vip["tasks"],
-        daily_income=vip["income"]
-    )
-
-#----------COMPLETE TASK ROUTE ---------------------
-from datetime import date, datetime
-
-@app.route("/complete-task", methods=["POST"])
-@login_required
-def complete_task():
-
-    VIPS = {
-        "Bronze": {"tasks": 0, "income": 0},
-        "Silver": {"tasks": 5, "income": 50},
-        "Gold": {"tasks": 10, "income": 180},
-        "Platinum": {"tasks": 20, "income": 700},
-        "Diamond": {"tasks": 30, "income": 1500},
-    }
-
-    vip = VIPS.get(current_user.vip_level)
-
-    if not vip:
-        return "Invalid VIP"
-
-    # Bronze cannot earn
-    if vip["tasks"] == 0:
-        return "Upgrade your VIP plan first."
-
     # Check VIP expiry
     if (
         current_user.vip_expires_at
@@ -1010,42 +975,27 @@ def complete_task():
     ):
         current_user.vip_level = "Bronze"
         db.session.commit()
-        return "Your VIP membership has expired."
 
-    # Reset every new day
-    today = date.today()
+    tasks = Task.query.filter_by(
+        vip_level=current_user.vip_level,
+        active=True
+    ).all()
 
-    if current_user.last_task_date != today:
-        current_user.tasks_completed = 0
-        current_user.last_task_date = today
+    completed = UserTask.query.filter(
+        UserTask.user_id == current_user.id,
+        db.func.date(UserTask.completed_at) == date.today()
+    ).all()
 
-    # Daily limit reached
-    if current_user.tasks_completed >= vip["tasks"]:
-        db.session.commit()
-        return "You have completed all today's tasks."
+    completed_ids = [
+        t.task_id
+        for t in completed
+    ]
 
-    # Earnings per task
-    earning = vip["income"] / vip["tasks"]
-
-    add_to_task_wallet(
-        current_user,
-        earning,
-        "Daily Task Reward"
+    return render_template(
+        "tasks.html",
+        tasks=tasks,
+        completed_ids=completed_ids
     )
-
-    current_user.tasks_completed += 1
-
-    notification = Notification(
-        user_id=current_user.id,
-        title="Task Completed",
-        message=f"You earned KES {earning:.2f}."
-    )
-
-    db.session.add(notification)
-
-    db.session.commit()
-
-    return redirect("/tasks")
 
 #-----------TEAM ROUTE----------------
 @app.route("/team")
@@ -1112,6 +1062,57 @@ def admin_tasks():
         "admin_tasks.html",
         tasks=tasks
     )
+
+
+#--------------REWARD ROUTE------------------
+@app.route("/claim-task/<int:task_id>", methods=["POST"])
+@login_required
+def claim_task(task_id):
+
+    task = Task.query.get_or_404(task_id)
+
+    # Prevent claiming inactive tasks
+    if not task.active:
+        return "Task is inactive."
+
+    # VIP check
+    if task.vip_level != current_user.vip_level:
+        return "This task is not available for your VIP."
+
+    # Already completed today?
+    completed = UserTask.query.filter(
+        UserTask.user_id == current_user.id,
+        UserTask.task_id == task.id,
+        db.func.date(UserTask.completed_at) == date.today()
+    ).first()
+
+    if completed:
+        return "Task already completed today."
+
+    add_to_task_wallet(
+        current_user,
+        task.reward,
+        task.title
+    )
+
+    db.session.add(
+        UserTask(
+            user_id=current_user.id,
+            task_id=task.id
+        )
+    )
+
+    db.session.add(
+        Notification(
+            user_id=current_user.id,
+            title="Task Reward",
+            message=f"You earned KES {task.reward:.2f}."
+        )
+    )
+
+    db.session.commit()
+
+    return redirect("/tasks")
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)

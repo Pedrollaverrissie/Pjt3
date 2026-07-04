@@ -39,42 +39,65 @@
 
 <div class="tasks-container">
 
-    <h2>Daily Tasks</h2>
+<h2>Today's Tasks</h2>
 
-    <h3>{{ current_user.vip_level }} Member</h3>
+{% for task in tasks %}
 
-    <p>
-        Daily Tasks:
-        {{ max_tasks }}
-    </p>
+<div class="task-card">
 
-    <p>
-        Daily Income:
-        KES {{ daily_income }}
-    </p>
+<h3>{{ task.title }}</h3>
 
-    <p>
-        Completed:
-        {{ current_user.tasks_completed }}/{{ max_tasks }}
-    </p>
+<p>{{ task.description }}</p>
 
-    {% if max_tasks == 0 %}
+<p>
 
-        <button disabled>
-            Upgrade VIP First
-        </button>
+Reward
 
-    {% else %}
+<strong>
 
-        <form action="/complete-task" method="POST">
+KES {{ task.reward }}
 
-            <button>
-                Complete Task
-            </button>
+</strong>
 
-        </form>
+</p>
 
-    {% endif %}
+{% if task.id in completed_ids %}
+
+<button disabled>
+
+✅ Completed
+
+</button>
+
+{% else %}
+
+<a href="{{ task.url }}" target="_blank">
+
+<button>
+
+Start Task
+
+</button>
+
+</a>
+
+<form
+action="/claim-task/{{ task.id }}"
+method="POST">
+
+<button>
+
+Claim Reward
+
+</button>
+
+</form>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
 
 </div>
 

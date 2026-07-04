@@ -214,3 +214,15 @@ class UserTask(db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
+
+
+
+class TaskSession(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
+    task_id = db.Column(db.Integer)
+
+    started_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    completed = db.Column(db.Boolean, default=False)
