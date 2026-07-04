@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>{{ task.title }}</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+            .timer-card{
+
+            width:90%;
+            max-width:500px;
+
+            margin:80px auto;
+
+            background:white;
+
+            border-radius:15px;
+
+            padding:30px;
+
+            text-align:center;
+
+        }
+
+        .timer-card h1{
+
+            font-size:70px;
+
+            color:#0b7dda;
+
+        }
+
+        .timer-card button{
+
+            margin-top:25px;
+
+            width:100%;
+
+            padding:15px;
+
+            font-size:18px;
+
+        }
+
+        .timer-card button:disabled{
+
+            opacity:.5;
+
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="timer-card">
+
+    <h2>{{ task.title }}</h2>
+
+    <p>{{ task.description }}</p>
+
+    <h1 id="countdown">15</h1>
+
+    <p>Please stay on this page until the timer finishes.</p>
+
+    <form
+        action="/claim-task/{{ task.id }}"
+        method="POST">
+
+        <button
+            id="claimBtn"
+            disabled>
+
+            Claim Reward
+
+        </button>
+
+    </form>
+
+</div>
+
+<script>
+
+let seconds = 15;
+
+const counter = document.getElementById("countdown");
+
+const button = document.getElementById("claimBtn");
+
+const timer = setInterval(function(){
+
+    seconds--;
+
+    counter.innerHTML = seconds;
+
+    if(seconds <= 0){
+
+        clearInterval(timer);
+
+        counter.innerHTML="✅";
+
+        button.disabled=false;
+
+    }
+
+},1000);
+
+</script>
+
+</body>
+
+</html>

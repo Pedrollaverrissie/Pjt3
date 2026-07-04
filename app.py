@@ -1065,17 +1065,98 @@ def admin_tasks():
 
 
 #--------------REWARD ROUTE------------------
+from datetime import datetime, date
+
 @app.route("/claim-task/<int:task_id>", methods=["POST"])
 @login_required
 def claim_task(task_id):
 
     task = Task.query.get_or_404(task_id)
 
-    # Prevent claiming inactive tasks
+    # Task must be active
     if not task.active:
         return "Task is inactive."
 
-    # VIP check
+    # Correct VIP
+    if task.vip_level != current_user.vip_level:
+        return "Task not available for your VIP."
+
+    # Already completed today?
+    completed = UserTask.query.filter(
+        UserTask.user_id == current_user.id,
+        UserTask.task_id == task.id,
+        db.func.date(UserTask.completed_at) == date.today()
+    ).first()
+
+    if completed:
+        return "You already completed this task today."
+
+    # Find task session
+    session = TaskSession.query.filter_by(
+        user_id=current_user.id,
+        task_id=task.id
+    ).first()
+
+    if not session:
+        return "Task session not found."
+
+    # ==============================
+    # SERVER TIMER CHECK
+    # ==============================
+
+    elapsed = (datetime.utcnow() - session.started_at).total_seconds()
+
+    if elapsed < 15:
+        return f"Please wait {15 - int(elapsed)} more seconds."
+
+    # Prevent claiming twice
+    if session.completed:
+        return "Reward already claimed."
+
+    # Mark session completed
+    session.completed = True
+
+    # Credit wallet
+    add_to_task_wallet(
+        current_user,
+        task.reward,
+        task.title
+    )
+
+    # Save completed task
+    db.session.add(
+        UserTask(
+            user_id=current_user.id,
+            task_id=task.id
+        )
+    )
+
+    # Notification
+    db.session.add(
+        Notification(
+            user_id=current_user.id,
+            title="Task Completed",
+            message=f"You earned KES {task.reward:.2f}."
+        )
+    )
+
+    db.session.commit()
+
+    return redirect("/tasks")
+#-------------TASK TIME ROUTE----------------
+
+
+@app.route("/start-task/<int:task_id>")
+@login_required
+def start_task(task_id):
+
+    task = Task.query.get_or_404(task_id)
+
+    # Task must be active
+    if not task.active:
+        return "Task is unavailable."
+
+    # User must have the correct VIP
     if task.vip_level != current_user.vip_level:
         return "This task is not available for your VIP."
 
@@ -1087,32 +1168,28 @@ def claim_task(task_id):
     ).first()
 
     if completed:
-        return "Task already completed today."
+        return "You have already completed this task today."
 
-    add_to_task_wallet(
-        current_user,
-        task.reward,
-        task.title
+    # Delete any old unfinished session
+    TaskSession.query.filter_by(
+        user_id=current_user.id,
+        task_id=task.id
+    ).delete()
+
+    # Create a fresh session
+    session = TaskSession(
+        user_id=current_user.id,
+        task_id=task.id,
+        started_at=datetime.utcnow()
     )
 
-    db.session.add(
-        UserTask(
-            user_id=current_user.id,
-            task_id=task.id
-        )
-    )
-
-    db.session.add(
-        Notification(
-            user_id=current_user.id,
-            title="Task Reward",
-            message=f"You earned KES {task.reward:.2f}."
-        )
-    )
-
+    db.session.add(session)
     db.session.commit()
 
-    return redirect("/tasks")
+    return render_template(
+        "task_timer.html",
+        task=task
+    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
