@@ -4,7 +4,10 @@ from flask_login import LoginManager, login_user, login_required, logout_user, c
 from werkzeug.security import generate_password_hash, check_password_hash
 import re, random ,time,os,requests
 from flask_mail import Mail, Message
-from models import db, User, Payment, PendingUser,Notification,Transaction
+
+from models import db, User, Payment, PendingUser,Notification,Transaction,Task,UserTask
+
+
 from flask_sqlalchemy import SQLAlchemy
 from intasend import APIService
 from dotenv import load_dotenv

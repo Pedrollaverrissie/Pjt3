@@ -158,7 +158,7 @@ class Transaction(db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
-    
+
 
 from datetime import date
 
@@ -178,3 +178,39 @@ vip_expires_at = db.Column(
     db.DateTime,
     nullable=True
 )
+
+class Task(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    title = db.Column(db.String(150))
+
+    description = db.Column(db.Text)
+
+    reward = db.Column(db.Float)
+
+    vip_level = db.Column(db.String(20))
+
+    url = db.Column(db.String(255))
+
+    active = db.Column(db.Boolean, default=True)
+
+
+class UserTask(db.Model):
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id")
+    )
+
+    task_id = db.Column(
+        db.Integer,
+        db.ForeignKey("task.id")
+    )
+
+    completed_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
