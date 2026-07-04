@@ -12,6 +12,8 @@ from models import (
     PendingUser,
     Notification,
     Transaction,
+    Task,
+    UserTask,
     TaskSession
 )
 
