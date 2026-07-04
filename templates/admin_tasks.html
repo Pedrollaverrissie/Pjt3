@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Admin Tasks</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+            .admin-task-container{
+            width:90%;
+            max-width:700px;
+            margin:30px auto;
+            background:#fff;
+            padding:20px;
+            border-radius:15px;
+        }
+
+        .admin-task-container input,
+        .admin-task-container textarea,
+        .admin-task-container select{
+            width:100%;
+            padding:12px;
+            margin:10px 0;
+            border:1px solid #ccc;
+            border-radius:8px;
+        }
+
+        .admin-task-container button{
+            width:100%;
+            padding:12px;
+            border:none;
+            background:#0b7dda;
+            color:#fff;
+            border-radius:8px;
+            cursor:pointer;
+        }
+
+        .task-row{
+            border-bottom:1px solid #ddd;
+            padding:15px 0;
+        }
+</style>
+</head>
+
+<body>
+
+<div class="admin-task-container">
+
+<h2>Create Task</h2>
+
+<form method="POST">
+
+<input
+type="text"
+name="title"
+placeholder="Task Title"
+required>
+
+<textarea
+name="description"
+placeholder="Description"></textarea>
+
+<input
+type="number"
+step="0.01"
+name="reward"
+placeholder="Reward"
+required>
+
+<select name="vip_level">
+
+<option>Silver</option>
+
+<option>Gold</option>
+
+<option>Platinum</option>
+
+<option>Diamond</option>
+
+</select>
+
+<input
+type="text"
+name="url"
+placeholder="Task URL">
+
+<button type="submit">
+
+Save Task
+
+</button>
+
+</form>
+
+<hr>
+
+<h2>Existing Tasks</h2>
+
+{% for task in tasks %}
+
+<div class="task-row">
+
+<b>{{ task.title }}</b>
+
+<br>
+
+VIP: {{ task.vip_level }}
+
+<br>
+
+Reward:
+KES {{ task.reward }}
+
+<br>
+
+Status:
+
+{{ "Active" if task.active else "Inactive" }}
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</body>
+
+</html>

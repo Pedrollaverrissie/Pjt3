@@ -1081,7 +1081,37 @@ def team():
         commissions=current_user.commissions
     )
 
+#--------------ADMNIN TASK ROUTE----------------
+@app.route("/admin/tasks", methods=["GET", "POST"])
+@login_required
+def admin_tasks():
 
+    # Replace this with your own admin check later
+    if current_user.email != "petersongitonga42@gmail.com":
+        return "Access Denied"
+
+    if request.method == "POST":
+
+        task = Task(
+            title=request.form["title"],
+            description=request.form["description"],
+            reward=float(request.form["reward"]),
+            vip_level=request.form["vip_level"],
+            url=request.form["url"],
+            active=True
+        )
+
+        db.session.add(task)
+        db.session.commit()
+
+        return redirect("/admin/tasks")
+
+    tasks = Task.query.order_by(Task.id.desc()).all()
+
+    return render_template(
+        "admin_tasks.html",
+        tasks=tasks
+    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
