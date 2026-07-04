@@ -966,6 +966,17 @@ h3{
     border-radius: 5px;
   
 }
+.vip-status-card{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+         
+          
+}
+
 .income .bottom-div{
     display: flex;
     flex-direction: column;
