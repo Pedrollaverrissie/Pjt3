@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Daily Tasks</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+    <style>
+                        .tasks-container{
+                    width:90%;
+                    max-width:450px;
+                    margin:40px auto;
+                    background:#fff;
+                    padding:25px;
+                    border-radius:15px;
+                    box-shadow:0 0 10px rgba(0,0,0,.15);
+                    text-align:center;
+                }
+
+                .tasks-container button{
+                    width:100%;
+                    padding:12px;
+                    border:none;
+                    border-radius:10px;
+                    background:#0b7dda;
+                    color:white;
+                    cursor:pointer;
+                    font-size:16px;
+                }
+
+                .tasks-container button:disabled{
+                    background:gray;
+                }
+    </style>
+</head>
+
+<body>
+
+<div class="tasks-container">
+
+    <h2>Daily Tasks</h2>
+
+    <h3>{{ current_user.vip_level }} Member</h3>
+
+    <p>
+        Daily Tasks:
+        {{ max_tasks }}
+    </p>
+
+    <p>
+        Daily Income:
+        KES {{ daily_income }}
+    </p>
+
+    <p>
+        Completed:
+        {{ current_user.tasks_completed }}/{{ max_tasks }}
+    </p>
+
+    {% if max_tasks == 0 %}
+
+        <button disabled>
+            Upgrade VIP First
+        </button>
+
+    {% else %}
+
+        <form action="/complete-task" method="POST">
+
+            <button>
+                Complete Task
+            </button>
+
+        </form>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

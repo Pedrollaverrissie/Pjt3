@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>My Team</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+
+    <style>
+            .team-container{
+                width:95%;
+                max-width:900px;
+                margin:auto;
+                padding:20px;
+            }
+
+            .team-summary{
+                display:flex;
+                justify-content:space-between;
+                margin-bottom:20px;
+                gap:10px;
+            }
+
+            .team-summary p{
+                background:#fff;
+                padding:15px;
+                border-radius:10px;
+                flex:1;
+                text-align:center;
+                font-weight:bold;
+            }
+
+            table{
+                width:100%;
+                border-collapse:collapse;
+                background:#fff;
+            }
+
+            th,td{
+                border:1px solid #ddd;
+                padding:12px;
+                text-align:center;
+            }
+
+            th{
+                background:#0b7dda;
+                color:white;
+            }
+    </style>
+
+</head>
+
+<body>
+
+<div class="team-container">
+
+<h2>My Team</h2>
+
+<div class="team-summary">
+
+<p>Total Referrals: {{ total_referrals }}</p>
+
+<p>Total Team Recharge: KES {{ total_team_recharge }}</p>
+
+<p>Total Commission: KES {{ commissions }}</p>
+
+</div>
+
+<table>
+
+<tr>
+
+<th>User</th>
+
+<th>VIP</th>
+
+<th>Recharge</th>
+
+<th>Joined</th>
+
+</tr>
+
+{% for member in referrals %}
+
+<tr>
+
+<td>{{ member.username }}</td>
+
+<td>{{ member.vip_level }}</td>
+
+<td>KES {{ member.total_recharge }}</td>
+
+<td>{{ member.joined_at.strftime("%d %b %Y") }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</div>
+
+</body>
+
+</html>

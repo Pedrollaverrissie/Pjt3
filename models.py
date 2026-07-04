@@ -158,5 +158,23 @@ class Transaction(db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
+    
 
+from datetime import date
 
+tasks_completed = db.Column(db.Integer, default=0)
+
+last_task_date = db.Column(
+    db.Date,
+    nullable=True
+)
+
+vip_started_at = db.Column(
+    db.DateTime,
+    nullable=True
+)
+
+vip_expires_at = db.Column(
+    db.DateTime,
+    nullable=True
+)

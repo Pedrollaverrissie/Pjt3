@@ -952,7 +952,133 @@ def upgrade_vip(plan):
     db.session.commit()
 
     return redirect("/vip")
-#------------------------------------------------------
+#---------------TASK ROUTE---------------------
+@app.route("/tasks")
+@login_required
+def tasks():
+
+    VIPS = {
+        "Bronze": {"tasks": 0, "income": 0},
+        "Silver": {"tasks": 5, "income": 50},
+        "Gold": {"tasks": 10, "income": 180},
+        "Platinum": {"tasks": 20, "income": 700},
+        "Diamond": {"tasks": 30, "income": 1500},
+    }
+
+    vip = VIPS.get(
+        current_user.vip_level,
+        VIPS["Bronze"]
+    )
+
+    return render_template(
+        "tasks.html",
+        max_tasks=vip["tasks"],
+        daily_income=vip["income"]
+    )
+
+#----------COMPLETE TASK ROUTE ---------------------
+from datetime import date, datetime
+
+@app.route("/complete-task", methods=["POST"])
+@login_required
+def complete_task():
+
+    VIPS = {
+        "Bronze": {"tasks": 0, "income": 0},
+        "Silver": {"tasks": 5, "income": 50},
+        "Gold": {"tasks": 10, "income": 180},
+        "Platinum": {"tasks": 20, "income": 700},
+        "Diamond": {"tasks": 30, "income": 1500},
+    }
+
+    vip = VIPS.get(current_user.vip_level)
+
+    if not vip:
+        return "Invalid VIP"
+
+    # Bronze cannot earn
+    if vip["tasks"] == 0:
+        return "Upgrade your VIP plan first."
+
+    # Check VIP expiry
+    if (
+        current_user.vip_expires_at
+        and current_user.vip_expires_at < datetime.utcnow()
+    ):
+        current_user.vip_level = "Bronze"
+        db.session.commit()
+        return "Your VIP membership has expired."
+
+    # Reset every new day
+    today = date.today()
+
+    if current_user.last_task_date != today:
+        current_user.tasks_completed = 0
+        current_user.last_task_date = today
+
+    # Daily limit reached
+    if current_user.tasks_completed >= vip["tasks"]:
+        db.session.commit()
+        return "You have completed all today's tasks."
+
+    # Earnings per task
+    earning = vip["income"] / vip["tasks"]
+
+    add_to_task_wallet(
+        current_user,
+        earning,
+        "Daily Task Reward"
+    )
+
+    current_user.tasks_completed += 1
+
+    notification = Notification(
+        user_id=current_user.id,
+        title="Task Completed",
+        message=f"You earned KES {earning:.2f}."
+    )
+
+    db.session.add(notification)
+
+    db.session.commit()
+
+    return redirect("/tasks")
+
+#-----------TEAM ROUTE----------------
+@app.route("/team")
+@login_required
+def team():
+
+    referrals = User.query.filter_by(
+        referred_by=current_user.referral_code
+    ).all()
+
+    total_referrals = len(referrals)
+
+    total_team_recharge = 0
+
+    for member in referrals:
+
+        recharge = db.session.query(
+            db.func.sum(Payment.amount)
+        ).filter(
+            Payment.user_id == member.id,
+            Payment.payment_type == "recharge",
+            Payment.status == "approved"
+        ).scalar() or 0
+
+        member.total_recharge = recharge
+        total_team_recharge += recharge
+
+    return render_template(
+        "team.html",
+        referrals=referrals,
+        total_referrals=total_referrals,
+        total_team_recharge=total_team_recharge,
+        commissions=current_user.commissions
+    )
+
+
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
