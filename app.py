@@ -308,6 +308,9 @@ def dashboard():
         # Referral
         referral_link=referral_link,
         total_referrals=total_referrals
+        #vip plan
+        vip_level=current_user.vip_level,
+        vip_expires_at=current_user.vip_expires_at
     )
 # ---------------- LOGOUT ----------------
 @app.route("/logout")
