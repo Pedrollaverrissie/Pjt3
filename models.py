@@ -51,12 +51,30 @@ class User(UserMixin, db.Model):
         db.DateTime,
         default=datetime.utcnow
     )
+    tasks_completed = db.Column(db.Integer, default=0)
+
+    last_task_date = db.Column(
+        db.Date,
+        nullable=True
+    )
+
+    vip_started_at = db.Column(
+        db.DateTime,
+        nullable=True
+    )
+
+    vip_expires_at = db.Column(
+        db.DateTime,
+        nullable=True
+    )
 
     notifications = db.relationship(
         "Notification",
         backref="user",
         lazy=True
     )
+
+
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
@@ -160,24 +178,9 @@ class Transaction(db.Model):
     )
 
 
-from datetime import date
 
-tasks_completed = db.Column(db.Integer, default=0)
 
-last_task_date = db.Column(
-    db.Date,
-    nullable=True
-)
 
-vip_started_at = db.Column(
-    db.DateTime,
-    nullable=True
-)
-
-vip_expires_at = db.Column(
-    db.DateTime,
-    nullable=True
-)
 
 class Task(db.Model):
 
