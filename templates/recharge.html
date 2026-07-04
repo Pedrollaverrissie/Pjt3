@@ -226,8 +226,6 @@ form{
 
             <h2>Recharge Wallet</h2>
 
-            <p>Hover to Recharge</p>
-
         </div>
 
         <div class="content">
@@ -238,7 +236,7 @@ form{
                     type="number"
                     name="amount"
                     placeholder="Enter Amount"
-                        min="10"
+                        min="100"
                         step="10"
                         value="10"
                     required
@@ -247,7 +245,7 @@ form{
                 <input
                     type="text"
                     name="phone"
-                    value="{{ current_user.phone }}"
+                    value="+{{ current_user.phone }}"
                     placeholder="Phone Number"
                     required
                 >
