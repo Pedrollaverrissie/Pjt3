@@ -133,8 +133,22 @@
 
 
         <div class="page-content">
+
+
             
             <div class="top-content" >
+
+                    <div class="vip-status-card">
+                        <h3>Current VIP Plan</h3>
+
+                        <h2>{{ vip_level }}</h2>
+
+                        {% if vip_expires_at %}
+                            <p>Expires on {{ vip_expires_at.strftime("%d %B %Y") }}</p>
+                        {% else %}
+                            <p>No active expiry date</p>
+                        {% endif %}
+                    </div>
                 
                     <a href="/profile" class="header-profile2">
                         <span id="profile" data-username="{{ username }}"></span>
