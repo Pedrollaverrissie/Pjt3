@@ -37,69 +37,75 @@
 
 <body>
 
-<div class="tasks-container">
+    <div class="tasks-container">
 
-<h2>Today's Tasks</h2>
+            <h2>Today's Tasks</h2>
 
-{% for task in tasks %}
+            {% for task in tasks %}
 
-<div class="task-card">
+        <div class="task-card">
 
-<h3>{{ task.title }}</h3>
+            <h3>{{ task.title }}</h3>
 
-<p>{{ task.description }}</p>
+            <p>{{ task.description }}</p>
 
-<p>
+            <p>
 
-Reward
+            Reward
 
-<strong>
+            <strong>
 
-KES {{ task.reward }}
+            KES {{ task.reward }}
 
-</strong>
+            </strong>
 
-</p>
+            </p>
 
-{% if task.id in completed_ids %}
+            {% if task.id in completed_ids %}
 
-<button disabled>
+            <button disabled>
 
-✅ Completed
+            ✅ Completed
 
-</button>
+            </button>
 
-{% else %}
+            {% else %}
 
-<a href="{{ task.url }}" target="_blank">
+            <a href="{{ task.url }}" target="_blank">
 
-<button>
+            <button>
 
-Start Task
+            Start Task
 
-</button>
+            </button>
 
-</a>
+            </a>
 
-<form
-action="/claim-task/{{ task.id }}"
-method="POST">
+            <form
+            action="/claim-task/{{ task.id }}"
+            method="POST">
 
-<button>
+            <button>
 
-Claim Reward
+            Claim Reward
 
-</button>
+            </button>
 
-</form>
+            </form>
 
-{% endif %}
+            {% endif %}
 
-</div>
+        </div>
 
-{% endfor %}
+            {% endfor %}
 
-</div>
+            <div class="task-progress">
+                <h3>Today's Progress</h3>
+                <p>{{ completed_today }} / {{ daily_limit }} Tasks Completed</p>
+            </div>
+
+    </div>
+
 
 </body>
 </html>

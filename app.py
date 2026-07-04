@@ -866,7 +866,7 @@ def notifications():
         notes=notes
     )
 
-#=====================WALLETS HELPERS FUNCTIONS================================
+#============WALLETS/vip plans HELPERS FUNCTIONS=========
 def add_to_main_wallet(user, amount, description):
 
     user.main_wallet += amount
@@ -908,6 +908,19 @@ def add_to_team_wallet(user, amount, description):
     )
 
     db.session.add(transaction)
+
+def get_daily_task_limit(vip_level):
+
+    limits = {
+        "Bronze": 0,
+        "Silver": 5,
+        "Gold": 10,
+        "Platinum": 20,
+        "Diamond": 30
+    }
+
+    return limits.get(vip_level, 0)
+
 
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
@@ -1064,7 +1077,7 @@ def admin_tasks():
     )
 
 
-#--------------REWARD ROUTE------------------
+#--------------REWARD/claim ROUTE------------------
 from datetime import datetime, date
 
 @app.route("/claim-task/<int:task_id>", methods=["POST"])
@@ -1081,7 +1094,7 @@ def claim_task(task_id):
     if task.vip_level != current_user.vip_level:
         return "Task not available for your VIP."
 
-    # Already completed today?
+    # Already completed this task today?
     completed = UserTask.query.filter(
         UserTask.user_id == current_user.id,
         UserTask.task_id == task.id,
@@ -1091,7 +1104,22 @@ def claim_task(task_id):
     if completed:
         return "You already completed this task today."
 
-    # Find task session
+    # ==============================
+    # DAILY TASK LIMIT
+    # ==============================
+    completed_today = UserTask.query.filter(
+        UserTask.user_id == current_user.id,
+        db.func.date(UserTask.completed_at) == date.today()
+    ).count()
+
+    daily_limit = get_daily_task_limit(current_user.vip_level)
+
+    if completed_today >= daily_limit:
+        return "You have completed today's tasks."
+
+    # ==============================
+    # FIND TASK SESSION
+    # ==============================
     session = TaskSession.query.filter_by(
         user_id=current_user.id,
         task_id=task.id
@@ -1103,7 +1131,6 @@ def claim_task(task_id):
     # ==============================
     # SERVER TIMER CHECK
     # ==============================
-
     elapsed = (datetime.utcnow() - session.started_at).total_seconds()
 
     if elapsed < 15:
@@ -1116,7 +1143,7 @@ def claim_task(task_id):
     # Mark session completed
     session.completed = True
 
-    # Credit wallet
+    # Credit Task Wallet
     add_to_task_wallet(
         current_user,
         task.reward,
