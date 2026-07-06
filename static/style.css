@@ -806,7 +806,7 @@ h3{
     font-weight: bold;
 
  }
-  .finance .rtchge button, .main .rtchge button, .games .rtchge button{
+  .finance .rtchge button, .main .rtchge button, .games .rtchge span{
     background: none;
     text-align: left;
     border: 0;
