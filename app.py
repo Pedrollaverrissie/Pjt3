@@ -1062,10 +1062,10 @@ def upgrade_vip(plan):
     now = datetime.utcnow()
 
     if current_user.vip_expires_at and current_user.vip_expires_at > now:
-        current_user.vip_expires_at += relativedelta(months=6)
+        current_user.vip_expires_at += relativedelta(months=1)
     else:
         current_user.vip_started_at = now
-        current_user.vip_expires_at = now + relativedelta(months=6)
+        current_user.vip_expires_at = now + relativedelta(months=1)
 
     current_user.vip_level = plan
     current_user.main_wallet -= price
