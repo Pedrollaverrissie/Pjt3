@@ -342,14 +342,12 @@ def dashboard():
     # -------------------------------
     # Days remaining
     # -------------------------------
-    vip_days_left = None
+    vip_days_left = 0
 
     if current_user.vip_expires_at:
-        vip_days_left = max(
-            0,
-            (current_user.vip_expires_at - datetime.utcnow()).days
-        )
-
+        vip_days_left = (
+            current_user.vip_expires_at - datetime.utcnow()
+        ).days
 
     today_earnings = db.session.query(
         db.func.sum(Transaction.amount)

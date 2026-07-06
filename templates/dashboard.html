@@ -159,11 +159,15 @@
 
             <div class="vip-status-card">
 
-                <h3 style="color:rgb(255,145,0);">Current VIP Plan</h3>
+                <h3 style="color:rgb(255,145,0);">
+                    Current VIP Plan
+                </h3>
 
-                <h2 style="color:aqua;">{{ vip_level }}</h2>
+                <h2 style="color:aqua;">
+                    {{ vip_level }}
+                </h2>
 
-                {% if vip_level != "Bronze" %}
+                {% if vip_expires_at %}
 
                     <p>
                         Expires:
@@ -177,7 +181,7 @@
                 {% else %}
 
                     <p style="color:orange;">
-                        Free Plan
+                        You are currently on the Bronze plan.
                     </p>
 
                     <a href="/vip">
