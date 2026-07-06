@@ -211,7 +211,7 @@
                     </div>
                     
                     <div class="today-income">
-                        <h4>Ksh. 0</h4>
+                        <h4>Ksh. {{ today_earnings }}</h4>
                         <p>TODAY</p>
                     </div>
 
@@ -251,10 +251,16 @@
                 </div>
 
                 <div class="today-earnings">
-                     <img class="earnings-img" src="static/images/today earnings.jfif" alt="" class="wallets-img">
-                     <p>TODAY'S EARNINGS</p>
-                     <h4>Ksh. 0</h4>
-                      <h6>TODAY</h6>
+
+                    <img class="earnings-img"
+                        src="static/images/today earnings.jfif">
+
+                    <p>TODAY'S EARNINGS</p>
+
+                    <h4>Ksh. {{ today_earnings }}</h4>
+
+                    <h6>TODAY</h6>
+
                 </div>
 
                 <div class="commissions">

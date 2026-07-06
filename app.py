@@ -350,6 +350,15 @@ def dashboard():
             (current_user.vip_expires_at - datetime.utcnow()).days
         )
 
+
+    today_earnings = db.session.query(
+        db.func.sum(Transaction.amount)
+    ).filter(
+        Transaction.user_id == current_user.id,
+        Transaction.transaction_type == "task_reward",
+        db.func.date(Transaction.created_at) == date.today()
+    ).scalar() or 0
+
     return render_template(
         "dashboard.html",
 
@@ -361,6 +370,7 @@ def dashboard():
         team_wallet=current_user.team_wallet,
         withdrawn=current_user.withdrawn,
         commissions=current_user.commissions,
+        today_earnings=today_earnings,
 
         # Totals
         total_income=total_income,
