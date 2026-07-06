@@ -267,6 +267,7 @@ def payment():
 # ---------------- DASHBOARD ----------------
 @app.route("/dashboard")
 @login_required
+@active_account_required
 def dashboard():
 
     payments = Payment.query.filter_by(
@@ -940,6 +941,23 @@ def admin_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
+
+from functools import wraps
+from flask import flash, redirect
+from flask_login import current_user, logout_user
+
+def active_account_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+
+        if not current_user.account_active:
+            logout_user()
+            flash("Your account has been suspended.")
+            return redirect("/login")
+
+        return f(*args, **kwargs)
+
+    return decorated
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
@@ -1353,6 +1371,51 @@ def add_wallet(user_id, amount):
     db.session.commit()
 
     return redirect(f"/admin/user/{user.id}")
+
+#---------------MANAGE WALLETS-----------------------
+@app.route("/admin/wallet/<int:user_id>", methods=["GET", "POST"])
+@login_required
+@admin_required
+def admin_wallet(user_id):
+
+    user = User.query.get_or_404(user_id)
+
+    if request.method == "POST":
+
+        wallet = request.form["wallet"]
+
+        amount = float(request.form["amount"])
+
+        reason = request.form["reason"]
+
+        if wallet == "main":
+            user.main_wallet += amount
+
+        elif wallet == "task":
+            user.task_wallet += amount
+
+        elif wallet == "team":
+            user.team_wallet += amount
+
+        db.session.add(
+            Transaction(
+                user_id=user.id,
+                transaction_type="admin_adjustment",
+                wallet=wallet,
+                amount=amount,
+                description=reason,
+                status="Completed"
+            )
+        )
+
+        db.session.commit()
+
+        return redirect(f"/admin/user/{user.id}")
+
+    return render_template(
+        "admin/wallet.html",
+        user=user
+    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)

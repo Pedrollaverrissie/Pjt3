@@ -39,7 +39,7 @@ href="{{ url_for('static', filename='style.css') }}">
 
             <a href="/admin/suspend/{{ user.id }}">
                 Suspend
-            </a>
+            </a> <br>
 
             <a href="/admin/activate/{{ user.id }}">
                 Activate
@@ -58,6 +58,10 @@ href="{{ url_for('static', filename='style.css') }}">
             <a href="/admin/change-vip/{{ user.id }}/Platinum">Platinum</a>
 
             <a href="/admin/change-vip/{{ user.id }}/Diamond">Diamond</a>
+
+            <a href="/admin/wallet/{{ user.id }}">
+                Manage Wallet
+            </a>
 
     </div>
 
