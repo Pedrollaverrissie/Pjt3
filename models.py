@@ -70,6 +70,10 @@ class User(UserMixin, db.Model):
         db.DateTime,
         nullable=True
     )
+    account_active = db.Column(
+    db.Boolean,
+    default=True
+    )
 
     notifications = db.relationship(
         "Notification",

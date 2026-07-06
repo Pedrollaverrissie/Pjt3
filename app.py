@@ -1299,6 +1299,60 @@ def admin_user(user_id):
         "admin/user.html",
         user=user
     )
+
+#---------------SUSPEND ROUTE--------------------
+@app.route("/admin/suspend/<int:user_id>")
+@login_required
+@admin_required
+def suspend_user(user_id):
+
+    user = User.query.get_or_404(user_id)
+
+    user.account_active = False
+
+    db.session.commit()
+
+    return redirect("/admin/users")
+#--------------ACTIVATE ROUTE-------------------
+@app.route("/admin/activate/<int:user_id>")
+@login_required
+@admin_required
+def activate_user(user_id):
+
+    user = User.query.get_or_404(user_id)
+
+    user.account_active = True
+
+    db.session.commit()
+
+    return redirect("/admin/users")
+
+#--------------CHANGE VIP FROM ADMIN------------
+@app.route("/admin/change-vip/<int:user_id>/<vip>")
+@login_required
+@admin_required
+def change_vip(user_id, vip):
+
+    user = User.query.get_or_404(user_id)
+
+    user.vip_level = vip
+
+    db.session.commit()
+
+    return redirect(f"/admin/user/{user.id}")
+#--------------EDIT WALLETS----------------
+@app.route("/admin/add-main-wallet/<int:user_id>/<float:amount>")
+@login_required
+@admin_required
+def add_wallet(user_id, amount):
+
+    user = User.query.get_or_404(user_id)
+
+    user.main_wallet += amount
+
+    db.session.commit()
+
+    return redirect(f"/admin/user/{user.id}")
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)

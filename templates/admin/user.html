@@ -17,27 +17,49 @@ href="{{ url_for('static', filename='style.css') }}">
  </style>
 <body>
 
-        <div class="admin-container">
+     <div class="admin-container">
 
-        <h1>{{ user.username }}</h1>
+            <h1>{{ user.username }}</h1>
 
-        <p>Email: {{ user.email }}</p>
+            <p>Email: {{ user.email }}</p>
 
-        <p>Phone: {{ user.phone }}</p>
+            <p>Phone: {{ user.phone }}</p>
 
-        <p>VIP: {{ user.vip_level }}</p>
+            <p>VIP: {{ user.vip_level }}</p>
 
-        <p>Main Wallet: KES {{ user.main_wallet }}</p>
+            <p>Main Wallet: KES {{ user.main_wallet }}</p>
 
-        <p>Task Wallet: KES {{ user.task_wallet }}</p>
+            <p>Task Wallet: KES {{ user.task_wallet }}</p>
 
-        <p>Team Wallet: KES {{ user.team_wallet }}</p>
+            <p>Team Wallet: KES {{ user.team_wallet }}</p>
 
-        <p>Commissions: KES {{ user.commissions }}</p>
+            <p>Commissions: KES {{ user.commissions }}</p>
 
-        <p>Joined: {{ user.joined_at }}</p>
+            <p>Joined: {{ user.joined_at }}</p>
 
-        </div>
+            <a href="/admin/suspend/{{ user.id }}">
+                Suspend
+            </a>
+
+            <a href="/admin/activate/{{ user.id }}">
+                Activate
+            </a>
+
+            <hr>
+
+            <h3>Change VIP</h3>
+
+            <a href="/admin/change-vip/{{ user.id }}/Bronze">Bronze</a>
+
+            <a href="/admin/change-vip/{{ user.id }}/Silver">Silver</a>
+
+            <a href="/admin/change-vip/{{ user.id }}/Gold">Gold</a>
+
+            <a href="/admin/change-vip/{{ user.id }}/Platinum">Platinum</a>
+
+            <a href="/admin/change-vip/{{ user.id }}/Diamond">Diamond</a>
+
+    </div>
 
 </body>
 
