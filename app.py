@@ -267,7 +267,6 @@ def payment():
 # ---------------- DASHBOARD ----------------
 @app.route("/dashboard")
 @login_required
-@active_account_required
 def dashboard():
 
     payments = Payment.query.filter_by(
@@ -942,22 +941,7 @@ def admin_required(f):
 
     return decorated_function
 
-from functools import wraps
-from flask import flash, redirect
-from flask_login import current_user, logout_user
 
-def active_account_required(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-
-        if not current_user.account_active:
-            logout_user()
-            flash("Your account has been suspended.")
-            return redirect("/login")
-
-        return f(*args, **kwargs)
-
-    return decorated
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
