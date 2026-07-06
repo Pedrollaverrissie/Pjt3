@@ -799,7 +799,7 @@ h3{
     align-items: center;
     gap: 25px;
  }
- .games div .rtchge a{
+ .games .rtchge a{
     display: flex;
     align-items: center;
     gap: 25px;
