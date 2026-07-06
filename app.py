@@ -178,10 +178,26 @@ def signup():
 @app.route("/checkboxAlert")
 def checkbox_alert():
     return render_template("checkbox_alert.html")
+#---------------DECORATOR ACTIVE/SUSPEND HELPER----------
+from functools import wraps
+from flask_login import current_user, logout_user
+from flask import redirect
 
+def active_account_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+
+        if not current_user.account_active:
+            logout_user()
+            return redirect("/login")
+
+        return f(*args, **kwargs)
+
+    return decorated
 # ---------------- LOGIN ----------------
 @app.route("/login", methods=["GET", "POST"])
 def login():
+
     if request.method == "POST":
 
         login_input = request.form["login"]
@@ -192,6 +208,10 @@ def login():
         ).first()
 
         if user and check_password_hash(user.password, request.form["password"]):
+
+            # Prevent suspended users from logging in
+            if not user.account_active:
+                return "Your account has been suspended. Contact support."
 
             remember = request.form.get("remember_me") == "on"
 
@@ -267,6 +287,7 @@ def payment():
 # ---------------- DASHBOARD ----------------
 @app.route("/dashboard")
 @login_required
+@active_account_required
 def dashboard():
 
     payments = Payment.query.filter_by(
@@ -318,6 +339,7 @@ def dashboard():
 # ---------------- LOGOUT ----------------
 @app.route("/logout")
 @login_required
+@active_account_required
 def logout():
     logout_user()
     return redirect("/login")
@@ -657,6 +679,7 @@ def check_payment(invoice_id):
 #========================recharge route==================
 @app.route("/recharge", methods=["GET", "POST"])
 @login_required
+@active_account_required
 def recharge():
 
     if request.method == "POST":
@@ -814,6 +837,7 @@ def smtp_test():
 #============================profile=========================
 @app.route("/profile")
 @login_required
+@active_account_required
 def profile():
 
     total_referrals = User.query.filter_by(
@@ -843,6 +867,7 @@ def profile():
 #============================================================
 @app.route("/edit-profile", methods=["GET", "POST"])
 @login_required
+@active_account_required
 def edit_profile():
 
     if request.method == "POST":
@@ -859,6 +884,7 @@ def edit_profile():
 #===================notification route=====================
 @app.route("/notifications")
 @login_required
+@active_account_required
 def notifications():
 
     notes = Notification.query.filter_by(
@@ -942,9 +968,12 @@ def admin_required(f):
     return decorated_function
 
 
+
+
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
+@active_account_required
 def vip():
 
     plans = [
@@ -965,6 +994,7 @@ from dateutil.relativedelta import relativedelta
 
 @app.route("/upgrade-vip/<plan>", methods=["POST"])
 @login_required
+@active_account_required
 def upgrade_vip(plan):
 
     VIP_PLANS = {
@@ -999,6 +1029,7 @@ def upgrade_vip(plan):
 #---------------TASK ROUTE---------------------
 @app.route("/tasks")
 @login_required
+@active_account_required
 def tasks():
 
     # Check VIP expiry
@@ -1033,6 +1064,7 @@ def tasks():
 #-----------TEAM ROUTE----------------
 @app.route("/team")
 @login_required
+@active_account_required
 def team():
 
     referrals = User.query.filter_by(
@@ -1067,6 +1099,7 @@ def team():
 #--------------ADMNIN TASK ROUTE----------------
 @app.route("/admin/tasks", methods=["GET", "POST"])
 @login_required
+@active_account_required
 def admin_tasks():
 
     # Replace this with your own admin check later
@@ -1102,6 +1135,7 @@ from datetime import datetime, date
 
 @app.route("/claim-task/<int:task_id>", methods=["POST"])
 @login_required
+@active_account_required
 def claim_task(task_id):
 
     task = Task.query.get_or_404(task_id)
@@ -1195,6 +1229,7 @@ def claim_task(task_id):
 
 @app.route("/start-task/<int:task_id>")
 @login_required
+@active_account_required
 def start_task(task_id):
 
     task = Task.query.get_or_404(task_id)
