@@ -1,0 +1,43 @@
+<h1>Pending Recharges</h1>
+
+<table>
+
+<tr>
+<th>User</th>
+<th>Phone</th>
+<th>Amount</th>
+<th>Transaction</th>
+<th>Action</th>
+</tr>
+
+{% for payment in payments %}
+
+<tr>
+
+<td>{{ payment.email }}</td>
+
+<td>{{ payment.phone }}</td>
+
+<td>{{ payment.amount }}</td>
+
+<td>{{ payment.transaction_code }}</td>
+
+<td>
+
+<a href="/admin/approve-recharge/{{ payment.id }}">
+Approve
+</a>
+
+|
+
+<a href="/admin/reject-recharge/{{ payment.id }}">
+Reject
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>

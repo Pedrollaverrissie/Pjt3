@@ -1460,6 +1460,72 @@ def admin_wallet(user_id):
         "admin/wallet.html",
         user=user
     )
+
+#-------------PENDING RECHARGES------------------
+@app.route("/admin/recharges")
+@login_required
+@admin_required
+def admin_recharges():
+
+    payments = Payment.query.filter_by(
+        payment_type="recharge",
+        status="pending"
+    ).all()
+
+    return render_template(
+        "admin/recharges.html",
+        payments=payments
+    )
+
+#---------------APPROVE RECHARGES---------------
+@app.route("/admin/approve-recharge/<int:payment_id>")
+@login_required
+@admin_required
+def approve_recharge(payment_id):
+
+    payment = Payment.query.get_or_404(payment_id)
+
+    user = User.query.get(payment.user_id)
+
+    if payment.status != "pending":
+        return redirect("/admin/recharges")
+
+    payment.status = "approved"
+
+    user.main_wallet += payment.amount
+
+    # Upgrade VIP
+    if payment.amount >= 10000:
+        user.vip_level = "Diamond"
+
+    elif payment.amount >= 5000:
+        user.vip_level = "Platinum"
+
+    elif payment.amount >= 1500:
+        user.vip_level = "Gold"
+
+    elif payment.amount >= 500:
+        user.vip_level = "Silver"
+
+    db.session.commit()
+
+    return redirect("/admin/recharges")
+
+#------------REJECT RECHARGES-----------------
+@app.route("/admin/reject-recharge/<int:payment_id>")
+@login_required
+@admin_required
+def reject_recharge(payment_id):
+
+    payment = Payment.query.get_or_404(payment_id)
+
+    payment.status = "rejected"
+
+    db.session.commit()
+
+    return redirect("/admin/recharges")
+
+#----------------------------------------------
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
