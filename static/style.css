@@ -995,6 +995,12 @@ h3{
          
           
 }
+.upgrade-btn{
+    margin-bottom: 20px;
+    background-color: none;
+    border: none;
+    box-shadow: 0 -0 2px white;
+}
 
 .income .bottom-div{
     display: flex;
