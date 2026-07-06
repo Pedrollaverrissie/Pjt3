@@ -806,7 +806,7 @@ h3{
     font-weight: bold;
 
  }
-  .finance .rtchge button, .main .rtchge button, .games .rtchge span{
+  .finance .rtchge button, .main .rtchge button{
     background: none;
     text-align: left;
     border: 0;
@@ -816,7 +816,17 @@ h3{
     font-size: 12px;
     font-weight: bold;
  }
- 
+ .games .rtchge span{
+    background: none;
+    text-align: left;
+    border: 0;
+    color: white;
+  
+    font-family:Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+
+ }
 .titles{
     color: #ffc400;
 }
