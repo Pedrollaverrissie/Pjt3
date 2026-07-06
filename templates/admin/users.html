@@ -86,7 +86,8 @@ background:#000000;
                 <th>Task Wallet</th>
 
                 <th>Team Wallet</th>
-
+              
+                <th>Status</th>
                 <th>Actions</th>
 
             </tr>
@@ -111,12 +112,57 @@ background:#000000;
 
                 <td>
 
-                <a href="/admin/user/{{ user.id }}">
-                View
+                {% if user.account_active %}
 
-                </a>
+                <span style="color:lime;font-weight:bold;">
+                Active
+                </span>
+
+                {% else %}
+
+                <span style="color:red;font-weight:bold;">
+                Suspended
+                </span>
+
+                {% endif %}
 
                 </td>
+
+                <td>
+
+                <a href="/admin/user/{{ user.id }}">
+                View
+                </a>
+
+                <br><br>
+
+                {% if user.account_active %}
+
+                <a href="/admin/toggle-user/{{ user.id }}"
+                style="
+                background:red;
+                color:white;
+                padding:6px 12px;
+                text-decoration:none;
+                border-radius:5px;">
+                Suspend
+                </a>
+
+            {% else %}
+
+            <a href="/admin/toggle-user/{{ user.id }}"
+            style="
+            background:green;
+            color:white;
+            padding:6px 12px;
+            text-decoration:none;
+            border-radius:5px;">
+            Activate
+            </a>
+
+            {% endif %}
+
+            </td>
 
              </tr>
 

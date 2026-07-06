@@ -1289,6 +1289,31 @@ def admin_users():
         users=users
     )
 
+
+#--------------------ADMIN_USER -----------------
+@app.route("/admin/toggle-user/<int:user_id>")
+@login_required
+@admin_required
+def toggle_user(user_id):
+
+    user = User.query.get_or_404(user_id)
+
+    # Don't allow admin to suspend themselves
+    if user.id == current_user.id:
+        flash("You cannot suspend your own account.")
+        return redirect("/admin/users")
+
+    user.account_active = not user.account_active
+
+    db.session.commit()
+
+    if user.account_active:
+        flash(f"{user.username} has been activated.")
+    else:
+        flash(f"{user.username} has been suspended.")
+
+    return redirect("/admin/users")
+
 #-------------USERS DETAIL ROUTE-----------------
 @app.route("/admin/user/<int:user_id>")
 @login_required
