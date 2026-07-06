@@ -1273,6 +1273,32 @@ def admin():
         vip_members=vip_members,
         total_deposits=total_deposits
     )
+
+#--------------ADMIN USERS ROUTE------------------
+@app.route("/admin/users")
+@login_required
+@admin_required
+def admin_users():
+
+    users = User.query.order_by(User.joined_at.desc()).all()
+
+    return render_template(
+        "admin/users.html",
+        users=users
+    )
+
+#-------------USERS DETAIL ROUTE-----------------
+@app.route("/admin/user/<int:user_id>")
+@login_required
+@admin_required
+def admin_user(user_id):
+
+    user = User.query.get_or_404(user_id)
+
+    return render_template(
+        "admin/user.html",
+        user=user
+    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)

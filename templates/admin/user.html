@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>User Details</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+        <div class="admin-container">
+
+        <h1>{{ user.username }}</h1>
+
+        <p>Email: {{ user.email }}</p>
+
+        <p>Phone: {{ user.phone }}</p>
+
+        <p>VIP: {{ user.vip_level }}</p>
+
+        <p>Main Wallet: KES {{ user.main_wallet }}</p>
+
+        <p>Task Wallet: KES {{ user.task_wallet }}</p>
+
+        <p>Team Wallet: KES {{ user.team_wallet }}</p>
+
+        <p>Commissions: KES {{ user.commissions }}</p>
+
+        <p>Joined: {{ user.joined_at }}</p>
+
+        </div>
+
+</body>
+
+</html>
