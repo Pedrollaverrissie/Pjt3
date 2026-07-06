@@ -285,6 +285,8 @@ def payment():
 
 
 # ---------------- DASHBOARD ----------------
+from datetime import datetime
+
 @app.route("/dashboard")
 @login_required
 @active_account_required
@@ -314,8 +316,43 @@ def dashboard():
         current_user.team_wallet
     )
 
+    # -------------------------------
+    # Automatically expire VIP
+    # -------------------------------
+    if (
+        current_user.vip_level != "Bronze"
+        and current_user.vip_expires_at
+        and current_user.vip_expires_at <= datetime.utcnow()
+    ):
+
+        current_user.vip_level = "Bronze"
+        current_user.vip_started_at = None
+        current_user.vip_expires_at = None
+
+        db.session.add(
+            Notification(
+                user_id=current_user.id,
+                title="VIP Expired",
+                message="Your VIP plan has expired. Recharge to continue enjoying premium tasks."
+            )
+        )
+
+        db.session.commit()
+
+    # -------------------------------
+    # Days remaining
+    # -------------------------------
+    vip_days_left = None
+
+    if current_user.vip_expires_at:
+        vip_days_left = max(
+            0,
+            (current_user.vip_expires_at - datetime.utcnow()).days
+        )
+
     return render_template(
         "dashboard.html",
+
         username=current_user.username,
 
         # Wallets
@@ -332,10 +369,102 @@ def dashboard():
         # Referral
         referral_link=referral_link,
         total_referrals=total_referrals,
-        #vip plan
+
+        # VIP
         vip_level=current_user.vip_level,
-        vip_expires_at=current_user.vip_expires_at
+        vip_expires_at=current_user.vip_expires_at,
+        vip_days_left=vip_days_left
+    )from datetime import datetime
+
+@app.route("/dashboard")
+@login_required
+@active_account_required
+def dashboard():
+
+    payments = Payment.query.filter_by(
+        phone=current_user.phone
+    ).all()
+
+    total_paid = sum(
+        p.amount for p in payments
+        if p.status == "approved"
     )
+
+    referral_link = (
+        f"https://pjt3.onrender.com/signup?ref="
+        f"{current_user.referral_code}"
+    )
+
+    total_referrals = User.query.filter_by(
+        referred_by=current_user.referral_code
+    ).count()
+
+    total_income = (
+        current_user.main_wallet +
+        current_user.task_wallet +
+        current_user.team_wallet
+    )
+
+    # -------------------------------
+    # Automatically expire VIP
+    # -------------------------------
+    if (
+        current_user.vip_level != "Bronze"
+        and current_user.vip_expires_at
+        and current_user.vip_expires_at <= datetime.utcnow()
+    ):
+
+        current_user.vip_level = "Bronze"
+        current_user.vip_started_at = None
+        current_user.vip_expires_at = None
+
+        db.session.add(
+            Notification(
+                user_id=current_user.id,
+                title="VIP Expired",
+                message="Your VIP plan has expired. Recharge to continue enjoying premium tasks."
+            )
+        )
+
+        db.session.commit()
+
+    # -------------------------------
+    # Days remaining
+    # -------------------------------
+    vip_days_left = None
+
+    if current_user.vip_expires_at:
+        vip_days_left = max(
+            0,
+            (current_user.vip_expires_at - datetime.utcnow()).days
+        )
+
+    return render_template(
+        "dashboard.html",
+
+        username=current_user.username,
+
+        # Wallets
+        main_wallet=current_user.main_wallet,
+        task_wallet=current_user.task_wallet,
+        team_wallet=current_user.team_wallet,
+        withdrawn=current_user.withdrawn,
+        commissions=current_user.commissions,
+
+        # Totals
+        total_income=total_income,
+        total_paid=total_paid,
+
+        # Referral
+        referral_link=referral_link,
+        total_referrals=total_referrals,
+
+        # VIP
+        vip_level=current_user.vip_level,
+        vip_expires_at=current_user.vip_expires_at,
+        vip_days_left=vip_days_left
+    )
+    
 # ---------------- LOGOUT ----------------
 @app.route("/logout")
 @login_required
@@ -1478,10 +1607,19 @@ def admin_recharges():
     )
 
 #---------------APPROVE RECHARGES---------------
+from datetime import datetime, timedelta
 @app.route("/admin/approve-recharge/<int:payment_id>")
 @login_required
 @admin_required
 def approve_recharge(payment_id):
+
+    now = datetime.utcnow()
+
+    user.vip_started_at = now
+    user.vip_expires_at = now + timedelta(days=30)
+
+    user.tasks_completed = 0
+    user.last_task_date = None
 
     payment = Payment.query.get_or_404(payment_id)
 
@@ -1548,7 +1686,7 @@ def approve_recharge(payment_id):
         message=f"Your recharge of KES {payment.amount:.2f} has been approved."
         )
     )
-    
+
     db.session.add(
     Transaction(
         user_id=user.id,
