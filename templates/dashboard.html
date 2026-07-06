@@ -159,22 +159,22 @@
 
             <div class="vip-status-card">
 
-                <h3 style="color:rgb(255,145,0);">
+                <h3 style="color:rgb(255,145,0);margin-top: 20px;">
                     Current VIP Plan
                 </h3>
 
-                <h2 style="color:aqua; margin: 0;">
+                <h2 style="color:aqua; margin: 0;margin-top: 10px;">
                     {{ vip_level }}
                 </h2>
 
                 {% if vip_expires_at %}
 
-                    <p>
+                    <p style="margin: 0; margin-top: 10px;">
                         Expires:
                         {{ vip_expires_at.strftime("%d %B %Y") }}
                     </p>
 
-                    <p style="color:lime;font-weight:bold;">
+                    <p style="color:lime;font-weight:bold;margin: 0; margin-top: 10px;">
                         {{ vip_days_left }} Days Remaining
                     </p>
 
