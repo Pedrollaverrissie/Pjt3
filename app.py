@@ -1242,7 +1242,37 @@ def start_task(task_id):
 @admin_required
 def admin():
 
-    return render_template("admin/dashboard.html")
+    total_users = User.query.count()
+
+    pending_recharges = Payment.query.filter_by(
+        status="pending",
+        payment_type="recharge"
+    ).count()
+
+    pending_withdrawals = Transaction.query.filter_by(
+        transaction_type="withdrawal",
+        status="Pending"
+    ).count()
+
+    vip_members = User.query.filter(
+        User.vip_level != "Bronze"
+    ).count()
+
+    total_deposits = db.session.query(
+        db.func.sum(Payment.amount)
+    ).filter(
+        Payment.status == "approved",
+        Payment.payment_type == "recharge"
+    ).scalar() or 0
+
+    return render_template(
+        "admin/dashboard.html",
+        total_users=total_users,
+        pending_recharges=pending_recharges,
+        pending_withdrawals=pending_withdrawals,
+        vip_members=vip_members,
+        total_deposits=total_deposits
+    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
