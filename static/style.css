@@ -997,11 +997,12 @@ h3{
 }
 .upgrade-btn{
     margin-bottom: 20px;
-    background: none;
+    background:rgb(57, 92, 207);
     border: none;
     box-shadow: 0 -0 2px white;
     border-radius: 8px 5px;
-    height: 20px;
+    height: 30px;
+    color: white;
 }
 
 .income .bottom-div{
