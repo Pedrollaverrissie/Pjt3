@@ -990,6 +990,8 @@ h3{
     color: white;
     border: 1px white;
     box-shadow: 0 -0 10px white;
+    border-radius: 10px ;
+    width: 80%;
          
           
 }
