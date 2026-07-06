@@ -1494,6 +1494,40 @@ def approve_recharge(payment_id):
 
     user.main_wallet += payment.amount
 
+
+    # PAY REFERRAL COMMISSION
+    if user.referred_by:
+
+        referrer = User.query.filter_by(
+            referral_code=user.referred_by
+        ).first()
+
+        if referrer:
+
+            commission = payment.amount * 0.10
+
+            referrer.team_wallet += commission
+
+            referrer.commissions += commission
+
+            db.session.add(
+                Transaction(
+                    user_id=referrer.id,
+                    transaction_type="referral_bonus",
+                    amount=commission,
+                    wallet="team",
+                    description=f"10% commission from {user.username}"
+                )
+            )
+
+            db.session.add(
+                Notification(
+                    user_id=referrer.id,
+                    title="Referral Bonus",
+                    message=f"You earned KES {commission:.2f} because {user.username} recharged."
+                )
+            )
+
     # Upgrade VIP
     if payment.amount >= 10000:
         user.vip_level = "Diamond"
@@ -1506,6 +1540,24 @@ def approve_recharge(payment_id):
 
     elif payment.amount >= 500:
         user.vip_level = "Silver"
+
+    db.session.add(
+    Notification(
+        user_id=user.id,
+        title="Recharge Approved",
+        message=f"Your recharge of KES {payment.amount:.2f} has been approved."
+        )
+    )
+    
+    db.session.add(
+    Transaction(
+        user_id=user.id,
+        transaction_type="deposit",
+        amount=payment.amount,
+        wallet="main",
+        description="Recharge Approved"
+        )
+    )
 
     db.session.commit()
 
