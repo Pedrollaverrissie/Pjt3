@@ -794,7 +794,7 @@ h3{
     margin-bottom: 10px;
     padding-bottom: 5px;
  }
- .main div,.finance div,.account div, .games div{
+ .main div,.finance div,.account div, .games div, .games .rtchge a{
     display: flex;
     align-items: center;
     gap: 25px;
