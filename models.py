@@ -41,7 +41,10 @@ class User(UserMixin, db.Model):
         db.String(20),
         default="Bronze"
     )
-
+    is_admin = db.Column(
+    db.Boolean,
+    default=False
+    )
     profile_image = db.Column(
         db.String(255),
         nullable=True
@@ -73,7 +76,7 @@ class User(UserMixin, db.Model):
         backref="user",
         lazy=True
     )
-
+    
 
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -16,7 +16,8 @@ from models import (
     UserTask,
     TaskSession
 )
-
+from functools import wraps
+from flask import abort
 
 from flask_sqlalchemy import SQLAlchemy
 from intasend import APIService
@@ -926,7 +927,19 @@ def get_daily_task_limit(vip_level):
 
     return limits.get(vip_level, 0)
 
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
 
+        if not current_user.is_authenticated:
+            abort(401)
+
+        if not current_user.is_admin:
+            abort(403)
+
+        return f(*args, **kwargs)
+
+    return decorated_function
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
@@ -1222,6 +1235,14 @@ def start_task(task_id):
         "task_timer.html",
         task=task
     )
+
+#------------ADMIN  ROUTE---------------------
+@app.route("/admin")
+@login_required
+@admin_required
+def admin():
+
+    return render_template("admin/dashboard.html")
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)

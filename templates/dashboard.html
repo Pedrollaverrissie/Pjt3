@@ -115,10 +115,11 @@
 
                     <div>
                         <img src="static/images/admin.jfif" alt="">
-
+                        {% if current_user.is_admin %}
                         <a class="rtchge" href="/admin/aviator">
-                            <button>Aviator Admin</button>
+                            <button>Admin panel</button>
                         </a>
+                        {% endif %}
                     </div> 
                 
                 </div>
