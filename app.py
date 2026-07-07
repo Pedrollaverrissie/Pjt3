@@ -1619,13 +1619,13 @@ def approve_recharge(payment_id):
             )
 
     # Upgrade VIP
-    if payment.amount >= 10000:
+    if payment.amount >= 5000:
         user.vip_level = "Diamond"
 
-    elif payment.amount >= 5000:
+    elif payment.amount >= 2500:
         user.vip_level = "Platinum"
 
-    elif payment.amount >= 1500:
+    elif payment.amount >= 1000:
         user.vip_level = "Gold"
 
     elif payment.amount >= 500:
