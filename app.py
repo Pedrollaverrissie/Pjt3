@@ -1698,7 +1698,7 @@ def start_task(task_id):
 
     db.session.add(session)
     db.session.commit()
-
+    return redirect("/tasks")
     return render_template(
         "start_task.html",
         task=task
