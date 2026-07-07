@@ -322,29 +322,25 @@ color:#42d392;
 
         {% if task.id in completed_ids %}
 
+        {% if task.id in completed_ids %}
+
         <button class="completed">
-
-        ✅ Reward Claimed
-
+            ✅ Reward Claimed
         </button>
 
-            {% else %}
+        {% else %}
 
-            <a href="/start-task/{{ task.id }}">
-                <button class="video-btn">
-                    ▶ Start Task
-                </button>
-            </a>
-
-            {% if task.id in completed_ids %}
-            <button class="completed">
-                ✅ Reward Claimed
+        <a href="/start-task/{{ task.id }}">
+            <button class="video-btn">
+                ▶ Start Task
             </button>
-            {% endif %}
+        </a>
+
+        {% endif %}
 
         </div>
 
-{% endfor %}
+        {% endfor %}
 
 </div>
 
