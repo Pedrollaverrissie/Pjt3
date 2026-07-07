@@ -1036,11 +1036,11 @@ def add_to_team_wallet(user, amount, description):
 def get_daily_task_limit(vip_level):
 
     limits = {
-        "Bronze": 0,
-        "Silver": 5,
-        "Gold": 10,
-        "Platinum": 20,
-        "Diamond": 30
+        "Bronze": 1,
+        "Silver": 3,
+        "Gold": 4,
+        "Platinum": 5,
+        "Diamond": 5
     }
 
     return limits.get(vip_level, 0)
