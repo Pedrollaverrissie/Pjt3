@@ -1352,11 +1352,8 @@ def claim_task(task_id):
 
     db.session.commit()
 
-    return jsonify({
-        "success": True,
-        "message": "Reward claimed successfully!",
-        "redirect": "/tasks"
-    })
+    return redirect("/tasks")
+
 #------------ADMIN  ROUTE---------------------
 @app.route("/admin")
 @login_required
