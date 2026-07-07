@@ -1227,6 +1227,7 @@ def admin_tasks():
 
 #--------------REWARD/claim ROUTE------------------
 from datetime import datetime, date
+from flask import jsonify
 
 @app.route("/claim-task/<int:task_id>", methods=["POST"])
 @login_required
@@ -1237,13 +1238,19 @@ def claim_task(task_id):
 
     # Task must be active
     if not task.active:
-        return "Task is inactive."
+        return jsonify({
+            "success": False,
+            "message": "Task is inactive."
+        }), 400
 
-    # Correct VIP
+    # VIP check
     if task.vip_level != current_user.vip_level:
-        return "Task not available for your VIP."
+        return jsonify({
+            "success": False,
+            "message": "This task is not available for your VIP."
+        }), 403
 
-    # Already completed this task today?
+    # Already completed today?
     completed = UserTask.query.filter(
         UserTask.user_id == current_user.id,
         UserTask.task_id == task.id,
@@ -1251,11 +1258,12 @@ def claim_task(task_id):
     ).first()
 
     if completed:
-        return "You already completed this task today."
+        return jsonify({
+            "success": False,
+            "message": "You already completed this task today."
+        }), 400
 
-    # ==============================
-    # DAILY TASK LIMIT
-    # ==============================
+    # Daily task limit
     completed_today = UserTask.query.filter(
         UserTask.user_id == current_user.id,
         db.func.date(UserTask.completed_at) == date.today()
@@ -1264,30 +1272,38 @@ def claim_task(task_id):
     daily_limit = get_daily_task_limit(current_user.vip_level)
 
     if completed_today >= daily_limit:
-        return "You have completed today's tasks."
+        return jsonify({
+            "success": False,
+            "message": "You have reached today's task limit."
+        }), 400
 
-    # ==============================
-    # FIND TASK SESSION
-    # ==============================
+    # Find task session
     session = TaskSession.query.filter_by(
         user_id=current_user.id,
         task_id=task.id
     ).first()
 
     if not session:
-        return "Task session not found."
+        return jsonify({
+            "success": False,
+            "message": "Task session not found."
+        }), 400
 
-    # ==============================
-    # SERVER TIMER CHECK
-    # ==============================
+    # Server-side timer
     elapsed = (datetime.utcnow() - session.started_at).total_seconds()
 
     if elapsed < 15:
-        return f"Please wait {15 - int(elapsed)} more seconds."
+        return jsonify({
+            "success": False,
+            "message": f"Please wait {15-int(elapsed)} more seconds."
+        }), 400
 
-    # Prevent claiming twice
+    # Prevent duplicate reward
     if session.completed:
-        return "Reward already claimed."
+        return jsonify({
+            "success": False,
+            "message": "Reward already claimed."
+        }), 400
 
     # Mark session completed
     session.completed = True
@@ -1299,11 +1315,25 @@ def claim_task(task_id):
         task.title
     )
 
-    # Save completed task
+    # Increase completed tasks counter
+    current_user.tasks_completed += 1
+
+    # Save completion
     db.session.add(
         UserTask(
             user_id=current_user.id,
             task_id=task.id
+        )
+    )
+
+    # Transaction history
+    db.session.add(
+        Transaction(
+            user_id=current_user.id,
+            transaction_type="task_reward",
+            wallet="task",
+            amount=task.reward,
+            description=f"Completed {task.title}"
         )
     )
 
@@ -1318,7 +1348,11 @@ def claim_task(task_id):
 
     db.session.commit()
 
-    return redirect("/tasks")
+    return jsonify({
+        "success": True,
+        "message": "Reward claimed successfully!",
+        "redirect": "/tasks"
+    })
 #------------ADMIN  ROUTE---------------------
 @app.route("/admin")
 @login_required
@@ -1648,56 +1682,7 @@ def start_task(task_id):
         task=task
     )
 
-#--------------claim task route------------------
-from datetime import date
 
-@app.route("/claim-task/<int:task_id>", methods=["POST"])
-@login_required
-@active_account_required
-def claim_task(task_id):
-
-    task = Task.query.get_or_404(task_id)
-
-    # Ensure task belongs to user's VIP
-    if task.vip_level != current_user.vip_level:
-        return redirect("/tasks")
-
-    # Check if already claimed today
-    already_completed = UserTask.query.filter(
-        UserTask.user_id == current_user.id,
-        UserTask.task_id == task.id,
-        db.func.date(UserTask.completed_at) == date.today()
-    ).first()
-
-    if already_completed:
-        return redirect("/tasks")
-
-    # Credit reward
-    current_user.task_wallet += task.reward
-    current_user.tasks_completed += 1
-
-    # Save completion
-    completed = UserTask(
-        user_id=current_user.id,
-        task_id=task.id
-    )
-
-    db.session.add(completed)
-
-    # Record transaction
-    transaction = Transaction(
-        user_id=current_user.id,
-        transaction_type="task_reward",
-        wallet="task",
-        amount=task.reward,
-        description=f"Completed {task.title}"
-    )
-
-    db.session.add(transaction)
-
-    db.session.commit()
-
-    return redirect("/tasks")
 #---------------------------------------------------
 #---------------------------------------------------
 #======================================================
