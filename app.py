@@ -1127,33 +1127,26 @@ from models import Task, UserTask
 @active_account_required
 def tasks():
 
-    # Get tasks for the user's VIP level
+    # Get today's tasks for the current VIP
     tasks = Task.query.filter_by(
         vip_level=current_user.vip_level,
         active=True
     ).all()
 
-    today = date.today()
+    # VIP plan details
+    plan = VIP_PLANS[current_user.vip_level]
+    daily_limit = plan["tasks"]
+    daily_reward = plan["tasks"] * plan["reward"]
 
-    completed_today = []
+    # Tasks completed today
+    completed_tasks = UserTask.query.filter(
+        UserTask.user_id == current_user.id,
+        db.func.date(UserTask.completed_at) == date.today()
+    ).all()
 
-    for task in tasks:
+    completed_ids = [t.task_id for t in completed_tasks]
 
-        completed = UserTask.query.filter(
-            UserTask.user_id == current_user.id,
-            UserTask.task_id == task.id,
-            db.func.date(UserTask.completed_at) == today
-        ).first()
-
-        completed_today.append({
-            "task": task,
-            "completed": completed is not None
-        })
-        plan = VIP_PLANS[current_user.vip_level]
-
-        daily_limit = plan["tasks"]
-
-        daily_reward = plan["tasks"] * plan["reward"]
+    completed_today = len(completed_ids)
 
     return render_template(
         "tasks.html",
@@ -1163,7 +1156,6 @@ def tasks():
         daily_limit=daily_limit,
         daily_reward=daily_reward
     )
-
 #-----------TEAM ROUTE----------------
 @app.route("/team")
 @login_required
