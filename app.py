@@ -1136,7 +1136,7 @@ def tasks():
     # VIP plan details
     plan = VIP_PLANS[current_user.vip_level]
     daily_limit = int(plan["tasks"])
-    daily_reward = plan["tasks"] * plan["reward"]
+    daily_reward = int(plan["tasks"] * plan["reward"])
 
     # Tasks completed today
     completed_tasks = UserTask.query.filter(
