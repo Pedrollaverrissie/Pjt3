@@ -1648,7 +1648,56 @@ def start_task(task_id):
         task=task
     )
 
-#---------------------------------------------------
+#--------------claim task route------------------
+from datetime import date
+
+@app.route("/claim-task/<int:task_id>", methods=["POST"])
+@login_required
+@active_account_required
+def claim_task(task_id):
+
+    task = Task.query.get_or_404(task_id)
+
+    # Ensure task belongs to user's VIP
+    if task.vip_level != current_user.vip_level:
+        return redirect("/tasks")
+
+    # Check if already claimed today
+    already_completed = UserTask.query.filter(
+        UserTask.user_id == current_user.id,
+        UserTask.task_id == task.id,
+        db.func.date(UserTask.completed_at) == date.today()
+    ).first()
+
+    if already_completed:
+        return redirect("/tasks")
+
+    # Credit reward
+    current_user.task_wallet += task.reward
+    current_user.tasks_completed += 1
+
+    # Save completion
+    completed = UserTask(
+        user_id=current_user.id,
+        task_id=task.id
+    )
+
+    db.session.add(completed)
+
+    # Record transaction
+    transaction = Transaction(
+        user_id=current_user.id,
+        transaction_type="task_reward",
+        wallet="task",
+        amount=task.reward,
+        description=f"Completed {task.title}"
+    )
+
+    db.session.add(transaction)
+
+    db.session.commit()
+
+    return redirect("/tasks")
 #---------------------------------------------------
 #---------------------------------------------------
 #======================================================
