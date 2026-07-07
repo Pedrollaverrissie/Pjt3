@@ -1,111 +1,365 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 
-    <title>Daily Tasks</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
-    <style>
-                        .tasks-container{
-                    width:90%;
-                    max-width:450px;
-                    margin:40px auto;
-                    background:#fff;
-                    padding:25px;
-                    border-radius:15px;
-                    box-shadow:0 0 10px rgba(0,0,0,.15);
-                    text-align:center;
-                }
+<title>Daily Tasks</title>
 
-                .tasks-container button{
-                    width:100%;
-                    padding:12px;
-                    border:none;
-                    border-radius:10px;
-                    background:#0b7dda;
-                    color:white;
-                    cursor:pointer;
-                    font-size:16px;
-                }
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
 
-                .tasks-container button:disabled{
-                    background:gray;
-                }
-    </style>
+<style>
+
+body{
+    margin:0;
+    background:#0b1020;
+    font-family:Arial,Helvetica,sans-serif;
+    color:white;
+}
+
+.tasks-container{
+    width:95%;
+    max-width:700px;
+    margin:30px auto;
+}
+
+.page-title{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.page-title h1{
+    color:#ff9900;
+    margin-bottom:5px;
+}
+
+.page-title p{
+    color:#bdbdbd;
+}
+
+.progress-card{
+    background:#181f38;
+    border-radius:15px;
+    padding:20px;
+    margin-bottom:25px;
+}
+
+.progress-bar{
+    width:100%;
+    height:12px;
+    background:#2c3555;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.progress-fill{
+    height:100%;
+    background:#1fd655;
+}
+
+.task-card{
+
+    background:#181f38;
+
+    border-radius:15px;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.25);
+
+}
+
+.task-top{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:15px;
+
+}
+
+.reward{
+
+background:#ff9900;
+
+padding:8px 15px;
+
+border-radius:30px;
+
+font-weight:bold;
+
+color:#000;
+
+}
+
+.task-title{
+
+font-size:20px;
+
+font-weight:bold;
+
+}
+
+.task-desc{
+
+color:#d7d7d7;
+
+margin-bottom:15px;
+
+}
+
+.video-btn{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:10px;
+
+background:#0d6efd;
+
+color:white;
+
+font-size:16px;
+
+cursor:pointer;
+
+margin-bottom:10px;
+
+}
+
+.claim-btn{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:10px;
+
+background:#16b364;
+
+color:white;
+
+font-size:16px;
+
+cursor:pointer;
+
+}
+
+.completed{
+
+width:100%;
+
+padding:14px;
+
+border:none;
+
+border-radius:10px;
+
+background:gray;
+
+color:white;
+
+font-size:16px;
+
+}
+
+.vip-box{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+background:#181f38;
+
+padding:20px;
+
+border-radius:15px;
+
+margin-bottom:25px;
+
+}
+
+.vip-name{
+
+font-size:22px;
+
+font-weight:bold;
+
+color:#ff9900;
+
+}
+
+.daily{
+
+font-size:17px;
+
+color:#42d392;
+
+}
+
+</style>
+
 </head>
 
 <body>
 
-    <div class="tasks-container">
+<div class="tasks-container">
 
-            <h2>Today's Tasks</h2>
+<div class="page-title">
 
-            {% for task in tasks %}
+<h1>🎯 Daily VIP Tasks</h1>
 
-        <div class="task-card">
+<p>Complete all tasks every 24 hours to earn rewards.</p>
 
-            <h3>{{ task.title }}</h3>
+</div>
 
-            <p>{{ task.description }}</p>
+<div class="vip-box">
 
-            <p>
+<div>
 
-            Reward
+<div class="vip-name">
 
-            <strong>
+{{ current_user.vip_level }}
 
-            KES {{ task.reward }}
+</div>
 
-            </strong>
+<div class="daily">
 
-            </p>
+{{ daily_limit }} Daily Tasks
 
-            {% if task.id in completed_ids %}
+</div>
 
-            <button disabled>
+</div>
 
-            ✅ Completed
+<div>
 
-            </button>
+<h2>KES {{ daily_reward }}</h2>
 
-            {% else %}
+<small>Daily Potential</small>
 
-            <a href="{{ task.url }}" target="_blank">
+</div>
 
-            <button>
+</div>
 
-            Start Task
+<div class="progress-card">
 
-            </button>
+<h3>Today's Progress</h3>
 
-            </a>
+<p>
 
-            <form
-            action="/claim-task/{{ task.id }}"
-            method="POST">
+Completed
 
-            <button>
+<strong>
 
-            Claim Reward
+{{ completed_today }}
 
-            </button>
+</strong>
 
-            </form>
+/
 
-            {% endif %}
+<strong>
 
-        </div>
+{{ daily_limit }}
 
-            {% endfor %}
+</strong>
 
-            <div class="task-progress">
-                <h3>Today's Progress</h3>
-                <p>{{ completed_today }} / {{ daily_limit }} Tasks Completed</p>
-            </div>
+Tasks
 
-    </div>
+</p>
 
+<div class="progress-bar">
+
+<div
+class="progress-fill"
+style="width: {{ (completed_today/daily_limit)*100 if daily_limit else 0 }}%;">
+
+</div>
+
+</div>
+
+</div>
+
+{% for task in tasks %}
+
+<div class="task-card">
+
+<div class="task-top">
+
+<div class="task-title">
+
+🎬 {{ task.title }}
+
+</div>
+
+<div class="reward">
+
+KES {{ task.reward }}
+
+</div>
+
+</div>
+
+<div class="task-desc">
+
+{{ task.description }}
+
+</div>
+
+{% if task.id in completed_ids %}
+
+<button class="completed">
+
+✅ Reward Claimed
+
+</button>
+
+{% else %}
+
+<a href="{{ task.url }}" target="_blank">
+
+<button class="video-btn">
+
+▶ Watch Video
+
+</button>
+
+</a>
+
+<form
+action="/claim-task/{{ task.id }}"
+method="POST">
+
+<button class="claim-btn">
+
+💰 Claim Reward
+
+</button>
+
+</form>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+</div>
 
 </body>
+
 </html>

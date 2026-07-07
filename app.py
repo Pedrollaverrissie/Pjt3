@@ -1119,38 +1119,49 @@ def upgrade_vip(plan):
 
     return redirect("/vip")
 #---------------TASK ROUTE---------------------
+from datetime import date
+from models import Task, UserTask
+
 @app.route("/tasks")
 @login_required
 @active_account_required
 def tasks():
 
-    # Check VIP expiry
-    if (
-        current_user.vip_expires_at
-        and current_user.vip_expires_at < datetime.utcnow()
-    ):
-        current_user.vip_level = "Bronze"
-        db.session.commit()
-
+    # Get tasks for the user's VIP level
     tasks = Task.query.filter_by(
         vip_level=current_user.vip_level,
         active=True
     ).all()
 
-    completed = UserTask.query.filter(
-        UserTask.user_id == current_user.id,
-        db.func.date(UserTask.completed_at) == date.today()
-    ).all()
+    today = date.today()
 
-    completed_ids = [
-        t.task_id
-        for t in completed
-    ]
+    completed_today = []
+
+    for task in tasks:
+
+        completed = UserTask.query.filter(
+            UserTask.user_id == current_user.id,
+            UserTask.task_id == task.id,
+            db.func.date(UserTask.completed_at) == today
+        ).first()
+
+        completed_today.append({
+            "task": task,
+            "completed": completed is not None
+        })
+        plan = VIP_PLANS[current_user.vip_level]
+
+        daily_limit = plan["tasks"]
+
+        daily_reward = plan["tasks"] * plan["reward"]
 
     return render_template(
         "tasks.html",
         tasks=tasks,
-        completed_ids=completed_ids
+        completed_ids=completed_ids,
+        completed_today=completed_today,
+        daily_limit=daily_limit,
+        daily_reward=daily_reward
     )
 
 #-----------TEAM ROUTE----------------
