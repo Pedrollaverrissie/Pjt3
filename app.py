@@ -1069,10 +1069,10 @@ def admin_required(f):
 def vip():
 
     plans = [
-        {"name": "Silver", "price": 500, "daily_income": 50, "tasks": 5},
-        {"name": "Gold", "price": 1500, "daily_income": 180, "tasks": 10},
-        {"name": "Platinum", "price": 5000, "daily_income": 700, "tasks": 20},
-        {"name": "Diamond", "price": 10000, "daily_income": 1500, "tasks": 30},
+        {"name": "Silver", "price": 500, "daily_income": 50, "tasks": 3},
+        {"name": "Gold", "price": 1000, "daily_income": 100, "tasks": 4},
+        {"name": "Platinum", "price": 2500, "daily_income": 250, "tasks": 5},
+        {"name": "Diamond", "price": 5000, "daily_income": 500, "tasks": 5},
     ]
 
     return render_template(
