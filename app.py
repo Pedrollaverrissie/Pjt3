@@ -1666,7 +1666,7 @@ def reject_recharge(payment_id):
 
     return redirect("/admin/recharges")
 
-#----------------STSRT TASK ROUTE--------------------
+#----------------START TASK ROUTE--------------------
 from datetime import datetime
 
 @app.route("/start-task/<int:task_id>")

@@ -93,16 +93,17 @@ seconds remaining...
 
 </div>
 
-<form id="claimForm">
+<form
+action="/claim-task/{{ task.id }}"
+method="POST">
 
-    <button
-        id="claimBtn"
-        disabled
-        type="submit">
+<button
+id="claimBtn"
+disabled>
 
-        Claim Reward
+Claim Reward
 
-    </button>
+</button>
 
 </form>
 
@@ -110,59 +111,27 @@ seconds remaining...
 
 <script>
 
-let seconds = 30;
+let seconds=30;
 
-const btn = document.getElementById("claimBtn");
-const txt = document.getElementById("count");
+const btn=document.getElementById("claimBtn");
 
-const timer = setInterval(() => {
+const txt=document.getElementById("count");
 
-    seconds--;
+const timer=setInterval(()=>{
 
-    txt.innerHTML = seconds;
+seconds--;
 
-    if (seconds <= 0) {
+txt.innerHTML=seconds;
 
-        clearInterval(timer);
+if(seconds<=0){
 
-        btn.disabled = false;
+clearInterval(timer);
 
-    }
+btn.disabled=false;
 
-}, 1000);
+}
 
-
-// Claim Reward
-
-document.getElementById("claimForm").addEventListener("submit", async function(e){
-
-    e.preventDefault();
-
-    btn.disabled = true;
-    btn.innerHTML = "Processing...";
-
-    const response = await fetch("/claim-task/{{ task.id }}",{
-
-        method:"POST"
-
-    });
-
-    const data = await response.json();
-
-    alert(data.message);
-
-    if(data.success){
-
-        window.location.href = data.redirect;
-
-    }else{
-
-        btn.disabled = false;
-        btn.innerHTML = "Claim Reward";
-
-    }
-
-});
+},1000);
 
 </script>
 
