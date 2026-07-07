@@ -1717,7 +1717,7 @@ def task_access():
         if current_user.main_wallet < 20:
             return render_template("task_alert.html")
 
-    return redirect(url_for("tasks"))
+    return redirect("/tasks")
 #---------------------------------------------------
 #======================================================
 if __name__ == "__main__":
