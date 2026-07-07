@@ -193,17 +193,21 @@ class Task(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    title = db.Column(db.String(150))
+    title = db.Column(db.String(150), nullable=False)
 
     description = db.Column(db.Text)
 
-    reward = db.Column(db.Float)
+    reward = db.Column(db.Float, nullable=False)
 
-    vip_level = db.Column(db.String(20))
+    vip_level = db.Column(db.String(20), nullable=False)
 
     url = db.Column(db.String(255))
 
     active = db.Column(db.Boolean, default=True)
+
+    daily_limit = db.Column(db.Integer, default=1)
+
+    video_duration = db.Column(db.Integer, default=30)
 
 
 class UserTask(db.Model):
@@ -212,12 +216,14 @@ class UserTask(db.Model):
 
     user_id = db.Column(
         db.Integer,
-        db.ForeignKey("user.id")
+        db.ForeignKey("user.id"),
+        nullable=False
     )
 
     task_id = db.Column(
         db.Integer,
-        db.ForeignKey("task.id")
+        db.ForeignKey("task.id"),
+        nullable=False
     )
 
     completed_at = db.Column(
@@ -225,6 +231,10 @@ class UserTask(db.Model):
         default=datetime.utcnow
     )
 
+    reward_paid = db.Column(
+        db.Boolean,
+        default=False
+    )
 
 
 class TaskSession(db.Model):

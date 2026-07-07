@@ -28,6 +28,51 @@ from flask_migrate import Migrate
 
 
 
+VIP_PLANS = {
+
+    "Bronze": {
+        "price": 200,
+        "tasks": 1,
+        "reward": 20,
+        "withdrawal": 200,
+        "required_referrals": 4
+    },
+
+    "Silver": {
+        "price": 500,
+        "tasks": 3,
+        "reward": 16.67,
+        "withdrawal": 500,
+        "required_referrals": 3
+    },
+
+    "Gold": {
+        "price": 1000,
+        "tasks": 4,
+        "reward": 25,
+        "withdrawal": 1000,
+        "required_referrals": 3
+    },
+
+    "Platinum": {
+        "price": 2500,
+        "tasks": 5,
+        "reward": 50,
+        "withdrawal": 2500,
+        "required_referrals": 3
+    },
+
+    "Diamond": {
+        "price": 5000,
+        "tasks": 5,
+        "reward": 100,
+        "withdrawal": 5000,
+        "required_referrals": 3
+    }
+
+}
+
+
 load_dotenv()
 
 app = Flask(__name__)
