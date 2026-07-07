@@ -1319,55 +1319,6 @@ def claim_task(task_id):
     db.session.commit()
 
     return redirect("/tasks")
-#-------------TASK TIME ROUTE----------------
-
-
-@app.route("/start-task/<int:task_id>")
-@login_required
-@active_account_required
-def start_task(task_id):
-
-    task = Task.query.get_or_404(task_id)
-
-    # Task must be active
-    if not task.active:
-        return "Task is unavailable."
-
-    # User must have the correct VIP
-    if task.vip_level != current_user.vip_level:
-        return "This task is not available for your VIP."
-
-    # Already completed today?
-    completed = UserTask.query.filter(
-        UserTask.user_id == current_user.id,
-        UserTask.task_id == task.id,
-        db.func.date(UserTask.completed_at) == date.today()
-    ).first()
-
-    if completed:
-        return "You have already completed this task today."
-
-    # Delete any old unfinished session
-    TaskSession.query.filter_by(
-        user_id=current_user.id,
-        task_id=task.id
-    ).delete()
-
-    # Create a fresh session
-    session = TaskSession(
-        user_id=current_user.id,
-        task_id=task.id,
-        started_at=datetime.utcnow()
-    )
-
-    db.session.add(session)
-    db.session.commit()
-
-    return render_template(
-        "task_timer.html",
-        task=task
-    )
-
 #------------ADMIN  ROUTE---------------------
 @app.route("/admin")
 @login_required
@@ -1696,6 +1647,10 @@ def start_task(task_id):
         "start_task.html",
         task=task
     )
+
+#---------------------------------------------------
+#---------------------------------------------------
+#---------------------------------------------------
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
