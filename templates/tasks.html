@@ -220,141 +220,141 @@ color:#42d392;
 
 <div class="tasks-container">
 
-<div class="page-title">
+        <div class="page-title">
 
-<h1>🎯 Daily VIP Tasks</h1>
+            <h1>🎯 Daily VIP Tasks</h1>
 
-<p>Complete all tasks every 24 hours to earn rewards.</p>
+            <p>Complete all tasks every 24 hours to earn rewards.</p>
 
-</div>
+        </div>
 
-<div class="vip-box">
+        <div class="vip-box">
 
-<div>
+        <div>
 
-<div class="vip-name">
+        <div class="vip-name">
 
-{{ current_user.vip_level }}
+        {{ current_user.vip_level }}
 
-</div>
+        </div>
 
-<div class="daily">
+        <div class="daily">
 
-{{ daily_limit }} Daily Tasks
+        {{ daily_limit }} Daily Tasks
 
-</div>
+        </div>
 
-</div>
+        </div>
 
-<div>
+        <div>
 
-<h2>KES {{ daily_reward }}</h2>
+        <h2>KES {{ daily_reward }}</h2>
 
-<small>Daily Potential</small>
+        <small>Daily Potential</small>
 
-</div>
+        </div>
 
-</div>
+        </div>
 
-<div class="progress-card">
+        <div class="progress-card">
 
-<h3>Today's Progress</h3>
+        <h3>Today's Progress</h3>
 
-<p>
+        <p>
 
-Completed
+        Completed
 
-<strong>
+        <strong>
 
-{{ completed_today }}
+        {{ completed_today }}
 
-</strong>
+        </strong>
 
-/
+        /
 
-<strong>
+        <strong>
 
-{{ daily_limit }}
+        {{ daily_limit }}
 
-</strong>
+        </strong>
 
-Tasks
+        Tasks
 
-</p>
+        </p>
 
-<div class="progress-bar">
+        <div class="progress-bar">
 
-<div
-class="progress-fill"
-style="width: {{ (completed_today/daily_limit)*100 if daily_limit else 0 }}%;">
+        <div
+        class="progress-fill"
+        style="width: {{ (completed_today/daily_limit)*100 if daily_limit else 0 }}%;">
 
-</div>
+        </div>
 
-</div>
+        </div>
 
-</div>
+        </div>
 
-{% for task in tasks %}
+        {% for task in tasks %}
 
-<div class="task-card">
+        <div class="task-card">
 
-<div class="task-top">
+        <div class="task-top">
 
-<div class="task-title">
+        <div class="task-title">
 
-🎬 {{ task.title }}
+        🎬 {{ task.title }}
 
-</div>
+        </div>
 
-<div class="reward">
+        <div class="reward">
 
-KES {{ task.reward }}
+        KES {{ task.reward }}
 
-</div>
+        </div>
 
-</div>
+        </div>
 
-<div class="task-desc">
+        <div class="task-desc">
 
-{{ task.description }}
+        {{ task.description }}
 
-</div>
+        </div>
 
-{% if task.id in completed_ids %}
+        {% if task.id in completed_ids %}
 
-<button class="completed">
+        <button class="completed">
 
-✅ Reward Claimed
+        ✅ Reward Claimed
 
-</button>
+        </button>
 
-{% else %}
+        {% else %}
 
-<a href="{{ task.url }}" target="_blank">
+        <a href="/start-task/{{ task.id }}">
 
-<button class="video-btn">
+        <button class="video-btn">
 
-▶ Watch Video
+        ▶ Watch Video
 
-</button>
+        </button>
 
-</a>
+        </a>
 
-<form
-action="/claim-task/{{ task.id }}"
-method="POST">
+        <form
+        action="/claim-task/{{ task.id }}"
+        method="POST">
 
-<button class="claim-btn">
+        <button class="claim-btn">
 
-💰 Claim Reward
+        💰 Claim Reward
 
-</button>
+        </button>
 
-</form>
+        </form>
 
-{% endif %}
+        {% endif %}
 
-</div>
+        </div>
 
 {% endfor %}
 
