@@ -1271,6 +1271,10 @@ def claim_task(task_id):
 
     daily_limit = get_daily_task_limit(current_user.vip_level)
 
+    print("VIP:", current_user.vip_level)
+    print("Completed today:", completed_today)
+    print("Daily limit:", daily_limit)
+
     if completed_today >= daily_limit:
         return jsonify({
             "success": False,
