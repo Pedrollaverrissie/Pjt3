@@ -18,16 +18,14 @@ body{
 
     width:90%;
     max-width:650px;
-
     margin:40px auto;
 
 }
 
-iframe{
+#player{
 
     width:100%;
     height:360px;
-
     border-radius:15px;
 
 }
@@ -35,19 +33,12 @@ iframe{
 button{
 
     margin-top:20px;
-
     padding:15px 40px;
-
     border:none;
-
     border-radius:10px;
-
     background:#16b364;
-
     color:white;
-
     font-size:18px;
-
     cursor:pointer;
 
 }
@@ -55,15 +46,14 @@ button{
 button:disabled{
 
     background:gray;
+    cursor:not-allowed;
 
 }
 
-.timer{
+.status{
 
-    font-size:26px;
-
+    font-size:22px;
     color:#ff9900;
-
     margin:20px;
 
 }
@@ -80,16 +70,11 @@ button:disabled{
 
 <p>{{ task.description }}</p>
 
-<iframe
-src="{{ task.url }}"
-allowfullscreen>
-</iframe>
+<div id="player"></div>
 
-<div class="timer">
+<div class="status" id="status">
 
-<span id="count">30</span>
-
-seconds remaining...
+▶ Watch the video until it finishes to unlock your reward.
 
 </div>
 
@@ -109,29 +94,61 @@ Claim Reward
 
 </div>
 
+<script src="https://www.youtube.com/iframe_api"></script>
+
 <script>
 
-let seconds=30;
+let player;
 
 const btn=document.getElementById("claimBtn");
+const status=document.getElementById("status");
 
-const txt=document.getElementById("count");
+const videoId="{{ task.url.split('/')[-1] }}";
 
-const timer=setInterval(()=>{
+function onYouTubeIframeAPIReady(){
 
-seconds--;
+    player=new YT.Player("player",{
 
-txt.innerHTML=seconds;
+        width:"100%",
+        height:"360",
 
-if(seconds<=0){
+        videoId:videoId,
 
-clearInterval(timer);
+        playerVars:{
 
-btn.disabled=false;
+            autoplay:1,
+            rel:0,
+            modestbranding:1
+
+        },
+
+        events:{
+
+            onStateChange:onPlayerStateChange
+
+        }
+
+    });
 
 }
 
-},1000);
+function onPlayerStateChange(event){
+
+    if(event.data==YT.PlayerState.PLAYING){
+
+        status.innerHTML="Watching video...";
+
+    }
+
+    if(event.data==YT.PlayerState.ENDED){
+
+        status.innerHTML="✅ Video completed. You can now claim your reward.";
+
+        btn.disabled=false;
+
+    }
+
+}
 
 </script>
 
