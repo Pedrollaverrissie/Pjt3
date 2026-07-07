@@ -1681,7 +1681,21 @@ def reject_recharge(payment_id):
 
     return redirect("/admin/recharges")
 
-#----------------------------------------------
+#----------------STSRT TASK ROUTE--------------------
+@app.route("/start-task/<int:task_id>")
+@login_required
+@active_account_required
+def start_task(task_id):
+
+    task = Task.query.get_or_404(task_id)
+
+    if task.vip_level != current_user.vip_level:
+        return redirect("/tasks")
+
+    return render_template(
+        "start_task.html",
+        task=task
+    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)

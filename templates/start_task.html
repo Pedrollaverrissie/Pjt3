@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Complete Task</title>
+
+<style>
+
+body{
+    background:#0b1020;
+    color:white;
+    font-family:Arial;
+    text-align:center;
+}
+
+.container{
+
+    width:90%;
+    max-width:650px;
+
+    margin:40px auto;
+
+}
+
+iframe{
+
+    width:100%;
+    height:360px;
+
+    border-radius:15px;
+
+}
+
+button{
+
+    margin-top:20px;
+
+    padding:15px 40px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#16b364;
+
+    color:white;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+}
+
+button:disabled{
+
+    background:gray;
+
+}
+
+.timer{
+
+    font-size:26px;
+
+    color:#ff9900;
+
+    margin:20px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>{{ task.title }}</h2>
+
+<p>{{ task.description }}</p>
+
+<iframe
+src="{{ task.url }}"
+allowfullscreen>
+</iframe>
+
+<div class="timer">
+
+<span id="count">30</span>
+
+seconds remaining...
+
+</div>
+
+<form
+action="/claim-task/{{ task.id }}"
+method="POST">
+
+<button
+id="claimBtn"
+disabled>
+
+Claim Reward
+
+</button>
+
+</form>
+
+</div>
+
+<script>
+
+let seconds=30;
+
+const btn=document.getElementById("claimBtn");
+
+const txt=document.getElementById("count");
+
+const timer=setInterval(()=>{
+
+seconds--;
+
+txt.innerHTML=seconds;
+
+if(seconds<=0){
+
+clearInterval(timer);
+
+btn.disabled=false;
+
+}
+
+},1000);
+
+</script>
+
+</body>
+
+</html>

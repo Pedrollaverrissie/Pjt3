@@ -328,31 +328,19 @@ color:#42d392;
 
         </button>
 
-        {% else %}
+            {% else %}
 
-        <a href="/start-task/{{ task.id }}">
+            <a href="/start-task/{{ task.id }}">
+                <button class="video-btn">
+                    ▶ Start Task
+                </button>
+            </a>
 
-        <button class="video-btn">
-
-        ▶ Watch Video
-
-        </button>
-
-        </a>
-
-        <form
-        action="/claim-task/{{ task.id }}"
-        method="POST">
-
-        <button class="claim-btn">
-
-        💰 Claim Reward
-
-        </button>
-
-        </form>
-
-        {% endif %}
+            {% if task.id in completed_ids %}
+            <button class="completed">
+                ✅ Reward Claimed
+            </button>
+            {% endif %}
 
         </div>
 
