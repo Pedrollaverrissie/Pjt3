@@ -1705,7 +1705,19 @@ def start_task(task_id):
         task=task
     )
 
-#---------------------------------------------------
+#---------------TASK ALERT-------------------
+@app.route("/task-access")
+@login_required
+@active_account_required
+def task_access():
+
+    # Free/Bronze users must have at least KES 200 in Main Wallet
+    if current_user.vip_level == "Bronze":
+
+        if current_user.main_wallet < 20:
+            return render_template("task_alert.html")
+
+    return redirect(url_for("tasks"))
 #---------------------------------------------------
 #======================================================
 if __name__ == "__main__":
