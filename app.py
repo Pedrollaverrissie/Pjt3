@@ -1667,6 +1667,8 @@ def reject_recharge(payment_id):
     return redirect("/admin/recharges")
 
 #----------------STSRT TASK ROUTE--------------------
+from datetime import datetime
+
 @app.route("/start-task/<int:task_id>")
 @login_required
 @active_account_required
@@ -1674,14 +1676,33 @@ def start_task(task_id):
 
     task = Task.query.get_or_404(task_id)
 
+    if not task.active:
+        return redirect("/tasks")
+
     if task.vip_level != current_user.vip_level:
         return redirect("/tasks")
+
+    # Remove any unfinished session
+    TaskSession.query.filter_by(
+        user_id=current_user.id,
+        task_id=task.id
+    ).delete()
+
+    # Create a new session
+    session = TaskSession(
+        user_id=current_user.id,
+        task_id=task.id,
+        started_at=datetime.utcnow(),
+        completed=False
+    )
+
+    db.session.add(session)
+    db.session.commit()
 
     return render_template(
         "start_task.html",
         task=task
     )
-
 
 #---------------------------------------------------
 #---------------------------------------------------
