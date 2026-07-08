@@ -1017,14 +1017,14 @@ def notifications():
     )
 
 #============WALLETS/vip plans HELPERS FUNCTIONS=========
-def add_to_main_wallet(user, amount, description):
+def add_to_main_wallet(user, amount, description, transaction_type="deposit"):
 
     user.main_wallet += amount
 
     transaction = Transaction(
         user_id=user.id,
-        transaction_type="credit",
-        wallet="Main",
+        transaction_type=transaction_type,
+        wallet="main",
         amount=amount,
         description=description
     )
@@ -1037,8 +1037,8 @@ def add_to_task_wallet(user, amount, description):
 
     transaction = Transaction(
         user_id=user.id,
-        transaction_type="credit",
-        wallet="Task",
+        transaction_type="task_reward",
+        wallet="task",
         amount=amount,
         description=description
     )
@@ -1051,8 +1051,8 @@ def add_to_team_wallet(user, amount, description):
 
     transaction = Transaction(
         user_id=user.id,
-        transaction_type="credit",
-        wallet="Team",
+        transaction_type="team_bonus",
+        wallet="team",
         amount=amount,
         description=description
     )
@@ -1098,12 +1098,18 @@ def get_required_contribution(vip):
 
     return requirements.get(vip, 0)
 
-def add_contribution(user, amount):
+def add_contribution(user, referred_user, amount, description):
 
     user.referral_contribution_balance += amount
 
-def add_contribution(user, referred_user, amount, description):
-    ...
+    db.session.add(
+        ContributionHistory(
+            user_id=user.id,
+            referred_user_id=referred_user.id,
+            amount=amount,
+            description=description
+        )
+    )
 
 from datetime import datetime
 
@@ -1436,17 +1442,6 @@ def claim_task(task_id):
         UserTask(
             user_id=current_user.id,
             task_id=task.id
-        )
-    )
-
-    # Transaction history
-    db.session.add(
-        Transaction(
-            user_id=current_user.id,
-            transaction_type="task_reward",
-            wallet="task",
-            amount=task.reward,
-            description=f"Completed {task.title}"
         )
     )
 
@@ -1955,17 +1950,92 @@ def progress():
 #--------------Withdraw Route------------------
 @app.route("/withdraw")
 @login_required
+@active_account_required
 def withdraw():
 
     allowed, message = can_withdraw(current_user)
 
     if not allowed:
-
-        flash(message)
-
+        flash(message, "danger")
         return redirect("/progress")
 
-    return render_template("withdraw.html")
+    pending = Withdrawal.query.filter_by(
+        user_id=current_user.id,
+        status="Pending"
+    ).first()
+
+    return render_template(
+        "withdraw.html",
+        pending=pending
+    )
+#----------withdrawal request route------------------
+@app.route("/request-withdrawal", methods=["POST"])
+@login_required
+@active_account_required
+def request_withdrawal():
+
+    amount = float(request.form["amount"])
+
+    allowed, message = can_withdraw(current_user)
+
+    if not allowed:
+        return jsonify({
+            "success": False,
+            "message": message
+        })
+
+    if amount > current_user.main_wallet:
+
+        return jsonify({
+            "success": False,
+            "message": "Insufficient Main Wallet balance."
+        })
+
+    MINIMUM = 500
+
+    if amount < MINIMUM:
+
+        return jsonify({
+            "success": False,
+            "message": f"Minimum withdrawal is KES {MINIMUM}."
+        })
+
+    existing = Withdrawal.query.filter_by(
+        user_id=current_user.id,
+        status="Pending"
+    ).first()
+
+    if existing:
+
+        return jsonify({
+            "success": False,
+            "message": "You already have a pending withdrawal."
+        })
+
+    withdrawal = Withdrawal(
+        user_id=current_user.id,
+        phone=current_user.phone,
+        amount=amount,
+        status="Pending",
+        reference=f"WD{datetime.utcnow().strftime('%Y%m%d%H%M%S')}"
+    )
+
+    db.session.add(withdrawal)
+
+    db.session.add(
+        Notification(
+            user_id=current_user.id,
+            title="Withdrawal Requested",
+            message=f"Your withdrawal request of KES {amount:.2f} has been received."
+        )
+    )
+
+    db.session.commit()
+
+    return jsonify({
+        "success": True,
+        "message": "Withdrawal request submitted successfully."
+    })
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
