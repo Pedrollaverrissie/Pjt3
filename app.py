@@ -1282,6 +1282,10 @@ def claim_task(task_id):
             "message": "You have reached today's task limit."
         }), 400
 
+    print("===== CLAIM REQUEST =====")
+    print("Task ID:", task.id)
+    print("User ID:", current_user.id)
+    print("Received token:", token)
     # Find task session
     session = TaskSession.query.filter_by(
         user_id=current_user.id,
@@ -1290,6 +1294,8 @@ def claim_task(task_id):
         completed=False
     ).first()
 
+    print("Session found:", session)
+    
     if not session:
         return jsonify({
             "success": False,
@@ -1718,7 +1724,7 @@ def start_task(task_id):
     )
     db.session.add(session)
     db.session.commit()
-    
+
     print("SESSION CREATED")
     print(session.user_id)
     print(session.task_id)
