@@ -1227,7 +1227,7 @@ def admin_tasks():
 
 #--------------REWARD/claim ROUTE------------------
 from datetime import datetime, date
-from flask import jsonify
+from flask import jsonify, redirect
 
 @app.route("/claim-task/<int:task_id>", methods=["POST"])
 @login_required
@@ -1293,20 +1293,27 @@ def claim_task(task_id):
             "message": "Task session not found."
         }), 400
 
-    # Server-side timer
-    elapsed = (datetime.utcnow() - session.started_at).total_seconds()
-
-    if elapsed < 15:
-        return jsonify({
-            "success": False,
-            "message": f"Please wait {15-int(elapsed)} more seconds."
-        }), 400
-
-    # Prevent duplicate reward
+    # Reward already claimed?
     if session.completed:
         return jsonify({
             "success": False,
             "message": "Reward already claimed."
+        }), 400
+
+    # Server-side watch verification
+    if session.watched_seconds < 25:
+        return jsonify({
+            "success": False,
+            "message": "Please finish watching the video."
+        }), 400
+
+    # Extra protection against fake requests
+    elapsed = (datetime.utcnow() - session.started_at).total_seconds()
+
+    if elapsed < 25:
+        return jsonify({
+            "success": False,
+            "message": "Please finish watching the video."
         }), 400
 
     # Mark session completed
@@ -1349,6 +1356,9 @@ def claim_task(task_id):
             message=f"You earned KES {task.reward:.2f}."
         )
     )
+
+    # Delete the session so it cannot be reused
+    db.session.delete(session)
 
     db.session.commit()
 
@@ -1696,13 +1706,15 @@ def start_task(task_id):
         started_at=datetime.utcnow(),
         completed=False
     )
-
+    video_id = task.url.split("/")[-1]
     db.session.add(session)
     db.session.commit()
     
     return render_template(
         "start_task.html",
-        task=task
+        task=task,
+        video_id=video_id
+
     )
 
 #---------------TASK ALERT-------------------
@@ -1714,11 +1726,53 @@ def task_access():
     # Free/Bronze users must have at least KES 200 in Main Wallet
     if current_user.vip_level == "Bronze":
 
-        if current_user.main_wallet < 20:
+        if current_user.main_wallet < 200:
             return render_template("task_alert.html")
 
     return redirect("/tasks")
-#---------------------------------------------------
+#-----------------PROGRESS ROUTE------------------
+from flask import request, jsonify
+from datetime import datetime
+
+@app.route("/update-task-progress", methods=["POST"])
+@login_required
+@active_account_required
+def update_task_progress():
+
+    data = request.get_json()
+
+    task_id = int(data.get("task_id"))
+    watched = int(data.get("watched", 0))
+
+    session = TaskSession.query.filter_by(
+        user_id=current_user.id,
+        task_id=task_id,
+        completed=False
+    ).first()
+
+    if not session:
+        return jsonify(success=False), 404
+
+    # Never allow more than 25 seconds
+    watched = min(watched, 25)
+
+    # User cannot report more time than has actually passed
+    elapsed = int((datetime.utcnow() - session.started_at).total_seconds())
+
+    if watched > elapsed:
+        watched = elapsed
+
+    # Only increase progress
+    if watched > session.watched_seconds:
+
+        session.watched_seconds = watched
+
+        db.session.commit()
+
+    return jsonify(
+        success=True,
+        watched=session.watched_seconds
+    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)

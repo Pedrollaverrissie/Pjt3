@@ -74,13 +74,20 @@ button:disabled{
 
 <div class="status" id="status">
 
-▶ Watch the video until it finishes to unlock your reward.
+▶ Press Play and watch the video to unlock your reward.
 
 </div>
 
 <form
 action="/claim-task/{{ task.id }}"
-method="POST">
+method="POST"
+id="claimForm">
+
+<input
+type="hidden"
+id="watchedSeconds"
+name="watched_seconds"
+value="0">
 
 <button
 id="claimBtn"
@@ -100,14 +107,19 @@ Claim Reward
 
 let player;
 
-const btn=document.getElementById("claimBtn");
-const status=document.getElementById("status");
+const btn = document.getElementById("claimBtn");
+const status = document.getElementById("status");
+const watchedInput = document.getElementById("watchedSeconds");
 
-const videoId="{{ task.url.split('/')[-1] }}";
+const REQUIRED_SECONDS = 25;
+const videoId = "{{ video_id }}";
+
+let watched = 0;
+let interval = null;
 
 function onYouTubeIframeAPIReady(){
 
-    player=new YT.Player("player",{
+    player = new YT.Player("player",{
 
         width:"100%",
         height:"360",
@@ -116,9 +128,12 @@ function onYouTubeIframeAPIReady(){
 
         playerVars:{
 
-            autoplay:1,
             rel:0,
-            modestbranding:1
+            modestbranding:1,
+            controls:1,
+            disablekb:1,
+            playsinline:1,
+            fs:0
 
         },
 
@@ -134,21 +149,107 @@ function onYouTubeIframeAPIReady(){
 
 function onPlayerStateChange(event){
 
-    if(event.data==YT.PlayerState.PLAYING){
+    if(event.data === YT.PlayerState.PLAYING){
 
-        status.innerHTML="Watching video...";
+        clearInterval(interval);
+
+        status.innerHTML =
+        "🎥 Watching...";
+
+        interval = setInterval(function(){
+
+            watched++;
+
+            if(watched > REQUIRED_SECONDS){
+
+                watched = REQUIRED_SECONDS;
+
+            }
+
+            watchedInput.value = watched;
+
+            status.innerHTML =
+            "🎥 Watching... " + watched + " / " + REQUIRED_SECONDS + " seconds";
+
+            // Send progress to Flask every 5 seconds
+            if(watched < REQUIRED_SECONDS && watched % 5 === 0){
+
+                fetch("/update-task-progress",{
+
+                    method:"POST",
+
+                    headers:{
+
+                        "Content-Type":"application/json"
+
+                    },
+
+                    body:JSON.stringify({
+
+                        task_id:{{ task.id }},
+                        watched:watched
+
+                    })
+
+                });
+
+            }
+
+            if(watched >= REQUIRED_SECONDS){
+
+                clearInterval(interval);
+
+                btn.disabled = false;
+
+                status.innerHTML =
+                "✅ Minimum watch time reached. You can now claim your reward.";
+
+            }
+
+        },1000);
 
     }
 
-    if(event.data==YT.PlayerState.ENDED){
+    else if(event.data === YT.PlayerState.PAUSED){
 
-        status.innerHTML="✅ Video completed. You can now claim your reward.";
+        clearInterval(interval);
 
-        btn.disabled=false;
+        status.innerHTML =
+        "⏸ Video paused. Continue watching.";
+
+    }
+
+    else if(event.data === YT.PlayerState.ENDED){
+
+        clearInterval(interval);
+
+        watched = REQUIRED_SECONDS;
+
+        watchedInput.value = watched;
+
+        btn.disabled = false;
+
+        status.innerHTML =
+        "✅ Video completed. You can now claim your reward.";
+
+    }
+
+    else{
+
+        clearInterval(interval);
 
     }
 
 }
+
+// Prevent double claim
+document.getElementById("claimForm").addEventListener("submit",function(){
+
+    btn.disabled = true;
+
+    btn.innerHTML = "Claiming Reward...";
+
+});
 
 </script>
 

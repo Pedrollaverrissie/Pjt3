@@ -246,3 +246,5 @@ class TaskSession(db.Model):
     started_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     completed = db.Column(db.Boolean, default=False)
+
+    watched_seconds = db.Column(db.Integer, default=0)
