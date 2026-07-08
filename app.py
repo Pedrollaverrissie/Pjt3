@@ -1718,6 +1718,11 @@ def start_task(task_id):
     )
     db.session.add(session)
     db.session.commit()
+    
+    print("SESSION CREATED")
+    print(session.user_id)
+    print(session.task_id)
+    print(session.completed)
 
     # Extract YouTube video ID
     if not task.url:
