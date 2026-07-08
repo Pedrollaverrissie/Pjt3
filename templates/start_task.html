@@ -8,17 +8,33 @@
 <style>
 
 body{
+
+    margin:0;
+    padding:0;
+
     background:#0b1020;
     color:white;
     font-family:Arial;
-    text-align:center;
-}
 
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    min-height:100vh;
+
+}
 .container{
 
     width:90%;
     max-width:650px;
-    margin:40px auto;
+
+    background:#121a33;
+
+    padding:25px;
+
+    border-radius:15px;
+
+    box-shadow:0 0 20px rgba(0,0,0,.4);
 
 }
 
@@ -26,7 +42,12 @@ body{
 
     width:100%;
     height:360px;
+
     border-radius:15px;
+
+    overflow:hidden;
+
+    margin-top:20px;
 
 }
 
@@ -34,18 +55,31 @@ button{
 
     margin-top:20px;
     padding:15px 40px;
+
     border:none;
     border-radius:10px;
+
     background:#16b364;
+
     color:white;
     font-size:18px;
+
     cursor:pointer;
+
+    transition:.3s;
+
+}
+
+button:hover:not(:disabled){
+
+    background:#149c58;
+    transform:translateY(-2px);
 
 }
 
 button:disabled{
 
-    background:gray;
+    background:#666;
     cursor:not-allowed;
 
 }
