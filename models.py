@@ -2,6 +2,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 import uuid
+import secrets
 from datetime import datetime
 db = SQLAlchemy()
 
@@ -12,6 +13,12 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(150), unique=True)
     phone = db.Column(db.String(20))
     password = db.Column(db.String(200))
+
+    # Contribution Wallet
+    referral_contribution_balance = db.Column(db.Float, default=0.0)
+
+    # Withdrawal status for current membership
+    withdrawal_unlocked = db.Column(db.Boolean, default=False)
     
     # Referral System
     referral_code = db.Column(
@@ -253,3 +260,62 @@ class TaskSession(db.Model):
         default=lambda: secrets.token_hex(32),
         unique=True
     )
+
+class ContributionHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False
+    )
+
+    referred_user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False
+    )
+
+    amount = db.Column(db.Float, nullable=False)
+
+    description = db.Column(db.String(200))
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    sponsor = db.relationship(
+        "User",
+        foreign_keys=[user_id]
+    )
+
+    referral = db.relationship(
+        "User",
+        foreign_keys=[referred_user_id]
+    )
+
+
+class MembershipHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        nullable=False
+    )
+
+    vip_level = db.Column(db.String(20))
+
+    contribution_used = db.Column(db.Float)
+
+    renewed_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    withdrawal_unlocked = db.Column(
+        db.Boolean,
+        default=False
+    )
+

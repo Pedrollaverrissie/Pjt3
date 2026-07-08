@@ -651,24 +651,48 @@ def webhook():
 
                             referral_bonus = payment.amount * 0.10
 
-                            # Add commission directly to Main Wallet
+                            # ------------------------------
+                            # Referral Commission
+                            # ------------------------------
                             add_to_main_wallet(
                                 referrer,
                                 referral_bonus,
                                 f"10% Referral commission from {user.username}'s recharge"
                             )
 
-                            # Track total commissions earned
                             referrer.commissions += referral_bonus
 
-                            # Notify the referrer
+                            # ------------------------------
+                            # Contribution Wallet
+                            # ------------------------------
+                            referrer.referral_contribution_balance += payment.amount
+
+                            db.session.add(
+                                ContributionHistory(
+                                    user_id=referrer.id,
+                                    referred_user_id=user.id,
+                                    amount=payment.amount,
+                                    description=f"{user.username} recharged KES {payment.amount:.2f}"
+                                )
+                            )
+
+                            # ------------------------------
+                            # Notification
+                            # ------------------------------
                             notification = Notification(
                                 user_id=referrer.id,
                                 title="Referral Commission",
-                                message=f"You earned KES {referral_bonus:.2f} because {user.username} recharged KES {payment.amount:.2f}."
+                                message=(
+                                    f"You earned KES {referral_bonus:.2f} commission.\n"
+                                    f"Contribution Progress +KES {payment.amount:.2f}."
+                                )
                             )
 
                             db.session.add(notification)
+
+                            print(
+                                f"Contribution Wallet updated for {referrer.username}: +KES {payment.amount:.2f}"
+                            )
 
                             print(
                                 f"Referral commission of KES {referral_bonus:.2f} awarded to {referrer.username}"
@@ -1060,7 +1084,24 @@ def admin_required(f):
     return decorated_function
 
 
+def get_required_contribution(vip):
 
+    requirements = {
+        "Bronze": 800,
+        "Silver": 1500,
+        "Gold": 3000,
+        "Platinum": 7500,
+        "Diamond": 15000
+    }
+
+    return requirements.get(vip, 0)
+
+def add_contribution(user, amount):
+
+    user.referral_contribution_balance += amount
+
+def add_contribution(user, referred_user, amount, description):
+    ...
 
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
