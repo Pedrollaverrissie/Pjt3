@@ -167,8 +167,10 @@ class Transaction(db.Model):
     transaction_type = db.Column(db.String(30))
     # deposit
     # withdrawal
-    # referral_bonus
+    # referral_commission
     # task_reward
+    # team_bonus
+    # recharge
     # aviator_win
     # aviator_loss
 

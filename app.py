@@ -1743,7 +1743,7 @@ def approve_recharge(payment_id):
             db.session.add(
                 Transaction(
                     user_id=referrer.id,
-                    transaction_type="referral_bonus",
+                    transaction_type="referral_commission",
                     amount=commission,
                     wallet="team",
                     description=f"10% commission from {user.username}"
