@@ -14,7 +14,9 @@ from models import (
     Transaction,
     Task,
     UserTask,
-    TaskSession
+    TaskSession,
+    ContributionHistory,
+    MembershipHistory
 )
 from functools import wraps
 from flask import abort
@@ -1103,6 +1105,33 @@ def add_contribution(user, amount):
 def add_contribution(user, referred_user, amount, description):
     ...
 
+from datetime import datetime
+
+def can_withdraw(user):
+
+    # Account inactive
+    if not user.account_active:
+        return False, "Your account is inactive."
+
+    # VIP expired
+    if not user.vip_expires_at:
+        return False, "You do not have an active membership."
+
+    if datetime.utcnow() > user.vip_expires_at:
+        return False, "Your VIP membership has expired."
+
+    # Contribution requirement
+    required = get_required_contribution(user.vip_level)
+
+    if user.referral_contribution_balance < required:
+        remaining = required - user.referral_contribution_balance
+
+        return (
+            False,
+            f"You need KES {remaining:.2f} more contribution to unlock withdrawals."
+        )
+
+    return True, "Withdrawal unlocked."
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
@@ -1890,6 +1919,21 @@ def progress():
         percentage=percentage,
         history=history
     )
+
+#--------------Withdraw Route------------------
+@app.route("/withdraw")
+@login_required
+def withdraw():
+
+    allowed, message = can_withdraw(current_user)
+
+    if not allowed:
+
+        flash(message)
+
+        return redirect("/progress")
+
+    return render_template("withdraw.html")
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
