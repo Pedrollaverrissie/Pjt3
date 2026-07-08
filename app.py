@@ -654,15 +654,48 @@ def webhook():
                             referral_bonus = payment.amount * 0.10
 
                             # ------------------------------
-                            # Referral Commission
+                            # Referral Commission (10%)
                             # ------------------------------
                             add_to_main_wallet(
                                 referrer,
                                 referral_bonus,
-                                f"10% Referral commission from {user.username}'s recharge"
+                                f"10% Referral commission from {user.username}'s recharge",
+                                transaction_type="referral_commission"
                             )
 
                             referrer.commissions += referral_bonus
+
+                            # ------------------------------
+                            # Contribution Progress
+                            # ------------------------------
+                            add_contribution(
+                                referrer,
+                                user,
+                                payment.amount,
+                                f"{user.username} recharged KES {payment.amount:.2f}"
+                            )
+
+                            # ------------------------------
+                            # Notification
+                            # ------------------------------
+                            notification = Notification(
+                                user_id=referrer.id,
+                                title="Referral Commission",
+                                message=(
+                                    f"You earned KES {referral_bonus:.2f} commission.\n"
+                                    f"Contribution Progress +KES {payment.amount:.2f}."
+                                )
+                            )
+
+                            db.session.add(notification)
+
+                            print(
+                                f"Referral commission of KES {referral_bonus:.2f} awarded to {referrer.username}"
+                            )
+
+                            print(
+                                f"Contribution Wallet updated for {referrer.username}: +KES {payment.amount:.2f}"
+                            )
 
                             # ------------------------------
                             # Contribution Wallet
