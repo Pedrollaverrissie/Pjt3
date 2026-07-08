@@ -216,16 +216,14 @@ function onPlayerStateChange(event){
             "🎥 Watching... " + watched + " / " + REQUIRED_SECONDS + " seconds";
 
             // Send progress to Flask every 5 seconds
-            if(watched < REQUIRED_SECONDS && watched % 5 === 0){
+            if(watched >= REQUIRED_SECONDS){
 
                 fetch("/update-task-progress",{
 
                     method:"POST",
 
                     headers:{
-
                         "Content-Type":"application/json"
-
                     },
 
                     body:JSON.stringify({
@@ -238,6 +236,7 @@ function onPlayerStateChange(event){
 
                 });
 
+                btn.disabled = false;
             }
 
             if(watched >= REQUIRED_SECONDS){
