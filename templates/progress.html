@@ -368,6 +368,71 @@ No contribution history yet.
 
 </div>
 
+<!-- Membership History -->
+
+<div class="card">
+
+<h2 class="history-title">
+
+Membership History
+
+</h2>
+
+{% if membership_history %}
+
+{% for item in membership_history %}
+
+<div class="history">
+
+<h3>{{ item.vip_level }} Membership</h3>
+
+<div class="amount">
+
+Contribution Used: KES {{ "%.2f"|format(item.contribution_used) }}
+
+</div>
+
+<div class="date">
+
+Renewed:
+{{ item.renewed_at.strftime("%d %b %Y %I:%M %p") }}
+
+</div>
+
+{% if item.withdrawal_unlocked %}
+
+<div style="color:#1fd655;margin-top:8px;">
+
+✅ Withdrawal Unlocked
+
+</div>
+
+{% else %}
+
+<div style="color:#ff4d4d;margin-top:8px;">
+
+🔒 Withdrawal Locked
+
+</div>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<p style="text-align:center;color:#bdbdbd;">
+
+No membership history yet.
+
+</p>
+
+{% endif %}
+
+</div>
+
 <a href="/dashboard" class="back">
 
 ⬅ Back to Dashboard
