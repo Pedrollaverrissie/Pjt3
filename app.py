@@ -1679,6 +1679,7 @@ def reject_recharge(payment_id):
 
 #----------------START TASK ROUTE--------------------
 from datetime import datetime
+import re
 
 @app.route("/start-task/<int:task_id>")
 @login_required
@@ -1687,9 +1688,11 @@ def start_task(task_id):
 
     task = Task.query.get_or_404(task_id)
 
+    # Task must be active
     if not task.active:
         return redirect("/tasks")
 
+    # VIP restriction
     if task.vip_level != current_user.vip_level:
         return redirect("/tasks")
 
@@ -1699,22 +1702,36 @@ def start_task(task_id):
         task_id=task.id
     ).delete()
 
-    # Create a new session
+    # Create new session
     session = TaskSession(
         user_id=current_user.id,
         task_id=task.id,
         started_at=datetime.utcnow(),
+        watched_seconds=0,
         completed=False
     )
-    video_id = task.url.split("/")[-1]
+
     db.session.add(session)
     db.session.commit()
-    
+
+    # Extract YouTube video ID
+    if not task.url:
+        return "No video URL found.", 400
+
+    match = re.search(
+        r"(?:youtube\.com/(?:embed/|watch\?v=)|youtu\.be/)([^?&/]+)",
+        task.url
+    )
+
+    if not match:
+        return "Invalid YouTube URL.", 400
+
+    video_id = match.group(1)
+
     return render_template(
         "start_task.html",
         task=task,
         video_id=video_id
-
     )
 
 #---------------TASK ALERT-------------------
