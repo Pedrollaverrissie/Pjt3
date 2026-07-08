@@ -1235,6 +1235,7 @@ from flask import jsonify, redirect
 def claim_task(task_id):
 
     task = Task.query.get_or_404(task_id)
+    token = request.form.get("session_token")
 
     # Task must be active
     if not task.active:
@@ -1284,7 +1285,9 @@ def claim_task(task_id):
     # Find task session
     session = TaskSession.query.filter_by(
         user_id=current_user.id,
-        task_id=task.id
+        task_id=task.id,
+        session_token=token,
+        completed=False
     ).first()
 
     if not session:
@@ -1703,14 +1706,16 @@ def start_task(task_id):
     ).delete()
 
     # Create new session
+    import secrets
+
     session = TaskSession(
         user_id=current_user.id,
         task_id=task.id,
         started_at=datetime.utcnow(),
         watched_seconds=0,
-        completed=False
+        completed=False,
+        session_token=secrets.token_hex(32)
     )
-
     db.session.add(session)
     db.session.commit()
 
@@ -1731,7 +1736,8 @@ def start_task(task_id):
     return render_template(
         "start_task.html",
         task=task,
-        video_id=video_id
+        video_id=video_id,
+        session_token=session.session_token
     )
 
 #---------------TASK ALERT-------------------
@@ -1759,12 +1765,16 @@ def update_task_progress():
     data = request.get_json()
 
     task_id = int(data.get("task_id"))
-    watched = int(data.get("watched", 0))
+    watched = int(data.get("watched",0))
+    token = data.get("token")
 
     session = TaskSession.query.filter_by(
+
         user_id=current_user.id,
         task_id=task_id,
+        session_token=token,
         completed=False
+
     ).first()
 
     if not session:

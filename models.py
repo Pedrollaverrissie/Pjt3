@@ -248,3 +248,8 @@ class TaskSession(db.Model):
     completed = db.Column(db.Boolean, default=False)
 
     watched_seconds = db.Column(db.Integer, default=0)
+
+    session_token = db.Column(db.String(64),
+        default=lambda: secrets.token_hex(32),
+        unique=True
+    )

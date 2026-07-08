@@ -89,6 +89,16 @@ id="watchedSeconds"
 name="watched_seconds"
 value="0">
 
+<input
+type="hidden"
+id="sessionToken"
+value="{{ session_token }}">
+
+<input
+type="hidden"
+name="session_token"
+value="{{ session_token }}">
+
 <button
 id="claimBtn"
 disabled>
@@ -187,7 +197,8 @@ function onPlayerStateChange(event){
                     body:JSON.stringify({
 
                         task_id:{{ task.id }},
-                        watched:watched
+                        watched:watched,
+                        token:document.getElementById("sessionToken").value
 
                     })
 
