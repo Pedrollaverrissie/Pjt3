@@ -1295,7 +1295,7 @@ def claim_task(task_id):
     ).first()
 
     print("Session found:", session)
-    
+
     if not session:
         return jsonify({
             "success": False,
@@ -1318,6 +1318,8 @@ def claim_task(task_id):
 
     # Extra protection against fake requests
     elapsed = (datetime.utcnow() - session.started_at).total_seconds()
+
+    print("Elapsed:", elapsed)
 
     if elapsed < 25:
         return jsonify({
@@ -1805,6 +1807,13 @@ def update_task_progress():
 
         session.watched_seconds = watched
 
+        print(
+        "Progress:",
+        watched,
+        "Stored:",
+        session.watched_seconds
+             )
+        
         db.session.commit()
 
     return jsonify(
