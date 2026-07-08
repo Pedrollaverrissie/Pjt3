@@ -1132,6 +1132,27 @@ def can_withdraw(user):
         )
 
     return True, "Withdrawal unlocked."
+
+
+def deduct_membership_contribution(user):
+
+    required = get_required_contribution(user.vip_level)
+
+    if user.referral_contribution_balance < required:
+        return False
+
+    user.referral_contribution_balance -= required
+
+    db.session.add(
+        MembershipHistory(
+            user_id=user.id,
+            vip_level=user.vip_level,
+            contribution_used=required,
+            withdrawal_unlocked=False
+        )
+    )
+
+    return True
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
@@ -1903,12 +1924,22 @@ def progress():
 
     remaining = max(required - current, 0)
 
-    percentage = 100 if required == 0 else min((current / required) * 100, 100)
+    percentage = min(
+        (current_user.referral_contribution_balance /
+        get_required_contribution(current_user.vip_level)) * 100,
+        100
+    )
 
     history = ContributionHistory.query.filter_by(
         user_id=current_user.id
     ).order_by(
         ContributionHistory.created_at.desc()
+    ).all()
+
+    membership_history = MembershipHistory.query.filter_by(
+    user_id=current_user.id
+    ).order_by(
+        MembershipHistory.renewed_at.desc()
     ).all()
 
     return render_template(
@@ -1917,7 +1948,8 @@ def progress():
         current=current,
         remaining=remaining,
         percentage=percentage,
-        history=history
+        history=history,
+        membership_history=membership_history
     )
 
 #--------------Withdraw Route------------------
