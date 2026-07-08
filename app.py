@@ -1861,6 +1861,35 @@ def update_task_progress():
         success=True,
         watched=session.watched_seconds
     )
+
+#-------------Progress system page---------------
+@app.route("/progress")
+@login_required
+@active_account_required
+def progress():
+
+    required = get_required_contribution(current_user.vip_level)
+
+    current = current_user.referral_contribution_balance
+
+    remaining = max(required - current, 0)
+
+    percentage = 100 if required == 0 else min((current / required) * 100, 100)
+
+    history = ContributionHistory.query.filter_by(
+        user_id=current_user.id
+    ).order_by(
+        ContributionHistory.created_at.desc()
+    ).all()
+
+    return render_template(
+        "progress.html",
+        required=required,
+        current=current,
+        remaining=remaining,
+        percentage=percentage,
+        history=history
+    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
