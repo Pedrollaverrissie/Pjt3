@@ -710,7 +710,7 @@ def webhook():
                                     description=f"{user.username} recharged KES {payment.amount:.2f}"
                                 )
                             )
-
+                            update_withdrawal_status(referrer)
                             # ------------------------------
                             # Notification
                             # ------------------------------
@@ -1171,6 +1171,18 @@ def can_withdraw(user):
         )
 
     return True, "Withdrawal unlocked."
+
+
+
+def update_withdrawal_status(user):
+
+    required = get_required_contribution(user.vip_level)
+
+    if user.referral_contribution_balance >= required:
+        user.withdrawal_unlocked = True
+    else:
+        user.withdrawal_unlocked = False
+
 
 
 def deduct_membership_contribution(user):
