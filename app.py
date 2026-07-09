@@ -130,8 +130,14 @@ migrate = Migrate(app, db)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
-#-----------------------------------------
+#------------send_mpesa_withdrawal function------------
 def send_mpesa_withdrawal(user, amount):
+    """
+    Sends an automatic M-Pesa withdrawal using IntaSend B2C.
+    Returns:
+        (True, response)  -> Request accepted
+        (False, error)    -> Failed to initiate
+    """
 
     try:
 
@@ -148,14 +154,31 @@ def send_mpesa_withdrawal(user, amount):
             requires_approval="NO"
         )
 
-        print("WITHDRAWAL RESPONSE:")
+        print("=" * 60)
+        print("INTASEND WITHDRAWAL RESPONSE")
         print(response)
+        print("=" * 60)
 
-        return True, response
+        status = response.get("status", "").lower()
+
+        # Request accepted by IntaSend
+        if status in [
+            "confirming balance",
+            "pending",
+            "processing",
+            "submitted"
+        ]:
+
+            return True, response
+
+        return False, response
 
     except Exception as e:
 
-        print("WITHDRAWAL ERROR:", e)
+        print("=" * 60)
+        print("INTASEND WITHDRAWAL ERROR")
+        print(e)
+        print("=" * 60)
 
         return False, str(e)
 #-----------USER LOADER--------------
@@ -632,6 +655,7 @@ def webhook():
 
     invoice_id = data.get("invoice_id")
     state = data.get("state", "").upper()
+    tracking_id = data.get("tracking_id")
 
     print("INVOICE:", invoice_id)
     print("STATE:", state)
@@ -763,6 +787,87 @@ def webhook():
                 print(f"Wallet recharged for {user.username}")
 
                 return jsonify({"status": "received"}), 200
+
+            # =====================================================
+            # WITHDRAWAL WEBHOOK
+            # =====================================================
+
+            withdrawal = Withdrawal.query.filter_by(
+                intasend_transaction_id=tracking_id
+            ).first()
+
+            if withdrawal:
+
+                user = User.query.get(withdrawal.user_id)
+
+                # ----------------------------------
+                # SUCCESSFUL WITHDRAWAL
+                # ----------------------------------
+                if state in ["SUCCESSFUL", "COMPLETED", "COMPLETE"]:
+
+                    withdrawal.status = "Paid"
+                    withdrawal.processed_at = datetime.utcnow()
+
+                    # Deduct wallet NOW
+                    user.main_wallet -= withdrawal.amount
+
+                    user.withdrawn += withdrawal.amount
+
+                    # Deduct contribution ONLY once
+                    if not user.contribution_deducted:
+
+                        required = get_required_contribution(user.vip_level)
+
+                        user.referral_contribution_balance -= required
+
+                        user.contribution_deducted = True
+
+                        db.session.add(
+                            ContributionHistory(
+                                user_id=user.id,
+                                referred_user_id=user.id,
+                                amount=-required,
+                                description=f"{user.vip_level} contribution used"
+                            )
+                        )
+
+                    db.session.add(
+                        Transaction(
+                            user_id=user.id,
+                            transaction_type="withdrawal",
+                            wallet="main",
+                            amount=-withdrawal.amount,
+                            description="Automatic Withdrawal"
+                        )
+                    )
+
+                    db.session.add(
+                        Notification(
+                            user_id=user.id,
+                            title="Withdrawal Successful",
+                            message=f"KES {withdrawal.amount:.2f} has been sent to your M-Pesa."
+                        )
+                    )
+
+                # ----------------------------------
+                # FAILED
+                # ----------------------------------
+                elif state == "FAILED":
+
+                    withdrawal.status = "Failed"
+
+                    db.session.add(
+                        Notification(
+                            user_id=user.id,
+                            title="Withdrawal Failed",
+                            message="Your withdrawal could not be processed. Please try again."
+                        )
+                    )
+
+                db.session.commit()
+
+                return jsonify({"status": "received"}), 200
+
 
             pending_user = PendingUser.query.filter_by(
                 email=payment.email
@@ -2024,7 +2129,7 @@ def withdraw():
     phone = request.form["phone"]
 
     # ----------------------------
-    # Check withdrawal eligibility
+    # Eligibility
     # ----------------------------
     allowed, message = can_withdraw(current_user)
 
@@ -2048,11 +2153,14 @@ def withdraw():
     # Wallet balance
     # ----------------------------
     if amount > current_user.main_wallet:
-        flash("Insufficient Main Wallet balance.", "danger")
+        flash(
+            "Insufficient Main Wallet balance.",
+            "danger"
+        )
         return redirect("/withdraw")
 
     # ----------------------------
-    # Pending withdrawal
+    # Existing pending withdrawal
     # ----------------------------
     pending = Withdrawal.query.filter_by(
         user_id=current_user.id,
@@ -2066,122 +2174,65 @@ def withdraw():
         )
         return redirect("/withdraw")
 
-    # =====================================================
-    # FIRST WITHDRAWAL OF CURRENT MEMBERSHIP
-    # Deduct contribution ONLY ONCE
-    # =====================================================
-
-    if current_user.last_contribution_period != current_user.vip_started_at:
-
-        required = get_required_contribution(current_user.vip_level)
-
-        current_user.referral_contribution_balance -= required
-
-        current_user.last_contribution_period = current_user.vip_started_at
-
-        db.session.add(
-            ContributionHistory(
-                user_id=current_user.id,
-                referred_user_id=current_user.id,
-                amount=-required,
-                description=f"{current_user.vip_level} membership contribution used"
-            )
-        )
-
     # ----------------------------
-    # Deduct wallet
-    # ----------------------------
-    current_user.main_wallet -= amount
-
-    # ----------------------------
-    # Create withdrawal
+    # Create withdrawal request
     # ----------------------------
     withdrawal = Withdrawal(
         user_id=current_user.id,
         phone=phone,
         amount=amount,
         wallet="main",
+        status="Pending",
         reference=f"WDL-{uuid4().hex[:10].upper()}"
     )
 
     db.session.add(withdrawal)
+    db.session.commit()
 
     # ----------------------------
-    # Transaction history
+    # Send via IntaSend
     # ----------------------------
-    db.session.add(
-        Transaction(
-            user_id=current_user.id,
-            transaction_type="withdrawal",
-            wallet="main",
-            amount=-amount,
-            description="Withdrawal Request"
-        )
+    success, response = send_mpesa_withdrawal(
+        current_user,
+        amount
     )
 
-    # ----------------------------
-    # Notification
-    # ----------------------------
+    if not success:
+
+        db.session.delete(withdrawal)
+        db.session.commit()
+
+        flash(
+            "Unable to initiate withdrawal. Please try again.",
+            "danger"
+        )
+
+        return redirect("/withdraw")
+
+    # Save IntaSend Tracking ID
+    withdrawal.intasend_transaction_id = response.get("tracking_id")
+
     db.session.add(
         Notification(
             user_id=current_user.id,
             title="Withdrawal Submitted",
-            message=f"Your withdrawal request of KES {amount:.2f} has been received."
+            message=(
+                f"Your withdrawal request of "
+                f"KES {amount:.2f} is being processed."
+            )
         )
     )
 
     db.session.commit()
 
     flash(
-        "Withdrawal request submitted successfully.",
+        "Withdrawal submitted successfully.",
         "success"
     )
 
     return redirect("/dashboard")
 
 
-#----------APPROVE WITHDRAWAL---------------
-@app.route("/admin/approve-withdrawal/<int:withdrawal_id>")
-@login_required
-@admin_required
-def approve_withdrawal(withdrawal_id):
-
-    withdrawal = Withdrawal.query.get_or_404(withdrawal_id)
-
-    if withdrawal.status != "Pending":
-        flash("This withdrawal has already been processed.", "warning")
-        return redirect("/admin/withdrawals")
-
-    user = User.query.get(withdrawal.user_id)
-
-    # Mark as approved
-    withdrawal.status = "Approved"
-    withdrawal.processed_at = datetime.utcnow()
-
-    # Deduct contribution ONLY once per membership
-    if not user.contribution_deducted:
-
-        required = get_required_contribution(user.vip_level)
-
-        user.referral_contribution_balance -= required
-        user.contribution_deducted = True
-
-    # Record withdrawn amount
-    user.withdrawn += withdrawal.amount
-
-    # Notify the user
-    db.session.add(
-        Notification(
-            user_id=user.id,
-            title="Withdrawal Approved",
-            message=f"Your withdrawal of KES {withdrawal.amount:.2f} has been approved."
-        )
-    )
-
-    db.session.commit()
-
-    flash("Withdrawal approved successfully.", "success")
-    return redirect("/admin/withdrawals")
 #----------withdrawal request route------------------
 @app.route("/request-withdrawal", methods=["POST"])
 @login_required
@@ -2252,19 +2303,7 @@ def request_withdrawal():
     })
 
 #---------------TEMPORARY ROUTES-------------------
-@app.route("/test-withdraw")
-@login_required
-def test_withdraw():
 
-    success, response = send_mpesa_withdrawal(
-        current_user,
-        5
-    )
-
-    if success:
-        return response
-
-    return str(response)
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)

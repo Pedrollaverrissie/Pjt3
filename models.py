@@ -19,7 +19,7 @@ class User(UserMixin, db.Model):
 
     # Withdrawal status for current membership
     withdrawal_unlocked = db.Column(db.Boolean, default=False)
-    
+
     contribution_deducted = db.Column(
     db.Boolean,
     default=False
@@ -382,4 +382,8 @@ class Withdrawal(db.Model):
     admin_note = db.Column(
         db.Text,
         nullable=True
+    )
+    intasend_transaction_id = db.Column(
+    db.String(100),
+    nullable=True
     )
