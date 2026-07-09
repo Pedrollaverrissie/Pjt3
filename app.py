@@ -2124,7 +2124,23 @@ from uuid import uuid4
 def withdraw():
 
     if request.method == "GET":
-        return render_template("withdraw.html")
+
+        pending_withdrawal = Withdrawal.query.filter_by(
+            user_id=current_user.id,
+            status="Pending"
+        ).first()
+
+        withdrawals = Withdrawal.query.filter_by(
+            user_id=current_user.id
+        ).order_by(
+            Withdrawal.created_at.desc()
+        ).all()
+
+        return render_template(
+            "withdraw.html",
+            pending_withdrawal=pending_withdrawal,
+            withdrawals=withdrawals
+        )
 
     amount = float(request.form["amount"])
     phone = request.form["phone"]
