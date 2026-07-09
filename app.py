@@ -2363,7 +2363,7 @@ def view_withdrawal(withdrawal_id):
     withdrawal = Withdrawal.query.get_or_404(withdrawal_id)
 
     return render_template(
-        "view_withdrawal.html",
+        "admin/view_withdrawal.html",
         withdrawal=withdrawal
     )
 
