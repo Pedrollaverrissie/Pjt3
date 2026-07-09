@@ -20,6 +20,11 @@ class User(UserMixin, db.Model):
     # Withdrawal status for current membership
     withdrawal_unlocked = db.Column(db.Boolean, default=False)
     
+    contribution_deducted = db.Column(
+    db.Boolean,
+    default=False
+    )
+    
     # Referral System
     referral_code = db.Column(
         db.String(20),
@@ -86,6 +91,10 @@ class User(UserMixin, db.Model):
         "Notification",
         backref="user",
         lazy=True
+    )
+    last_contribution_period = db.Column(
+    db.DateTime,
+    nullable=True
     )
     
 
@@ -334,14 +343,29 @@ class Withdrawal(db.Model):
 
     amount = db.Column(db.Float, nullable=False)
 
+    # Which wallet the withdrawal came from
+    wallet = db.Column(
+        db.String(20),
+        default="main"
+    )
+
     status = db.Column(
         db.String(20),
         default="Pending"
     )
+    # Pending
+    # Approved
+    # Rejected
+    # Paid
 
     mpesa_receipt = db.Column(
         db.String(50),
         nullable=True
+    )
+
+    reference = db.Column(
+        db.String(50),
+        unique=True
     )
 
     created_at = db.Column(
@@ -353,7 +377,9 @@ class Withdrawal(db.Model):
         db.DateTime,
         nullable=True
     )
-    reference = db.Column(
-    db.String(50),
-    unique=True
+
+    # Admin notes if rejected
+    admin_note = db.Column(
+        db.Text,
+        nullable=True
     )

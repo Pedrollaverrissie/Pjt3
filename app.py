@@ -638,6 +638,26 @@ def webhook():
                         "Wallet Recharge"
                     )
 
+                    # ==========================
+                    # MEMBERSHIP RENEWAL
+                    # ==========================
+                    renewal_days = 30
+                    now = datetime.utcnow()
+
+                    if not user.vip_expires_at:
+
+                        user.vip_started_at = now
+                        user.vip_expires_at = now + timedelta(days=renewal_days)
+
+                    elif user.vip_expires_at < now:
+
+                        user.vip_started_at = now
+                        user.vip_expires_at = now + timedelta(days=renewal_days)
+
+                    else:
+
+                        user.vip_started_at = user.vip_expires_at
+                        user.vip_expires_at = user.vip_expires_at + timedelta(days=renewal_days)
                  
 
                     # ==========================
@@ -697,41 +717,8 @@ def webhook():
                                 f"Contribution Wallet updated for {referrer.username}: +KES {payment.amount:.2f}"
                             )
 
-                            # ------------------------------
-                            # Contribution Wallet
-                            # ------------------------------
-                            referrer.referral_contribution_balance += payment.amount
-
-                            db.session.add(
-                                ContributionHistory(
-                                    user_id=referrer.id,
-                                    referred_user_id=user.id,
-                                    amount=payment.amount,
-                                    description=f"{user.username} recharged KES {payment.amount:.2f}"
-                                )
-                            )
+                    
                             update_withdrawal_status(referrer)
-                            # ------------------------------
-                            # Notification
-                            # ------------------------------
-                            notification = Notification(
-                                user_id=referrer.id,
-                                title="Referral Commission",
-                                message=(
-                                    f"You earned KES {referral_bonus:.2f} commission.\n"
-                                    f"Contribution Progress +KES {payment.amount:.2f}."
-                                )
-                            )
-
-                            db.session.add(notification)
-
-                            print(
-                                f"Contribution Wallet updated for {referrer.username}: +KES {payment.amount:.2f}"
-                            )
-
-                            print(
-                                f"Referral commission of KES {referral_bonus:.2f} awarded to {referrer.username}"
-                            )
 
                     notification = Notification(
                         user_id=user.id,
@@ -1993,26 +1980,134 @@ def progress():
     )
 
 #--------------Withdraw Route------------------
-@app.route("/withdraw")
+from uuid import uuid4
+
+@app.route("/withdraw", methods=["GET", "POST"])
 @login_required
 @active_account_required
 def withdraw():
 
+    if request.method == "GET":
+        return render_template("withdraw.html")
+
+    amount = float(request.form["amount"])
+    phone = request.form["phone"]
+
+    # ----------------------------
+    # Check withdrawal eligibility
+    # ----------------------------
     allowed, message = can_withdraw(current_user)
 
     if not allowed:
         flash(message, "danger")
-        return redirect("/progress")
+        return redirect("/withdraw")
 
+    # ----------------------------
+    # Minimum withdrawal
+    # ----------------------------
+    MINIMUM_WITHDRAWAL = 500
+
+    if amount < MINIMUM_WITHDRAWAL:
+        flash(
+            f"Minimum withdrawal is KES {MINIMUM_WITHDRAWAL}.",
+            "danger"
+        )
+        return redirect("/withdraw")
+
+    # ----------------------------
+    # Wallet balance
+    # ----------------------------
+    if amount > current_user.main_wallet:
+        flash("Insufficient Main Wallet balance.", "danger")
+        return redirect("/withdraw")
+
+    # ----------------------------
+    # Pending withdrawal
+    # ----------------------------
     pending = Withdrawal.query.filter_by(
         user_id=current_user.id,
         status="Pending"
     ).first()
 
-    return render_template(
-        "withdraw.html",
-        pending=pending
+    if pending:
+        flash(
+            "You already have a pending withdrawal.",
+            "warning"
+        )
+        return redirect("/withdraw")
+
+    # =====================================================
+    # FIRST WITHDRAWAL OF CURRENT MEMBERSHIP
+    # Deduct contribution ONLY ONCE
+    # =====================================================
+
+    if current_user.last_contribution_period != current_user.vip_started_at:
+
+        required = get_required_contribution(current_user.vip_level)
+
+        current_user.referral_contribution_balance -= required
+
+        current_user.last_contribution_period = current_user.vip_started_at
+
+        db.session.add(
+            ContributionHistory(
+                user_id=current_user.id,
+                referred_user_id=current_user.id,
+                amount=-required,
+                description=f"{current_user.vip_level} membership contribution used"
+            )
+        )
+
+    # ----------------------------
+    # Deduct wallet
+    # ----------------------------
+    current_user.main_wallet -= amount
+
+    # ----------------------------
+    # Create withdrawal
+    # ----------------------------
+    withdrawal = Withdrawal(
+        user_id=current_user.id,
+        phone=phone,
+        amount=amount,
+        wallet="main",
+        reference=f"WDL-{uuid4().hex[:10].upper()}"
     )
+
+    db.session.add(withdrawal)
+
+    # ----------------------------
+    # Transaction history
+    # ----------------------------
+    db.session.add(
+        Transaction(
+            user_id=current_user.id,
+            transaction_type="withdrawal",
+            wallet="main",
+            amount=-amount,
+            description="Withdrawal Request"
+        )
+    )
+
+    # ----------------------------
+    # Notification
+    # ----------------------------
+    db.session.add(
+        Notification(
+            user_id=current_user.id,
+            title="Withdrawal Submitted",
+            message=f"Your withdrawal request of KES {amount:.2f} has been received."
+        )
+    )
+
+    db.session.commit()
+
+    flash(
+        "Withdrawal request submitted successfully.",
+        "success"
+    )
+
+    return redirect("/dashboard")
 #----------withdrawal request route------------------
 @app.route("/request-withdrawal", methods=["POST"])
 @login_required
