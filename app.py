@@ -2258,7 +2258,7 @@ def test_withdraw():
 
     success, response = send_mpesa_withdrawal(
         current_user,
-        1
+        5
     )
 
     if success:
