@@ -130,7 +130,34 @@ migrate = Migrate(app, db)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+#-----------------------------------------
+def send_mpesa_withdrawal(user, amount):
 
+    try:
+
+        transactions = [{
+            "name": user.username,
+            "account": user.phone,
+            "amount": amount,
+            "narrative": "Supernova Earn Withdrawal"
+        }]
+
+        response = service.transfer.mpesa(
+            currency="KES",
+            transactions=transactions,
+            requires_approval="NO"
+        )
+
+        print("WITHDRAWAL RESPONSE:")
+        print(response)
+
+        return True, response
+
+    except Exception as e:
+
+        print("WITHDRAWAL ERROR:", e)
+
+        return False, str(e)
 #-----------USER LOADER--------------
 
 @login_manager.user_loader
@@ -658,6 +685,9 @@ def webhook():
 
                         user.vip_started_at = user.vip_expires_at
                         user.vip_expires_at = user.vip_expires_at + timedelta(days=renewal_days)
+
+                    # Reset contribution deduction for the new membership cycle
+                    user.contribution_deducted = False
                  
 
                     # ==========================
@@ -2108,6 +2138,50 @@ def withdraw():
     )
 
     return redirect("/dashboard")
+
+
+#----------APPROVE WITHDRAWAL---------------
+@app.route("/admin/approve-withdrawal/<int:withdrawal_id>")
+@login_required
+@admin_required
+def approve_withdrawal(withdrawal_id):
+
+    withdrawal = Withdrawal.query.get_or_404(withdrawal_id)
+
+    if withdrawal.status != "Pending":
+        flash("This withdrawal has already been processed.", "warning")
+        return redirect("/admin/withdrawals")
+
+    user = User.query.get(withdrawal.user_id)
+
+    # Mark as approved
+    withdrawal.status = "Approved"
+    withdrawal.processed_at = datetime.utcnow()
+
+    # Deduct contribution ONLY once per membership
+    if not user.contribution_deducted:
+
+        required = get_required_contribution(user.vip_level)
+
+        user.referral_contribution_balance -= required
+        user.contribution_deducted = True
+
+    # Record withdrawn amount
+    user.withdrawn += withdrawal.amount
+
+    # Notify the user
+    db.session.add(
+        Notification(
+            user_id=user.id,
+            title="Withdrawal Approved",
+            message=f"Your withdrawal of KES {withdrawal.amount:.2f} has been approved."
+        )
+    )
+
+    db.session.commit()
+
+    flash("Withdrawal approved successfully.", "success")
+    return redirect("/admin/withdrawals")
 #----------withdrawal request route------------------
 @app.route("/request-withdrawal", methods=["POST"])
 @login_required
@@ -2176,6 +2250,21 @@ def request_withdrawal():
         "success": True,
         "message": "Withdrawal request submitted successfully."
     })
+
+#---------------TEMPORARY ROUTES-------------------
+@app.route("/test-withdraw")
+@login_required
+def test_withdraw():
+
+    success, response = send_mpesa_withdrawal(
+        current_user,
+        10
+    )
+
+    if success:
+        return response
+
+    return str(response)
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
