@@ -1327,6 +1327,17 @@ def deduct_membership_contribution(user):
     )
 
     return True
+
+def get_minimum_withdrawal(vip_level):
+    minimums = {
+        "Bronze": 200,
+        "Silver": 500,
+        "Gold": 5,
+        "Platinum": 2500,
+        "Diamond": 5000
+    }
+
+    return minimums.get(vip_level, 500)
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
@@ -2162,11 +2173,11 @@ def withdraw():
     # ----------------------------
     # Minimum withdrawal
     # ----------------------------
-    MINIMUM_WITHDRAWAL = 500
+    minimum = get_minimum_withdrawal(current_user.vip_level)
 
-    if amount < MINIMUM_WITHDRAWAL:
+    if amount < minimum:
         flash(
-            f"Minimum withdrawal is KES {MINIMUM_WITHDRAWAL}.",
+            f"Minimum withdrawal for {current_user.vip_level} is KES {minimum}.",
             "danger"
         )
         return redirect("/withdraw")
