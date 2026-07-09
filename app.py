@@ -16,7 +16,8 @@ from models import (
     UserTask,
     TaskSession,
     ContributionHistory,
-    MembershipHistory
+    MembershipHistory,
+    Withdrawal
 )
 from functools import wraps
 from flask import abort
