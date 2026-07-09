@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <title>Withdraw</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Withdraw Funds</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="card">
+
+        <h3>Main Wallet</h3>
+
+        <h1>
+            KES {{ "{:,.2f}".format(current_user.main_wallet) }}
+        </h1>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Contribution Progress</h3>
+
+        <h2>
+            KES {{ "{:,.2f}".format(current_user.referral_contribution_balance) }}
+        </h2>
+
+    </div>
+
+    <form method="POST">
+
+        <label>Withdrawal Amount</label>
+
+        <input
+            type="number"
+            name="amount"
+            min="500"
+            step="1"
+            required>
+
+        <label>M-Pesa Phone Number</label>
+
+        <input
+            type="text"
+            name="phone"
+            value="{{ current_user.phone }}"
+            required>
+
+        <button type="submit">
+
+            Request Withdrawal
+
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h3>Withdrawal Rules</h3>
+
+    <ul>
+
+        <li>Minimum withdrawal: <strong>KES 500</strong></li>
+
+        <li>You must meet your VIP contribution requirement.</li>
+
+        <li>Only one pending withdrawal is allowed.</li>
+
+        <li>Money is sent directly to your M-Pesa account.</li>
+
+    </ul>
+
+</div>
+
+</body>
+
+</html>
