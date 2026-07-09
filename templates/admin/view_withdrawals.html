@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends "admin_base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2>Withdrawal Details</h2>
+
+    <div class="card mt-3">
+
+        <div class="card-body">
+
+            <table class="table table-bordered">
+
+                <tr>
+                    <th>User</th>
+                    <td>{{ withdrawal.user.username }}</td>
+                </tr>
+
+                <tr>
+                    <th>Email</th>
+                    <td>{{ withdrawal.user.email }}</td>
+                </tr>
+
+                <tr>
+                    <th>Phone</th>
+                    <td>{{ withdrawal.phone }}</td>
+                </tr>
+
+                <tr>
+                    <th>Amount</th>
+                    <td>KES {{ "{:,.2f}".format(withdrawal.amount) }}</td>
+                </tr>
+
+                <tr>
+                    <th>Wallet</th>
+                    <td>{{ withdrawal.wallet }}</td>
+                </tr>
+
+                <tr>
+                    <th>Status</th>
+
+                    <td>
+
+                        {% if withdrawal.status=="Paid" %}
+                        <span class="badge bg-success">Paid</span>
+
+                        {% elif withdrawal.status=="Pending" %}
+                        <span class="badge bg-warning">Pending</span>
+
+                        {% elif withdrawal.status=="Failed" %}
+                        <span class="badge bg-danger">Failed</span>
+
+                        {% else %}
+                        <span class="badge bg-secondary">
+                            {{ withdrawal.status }}
+                        </span>
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                <tr>
+                    <th>Reference</th>
+                    <td>{{ withdrawal.reference }}</td>
+                </tr>
+
+                <tr>
+                    <th>Tracking ID</th>
+                    <td>{{ withdrawal.intasend_transaction_id }}</td>
+                </tr>
+
+                <tr>
+                    <th>Transaction ID</th>
+                    <td>{{ withdrawal.intasend_reference }}</td>
+                </tr>
+
+                <tr>
+                    <th>M-Pesa Receipt</th>
+                    <td>{{ withdrawal.mpesa_receipt }}</td>
+                </tr>
+
+                <tr>
+                    <th>Requested At</th>
+                    <td>{{ withdrawal.created_at }}</td>
+                </tr>
+
+                <tr>
+                    <th>Processed At</th>
+                    <td>{{ withdrawal.processed_at }}</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+    <div class="card mt-4">
+
+        <div class="card-header">
+
+            IntaSend Response
+
+        </div>
+
+        <div class="card-body">
+
+<pre style="white-space:pre-wrap;">
+{{ withdrawal.provider_response }}
+</pre>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
+</body>
+</html>

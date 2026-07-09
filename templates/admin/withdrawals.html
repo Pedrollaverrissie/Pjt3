@@ -36,6 +36,27 @@
 
 </div>
 
+<form method="GET">
+
+<div class="input-group mb-3">
+
+<input
+type="text"
+name="search"
+class="form-control"
+placeholder="Search username, phone or reference">
+
+<button class="btn btn-primary">
+
+Search
+
+</button>
+
+</div>
+
+</form>
+
+
 <table>
 
 <thead>
@@ -66,7 +87,35 @@
 
 <td>KES {{ withdrawal.amount }}</td>
 
-<td>{{ withdrawal.status }}</td>
+<td>
+
+{% if withdrawal.status=="Paid" %}
+
+<span class="badge bg-success">
+Paid
+</span>
+
+{% elif withdrawal.status=="Pending" %}
+
+<span class="badge bg-warning">
+Pending
+</span>
+
+{% elif withdrawal.status=="Failed" %}
+
+<span class="badge bg-danger">
+Failed
+</span>
+
+{% else %}
+
+<span class="badge bg-secondary">
+{{ withdrawal.status }}
+</span>
+
+{% endif %}
+
+</td>
 
 <td>{{ withdrawal.reference }}</td>
 

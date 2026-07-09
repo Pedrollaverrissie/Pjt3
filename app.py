@@ -2330,8 +2330,24 @@ def admin_withdrawals():
         db.func.sum(Withdrawal.amount)
     ).filter_by(status="Paid").scalar() or 0
 
+    search = request.args.get("search", "")
+
+    query = Withdrawal.query
+
+    if search:
+
+        query = query.join(User).filter(
+            (User.username.ilike(f"%{search}%")) |
+            (User.phone.ilike(f"%{search}%")) |
+            (Withdrawal.reference.ilike(f"%{search}%"))
+        )
+
+    withdrawals = query.order_by(
+        Withdrawal.created_at.desc()
+    ).all()
+
     return render_template(
-        "admin_withdrawals.html",
+        "admin/withdrawals.html",
         withdrawals=withdrawals,
         pending=pending,
         paid=paid,
