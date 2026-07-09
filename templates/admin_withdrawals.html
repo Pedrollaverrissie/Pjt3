@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends "admin_base.html" %}
+
+{% block content %}
+
+<h2>Withdrawal Management</h2>
+
+<div class="stats">
+
+    <div class="card">
+        <h3>Pending</h3>
+        <h1>{{ pending }}</h1>
+    </div>
+
+    <div class="card">
+        <h3>Paid</h3>
+        <h1>{{ paid }}</h1>
+    </div>
+
+    <div class="card">
+        <h3>Failed</h3>
+        <h1>{{ failed }}</h1>
+    </div>
+
+    <div class="card">
+        <h3>Total Paid</h3>
+        <h1>KES {{ "{:,.2f}".format(total_paid) }}</h1>
+    </div>
+
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>User</th>
+<th>Phone</th>
+<th>Amount</th>
+<th>Status</th>
+<th>Reference</th>
+<th>Date</th>
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for withdrawal in withdrawals %}
+
+<tr>
+
+<td>{{ withdrawal.user.username }}</td>
+
+<td>{{ withdrawal.phone }}</td>
+
+<td>KES {{ withdrawal.amount }}</td>
+
+<td>{{ withdrawal.status }}</td>
+
+<td>{{ withdrawal.reference }}</td>
+
+<td>{{ withdrawal.created_at.strftime("%d %b %Y") }}</td>
+
+<td>
+
+<a href="{{ url_for('view_withdrawal', withdrawal_id=withdrawal.id) }}">
+
+View
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% endblock %}
+
+</body>
+</html>

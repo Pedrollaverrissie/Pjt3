@@ -92,6 +92,11 @@ class User(UserMixin, db.Model):
         backref="user",
         lazy=True
     )
+    withdrawals = db.relationship(
+    "Withdrawal",
+    backref="user",
+    lazy=True
+    )
     last_contribution_period = db.Column(
     db.DateTime,
     nullable=True
@@ -363,6 +368,11 @@ class Withdrawal(db.Model):
         nullable=True
     )
 
+    provider_response = db.Column(
+    db.Text,
+    nullable=True
+    )
+
     reference = db.Column(
         db.String(50),
         unique=True
@@ -387,3 +397,8 @@ class Withdrawal(db.Model):
     db.String(100),
     nullable=True
     )
+    intasend_reference = db.Column(
+    db.String(50),
+    nullable=True
+    )
+    

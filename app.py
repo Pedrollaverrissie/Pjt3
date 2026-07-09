@@ -2212,6 +2212,14 @@ def withdraw():
     # Save IntaSend Tracking ID
     withdrawal.intasend_transaction_id = response.get("tracking_id")
 
+    transactions = response.get("transactions", [])
+
+    if transactions:
+        withdrawal.intasend_reference = transactions[0].get("transaction_id")
+
+    import json
+    withdrawal.provider_response = json.dumps(response)
+
     db.session.add(
         Notification(
             user_id=current_user.id,
@@ -2302,7 +2310,46 @@ def request_withdrawal():
         "message": "Withdrawal request submitted successfully."
     })
 
-#---------------TEMPORARY ROUTES-------------------
+# ------------------ ADMIN WITHDRAWALS ------------------
+@app.route("/admin/withdrawals")
+@login_required
+@admin_required
+def admin_withdrawals():
+
+    withdrawals = Withdrawal.query.order_by(
+        Withdrawal.created_at.desc()
+    ).all()
+
+    pending = Withdrawal.query.filter_by(status="Pending").count()
+
+    paid = Withdrawal.query.filter_by(status="Paid").count()
+
+    failed = Withdrawal.query.filter_by(status="Failed").count()
+
+    total_paid = db.session.query(
+        db.func.sum(Withdrawal.amount)
+    ).filter_by(status="Paid").scalar() or 0
+
+    return render_template(
+        "admin_withdrawals.html",
+        withdrawals=withdrawals,
+        pending=pending,
+        paid=paid,
+        failed=failed,
+        total_paid=total_paid
+    )
+#---------------WITHDRAW VIEW ROUTES-------------
+@app.route("/admin/withdrawal/<int:withdrawal_id>")
+@login_required
+@admin_required
+def view_withdrawal(withdrawal_id):
+
+    withdrawal = Withdrawal.query.get_or_404(withdrawal_id)
+
+    return render_template(
+        "view_withdrawal.html",
+        withdrawal=withdrawal
+    )
 
 #======================================================
 if __name__ == "__main__":
