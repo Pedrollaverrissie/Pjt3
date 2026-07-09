@@ -410,12 +410,63 @@ gap:10px;
 }
 
 } 
+.approved{
+
+    background:#1976d2;
+
+}
+
+.rejected{
+
+    background:#616161;
+
+}
+
+.empty-history{
+
+    text-align:center;
+
+    padding:60px 20px;
+
+}
+
+.empty-history i{
+
+    font-size:70px;
+
+    color:#1565c0;
+
+    margin-bottom:20px;
+
+}
+
+.empty-history h3{
+
+    margin-bottom:10px;
+
+}
+
+.empty-history p{
+
+    color:#666;
+
+}
+
+.reject-note{
+
+    margin-top:10px;
+
+    color:red;
+
+    font-size:13px;
+
+}
 </style>
 
 <body
     data-main-wallet="{{ current_user.main_wallet }}"
     data-current-contribution="{{ current_user.referral_contribution_balance }}"
-    data-required-contribution="{{ get_required_contribution(current_user.vip_level) }}"
+    data-required-contribution="{{ required_contribution }}"
     data-pending-withdrawal="{{ 'true' if pending_withdrawal else 'false' }}">
 
 <div class="withdraw-container">
@@ -574,7 +625,7 @@ gap:10px;
 
                 <strong>
 
-                    KES {{ get_required_contribution(current_user.vip_level) }}
+                    KES {{ required_contribution }}
 
                 </strong>
 
@@ -676,11 +727,139 @@ gap:10px;
 
         </h2>
 
-        <div id="withdraw-history">
+<div id="withdraw-history">
 
-            <!-- We'll populate this from Flask in the next step -->
+{% if withdrawals %}
+
+    {% for withdrawal in withdrawals %}
+
+    <div class="withdraw-item">
+
+        <div>
+
+            <h3>
+                KES {{ "{:,.2f}".format(withdrawal.amount) }}
+            </h3>
+
+            <p>
+                {{ withdrawal.created_at.strftime("%d %b %Y %I:%M %p") }}
+            </p>
+
+            <small>
+
+                Reference:
+                {{ withdrawal.reference }}
+
+            </small>
+
+            {% if withdrawal.mpesa_receipt %}
+
+            <br>
+
+            <small>
+
+                M-Pesa Receipt:
+                {{ withdrawal.mpesa_receipt }}
+
+            </small>
+
+            {% endif %}
 
         </div>
+
+        <div>
+
+            {% if withdrawal.status == "Paid" %}
+
+                <span class="status paid">
+
+                    <i class="fas fa-circle-check"></i>
+
+                    Paid
+
+                </span>
+
+            {% elif withdrawal.status == "Pending" %}
+
+                <span class="status pending">
+
+                    <i class="fas fa-clock"></i>
+
+                    Pending
+
+                </span>
+
+            {% elif withdrawal.status == "Approved" %}
+
+                <span class="status approved">
+
+                    <i class="fas fa-user-check"></i>
+
+                    Approved
+
+                </span>
+
+            {% elif withdrawal.status == "Failed" %}
+
+                <span class="status failed">
+
+                    <i class="fas fa-circle-xmark"></i>
+
+                    Failed
+
+                </span>
+
+            {% elif withdrawal.status == "Rejected" %}
+
+                <span class="status rejected">
+
+                    <i class="fas fa-ban"></i>
+
+                    Rejected
+
+                </span>
+
+                {% if withdrawal.admin_note %}
+
+                    <p class="reject-note">
+
+                        {{ withdrawal.admin_note }}
+
+                    </p>
+
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+<div class="empty-history">
+
+    <i class="fas fa-wallet"></i>
+
+    <h3>
+
+        No withdrawals yet
+
+    </h3>
+
+    <p>
+
+        Your withdrawal history will appear here.
+
+    </p>
+
+</div>
+
+{% endif %}
+
+</div>
 
     </div>
 

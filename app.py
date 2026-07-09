@@ -2136,10 +2136,15 @@ def withdraw():
             Withdrawal.created_at.desc()
         ).all()
 
+        required_contribution = get_required_contribution(
+            current_user.vip_level
+        )
+
         return render_template(
             "withdraw.html",
             pending_withdrawal=pending_withdrawal,
-            withdrawals=withdrawals
+            withdrawals=withdrawals,
+            required_contribution=required_contribution
         )
 
     amount = float(request.form["amount"])
