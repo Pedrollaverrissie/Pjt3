@@ -467,6 +467,7 @@ gap:10px;
     data-main-wallet="{{ current_user.main_wallet }}"
     data-current-contribution="{{ current_user.referral_contribution_balance }}"
     data-required-contribution="{{ required_contribution }}"
+    data-minimum-withdrawal="{{ minimum_withdrawal }}"
     data-pending-withdrawal="{{ 'true' if pending_withdrawal else 'false' }}">
 
 <div class="withdraw-container">
@@ -570,13 +571,13 @@ gap:10px;
 
             <div class="check-item">
 
-                {% if current_user.main_wallet >= 500 %}
+                {% if current_user.main_wallet >= minimum_withdrawal %}
                     <i class="fas fa-circle-check success"></i>
                 {% else %}
                     <i class="fas fa-circle-xmark danger"></i>
                 {% endif %}
 
-                Minimum Wallet Balance
+                Minimum Wallet Balance (KES {{ minimum_withdrawal }})
 
             </div>
 
@@ -657,8 +658,8 @@ gap:10px;
             <input
                 type="number"
                 name="amount"
-                min="500"
-                placeholder="Enter amount"
+                min="{{ minimum_withdrawal }}"
+                placeholder="Minimum KES {{ minimum_withdrawal }}"
                 required>
 
             <label>
@@ -698,7 +699,12 @@ gap:10px;
 
         <ul>
 
-            <li>Minimum withdrawal is KES 500.</li>
+            <li>
+                Minimum withdrawal for your
+                <strong>{{ current_user.vip_level }}</strong>
+                account is
+                <strong>KES {{ "{:,.0f}".format(minimum_withdrawal) }}</strong>.
+            </li>
 
             <li>Only one pending withdrawal is allowed.</li>
 
@@ -892,7 +898,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const submitBtn = document.querySelector("button");
 
     const walletBalance =
-        Number(document.body.dataset.mainWallet || 0);
+        Number(document.body.dataset.mainWallet || 500);
 
     const hasPending =
         document.body.dataset.pendingWithdrawal === "true";
@@ -922,12 +928,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Minimum
 
-        if (amount < 500) {
+        if (amount < minimumWithdrawal) {
 
             submitBtn.disabled = true;
 
             submitBtn.innerHTML =
-                "Minimum Withdrawal is KES 500";
+                "Minimum Withdrawal is KES ${minimumWithdrawal}";
 
             return;
         }

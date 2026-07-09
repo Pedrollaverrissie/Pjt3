@@ -2151,11 +2151,22 @@ def withdraw():
             current_user.vip_level
         )
 
+        minimum_withdrawal = get_minimum_withdrawal(
+            current_user.vip_level
+        )
+
         return render_template(
             "withdraw.html",
             pending_withdrawal=pending_withdrawal,
             withdrawals=withdrawals,
-            required_contribution=required_contribution
+            required_contribution=required_contribution,
+            minimum_withdrawal=minimum_withdrawal,
+            can_withdraw=(
+                current_user.account_active
+                and current_user.main_wallet >= minimum_withdrawal
+                and current_user.referral_contribution_balance >= required_contribution
+                and pending_withdrawal is None
+            )
         )
 
     amount = float(request.form["amount"])
