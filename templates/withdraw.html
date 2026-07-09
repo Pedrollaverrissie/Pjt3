@@ -4,94 +4,827 @@
 <head>
 
     <meta charset="UTF-8">
-    <title>Withdraw</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Withdraw Funds</title>
 
     <link rel="stylesheet"
-        href="{{ url_for('static', filename='style.css') }}">
+          href="{{ url_for('static', filename='css/withdraw.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
+<style>
+   /* ===========================
+   WITHDRAW PAGE
+=========================== */
 
-<body>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
 
-<div class="container">
+body{
 
-    <h2>Withdraw Funds</h2>
+    background:#eef4ff;
+    color:#222;
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                <div class="alert {{ category }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+}
 
-    <div class="card">
+.withdraw-container{
 
-        <h3>Main Wallet</h3>
+    max-width:1200px;
+
+    margin:40px auto;
+
+    padding:20px;
+
+}
+
+
+/* ===========================
+HEADER
+=========================== */
+
+.page-header{
+
+    margin-bottom:30px;
+
+}
+
+.page-header h1{
+
+    color:#1565c0;
+
+    font-size:34px;
+
+    margin-bottom:10px;
+
+}
+
+.page-header p{
+
+    color:#666;
+
+}
+
+
+/* ===========================
+WALLET CARDS
+=========================== */
+
+.wallet-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+
+    gap:20px;
+
+    margin-bottom:30px;
+
+}
+
+.wallet-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+}
+
+.wallet-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.wallet-card i{
+
+    font-size:34px;
+
+    color:#1976d2;
+
+    margin-bottom:15px;
+
+}
+
+.wallet-card h3{
+
+    color:#666;
+
+    margin-bottom:8px;
+
+}
+
+.wallet-card h2{
+
+    color:#1565c0;
+
+}
+
+
+/* ===========================
+COMMON CARDS
+=========================== */
+
+.eligibility-card,
+.progress-card,
+.withdraw-card,
+.policy-card,
+.history-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    margin-bottom:25px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+
+}
+
+
+/* ===========================
+ELIGIBILITY
+=========================== */
+
+.check-item{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin:15px 0;
+
+    font-size:17px;
+
+}
+
+.success{
+
+    color:#2e7d32;
+
+}
+
+.danger{
+
+    color:#d32f2f;
+
+}
+
+
+/* ===========================
+PROGRESS BAR
+=========================== */
+
+.progress-bar{
+
+    height:18px;
+
+    background:#d9e6ff;
+
+    border-radius:50px;
+
+    overflow:hidden;
+
+    margin:25px 0;
+
+}
+
+.progress-fill{
+
+    height:100%;
+
+    width:0;
+
+    border-radius:50px;
+
+    background:linear-gradient(90deg,#1976d2,#42a5f5);
+
+    transition:1s;
+
+}
+
+.progress-values{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    flex-wrap:wrap;
+
+    gap:15px;
+
+}
+
+
+/* ===========================
+FORM
+=========================== */
+
+.withdraw-card form{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.withdraw-card label{
+
+    margin-top:18px;
+
+    margin-bottom:8px;
+
+    font-weight:bold;
+
+}
+
+.withdraw-card input{
+
+    padding:15px;
+
+    border:1px solid #d6d6d6;
+
+    border-radius:12px;
+
+    font-size:16px;
+
+    outline:none;
+
+    transition:.3s;
+
+}
+
+.withdraw-card input:focus{
+
+    border-color:#1976d2;
+
+}
+
+.withdraw-card button{
+
+    margin-top:25px;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#1565c0;
+
+    color:white;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.withdraw-card button:hover{
+
+    background:#0d47a1;
+
+    transform:translateY(-3px);
+
+}
+
+
+/* ===========================
+POLICY
+=========================== */
+
+.policy-card ul{
+
+    margin-top:15px;
+
+    padding-left:20px;
+
+}
+
+.policy-card li{
+
+    margin:12px 0;
+
+    line-height:1.6;
+
+}
+
+
+/* ===========================
+HISTORY
+=========================== */
+
+.withdraw-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:18px;
+
+    margin-top:15px;
+
+    border-radius:12px;
+
+    background:#f7f9fc;
+
+}
+
+.status{
+
+    padding:7px 14px;
+
+    border-radius:25px;
+
+    color:white;
+
+    font-size:13px;
+
+}
+
+.status.paid{
+
+    background:#2e7d32;
+
+}
+
+.status.pending{
+
+    background:#ff9800;
+
+}
+
+.status.failed{
+
+    background:#d32f2f;
+
+}
+
+
+/* ===========================
+RESPONSIVE
+=========================== */
+
+@media(max-width:768px){
+
+.wallet-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.progress-values{
+
+flex-direction:column;
+
+}
+
+.withdraw-item{
+
+flex-direction:column;
+
+align-items:flex-start;
+
+gap:10px;
+
+}
+
+} 
+</style>
+
+<body
+    data-main-wallet="{{ current_user.main_wallet }}"
+    data-current-contribution="{{ current_user.referral_contribution_balance }}"
+    data-required-contribution="{{ get_required_contribution(current_user.vip_level) }}"
+    data-pending-withdrawal="{{ 'true' if pending_withdrawal else 'false' }}">
+
+<div class="withdraw-container">
+
+    <!-- ================= HEADER ================= -->
+
+    <div class="page-header">
 
         <h1>
-            KES {{ "{:,.2f}".format(current_user.main_wallet) }}
+            <i class="fas fa-money-bill-wave"></i>
+            Withdraw Funds
         </h1>
 
+        <p>
+            Withdraw your earnings directly to your M-Pesa account.
+        </p>
+
     </div>
 
-    <div class="card">
 
-        <h3>Contribution Progress</h3>
+    <!-- ================= WALLET CARDS ================= -->
+
+    <div class="wallet-grid">
+
+        <div class="wallet-card">
+
+            <i class="fas fa-wallet"></i>
+
+            <h3>Main Wallet</h3>
+
+            <h2>
+                KES {{ "{:,.2f}".format(current_user.main_wallet) }}
+            </h2>
+
+        </div>
+
+        <div class="wallet-card">
+
+            <i class="fas fa-hand-holding-dollar"></i>
+
+            <h3>Total Withdrawn</h3>
+
+            <h2>
+                KES {{ "{:,.2f}".format(current_user.withdrawn) }}
+            </h2>
+
+        </div>
+
+        <div class="wallet-card">
+
+            <i class="fas fa-crown"></i>
+
+            <h3>VIP Level</h3>
+
+            <h2>
+
+                {{ current_user.vip_level }}
+
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ELIGIBILITY ================= -->
+
+    <div class="eligibility-card">
 
         <h2>
-            KES {{ "{:,.2f}".format(current_user.referral_contribution_balance) }}
+
+            Withdrawal Eligibility
+
         </h2>
+
+        <div class="check-list">
+
+            <div class="check-item">
+
+                {% if current_user.account_active %}
+                    <i class="fas fa-circle-check success"></i>
+                {% else %}
+                    <i class="fas fa-circle-xmark danger"></i>
+                {% endif %}
+
+                Active Account
+
+            </div>
+
+            <div class="check-item">
+
+                {% if current_user.vip_expires_at %}
+                    <i class="fas fa-circle-check success"></i>
+                {% else %}
+                    <i class="fas fa-circle-xmark danger"></i>
+                {% endif %}
+
+                VIP Membership
+
+            </div>
+
+            <div class="check-item">
+
+                {% if current_user.main_wallet >= 500 %}
+                    <i class="fas fa-circle-check success"></i>
+                {% else %}
+                    <i class="fas fa-circle-xmark danger"></i>
+                {% endif %}
+
+                Minimum Wallet Balance
+
+            </div>
+
+        </div>
 
     </div>
 
-    <form method="POST">
 
-        <label>Withdrawal Amount</label>
+    <!-- ================= CONTRIBUTION ================= -->
 
-        <input
-            type="number"
-            name="amount"
-            min="500"
-            step="1"
-            required>
+    <div class="progress-card">
 
-        <label>M-Pesa Phone Number</label>
+        <h2>
 
-        <input
-            type="text"
-            name="phone"
-            value="{{ current_user.phone }}"
-            required>
+            Contribution Progress
 
-        <button type="submit">
+        </h2>
+
+        <div class="progress-bar">
+
+            <div
+                id="progressFill"
+                class="progress-fill">
+
+            </div>
+
+        </div>
+
+        <div class="progress-values">
+
+            <span>
+
+                Current
+
+                <strong>
+
+                    KES {{ "{:,.2f}".format(current_user.referral_contribution_balance) }}
+
+                </strong>
+
+            </span>
+
+            <span>
+
+                Required
+
+                <strong>
+
+                    KES {{ get_required_contribution(current_user.vip_level) }}
+
+                </strong>
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FORM ================= -->
+
+    <div class="withdraw-card">
+
+        <h2>
 
             Request Withdrawal
 
-        </button>
+        </h2>
 
-    </form>
+        <form method="POST">
 
-    <hr>
+            <label>
 
-    <h3>Withdrawal Rules</h3>
+                Amount
 
-    <ul>
+            </label>
 
-        <li>Minimum withdrawal: <strong>KES 500</strong></li>
+            <input
+                type="number"
+                name="amount"
+                min="500"
+                placeholder="Enter amount"
+                required>
 
-        <li>You must meet your VIP contribution requirement.</li>
+            <label>
 
-        <li>Only one pending withdrawal is allowed.</li>
+                M-Pesa Number
 
-        <li>Money is sent directly to your M-Pesa account.</li>
+            </label>
 
-    </ul>
+            <input
+                type="text"
+                name="phone"
+                value="{{ current_user.phone }}"
+                required>
+
+            <button>
+
+                <i class="fas fa-paper-plane"></i>
+
+                Request Withdrawal
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================= POLICY ================= -->
+
+    <div class="policy-card">
+
+        <h2>
+
+            Withdrawal Policy
+
+        </h2>
+
+        <ul>
+
+            <li>Minimum withdrawal is KES 500.</li>
+
+            <li>Only one pending withdrawal is allowed.</li>
+
+            <li>Your VIP membership must be active.</li>
+
+            <li>You must reach the required contribution.</li>
+
+            <li>The contribution is deducted ONLY on the first successful withdrawal of the current membership.</li>
+
+            <li>Any remaining contribution balance carries forward to the next membership renewal.</li>
+
+            <li>Withdrawals are sent automatically to your M-Pesa account via IntaSend.</li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- ================= HISTORY ================= -->
+
+    <div class="history-card">
+
+        <h2>
+
+            Recent Withdrawals
+
+        </h2>
+
+        <div id="withdraw-history">
+
+            <!-- We'll populate this from Flask in the next step -->
+
+        </div>
+
+    </div>
 
 </div>
 
+<script src="{{ url_for('static', filename='js/withdraw.js') }}"></script>
+<script>
+    // ==============================
+// WITHDRAW PAGE
+// ==============================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // -----------------------------
+    // Elements
+    // -----------------------------
+
+    const progressBar = document.getElementById("progressFill");
+
+    const currentContribution =
+        Number(document.body.dataset.currentContribution || 0);
+
+    const requiredContribution =
+        Number(document.body.dataset.requiredContribution || 0);
+
+    const amountInput = document.querySelector("input[name='amount']");
+
+    const phoneInput = document.querySelector("input[name='phone']");
+
+    const submitBtn = document.querySelector("button");
+
+    const walletBalance =
+        Number(document.body.dataset.mainWallet || 0);
+
+    const hasPending =
+        document.body.dataset.pendingWithdrawal === "true";
+
+    // -----------------------------
+    // Progress Bar
+    // -----------------------------
+
+    if (progressBar && requiredContribution > 0) {
+
+        let percent = (currentContribution / requiredContribution) * 100;
+
+        if (percent > 100)
+            percent = 100;
+
+        progressBar.style.width = percent + "%";
+
+    }
+
+    // -----------------------------
+    // Validate Withdrawal
+    // -----------------------------
+
+    function validateWithdrawal() {
+
+        const amount = Number(amountInput.value);
+
+        // Minimum
+
+        if (amount < 500) {
+
+            submitBtn.disabled = true;
+
+            submitBtn.innerHTML =
+                "Minimum Withdrawal is KES 500";
+
+            return;
+        }
+
+        // Wallet
+
+        if (amount > walletBalance) {
+
+            submitBtn.disabled = true;
+
+            submitBtn.innerHTML =
+                "Insufficient Main Wallet";
+
+            return;
+        }
+
+        // Contribution
+
+        if (currentContribution < requiredContribution) {
+
+            submitBtn.disabled = true;
+
+            submitBtn.innerHTML =
+                "Contribution Requirement Not Met";
+
+            return;
+        }
+
+        // Pending
+
+        if (hasPending) {
+
+            submitBtn.disabled = true;
+
+            submitBtn.innerHTML =
+                "Pending Withdrawal Exists";
+
+            return;
+        }
+
+        submitBtn.disabled = false;
+
+        submitBtn.innerHTML =
+            '<i class="fas fa-paper-plane"></i> Request Withdrawal';
+
+    }
+
+    if (amountInput) {
+
+        amountInput.addEventListener("input", validateWithdrawal);
+
+        validateWithdrawal();
+
+    }
+
+    // -----------------------------
+    // Loading Animation
+    // -----------------------------
+
+    const form = document.querySelector("form");
+
+    if (form) {
+
+        form.addEventListener("submit", () => {
+
+            submitBtn.disabled = true;
+
+            submitBtn.innerHTML =
+                '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+        });
+
+    }
+
+});
+</script>
 </body>
 
 </html>
