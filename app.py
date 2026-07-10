@@ -390,8 +390,14 @@ from datetime import datetime
 @active_account_required
 def dashboard():
 
-    # Recharge amount
-    total_paid = total_deposits
+    payments = Payment.query.filter_by(
+        phone=current_user.phone
+    ).all()
+
+    total_paid = sum(
+        p.amount for p in payments
+        if p.status == "approved"
+    )
 
     referral_link = (
         f"https://pjt3.onrender.com/signup?ref="
@@ -1123,22 +1129,11 @@ def profile():
         referred_by=current_user.referral_code
     ).count()
 
-    # -----------------------------------
-    # Total Successful Recharge Amount
-    # -----------------------------------
-    total_deposits = db.session.query(
-        db.func.sum(Payment.amount)
-    ).filter(
-        Payment.user_id == current_user.id,
-        Payment.payment_type == "recharge",
-        Payment.status == "completed"
-    ).scalar() or 0
-
-    # -----------------------------------
-    # Total Income
-    # Main Wallet + Deposits
-    # -----------------------------------
-    total_income = current_user.main_wallet + total_deposits
+    total_income = (
+        current_user.main_wallet +
+        current_user.task_wallet +
+        current_user.team_wallet
+    )
 
     active_tasks = 0
 
