@@ -1191,6 +1191,9 @@ def add_to_task_wallet(user, amount, description):
 
     user.task_wallet += amount
 
+    user.main_wallet += amount
+    
+
     transaction = Transaction(
         user_id=user.id,
         transaction_type="task_reward",
@@ -1332,7 +1335,7 @@ def get_minimum_withdrawal(vip_level):
     minimums = {
         "Bronze": 200,
         "Silver": 500,
-        "Gold": 5,
+        "Gold": 1000,
         "Platinum": 2500,
         "Diamond": 5000
     }
