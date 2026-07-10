@@ -1416,7 +1416,6 @@ from models import Task, UserTask
 
 @app.route("/tasks")
 @login_required
-@active_account_required
 def tasks():
 
     # Get today's tasks for the current VIP
