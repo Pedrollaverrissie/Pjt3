@@ -1416,6 +1416,7 @@ from models import Task, UserTask
 
 @app.route("/tasks")
 @login_required
+@active_account_required
 def tasks():
 
     # Get today's tasks for the current VIP
@@ -1489,7 +1490,7 @@ def team():
 def admin_tasks():
 
     # Replace this with your own admin check later
-    if current_user.email != "petersongitonga42@gmail.com":
+    if current_user.email != "petersongitonga02@gmail.com":
         return "Access Denied"
 
     if request.method == "POST":
