@@ -1204,7 +1204,7 @@ def add_to_task_wallet(user, amount, description):
 
     user.task_wallet += amount
 
-    user.main_wallet += amount
+    
     
 
     transaction = Transaction(
