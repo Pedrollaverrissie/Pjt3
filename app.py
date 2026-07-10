@@ -344,9 +344,13 @@ def payment():
             if not pending_user:
                 return "No pending signup found"
 
+            print("PUBLISHABLE:", INTASEND_PUBLISHABLE_KEY)
+            print("SECRET:", INTASEND_SECRET_KEY[:10])
+            print("TEST MODE:", service.test)
+
             response = service.collect.mpesa_stk_push(
                 phone_number=phone,
-                amount=10,
+                amount=100,
                 narrative="Account Activation"
             )
 
@@ -358,7 +362,7 @@ def payment():
                 phone=phone,
                 email=pending_user.email,
                 transaction_code=invoice_id,
-                amount=10,
+                amount=100,
                 status="pending",
                 payment_type="registration"
             )
