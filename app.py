@@ -344,9 +344,7 @@ def payment():
             if not pending_user:
                 return "No pending signup found"
 
-            print("PUBLISHABLE:", INTASEND_PUBLISHABLE_KEY)
-            print("SECRET:", INTASEND_SECRET_KEY[:10])
-            print("TEST MODE:", service.test)
+
 
             response = service.collect.mpesa_stk_push(
                 phone_number=phone,
