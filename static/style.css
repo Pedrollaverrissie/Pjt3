@@ -799,12 +799,7 @@ h3{
     align-items: center;
     gap: 25px;
  }
- .games .rtchge a{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    
- }
+
  .finance .rtchge{
     font-family:Arial, Helvetica, sans-serif;
     font-size: 12px;
