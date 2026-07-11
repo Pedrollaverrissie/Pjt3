@@ -1968,6 +1968,23 @@ def reject_recharge(payment_id):
     db.session.commit()
 
     return redirect("/admin/recharges")
+  #-------------RECHARGE HISTORY------------------
+@app.route("/recharge-history")
+@login_required
+@active_account_required
+def recharge_history():
+
+    recharges = Payment.query.filter_by(
+        user_id=current_user.id,
+        payment_type="recharge"
+    ).order_by(
+        Payment.id.desc()
+    ).all()
+
+    return render_template(
+        "recharge_history.html",
+        recharges=recharges
+    )
 
 #----------------START TASK ROUTE--------------------
 from datetime import datetime
@@ -2443,23 +2460,7 @@ def withdrawal_history():
         "withdrawal_history.html",
         withdrawals=withdrawals
     )
-  #-------------RECHARGE HISTORY------------------
-@app.route("/recharge-history")
-@login_required
-@active_account_required
-def recharge_history():
 
-    recharges = Payment.query.filter_by(
-        user_id=current_user.id,
-        payment_type="recharge"
-    ).order_by(
-        Payment.id.desc()
-    ).all()
-
-    return render_template(
-        "recharge_history.html",
-        recharges=recharges
-    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
