@@ -131,6 +131,7 @@ class Payment(db.Model):
         db.ForeignKey("user.id"),
         nullable=True
     )
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 class PendingUser(db.Model):
