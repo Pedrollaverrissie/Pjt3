@@ -1000,77 +1000,134 @@ def recharge():
     return render_template("recharge.html")
 
 #-----------RENEW MEMBERSHIP---------------
-@app.route("/renew-membership", methods=["GET", "POST"])
+@app.route("/renew-membership", methods=["POST"])
 @login_required
 @active_account_required
-def renew_membership_route():
+def renew_membership():
 
-    # Check if renewal is allowed
-    if not can_renew(current_user):
+    if not current_user.vip_level:
 
-        flash(
-            "You can only renew when your membership has 2 days or less remaining.",
-            "warning"
-        )
-
-        return redirect(url_for("dashboard"))
-
-    renewal_cost = get_vip_price(current_user.vip_level)
-
-    if request.method == "POST":
-
-        # Only Main Wallet can be used
-        if current_user.main_wallet < renewal_cost:
-
-            flash("Insufficient Main Wallet balance.", "danger")
-
-            return redirect(url_for("renew_membership_route"))
-
-        # Deduct renewal fee
-        current_user.main_wallet -= renewal_cost
-
-        # Extend membership
-        renew_membership(current_user)
-
-        # Save transaction
-        db.session.add(
-            Transaction(
-                user_id=current_user.id,
-                transaction_type="membership_renewal",
-                wallet="main",
-                amount=-renewal_cost,
-                description=f"{current_user.vip_level} Membership Renewal"
-            )
-        )
-
-        # Notification
-        db.session.add(
-            Notification(
-                user_id=current_user.id,
-                title="Membership Renewed",
-                message=f"Your {current_user.vip_level} membership has been renewed for 30 days."
-            )
-        )
-
-        db.session.commit()
-
-        flash("Membership renewed successfully!", "success")
-
-        return redirect(url_for("dashboard"))
-
-    days_left = 0
+        flash("You do not have an active VIP plan.", "error")
+        return redirect("/vip")
 
     if current_user.vip_expires_at:
+
         days_left = (
             current_user.vip_expires_at - datetime.utcnow()
         ).days
 
-    return render_template(
-        "renew_membership.html",
-        renewal_cost=renewal_cost,
-        days_left=max(days_left, 0)
+        if days_left > 2:
+
+            flash(
+                "You can only renew when your membership has 2 days or less remaining.",
+                "warning"
+            )
+
+            return redirect("/vip")
+
+    renewal_cost = get_renewal_price(current_user.vip_level)
+
+    usable_task_wallet = 0
+
+    # Task wallet is ONLY usable if withdrawal requirements are met
+    if can_withdraw(current_user)[0]:
+
+        usable_task_wallet = current_user.task_wallet
+
+    total_available = (
+        current_user.main_wallet +
+        usable_task_wallet
     )
 
+    if total_available < renewal_cost:
+
+        flash(
+            "Insufficient balance to renew membership.",
+            "error"
+        )
+
+        return redirect("/vip")
+
+    remaining = renewal_cost
+
+    # Deduct Main Wallet first
+    if current_user.main_wallet >= remaining:
+
+        current_user.main_wallet -= remaining
+        remaining = 0
+
+    else:
+
+        remaining -= current_user.main_wallet
+        current_user.main_wallet = 0
+
+    # Deduct Task Wallet only if eligible
+    if remaining > 0:
+
+        current_user.task_wallet -= remaining
+
+    now = datetime.utcnow()
+
+    current_user.vip_started_at = now
+    current_user.vip_expires_at = now + timedelta(days=30)
+
+    current_user.contribution_deducted = False
+
+    db.session.add(
+
+        MembershipHistory(
+
+            user_id=current_user.id,
+
+            vip_level=current_user.vip_level,
+
+            contribution_used=get_required_contribution(
+                current_user.vip_level
+            ),
+
+            withdrawal_unlocked=False
+
+        )
+
+    )
+
+    db.session.add(
+
+        Transaction(
+
+            user_id=current_user.id,
+
+            transaction_type="renewal",
+
+            wallet="membership",
+
+            amount=-renewal_cost,
+
+            description=f"{current_user.vip_level} Membership Renewal"
+
+        )
+
+    )
+
+    db.session.add(
+
+        Notification(
+
+            user_id=current_user.id,
+
+            title="Membership Renewed",
+
+            message=f"Your {current_user.vip_level} membership has been renewed for another 30 days."
+
+        )
+
+    )
+
+    db.session.commit()
+
+    flash("Membership renewed successfully!", "success")
+
+    return redirect("/dashboard")
 #-----------TENPORARY ROUT---------------
 @app.route("/users")
 def users():
@@ -1475,7 +1532,12 @@ def upgrade_membership(user, new_level):
     if not user.vip_expires_at or user.vip_expires_at < now:
         user.vip_expires_at = now + timedelta(days=30)
 
+def get_renewal_price(vip_level):
 
+    if vip_level not in VIP_PLANS:
+        return 0
+
+    return VIP_PLANS[vip_level]["price"]
 #----------upgrade order------------------
 
 def get_next_vip(current_level):
@@ -1528,10 +1590,8 @@ def can_afford_upgrade(user):
     return user.main_wallet >= cost
 
 def get_locked_capital(user):
-    """
-    Amount that must always remain in the user's Main Wallet.
-    """
-    if not user.vip_level:
+
+    if user.vip_level == "Free":
         return 0
 
     return VIP_PLANS[user.vip_level]["price"]
@@ -1557,23 +1617,63 @@ def get_withdrawable_balance(user):
 
     return recharge_available + task_available
 
+def get_upgrade_amount(user, new_level):
+
+    if new_level == user.vip_level:
+        return 0
+
+    return get_upgrade_cost(
+        user.vip_level,
+        new_level
+    )
+
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
 @active_account_required
 def vip():
 
-    plans = [
-        {"name": "Silver", "price": 500, "daily_income": 50, "tasks": 3},
-        {"name": "Gold", "price": 1000, "daily_income": 100, "tasks": 4},
-        {"name": "Platinum", "price": 2500, "daily_income": 250, "tasks": 5},
-        {"name": "Diamond", "price": 5000, "daily_income": 500, "tasks": 5},
-    ]
+    plans = []
+
+    for plan_name in VIP_ORDER:
+
+        plans.append({
+
+            "name": plan_name,
+            "price": VIP_PLANS[plan_name]["price"],
+            "daily_income": VIP_PLANS[plan_name]["reward"],
+            "tasks": VIP_PLANS[plan_name]["tasks"]
+
+        })
+
+    vip_days_left = None
+
+    if current_user.vip_expires_at:
+
+        vip_days_left = (
+            current_user.vip_expires_at - datetime.utcnow()
+        ).days
 
     return render_template(
+
         "vip.html",
+
         plans=plans,
-        current_user=current_user
+
+        current_vip=current_user.vip_level,
+
+        VIP_ORDER=VIP_ORDER,
+
+        VIP_PLANS=VIP_PLANS,
+
+        get_upgrade_cost=get_upgrade_cost,
+
+        can_upgrade=can_upgrade,
+
+        current_user=current_user,
+
+        vip_days_left=vip_days_left
+
     )
 #--------------VIP UPGRADE ROUTE---------------
 from datetime import datetime

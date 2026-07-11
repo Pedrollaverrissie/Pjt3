@@ -332,6 +332,8 @@ class MembershipHistory(db.Model):
 
     vip_level = db.Column(db.String(20))
 
+    amount = db.Column(db.Float)  
+    
     contribution_used = db.Column(db.Float)
 
     renewed_at = db.Column(

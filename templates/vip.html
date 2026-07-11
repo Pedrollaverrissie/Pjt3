@@ -386,18 +386,88 @@
 
             <p>Tasks: {{ plan.tasks }}</p>
 
-            {% if current_user.vip_level == plan.name %}
+            {% if current_vip %}
+                {% set current_index = VIP_ORDER.index(current_vip) %}
+            {% else %}
+                {% set current_index = -1 %}
+            {% endif %}
+
+            {% set plan_index = VIP_ORDER.index(plan.name) %}
+
+            <!-- ========================= -->
+            <!-- CURRENT VIP -->
+            <!-- ========================= -->
+
+            {% if current_vip == plan.name %}
+
+                {% if vip_days_left is not none and vip_days_left <= 2 %}
+
+                    <form action="{{ url_for('renew_membership') }}" method="POST">
+
+                        <button class="vip-btn">
+
+                            Renew Membership
+
+                        </button>
+
+                    </form>
+
+                {% else %}
+
+                    <button class="vip-btn disabled" disabled>
+
+                        ✓ Current Plan
+
+                    </button>
+
+                {% endif %}
+
+            <!-- ========================= -->
+            <!-- LOWER VIP -->
+            <!-- ========================= -->
+
+            {% elif current_vip and plan_index < current_index %}
 
                 <button class="vip-btn disabled" disabled>
-                    Current Plan
+
+                    Lower Plan
+
                 </button>
+
+            <!-- ========================= -->
+            <!-- HIGHEST VIP -->
+            <!-- ========================= -->
+
+            {% elif current_vip == "Diamond" %}
+
+                <button class="vip-btn disabled" disabled>
+
+                    Highest VIP
+
+                </button>
+
+            <!-- ========================= -->
+            <!-- UPGRADE -->
+            <!-- ========================= -->
 
             {% else %}
 
                 <form action="{{ url_for('upgrade_vip', plan=plan.name) }}" method="POST">
 
                     <button class="vip-btn" type="submit">
-                        Upgrade
+
+                        {% if current_vip %}
+
+                            Upgrade
+                            (KES {{ get_upgrade_cost(current_vip, plan.name) }})
+
+                        {% else %}
+
+                            Purchase
+                            (KES {{ plan.price }})
+
+                        {% endif %}
+
                     </button>
 
                 </form>
@@ -411,6 +481,5 @@
     </div>
 
 </div>
-
 </body>
 </html>
