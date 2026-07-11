@@ -10,6 +10,7 @@
        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
      <style>
+        
      </style>
 </head>
     
@@ -217,15 +218,25 @@
 
                 {% else %}
 
-                    <p style="color:rgb(255, 255, 255);">
-                        Your are on a Free plan.
+                    <p style="color:rgb(255,255,255);">
+                        You are on a Free plan.
                     </p>
 
-                    <a href="/vip" >
-                        <button  class="upgrade-btn">
-                            Upgrade to VIP
-                        </button>
-                    </a>
+                    <div class="vip-buttons">
+
+                        <a href="/vip">
+                            <button class="upgrade-btn">
+                                Upgrade to VIP
+                            </button>
+                        </a>
+
+                        <a href="{{ url_for('renew_membership') }}">
+                            <button class="renew-btn">
+                                Renew Membership
+                            </button>
+                        </a>
+
+                    </div>
 
                 {% endif %}
 

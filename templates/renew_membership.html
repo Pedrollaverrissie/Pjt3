@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Renew Membership</title>
+
+</head>
+
+<body>
+
+<h2>Renew Membership</h2>
+
+<p>
+Current VIP:
+<strong>{{ current_user.vip_level }}</strong>
+</p>
+
+<p>
+Renewal Cost:
+<strong>KES {{ renewal_cost }}</strong>
+</p>
+
+<p>
+Days Remaining:
+<strong>{{ days_left }}</strong>
+</p>
+
+<form method="POST">
+
+<button type="submit">
+
+Renew Membership
+
+</button>
+
+</form>
+
+</body>
+
+</html>

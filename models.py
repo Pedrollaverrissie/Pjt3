@@ -36,6 +36,11 @@ class User(UserMixin, db.Model):
         db.String(20),
         nullable=True
     )
+    recharge_balance = db.Column(
+    db.Float,
+    default=0
+    )
+
 
     # ================= WALLETS =================
     
@@ -101,6 +106,12 @@ class User(UserMixin, db.Model):
     db.DateTime,
     nullable=True
     )
+    reward_paid = db.Column(
+    db.Boolean,
+    default=False
+    )
+    recharge_balance = db.Column(db.Float, default=0)
+
     
 
 class Payment(db.Model):
@@ -255,10 +266,7 @@ class UserTask(db.Model):
         default=datetime.utcnow
     )
 
-    reward_paid = db.Column(
-        db.Boolean,
-        default=False
-    )
+
 
 
 class TaskSession(db.Model):

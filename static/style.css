@@ -1368,5 +1368,41 @@ h3{
     font-weight: lighter;
     color: #fe9e03;
  }
+.vip-buttons{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    margin-top:15px;
+    flex-wrap:wrap;
+}
 
+.upgrade-btn,
+.renew-btn{
+    padding:10px 22px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.upgrade-btn{
+    background:#ff9800;
+    color:white;
+}
+
+.upgrade-btn:hover{
+    background:#e68900;
+}
+
+.renew-btn{
+    background:#00bcd4;
+    color:white;
+}
+
+.renew-btn:hover{
+    background:#0097a7;
+}
 

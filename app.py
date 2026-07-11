@@ -696,37 +696,15 @@ def webhook():
                 user = User.query.get(payment.user_id)
 
                 if user:
+                    
+                    user.recharge_balance += payment.amount
 
                     add_to_main_wallet(
                         user,
                         payment.amount,
                         "Wallet Recharge"
                     )
-
-                    # ==========================
-                    # MEMBERSHIP RENEWAL
-                    # ==========================
-                    renewal_days = 30
-                    now = datetime.utcnow()
-
-                    if not user.vip_expires_at:
-
-                        user.vip_started_at = now
-                        user.vip_expires_at = now + timedelta(days=renewal_days)
-
-                    elif user.vip_expires_at < now:
-
-                        user.vip_started_at = now
-                        user.vip_expires_at = now + timedelta(days=renewal_days)
-
-                    else:
-
-                        user.vip_started_at = user.vip_expires_at
-                        user.vip_expires_at = user.vip_expires_at + timedelta(days=renewal_days)
-
-                    # Reset contribution deduction for the new membership cycle
-                    user.contribution_deducted = False
-                 
+               
 
                     # ==========================
                     # Give 10% referral commission
@@ -1011,6 +989,78 @@ def recharge():
             return f"Recharge failed: {e}"
 
     return render_template("recharge.html")
+
+#-----------RENEW MEMBERSHIP---------------
+@app.route("/renew-membership", methods=["GET", "POST"])
+@login_required
+@active_account_required
+def renew_membership_route():
+
+    # Check if renewal is allowed
+    if not can_renew(current_user):
+
+        flash(
+            "You can only renew when your membership has 2 days or less remaining.",
+            "warning"
+        )
+
+        return redirect(url_for("dashboard"))
+
+    renewal_cost = get_vip_price(current_user.vip_level)
+
+    if request.method == "POST":
+
+        # Only Main Wallet can be used
+        if current_user.main_wallet < renewal_cost:
+
+            flash("Insufficient Main Wallet balance.", "danger")
+
+            return redirect(url_for("renew_membership_route"))
+
+        # Deduct renewal fee
+        current_user.main_wallet -= renewal_cost
+
+        # Extend membership
+        renew_membership(current_user)
+
+        # Save transaction
+        db.session.add(
+            Transaction(
+                user_id=current_user.id,
+                transaction_type="membership_renewal",
+                wallet="main",
+                amount=-renewal_cost,
+                description=f"{current_user.vip_level} Membership Renewal"
+            )
+        )
+
+        # Notification
+        db.session.add(
+            Notification(
+                user_id=current_user.id,
+                title="Membership Renewed",
+                message=f"Your {current_user.vip_level} membership has been renewed for 30 days."
+            )
+        )
+
+        db.session.commit()
+
+        flash("Membership renewed successfully!", "success")
+
+        return redirect(url_for("dashboard"))
+
+    days_left = 0
+
+    if current_user.vip_expires_at:
+        days_left = (
+            current_user.vip_expires_at - datetime.utcnow()
+        ).days
+
+    return render_template(
+        "renew_membership.html",
+        renewal_cost=renewal_cost,
+        days_left=max(days_left, 0)
+    )
 
 #-----------TENPORARY ROUT---------------
 @app.route("/users")
@@ -1354,6 +1404,156 @@ def get_minimum_withdrawal(vip_level):
     }
 
     return minimums.get(vip_level, 500)
+
+from datetime import datetime, timedelta
+
+RENEWAL_WINDOW_DAYS = 2
+
+
+def get_vip_price(vip_level):
+    plan = VIP_PLANS.get(vip_level)
+    return plan["price"] if plan else 0
+
+
+def can_renew(user):
+    """
+    User can renew only if:
+    - Membership already expired
+    OR
+    - Remaining days <= 2
+    """
+
+    if not user.vip_expires_at:
+        return True
+
+    remaining = user.vip_expires_at - datetime.utcnow()
+
+    return remaining.days <= RENEWAL_WINDOW_DAYS
+
+
+def renew_membership(user):
+    """
+    Adds 30 days without changing VIP level.
+    """
+
+    now = datetime.utcnow()
+
+    if not user.vip_expires_at or user.vip_expires_at < now:
+
+        user.vip_started_at = now
+        user.vip_expires_at = now + timedelta(days=30)
+
+    else:
+
+        user.vip_started_at = user.vip_expires_at
+        user.vip_expires_at += timedelta(days=30)
+
+    user.contribution_deducted = False
+
+
+def upgrade_membership(user, new_level):
+    """
+    Changes VIP level immediately.
+    """
+
+    user.vip_level = new_level
+
+    now = datetime.utcnow()
+
+    if not user.vip_started_at:
+        user.vip_started_at = now
+
+    if not user.vip_expires_at or user.vip_expires_at < now:
+        user.vip_expires_at = now + timedelta(days=30)
+
+
+VIP_ORDER = [
+    "Bronze",
+    "Silver",
+    "Gold",
+    "Platinum",
+    "Diamond"
+]
+
+def get_next_vip(current_level):
+    """
+    Returns the next VIP level.
+    Example:
+    Bronze -> Silver
+    Silver -> Gold
+    """
+
+    try:
+        index = VIP_ORDER.index(current_level)
+
+        if index < len(VIP_ORDER) - 1:
+            return VIP_ORDER[index + 1]
+
+    except ValueError:
+        return None
+
+    return None
+
+
+
+def get_upgrade_cost(current_level, new_level):
+
+    current_price = get_vip_price(current_level)
+    new_price = get_vip_price(new_level)
+
+    return max(new_price - current_price, 0)
+
+
+def can_upgrade(user):
+    """
+    Returns True if there is a higher VIP level.
+    """
+
+    return get_next_vip(user.vip_level) is not None
+def can_afford_upgrade(user):
+
+    next_vip = get_next_vip(user.vip_level)
+
+    if not next_vip:
+        return False
+
+    cost = get_upgrade_cost(
+        user.vip_level,
+        next_vip
+    )
+
+    return user.main_wallet >= cost
+
+def get_locked_capital(user):
+    """
+    Amount that must always remain in the user's Main Wallet.
+    """
+    if not user.vip_level:
+        return 0
+
+    return VIP_PLANS[user.vip_level]["price"]
+
+def get_withdrawable_balance(user):
+    """
+    Calculates the user's available withdrawal amount.
+    """
+
+    locked_capital = get_locked_capital(user)
+
+    # Recharge money that can be withdrawn
+    recharge_available = max(
+        user.recharge_balance - locked_capital,
+        0
+    )
+
+    # Task earnings
+    task_available = 0
+
+    if can_withdraw(user)[0]:
+        task_available = user.task_wallet
+
+    return recharge_available + task_available
+
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
@@ -2334,11 +2534,17 @@ def request_withdrawal():
             "message": message
         })
 
-    if amount > current_user.main_wallet:
+
+
+    available_balance = get_withdrawable_balance(current_user)
+
+    if amount > available_balance:
 
         return jsonify({
             "success": False,
-            "message": "Insufficient Main Wallet balance."
+            "message":
+                f"You can only withdraw KES {available_balance:.2f}. "
+                f"KES {locked_amount:.2f} is reserved for your {current_user.vip_level} membership."
         })
 
     MINIMUM = 500
