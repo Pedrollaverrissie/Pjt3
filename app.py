@@ -2427,6 +2427,22 @@ def view_withdrawal(withdrawal_id):
         withdrawal=withdrawal
     )
 
+#--------------WITHDRAWAL HISTORY------------------
+@app.route("/withdrawal-history")
+@login_required
+@active_account_required
+def withdrawal_history():
+
+    withdrawals = Withdrawal.query.filter_by(
+        user_id=current_user.id
+    ).order_by(
+        Withdrawal.created_at.desc()
+    ).all()
+
+    return render_template(
+        "withdrawal_history.html",
+        withdrawals=withdrawals
+    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Withdrawal History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .history-container{
+    width:95%;
+    margin:30px auto;
+}
+
+.history-container table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+}
+
+.history-container th{
+    background:#1f4ed8;
+    color:white;
+    padding:12px;
+}
+
+.history-container td{
+    padding:12px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
+}
+
+.paid{
+    color:green;
+    font-weight:bold;
+}
+
+.pending{
+    color:orange;
+    font-weight:bold;
+}
+
+.failed{
+    color:red;
+    font-weight:bold;
+}
+    </style>
+</head>
+
+<body>
+
+<div class="history-container">
+
+    <h2>Withdrawal History</h2>
+
+    {% if withdrawals %}
+
+    <table>
+
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+            <th>Phone</th>
+            <th>Status</th>
+        </tr>
+
+        {% for w in withdrawals %}
+
+        <tr>
+
+            <td>
+                {{ w.created_at.strftime("%d %b %Y %H:%M") }}
+            </td>
+
+            <td>
+                KES {{ "%.2f"|format(w.amount) }}
+            </td>
+
+            <td>
+                {{ w.phone }}
+            </td>
+
+            <td>
+
+                {% if w.status=="Paid" %}
+                    <span class="paid">Paid</span>
+
+                {% elif w.status=="Pending" %}
+                    <span class="pending">Pending</span>
+
+                {% else %}
+                    <span class="failed">Failed</span>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+        <p>No withdrawals yet.</p>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>
