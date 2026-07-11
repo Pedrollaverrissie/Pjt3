@@ -1869,8 +1869,6 @@ def approve_recharge(payment_id):
 
     now = datetime.utcnow()
 
-    user = recharge.user
-
     user.vip_started_at = now
     user.vip_expires_at = now + timedelta(days=30)
 
