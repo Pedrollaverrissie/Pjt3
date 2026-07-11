@@ -1676,43 +1676,169 @@ def vip():
 
     )
 #--------------VIP UPGRADE ROUTE---------------
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
-
 @app.route("/upgrade-vip/<plan>", methods=["POST"])
 @login_required
 @active_account_required
 def upgrade_vip(plan):
 
-    VIP_PLANS = {
-        "Silver": 10,
-        "Gold": 15,
-        "Platinum": 50,
-        "Diamond": 100
-    }
-
+    # ----------------------------
+    # VIP exists?
+    # ----------------------------
     if plan not in VIP_PLANS:
-        return "Invalid plan"
 
-    price = VIP_PLANS[plan]
+        flash("Invalid VIP plan.", "danger")
+        return redirect(url_for("vip"))
 
-    if current_user.main_wallet < price:
-        return "Insufficient balance"
+    # ----------------------------
+    # Cannot downgrade
+    # ----------------------------
+    if current_user.vip_level:
+
+        current_index = VIP_ORDER.index(current_user.vip_level)
+        new_index = VIP_ORDER.index(plan)
+
+        if new_index <= current_index:
+
+            flash("You can only upgrade to a higher VIP.", "warning")
+            return redirect(url_for("vip"))
+
+    # ----------------------------
+    # Calculate cost
+    # ----------------------------
+    if current_user.vip_level:
+
+        amount_required = get_upgrade_cost(
+            current_user.vip_level,
+            plan
+        )
+
+    else:
+
+        amount_required = VIP_PLANS[plan]["price"]
+
+    # ----------------------------
+    # Main wallet ONLY
+    # ----------------------------
+    if current_user.main_wallet < amount_required:
+
+        flash(
+            f"You need KES {amount_required:.2f} in your Main Wallet.",
+            "danger"
+        )
+
+        return redirect(url_for("vip"))
+
+    # ----------------------------
+    # Task earnings protection
+    # ----------------------------
+    earned_from_tasks = current_user.task_wallet
+
+    if not can_withdraw(current_user)[0]:
+
+        usable_main = current_user.main_wallet - earned_from_tasks
+
+        if usable_main < amount_required:
+
+            flash(
+                "Task earnings cannot be used for VIP upgrades until you meet the withdrawal requirements.",
+                "warning"
+            )
+
+            return redirect(url_for("vip"))
+
+    # ----------------------------
+    # Deduct Main Wallet
+    # ----------------------------
+    current_user.main_wallet -= amount_required
+
+    # ----------------------------
+    # Change VIP
+    # ----------------------------
+    current_user.vip_level = plan
 
     now = datetime.utcnow()
 
+    # Preserve remaining days
     if current_user.vip_expires_at and current_user.vip_expires_at > now:
-        current_user.vip_expires_at += relativedelta(months=1)
-    else:
-        current_user.vip_started_at = now
-        current_user.vip_expires_at = now + relativedelta(months=1)
 
-    current_user.vip_level = plan
-    current_user.main_wallet -= price
+        remaining = current_user.vip_expires_at - now
+
+        current_user.vip_started_at = now
+        current_user.vip_expires_at = now + remaining
+
+    else:
+
+        current_user.vip_started_at = now
+        current_user.vip_expires_at = now + timedelta(days=30)
+
+    # Reset contribution flag
+    current_user.contribution_deducted = False
+
+    # ----------------------------
+    # Membership History
+    # ----------------------------
+    db.session.add(
+
+        MembershipHistory(
+
+            user_id=current_user.id,
+
+            vip_level=plan,
+
+            contribution_used=0,
+
+            withdrawal_unlocked=False
+
+        )
+
+    )
+
+    # ----------------------------
+    # Transaction
+    # ----------------------------
+    db.session.add(
+
+        Transaction(
+
+            user_id=current_user.id,
+
+            transaction_type="vip_upgrade",
+
+            wallet="main",
+
+            amount=-amount_required,
+
+            description=f"VIP upgraded to {plan}"
+
+        )
+
+    )
+
+    # ----------------------------
+    # Notification
+    # ----------------------------
+    db.session.add(
+
+        Notification(
+
+            user_id=current_user.id,
+
+            title="VIP Upgraded",
+
+            message=f"You successfully upgraded to {plan}."
+
+        )
+
+    )
 
     db.session.commit()
 
-    return redirect("/vip")
+    flash(
+        f"Congratulations! You are now a {plan} member.",
+        "success"
+    )
+
+    return redirect(url_for("vip"))
 #---------------TASK ROUTE---------------------
 from datetime import date
 from models import Task, UserTask
