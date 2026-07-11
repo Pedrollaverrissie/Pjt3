@@ -1379,7 +1379,7 @@ h3{
 
 .upgrade-btn,
 .renew-btn{
-    padding:10px 22px;
+    padding:10px 22px 22px 10px;
     border:none;
     border-radius:8px;
     cursor:pointer;
