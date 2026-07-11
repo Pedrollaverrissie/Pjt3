@@ -75,6 +75,15 @@ VIP_PLANS = {
 
 }
 
+VIP_ORDER = [
+    "Free",
+    "Bronze",
+    "Silver",
+    "Gold",
+    "Platinum",
+    "Diamond"
+]
+
 
 load_dotenv()
 
@@ -1467,13 +1476,7 @@ def upgrade_membership(user, new_level):
         user.vip_expires_at = now + timedelta(days=30)
 
 
-VIP_ORDER = [
-    "Bronze",
-    "Silver",
-    "Gold",
-    "Platinum",
-    "Diamond"
-]
+
 
 def get_next_vip(current_level):
     """
