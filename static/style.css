@@ -821,7 +821,7 @@ h3{
     text-align: left;
     border: 0;
     color: white;
-  
+    margin-left: -6px;
     font-family:Arial, Helvetica, sans-serif;
     font-size: 12px;
     font-weight: bold;
