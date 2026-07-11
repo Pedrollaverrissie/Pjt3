@@ -2444,7 +2444,7 @@ def withdrawal_history():
         withdrawals=withdrawals
     )
   #-------------RECHARGE HISTORY------------------
-@app.route("/recharge_history")
+@app.route("/recharge-history")
 @login_required
 @active_account_required
 def recharge_history():
