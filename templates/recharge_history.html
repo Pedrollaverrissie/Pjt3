@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Recharge History</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="history-container">
+
+<h2>Recharge History</h2>
+
+{% if recharges %}
+
+<table>
+
+<tr>
+
+<th>Date</th>
+<th>Amount</th>
+<th>Invoice</th>
+<th>Status</th>
+
+</tr>
+
+{% for recharge in recharges %}
+
+<tr>
+
+<td>
+
+{{ recharge.created_at.strftime("%d %b %Y %H:%M") }}
+
+</td>
+
+<td>
+
+KES {{ "%.2f"|format(recharge.amount) }}
+
+</td>
+
+<td>
+
+{{ recharge.transaction_code }}
+
+</td>
+
+<td>
+
+{% if recharge.status=="approved" %}
+
+<span class="paid">Approved</span>
+
+{% elif recharge.status=="pending" %}
+
+<span class="pending">Pending</span>
+
+{% else %}
+
+<span class="failed">Failed</span>
+
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% else %}
+
+<p>No recharge history.</p>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>
