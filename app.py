@@ -1007,71 +1007,87 @@ def renew_membership():
 
     if not current_user.vip_level:
 
-        flash("You do not have an active VIP plan.", "error")
-        return redirect("/vip")
+        flash("You don't have an active VIP membership.", "danger")
+        return redirect(url_for("vip"))
+
+    now = datetime.utcnow()
+
+    # ---------------------------------
+    # Renewal window
+    # ---------------------------------
 
     if current_user.vip_expires_at:
 
         days_left = (
-            current_user.vip_expires_at - datetime.utcnow()
+            current_user.vip_expires_at - now
         ).days
 
         if days_left > 2:
 
             flash(
-                "You can only renew when your membership has 2 days or less remaining.",
+                "Membership can only be renewed during the last 2 days before expiry.",
                 "warning"
             )
 
-            return redirect("/vip")
+            return redirect(url_for("vip"))
 
-    renewal_cost = get_renewal_price(current_user.vip_level)
-
-    usable_task_wallet = 0
-
-    # Task wallet is ONLY usable if withdrawal requirements are met
-    if can_withdraw(current_user)[0]:
-
-        usable_task_wallet = current_user.task_wallet
-
-    total_available = (
-        current_user.main_wallet +
-        usable_task_wallet
-    )
-
-    if total_available < renewal_cost:
-
-        flash(
-            "Insufficient balance to renew membership.",
-            "error"
-        )
-
-        return redirect("/vip")
+    renewal_cost = VIP_PLANS[
+        current_user.vip_level
+    ]["price"]
 
     remaining = renewal_cost
 
-    # Deduct Main Wallet first
-    if current_user.main_wallet >= remaining:
+    # ---------------------------------
+    # Use Task Wallet FIRST
+    # ---------------------------------
+
+    task_used = min(
+        current_user.task_wallet,
+        remaining
+    )
+
+    current_user.task_wallet -= task_used
+
+    remaining -= task_used
+
+    # ---------------------------------
+    # Use Main Wallet SECOND
+    # ---------------------------------
+
+    if remaining > 0:
+
+        if current_user.main_wallet < remaining:
+
+            flash(
+                "Insufficient balance to renew your membership.",
+                "danger"
+            )
+
+            return redirect(url_for("vip"))
 
         current_user.main_wallet -= remaining
-        remaining = 0
+
+    # ---------------------------------
+    # Extend membership
+    # ---------------------------------
+
+    if current_user.vip_expires_at > now:
+
+        current_user.vip_started_at = current_user.vip_expires_at
+
+        current_user.vip_expires_at += timedelta(days=30)
 
     else:
 
-        remaining -= current_user.main_wallet
-        current_user.main_wallet = 0
+        current_user.vip_started_at = now
 
-    # Deduct Task Wallet only if eligible
-    if remaining > 0:
-
-        current_user.task_wallet -= remaining
-
-    now = datetime.utcnow()
-
-    current_user.vip_started_at = now
-    current_user.vip_expires_at = now + timedelta(days=30)
+        current_user.vip_expires_at = now + timedelta(days=30)
 
     current_user.contribution_deducted = False
+
+    # ---------------------------------
+    # Membership History
+    # ---------------------------------
 
     db.session.add(
 
@@ -1081,9 +1097,7 @@ def renew_membership():
 
             vip_level=current_user.vip_level,
 
-            contribution_used=get_required_contribution(
-                current_user.vip_level
-            ),
+            contribution_used=0,
 
             withdrawal_unlocked=False
 
@@ -1091,15 +1105,19 @@ def renew_membership():
 
     )
 
+    # ---------------------------------
+    # Transaction
+    # ---------------------------------
+
     db.session.add(
 
         Transaction(
 
             user_id=current_user.id,
 
-            transaction_type="renewal",
+            transaction_type="membership_renewal",
 
-            wallet="membership",
+            wallet="task/main",
 
             amount=-renewal_cost,
 
@@ -1109,6 +1127,10 @@ def renew_membership():
 
     )
 
+    # ---------------------------------
+    # Notification
+    # ---------------------------------
+
     db.session.add(
 
         Notification(
@@ -1117,7 +1139,7 @@ def renew_membership():
 
             title="Membership Renewed",
 
-            message=f"Your {current_user.vip_level} membership has been renewed for another 30 days."
+            message=f"Your {current_user.vip_level} membership has been renewed successfully."
 
         )
 
@@ -1125,32 +1147,12 @@ def renew_membership():
 
     db.session.commit()
 
-    flash("Membership renewed successfully!", "success")
+    flash(
+        "Membership renewed successfully!",
+        "success"
+    )
 
-    return redirect("/dashboard")
-#-----------TENPORARY ROUT---------------
-@app.route("/users")
-def users():
-    users = User.query.all()
-
-    html = ""
-
-    for u in users:
-        html += f"""
-        <p>
-        ID: {u.id}<br>
-        Username: {u.username}<br>
-        Email: {u.email}<br>
-        Referral Code: {u.referral_code}<br>
-        Referred By: {u.referred_by}<br>
-        Main Wallet: {u.main_wallet}<br>
-        Team Wallet: {u.team_wallet}<br>
-        Commissions: {u.commissions}<br>
-        <hr>
-        </p>
-        """
-
-    return html
+    return redirect(url_for("vip"))
 #--------------debugging-------------------------
 @app.route("/debug-pending")
 def debug_pending():
