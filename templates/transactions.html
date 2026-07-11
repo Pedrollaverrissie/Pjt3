@@ -6,7 +6,138 @@
 
 <link rel="stylesheet"
 href="{{ url_for('static',filename='style.css') }}">
+<style>
+    /* ===========================
+   TRANSACTION HISTORY
+=========================== */
 
+.history-container{
+    width:95%;
+    max-width:1200px;
+    margin:30px auto;
+    background:#fff;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+    padding:20px;
+}
+
+.history-container h2{
+    text-align:center;
+    color:#004aad;
+    margin-bottom:20px;
+    font-size:28px;
+}
+
+.history-container table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.history-container thead{
+    background:#004aad;
+    color:#fff;
+}
+
+.history-container th{
+    padding:15px;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    font-size:14px;
+}
+
+.history-container td{
+    padding:14px;
+    text-align:center;
+    border-bottom:1px solid #eee;
+    font-size:14px;
+}
+
+.history-container tbody tr:hover{
+    background:#f5f8ff;
+    transition:.3s;
+}
+
+/* Status */
+
+.paid{
+    display:inline-block;
+    background:#d4edda;
+    color:#155724;
+    padding:6px 14px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+.pending{
+    display:inline-block;
+    background:#fff3cd;
+    color:#856404;
+    padding:6px 14px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+.failed{
+    display:inline-block;
+    background:#f8d7da;
+    color:#721c24;
+    padding:6px 14px;
+    border-radius:20px;
+    font-weight:bold;
+}
+
+/* Positive Amount */
+
+.credit{
+    color:#16a34a;
+    font-weight:bold;
+}
+
+/* Negative Amount */
+
+.debit{
+    color:#dc2626;
+    font-weight:bold;
+}
+
+/* Wallet Badge */
+
+.wallet{
+    background:#eaf2ff;
+    color:#004aad;
+    padding:5px 12px;
+    border-radius:15px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+/* Responsive */
+
+@media(max-width:768px){
+
+.history-container{
+    width:98%;
+    padding:10px;
+}
+
+.history-container h2{
+    font-size:22px;
+}
+
+.history-container table{
+    display:block;
+    overflow-x:auto;
+    white-space:nowrap;
+}
+
+.history-container th,
+.history-container td{
+    padding:10px;
+    font-size:13px;
+}
+
+}
+</style>
 </head>
 
 <body>
