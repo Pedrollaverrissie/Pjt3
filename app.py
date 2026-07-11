@@ -2460,7 +2460,22 @@ def withdrawal_history():
         "withdrawal_history.html",
         withdrawals=withdrawals
     )
+#-----------TRANSACTIONS-------------------
+@app.route("/transactions")
+@login_required
+@active_account_required
+def transaction_history():
 
+    transactions = Transaction.query.filter_by(
+        user_id=current_user.id
+    ).order_by(
+        Transaction.created_at.desc()
+    ).all()
+
+    return render_template(
+        "transactions.html",
+        transactions=transactions
+    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
