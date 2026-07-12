@@ -362,6 +362,71 @@
         }
 
         }
+        .flash-message{
+
+    width:100%;
+
+    max-width:700px;
+
+    margin:20px auto;
+
+    padding:18px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+}
+
+.flash-message.success{
+
+    background:#0f5132;
+
+    color:white;
+
+    border:1px solid #198754;
+
+}
+
+.flash-message.danger{
+
+    background:#7f1d1d;
+
+    color:white;
+
+    border:1px solid #dc3545;
+
+}
+
+.recharge-btn{
+
+    padding:12px 25px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#f59e0b;
+
+    color:white;
+
+    font-size:17px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.recharge-btn:hover{
+
+    background:#d97706;
+
+}
 
     </style>
 </head>
@@ -371,6 +436,33 @@
 <div class="vip-container">
 
     <h2 class="vip-title">CHOOSE YOUR VIP PLAN</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+
+        {% for category, message in messages %}
+
+            <div class="flash-message {{ category }}">
+
+                {{ message }}
+
+                {% if category == "danger" %}
+
+                    <br><br>
+
+                    <a href="{{ url_for('recharge') }}">
+                        <button class="recharge-btn">
+                            Recharge Now
+                        </button>
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+{% endwith %}
 
     <div class="vip-grid">
 

@@ -1723,7 +1723,7 @@ def upgrade_vip(plan):
     if current_user.main_wallet < amount_required:
 
         flash(
-            f"You need KES {amount_required:.2f} in your Main Wallet.",
+            f"Insufficient Main Wallet balance. You need KES {amount_required:.2f} to upgrade to {plan}.",
             "danger"
         )
 
