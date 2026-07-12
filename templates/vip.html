@@ -362,71 +362,92 @@
         }
 
         }
-        .flash-message{
+        #toast-container{
 
-    width:100%;
+    position:fixed;
 
-    max-width:700px;
+    top:25px;
 
-    margin:20px auto;
+    right:25px;
+
+    z-index:99999;
+
+}
+
+.toast{
+
+    min-width:320px;
+
+    max-width:420px;
 
     padding:18px;
 
+    margin-bottom:15px;
+
     border-radius:12px;
-
-    text-align:center;
-
-    font-size:18px;
-
-    font-weight:bold;
-
-}
-
-.flash-message.success{
-
-    background:#0f5132;
-
-    color:white;
-
-    border:1px solid #198754;
-
-}
-
-.flash-message.danger{
-
-    background:#7f1d1d;
-
-    color:white;
-
-    border:1px solid #dc3545;
-
-}
-
-.recharge-btn{
-
-    padding:12px 25px;
-
-    border:none;
-
-    border-radius:10px;
-
-    background:#f59e0b;
 
     color:white;
 
     font-size:17px;
 
+    box-shadow:0 10px 25px rgba(0,0,0,.35);
+
+    animation:slideIn .4s ease;
+
+}
+
+.toast.success{
+
+    background:#16a34a;
+
+}
+
+.toast.danger{
+
+    background:#dc2626;
+
+}
+
+.toast-btn{
+
+    margin-top:10px;
+
+    padding:10px 18px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#fbbf24;
+
+    color:#111;
+
+    font-weight:bold;
+
     cursor:pointer;
 
-    transition:.3s;
-
 }
 
-.recharge-btn:hover{
+@keyframes slideIn{
 
-    background:#d97706;
+    from{
+
+        transform:translateX(100px);
+
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:translateX(0);
+
+        opacity:1;
+
+    }
 
 }
+        
 
     </style>
 </head>
@@ -436,33 +457,7 @@
 <div class="vip-container">
 
     <h2 class="vip-title">CHOOSE YOUR VIP PLAN</h2>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-
-        {% for category, message in messages %}
-
-            <div class="flash-message {{ category }}">
-
-                {{ message }}
-
-                {% if category == "danger" %}
-
-                    <br><br>
-
-                    <a href="{{ url_for('recharge') }}">
-                        <button class="recharge-btn">
-                            Recharge Now
-                        </button>
-                    </a>
-
-                {% endif %}
-
-            </div>
-
-        {% endfor %}
-
-    {% endif %}
-{% endwith %}
+    
 
     <div class="vip-grid">
 
@@ -573,5 +568,57 @@
     </div>
 
 </div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+
+<div id="toast-container">
+
+    {% for category, message in messages %}
+
+    <div class="toast {{ category }}">
+
+        {{ message }}
+
+        {% if category == "danger" %}
+        <br><br>
+
+        <a href="{{ url_for('recharge') }}">
+            <button class="toast-btn">
+                Recharge Now
+            </button>
+        </a>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+{% endwith %}
+<script>
+
+setTimeout(function(){
+
+    const toast=document.querySelector(".toast");
+
+    if(toast){
+
+        toast.style.transition="0.5s";
+
+        toast.style.opacity="0";
+
+        toast.style.transform="translateX(100px)";
+
+        setTimeout(()=>toast.remove(),500);
+
+    }
+
+},5000);
+
+</script>
 </body>
 </html>
