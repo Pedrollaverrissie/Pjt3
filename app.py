@@ -76,7 +76,6 @@ VIP_PLANS = {
 }
 
 VIP_ORDER = [
-    "Free",
     "Bronze",
     "Silver",
     "Gold",
