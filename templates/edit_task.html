@@ -4,6 +4,269 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        body{
+
+    margin:0;
+    padding:40px 0;
+
+    background:#0b1020;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+
+/* ===========================
+   CONTAINER
+=========================== */
+
+.edit-task-container{
+
+    width:90%;
+    max-width:700px;
+
+    margin:auto;
+
+    background:#181f38;
+
+    padding:35px;
+
+    border-radius:20px;
+
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+
+}
+
+
+/* ===========================
+   TITLE
+=========================== */
+
+.edit-task-container h2{
+
+    text-align:center;
+
+    color:#FFD54A;
+
+    margin-bottom:30px;
+
+    font-size:32px;
+
+}
+
+
+/* ===========================
+   LABELS
+=========================== */
+
+.edit-task-container label{
+
+    display:block;
+
+    margin-top:18px;
+
+    margin-bottom:8px;
+
+    color:#fff;
+
+    font-weight:bold;
+
+    font-size:15px;
+
+}
+
+
+/* ===========================
+   INPUTS
+=========================== */
+
+.edit-task-container input,
+
+.edit-task-container textarea,
+
+.edit-task-container select{
+
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    outline:none;
+
+    border-radius:12px;
+
+    background:#232b49;
+
+    color:#fff;
+
+    font-size:16px;
+
+    box-sizing:border-box;
+
+    transition:.3s;
+
+}
+
+
+.edit-task-container textarea{
+
+    resize:vertical;
+
+    min-height:130px;
+
+}
+
+
+.edit-task-container input:focus,
+
+.edit-task-container textarea:focus,
+
+.edit-task-container select:focus{
+
+    background:#2b355a;
+
+    box-shadow:0 0 0 2px #16b364;
+
+}
+
+
+/* ===========================
+   ACTIVE CHECKBOX
+=========================== */
+
+.checkbox-row{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin-top:25px;
+
+}
+
+.checkbox-row input{
+
+    width:22px;
+
+    height:22px;
+
+    cursor:pointer;
+
+}
+
+.checkbox-row span{
+
+    color:white;
+
+    font-size:16px;
+
+}
+
+
+/* ===========================
+   SAVE BUTTON
+=========================== */
+
+.save-btn{
+
+    width:100%;
+
+    margin-top:30px;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:linear-gradient(135deg,#16b364,#0ea95a);
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    box-shadow:0 10px 25px rgba(22,179,100,.35);
+
+}
+
+.save-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 15px 35px rgba(22,179,100,.45);
+
+}
+
+
+/* ===========================
+   BACK BUTTON
+=========================== */
+
+.back-btn{
+
+    display:block;
+
+    width:100%;
+
+    text-align:center;
+
+    margin-top:15px;
+
+    padding:15px;
+
+    border-radius:12px;
+
+    background:#2b355a;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.back-btn:hover{
+
+    background:#3a4672;
+
+}
+
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media(max-width:600px){
+
+.edit-task-container{
+
+    width:94%;
+
+    padding:25px;
+
+}
+
+.edit-task-container h2{
+
+    font-size:26px;
+
+}
+
+}
+    </style>
 </head>
 <body>
     <input
