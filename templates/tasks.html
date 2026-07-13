@@ -339,40 +339,135 @@ color:#42d392;
 
 }
 
-.loader{
+.coin-loader{
 
-    width:65px;
+    display:flex;
 
-    height:65px;
+    justify-content:center;
 
-    margin:25px auto;
+    align-items:center;
 
-    border:7px solid rgba(255,255,255,.15);
-
-    border-top:7px solid #17c964;
-
-    border-radius:50%;
-
-    animation:spin .8s linear infinite;
+    margin:30px 0;
 
 }
 
-@keyframes spin{
+.coin{
 
-    100%{
+    width:85px;
 
-        transform:rotate(360deg);
+    height:85px;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        145deg,
+        #ffe36b,
+        #ffb400
+    );
+
+    border:5px solid #fff3a1;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:#7a5200;
+
+    font-weight:bold;
+
+    font-size:22px;
+
+    box-shadow:
+        0 0 15px #ffd700,
+        0 0 35px rgba(255,215,0,.6);
+
+    animation:
+        spinCoin 1s linear infinite,
+        glowCoin 1.5s ease-in-out infinite;
+
+}
+
+@keyframes spinCoin{
+
+    from{
+
+        transform:rotateY(0deg);
+
+    }
+
+    to{
+
+        transform:rotateY(360deg);
 
     }
 
 }
 
+@keyframes glowCoin{
+
+    0%{
+
+        box-shadow:
+            0 0 10px #ffd700,
+            0 0 25px rgba(255,215,0,.4);
+
+    }
+
+    50%{
+
+        box-shadow:
+            0 0 25px #ffd700,
+            0 0 55px rgba(255,215,0,.9);
+
+    }
+
+    100%{
+
+        box-shadow:
+            0 0 10px #ffd700,
+            0 0 25px rgba(255,215,0,.4);
+
+    }
+
+}
 .processing{
 
     color:#bbb;
 
     margin-top:15px;
 
+}
+.reward-popup{
+
+    animation:popup .4s ease;
+
+}
+
+.reward-popup h2{
+
+    color:#FFD54A;
+
+    margin-bottom:15px;
+
+}
+
+.reward-popup p{
+
+    color:#d9d9d9;
+
+    line-height:1.7;
+
+}
+
+.reward-popup{
+
+    background:linear-gradient(
+        180deg,
+        #20242c,
+        #13161b
+    );
 }
 
 
@@ -556,7 +651,15 @@ color:#42d392;
             +KES {{ todays_reward }}
         </h1>
 
-        <div class="loader"></div>
+        <div class="coin-loader">
+
+            <div class="coin">
+
+                <span>KES</span>
+
+            </div>
+
+        </div>
 
         <p class="processing">
             Opening Dashboard...
