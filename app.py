@@ -1954,12 +1954,18 @@ def delete_task(task_id):
 
     task = Task.query.get_or_404(task_id)
 
+    # Delete task completions first
+    UserTask.query.filter_by(task_id=task.id).delete()
+
+    # Delete task sessions
+    TaskSession.query.filter_by(task_id=task.id).delete()
+
     db.session.delete(task)
     db.session.commit()
 
-    flash("Task deleted successfully.", "success")
+    flash("Task deleted successfully.")
 
-    return redirect(url_for("admin_tasks"))
+    return redirect("/admin/tasks")
 #--------------REWARD/claim ROUTE------------------
 from datetime import datetime, date
 from flask import jsonify, redirect
