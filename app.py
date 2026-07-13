@@ -1976,11 +1976,11 @@ def edit_task(task_id):
 
     if request.method == "POST":
 
-        task.title = request.form["title"]
-        task.description = request.form["description"]
-        task.reward = float(request.form["reward"])
-        task.vip_level = request.form["vip_level"]
-        task.url = request.form["url"]
+        task.title = request.form.get("title")
+        task.description = request.form.get("description")
+        task.reward = float(request.form.get("reward"))
+        task.vip_level = request.form.get("vip_level")
+        task.url = request.form.get("url")
 
         task.active = "active" in request.form
 
