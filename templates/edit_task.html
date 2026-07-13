@@ -269,64 +269,45 @@
     </style>
 </head>
 <body>
-    <input
-type="text"
-name="title"
-value="{{ task.title }}"
-required>
+<div class="edit-task-container">
 
-<textarea
-name="description">{{ task.description }}</textarea>
+<h2>✏ Edit Task</h2>
 
-<input
-type="number"
-step="0.01"
-name="reward"
-value="{{ task.reward }}"
-required>
+<form method="POST">
 
-<input
-type="text"
-name="url"
-value="{{ task.url }}">
+<label>Task Title</label>
+<input type="text" name="title" value="{{ task.title }}">
 
+<label>Description</label>
+<textarea name="description">{{ task.description }}</textarea>
+
+<label>Reward (KES)</label>
+<input type="number" step="0.01" name="reward" value="{{ task.reward }}">
+
+<label>VIP Level</label>
 <select name="vip_level">
-
-<option value="Silver"
-{% if task.vip_level=="Silver" %}selected{% endif %}>
-Silver
-</option>
-
-<option value="Gold"
-{% if task.vip_level=="Gold" %}selected{% endif %}>
-Gold
-</option>
-
-<option value="Platinum"
-{% if task.vip_level=="Platinum" %}selected{% endif %}>
-Platinum
-</option>
-
-<option value="Diamond"
-{% if task.vip_level=="Diamond" %}selected{% endif %}>
-Diamond
-</option>
-
+    ...
 </select>
 
-<label>
+<label>Video URL</label>
+<input type="text" name="url" value="{{ task.url }}">
 
-<input
-type="checkbox"
-name="active"
-{% if task.active %}checked{% endif %}>
+<div class="checkbox-row">
+    <input type="checkbox" name="active"
+    {% if task.active %}checked{% endif %}>
+    <span>Task Active</span>
+</div>
 
-Active
-
-</label>
-
-<button type="submit">
+<button class="save-btn" type="submit">
 💾 Save Changes
 </button>
+
+<a href="/admin/tasks" class="back-btn">
+← Back to Tasks
+</a>
+
+</form>
+
+</div>
 </body>
 </html>
