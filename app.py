@@ -1946,7 +1946,20 @@ def admin_tasks():
         tasks=tasks
     )
 
+#------------delete task admin---------------
+@app.route("/admin/delete-task/<int:task_id>", methods=["POST"])
+@login_required
+@admin_required
+def delete_task(task_id):
 
+    task = Task.query.get_or_404(task_id)
+
+    db.session.delete(task)
+    db.session.commit()
+
+    flash("Task deleted successfully.", "success")
+
+    return redirect(url_for("admin_tasks"))
 #--------------REWARD/claim ROUTE------------------
 from datetime import datetime, date
 from flask import jsonify, redirect

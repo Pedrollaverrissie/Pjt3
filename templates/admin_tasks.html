@@ -42,6 +42,31 @@ href="{{ url_for('static', filename='style.css') }}">
             border-bottom:1px solid #ddd;
             padding:15px 0;
         }
+        .delete-btn{
+
+    background:#e53935;
+
+    color:white;
+
+    border:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.delete-btn:hover{
+
+    background:#c62828;
+
+}
 </style>
 </head>
 
@@ -92,6 +117,15 @@ placeholder="Task URL">
 Save Task
 
 </button>
+
+</form>
+<form action="{{ url_for('delete_task', task_id=task.id) }}"
+      method="POST"
+      onsubmit="return confirm('Delete this task permanently?');">
+
+    <button class="delete-btn" type="submit">
+        🗑 Delete
+    </button>
 
 </form>
 
