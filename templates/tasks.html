@@ -211,17 +211,187 @@ font-size:17px;
 color:#42d392;
 
 }
-.reward-popup{
+/* ===========================
+   COLLECT BUTTON
+=========================== */
 
-    animation:popup .4s ease;
+.collect-btn{
+
+    width:100%;
+
+    padding:18px;
+
+    margin-top:30px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:linear-gradient(135deg,#16b364,#0ea95a);
+
+    color:#fff;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+    box-shadow:0 8px 20px rgba(22,179,100,.35);
 
 }
+
+.collect-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 12px 30px rgba(22,179,100,.5);
+
+}
+
+
+/* ===========================
+   POPUP OVERLAY
+=========================== */
+
+#rewardOverlay{
+
+    position:fixed;
+
+    top:0;
+
+    left:0;
+
+    width:100%;
+
+    height:100%;
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:rgba(0,0,0,.6);
+
+    backdrop-filter:blur(8px);
+
+    z-index:99999;
+
+}
+
+
+/* ===========================
+   POPUP
+=========================== */
+
+.reward-popup{
+
+    width:420px;
+
+    max-width:90%;
+
+    padding:40px;
+
+    border-radius:22px;
+
+    text-align:center;
+
+    color:white;
+
+    background:linear-gradient(
+        180deg,
+        #20242c,
+        #13161b
+    );
+
+    border:1px solid rgba(255,255,255,.08);
+
+    box-shadow:0 25px 70px rgba(0,0,0,.45);
+
+    animation:popup .35s ease;
+
+}
+
+@keyframes popup{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.8);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+}
+
+
+/* ===========================
+   SUCCESS ICON
+=========================== */
+
+.success-circle{
+
+    width:90px;
+
+    height:90px;
+
+    margin:auto;
+
+    margin-bottom:20px;
+
+    border-radius:50%;
+
+    background:#18b96d;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:45px;
+
+    font-weight:bold;
+
+    box-shadow:0 0 25px rgba(24,185,109,.5);
+
+}
+
+
+/* ===========================
+   POPUP TEXT
+=========================== */
 
 .reward-popup h2{
 
     color:#FFD54A;
 
     margin-bottom:15px;
+
+    font-size:28px;
+
+}
+
+.reward-popup h1{
+
+    color:#FFD54A;
+
+    margin:20px 0;
+
+    font-size:40px;
 
 }
 
@@ -233,14 +403,19 @@ color:#42d392;
 
 }
 
-.reward-popup{
+.processing{
 
-    background:linear-gradient(
-        180deg,
-        #20242c,
-        #13161b
-    );
+    margin-top:18px;
+
+    color:#bdbdbd;
+
 }
+
+
+/* ===========================
+   GOLD COIN LOADER
+=========================== */
+
 .coin-loader{
 
     display:flex;
@@ -286,7 +461,7 @@ color:#42d392;
         0 0 35px rgba(255,215,0,.6);
 
     animation:
-        spinCoin 1s linear infinite,
+        spinCoin .9s linear infinite,
         glowCoin 1.5s ease-in-out infinite;
 
 }
@@ -313,15 +488,15 @@ color:#42d392;
 
         box-shadow:
             0 0 10px #ffd700,
-            0 0 25px rgba(255,215,0,.4);
+            0 0 20px rgba(255,215,0,.4);
 
     }
 
     50%{
 
         box-shadow:
-            0 0 25px #ffd700,
-            0 0 55px rgba(255,215,0,.9);
+            0 0 30px #ffd700,
+            0 0 60px rgba(255,215,0,.9);
 
     }
 
@@ -329,12 +504,11 @@ color:#42d392;
 
         box-shadow:
             0 0 10px #ffd700,
-            0 0 25px rgba(255,215,0,.4);
+            0 0 20px rgba(255,215,0,.4);
 
     }
 
 }
-
 </style>
 
 </head>
