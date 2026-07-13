@@ -211,6 +211,170 @@ font-size:17px;
 color:#42d392;
 
 }
+.collect-btn{
+
+    width:100%;
+
+    padding:18px;
+
+    margin-top:30px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#17c964;
+
+    color:white;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.collect-btn:hover{
+
+    transform:translateY(-3px);
+
+}
+
+#rewardOverlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    backdrop-filter:blur(8px);
+
+    display:none;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:99999;
+
+}
+
+.reward-popup{
+
+    width:430px;
+
+    background:#16181d;
+
+    border-radius:22px;
+
+    padding:40px;
+
+    text-align:center;
+
+    color:white;
+
+    border:1px solid rgba(255,255,255,.1);
+
+    box-shadow:0 25px 70px rgba(0,0,0,.45);
+
+    animation:popup .4s ease;
+
+}
+
+@keyframes popup{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.8);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+}
+
+.success-circle{
+
+    width:90px;
+
+    height:90px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:#18b96d;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:45px;
+
+    font-weight:bold;
+
+    margin-bottom:20px;
+
+}
+
+.reward-popup h1{
+
+    color:#FFD54A;
+
+    margin:20px 0;
+
+}
+
+.loader{
+
+    width:65px;
+
+    height:65px;
+
+    margin:25px auto;
+
+    border:7px solid rgba(255,255,255,.15);
+
+    border-top:7px solid #17c964;
+
+    border-radius:50%;
+
+    animation:spin .8s linear infinite;
+
+}
+
+@keyframes spin{
+
+    100%{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+.processing{
+
+    color:#bbb;
+
+    margin-top:15px;
+
+}
+
 
 </style>
 
@@ -340,8 +504,80 @@ color:#42d392;
 
         {% endfor %}
 
+        <button id="collectBtn" class="collect-btn">
+    💰 Collect Today's Earnings
+</button>
+
+<div id="rewardOverlay" class="reward-overlay">
+
+    <div class="reward-box">
+
+        <div class="success-icon">✓</div>
+
+        <h2>Congratulations!</h2>
+
+        <p>You completed all today's tasks.</p>
+
+        <h1>+ KES {{ todays_reward }}</h1>
+
+        <p>Added to your Task Wallet</p>
+
+        <div class="loader"></div>
+
+        <span>Processing...</span>
+
+    </div>
+
 </div>
 
+
+</div>
+<button id="collectBtn" class="collect-btn">
+    💰 Collect Today's Earnings
+</button>
+
+<div id="rewardOverlay">
+
+    <div class="reward-popup">
+
+        <div class="success-circle">
+            ✓
+        </div>
+
+        <h2>Earnings Received</h2>
+
+        <p>
+            Congratulations!
+            <br>
+            Today's task earnings have been added to your Task Wallet.
+        </p>
+
+        <h1>
+            +KES {{ todays_reward }}
+        </h1>
+
+        <div class="loader"></div>
+
+        <p class="processing">
+            Opening Dashboard...
+        </p>
+
+    </div>
+
+</div>
+<script>
+    document.getElementById("collectBtn").addEventListener("click", function(){
+
+    document.getElementById("rewardOverlay").style.display = "flex";
+
+    setTimeout(function(){
+
+        window.location.href="/dashboard";
+
+    },2500);
+
+});
+</script>
 </body>
 
 </html>
