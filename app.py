@@ -1966,6 +1966,34 @@ def delete_task(task_id):
     flash("Task deleted successfully.")
 
     return redirect("/admin/tasks")
+#-----------------------dmin edit task------------------
+@app.route("/admin/edit-task/<int:task_id>", methods=["GET", "POST"])
+@login_required
+@admin_required
+def edit_task(task_id):
+
+    task = Task.query.get_or_404(task_id)
+
+    if request.method == "POST":
+
+        task.title = request.form["title"]
+        task.description = request.form["description"]
+        task.reward = float(request.form["reward"])
+        task.vip_level = request.form["vip_level"]
+        task.url = request.form["url"]
+
+        task.active = "active" in request.form
+
+        db.session.commit()
+
+        flash("Task updated successfully.")
+
+        return redirect("/admin/tasks")
+
+    return render_template(
+        "edit_task.html",
+        task=task
+    )
 #--------------REWARD/claim ROUTE------------------
 from datetime import datetime, date
 from flask import jsonify, redirect

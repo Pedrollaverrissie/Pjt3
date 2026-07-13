@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input
+type="text"
+name="title"
+value="{{ task.title }}"
+required>
+
+<textarea
+name="description">{{ task.description }}</textarea>
+
+<input
+type="number"
+step="0.01"
+name="reward"
+value="{{ task.reward }}"
+required>
+
+<input
+type="text"
+name="url"
+value="{{ task.url }}">
+
+<select name="vip_level">
+
+<option value="Silver"
+{% if task.vip_level=="Silver" %}selected{% endif %}>
+Silver
+</option>
+
+<option value="Gold"
+{% if task.vip_level=="Gold" %}selected{% endif %}>
+Gold
+</option>
+
+<option value="Platinum"
+{% if task.vip_level=="Platinum" %}selected{% endif %}>
+Platinum
+</option>
+
+<option value="Diamond"
+{% if task.vip_level=="Diamond" %}selected{% endif %}>
+Diamond
+</option>
+
+</select>
+
+<label>
+
+<input
+type="checkbox"
+name="active"
+{% if task.active %}checked{% endif %}>
+
+Active
+
+</label>
+
+<button type="submit">
+💾 Save Changes
+</button>
+</body>
+</html>

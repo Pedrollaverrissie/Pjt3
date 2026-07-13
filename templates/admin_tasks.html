@@ -126,6 +126,21 @@ Save Task
 
 {% for task in tasks %}
 
+<a href="{{ url_for('edit_task', task_id=task.id) }}">
+    <button
+        type="button"
+        style="
+            background:#1976d2;
+            color:white;
+            border:none;
+            padding:10px 18px;
+            border-radius:8px;
+            cursor:pointer;
+            margin-bottom:8px;">
+        ✏ Edit Task
+    </button>
+</a>
+
 <div class="task-row">
 
     <b>{{ task.title }}</b><br>
