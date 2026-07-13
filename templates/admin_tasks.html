@@ -119,15 +119,6 @@ Save Task
 </button>
 
 </form>
-<form action="{{ url_for('delete_task', task_id=task.id) }}"
-      method="POST"
-      onsubmit="return confirm('Delete this task permanently?');">
-
-    <button class="delete-btn" type="submit">
-        🗑 Delete
-    </button>
-
-</form>
 
 <hr>
 
@@ -137,29 +128,30 @@ Save Task
 
 <div class="task-row">
 
-<b>{{ task.title }}</b>
+    <b>{{ task.title }}</b><br>
 
-<br>
+    VIP: {{ task.vip_level }}<br>
 
-VIP: {{ task.vip_level }}
+    Reward: KES {{ task.reward }}<br>
 
-<br>
+    Status:
+    {{ "Active" if task.active else "Inactive" }}
 
-Reward:
-KES {{ task.reward }}
+    <br><br>
 
-<br>
+    <form action="{{ url_for('delete_task', task_id=task.id) }}"
+          method="POST"
+          onsubmit="return confirm('Delete this task permanently?');">
 
-Status:
+        <button class="delete-btn" type="submit">
+            🗑 Delete Task
+        </button>
 
-{{ "Active" if task.active else "Inactive" }}
+    </form>
 
 </div>
 
 {% endfor %}
-
-</div>
-
 </body>
 
 </html>
