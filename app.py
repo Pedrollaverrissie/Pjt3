@@ -2989,7 +2989,6 @@ def transaction_history():
         transactions=transactions
     )
 
-
 from datetime import datetime, timedelta
 
 payments = Payment.query.filter(
@@ -3015,6 +3014,7 @@ db.session.commit()
 
 print("Existing users upgraded.")
 
+    
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
