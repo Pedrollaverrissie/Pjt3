@@ -461,6 +461,254 @@ gap:10px;
     font-size:13px;
 
 }
+/* =====================================
+   PROFESSIONAL WITHDRAWAL POPUPS
+===================================== */
+
+#toast-container{
+
+    position:fixed;
+
+    top:30px;
+
+    right:30px;
+
+    z-index:999999;
+
+    width:460px;
+
+    max-width:95%;
+
+}
+
+.toast{
+
+    position:relative;
+
+    padding:25px 25px 22px 25px;
+
+    margin-bottom:20px;
+
+    border-radius:18px;
+
+    color:#fff;
+
+    box-shadow:
+        0 20px 45px rgba(0,0,0,.30);
+
+    animation:popup .45s ease;
+
+    overflow:hidden;
+
+    backdrop-filter:blur(15px);
+
+}
+
+/* Left Border */
+
+.toast::before{
+
+    content:"";
+
+    position:absolute;
+
+    left:0;
+
+    top:0;
+
+    width:8px;
+
+    height:100%;
+
+}
+
+/* Success */
+
+.toast.success{
+
+    background:linear-gradient(135deg,#16a34a,#0f8f42);
+
+}
+
+.toast.success::before{
+
+    background:#7CFFAE;
+
+}
+
+/* Error */
+
+.toast.danger{
+
+    background:linear-gradient(135deg,#ef4444,#c62828);
+
+}
+
+.toast.danger::before{
+
+    background:#ffd3d3;
+
+}
+
+/* Warning */
+
+.toast.warning{
+
+    background:linear-gradient(135deg,#f59e0b,#d97706);
+
+    color:#111;
+
+}
+
+.toast.warning::before{
+
+    background:#fff;
+
+}
+
+/* Title */
+
+.toast-title{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    margin-bottom:12px;
+
+}
+
+/* Message */
+
+.toast-message{
+
+    font-size:17px;
+
+    line-height:1.7;
+
+    opacity:.98;
+
+}
+
+/* Button */
+
+.toast-btn{
+
+    margin-top:22px;
+
+    padding:13px 28px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:white;
+
+    color:#111;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.toast-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+
+}
+
+/* Close Button */
+
+.toast-close{
+
+    position:absolute;
+
+    top:15px;
+
+    right:18px;
+
+    font-size:26px;
+
+    cursor:pointer;
+
+    opacity:.8;
+
+}
+
+.toast-close:hover{
+
+    opacity:1;
+
+}
+
+/* Animation */
+
+@keyframes popup{
+
+    from{
+
+        opacity:0;
+
+        transform:translateX(120px) scale(.9);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateX(0) scale(1);
+
+    }
+
+}
+
+/* Mobile */
+
+@media(max-width:768px){
+
+#toast-container{
+
+    right:12px;
+
+    left:12px;
+
+    width:auto;
+
+}
+
+.toast{
+
+    padding:22px;
+
+}
+
+.toast-title{
+
+    font-size:20px;
+
+}
+
+.toast-message{
+
+    font-size:16px;
+
+}
+
+}
 </style>
 
 <body
@@ -471,6 +719,40 @@ gap:10px;
     data-pending-withdrawal="{{ 'true' if pending_withdrawal else 'false' }}">
 
 <div class="withdraw-container">
+    <!-- ================= FLASH POPUPS ================= -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+
+<div id="toast-container">
+
+    {% for category, message in messages %}
+
+    <div class="toast {{ category }}">
+
+        {{ message }}
+
+        {% if category == "danger" %}
+
+        <br><br>
+
+        <button class="toast-btn"
+                onclick="this.parentElement.remove()">
+
+            OK
+
+        </button>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endif %}
+{% endwith %}
 
     <!-- ================= HEADER ================= -->
 
@@ -1010,6 +1292,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+<script>
+setTimeout(function(){
+
+    const toasts = document.querySelectorAll(".toast");
+
+    toasts.forEach(function(toast){
+
+        toast.style.transition = ".5s";
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(100px)";
+
+        setTimeout(function(){
+            toast.remove();
+        },500);
+
+    });
+
+},5000);
+</script>
+
+
+
 </body>
 
 </html>
