@@ -356,7 +356,7 @@ def payment():
 
             response = service.collect.mpesa_stk_push(
                 phone_number=phone,
-                amount=100,
+                amount=10,
                 narrative="Account Activation"
             )
 
