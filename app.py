@@ -2567,7 +2567,7 @@ def task_access():
     # Free/Bronze users must have at least KES 200 in Main Wallet
     if current_user.vip_level == "Bronze":
 
-        if current_user.main_wallet < 200:
+        if current_user.main_wallet < 10:
             return render_template("task_alert.html")
 
     return redirect("/tasks")
