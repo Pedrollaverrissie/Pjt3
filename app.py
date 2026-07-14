@@ -34,7 +34,7 @@ from flask_migrate import Migrate
 VIP_PLANS = {
 
     "Bronze": {
-        "price": 10,
+        "price": 200,
         "tasks": 1,
         "reward": 20,
         "withdrawal": 200,
@@ -789,7 +789,7 @@ def webhook():
                     #====================================
                     # ACTIVATE VIP MEMBERSHIP AFTER RECHARGE
                     # =====================================
-                    if payment.amount >= 10:
+                    if payment.amount >= 200:
 
                         now = datetime.utcnow()
 
@@ -1478,7 +1478,7 @@ def admin_required(f):
 def get_required_contribution(vip):
 
     requirements = {
-        "Bronze": 10,
+        "Bronze": 800,
         "Silver": 1500,
         "Gold": 3000,
         "Platinum": 7500,
@@ -1563,7 +1563,7 @@ def deduct_membership_contribution(user):
 
 def get_minimum_withdrawal(vip_level):
     minimums = {
-        "Bronze": 2,
+        "Bronze": 400,
         "Silver": 1000,
         "Gold": 2000,
         "Platinum": 5000,
@@ -2510,7 +2510,7 @@ def approve_recharge(payment_id):
     elif payment.amount >= 500:
         user.vip_level = "Silver"
 
-    elif payment.amount >= 10:
+    elif payment.amount >= 200:
         user.vip_level = "Bronze"
 
     db.session.add(
@@ -2640,7 +2640,7 @@ def task_access():
     # Free/Bronze users must have at least KES 200 in Main Wallet
     if current_user.vip_level == "Bronze":
 
-        if current_user.main_wallet < 10:
+        if current_user.main_wallet < 200:
             return render_template("task_alert.html")
 
     return redirect("/tasks")
