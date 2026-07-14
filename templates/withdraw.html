@@ -29,8 +29,8 @@
 
 body{
 
-    background:#eef4ff;
-    color:#222;
+    background:#020e28;
+    color:#f9f8f8;
 
 }
 
@@ -90,7 +90,7 @@ WALLET CARDS
 
 .wallet-card{
 
-    background:#fff;
+    background:#ffffff;
 
     border-radius:18px;
 
@@ -742,13 +742,12 @@ gap:10px;
 
 <div class="withdraw-container">
     <!-- ================= FLASH POPUPS ================= -->
-
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
 
 <div id="toast-container">
 
-{% for category, message in messages %}
+{% for category,message in messages %}
 
 <div class="toast {{ category }}">
 
@@ -757,17 +756,37 @@ gap:10px;
         &times;
     </span>
 
-    <div class="toast-title">
+    <div class="toast-header">
 
-        {% if category=="success" %}
-            ✅ Success
-        {% elif category=="danger" %}
-            ❌ Withdrawal Blocked
-        {% elif category=="warning" %}
-            ⚠ Warning
-        {% else %}
-            ℹ Notice
-        {% endif %}
+        <div class="toast-icon">
+
+            {% if category=="success" %}
+                <i class="fas fa-circle-check"></i>
+
+            {% elif category=="danger" %}
+                <i class="fas fa-triangle-exclamation"></i>
+
+            {% elif category=="warning" %}
+                <i class="fas fa-circle-info"></i>
+
+            {% endif %}
+
+        </div>
+
+        <div class="toast-title">
+
+            {% if category=="success" %}
+                Withdrawal Submitted
+
+            {% elif category=="danger" %}
+                Withdrawal Not Allowed
+
+            {% elif category=="warning" %}
+                Attention Required
+
+            {% endif %}
+
+        </div>
 
     </div>
 
@@ -777,12 +796,27 @@ gap:10px;
 
     </div>
 
-    <button class="toast-btn"
-            onclick="this.parentElement.remove()">
+    <div class="toast-actions">
 
-        OK
+        {% if category=="danger" %}
 
-    </button>
+            <button class="toast-btn toast-primary"
+                    onclick="window.location='/recharge'">
+
+                Recharge Now
+
+            </button>
+
+        {% endif %}
+
+        <button class="toast-btn toast-secondary"
+                onclick="this.closest('.toast').remove()">
+
+            OK
+
+        </button>
+
+    </div>
 
 </div>
 
