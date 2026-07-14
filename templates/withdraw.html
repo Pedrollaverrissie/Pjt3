@@ -726,28 +726,45 @@ gap:10px;
 
 <div id="toast-container">
 
-    {% for category, message in messages %}
+{% for category, message in messages %}
 
-    <div class="toast {{ category }}">
+<div class="toast {{ category }}">
 
-        {{ message }}
+    <span class="toast-close"
+          onclick="this.parentElement.remove()">
+        &times;
+    </span>
 
-        {% if category == "danger" %}
+    <div class="toast-title">
 
-        <br><br>
-
-        <button class="toast-btn"
-                onclick="this.parentElement.remove()">
-
-            OK
-
-        </button>
-
+        {% if category=="success" %}
+            ✅ Success
+        {% elif category=="danger" %}
+            ❌ Withdrawal Blocked
+        {% elif category=="warning" %}
+            ⚠ Warning
+        {% else %}
+            ℹ Notice
         {% endif %}
 
     </div>
 
-    {% endfor %}
+    <div class="toast-message">
+
+        {{ message }}
+
+    </div>
+
+    <button class="toast-btn"
+            onclick="this.parentElement.remove()">
+
+        OK
+
+    </button>
+
+</div>
+
+{% endfor %}
 
 </div>
 
