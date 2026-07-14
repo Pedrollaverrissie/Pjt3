@@ -34,7 +34,7 @@ from flask_migrate import Migrate
 VIP_PLANS = {
 
     "Bronze": {
-        "price": 200,
+        "price": 10,
         "tasks": 1,
         "reward": 20,
         "withdrawal": 200,
@@ -716,7 +716,7 @@ def webhook():
                     #====================================
                     # ACTIVATE VIP MEMBERSHIP AFTER RECHARGE
                     # =====================================
-                    if payment.amount >= 200:
+                    if payment.amount >= 10:
 
                         now = datetime.utcnow()
 
@@ -1405,7 +1405,7 @@ def admin_required(f):
 def get_required_contribution(vip):
 
     requirements = {
-        "Bronze": 200,
+        "Bronze": 10,
         "Silver": 1500,
         "Gold": 3000,
         "Platinum": 7500,
@@ -2437,7 +2437,7 @@ def approve_recharge(payment_id):
     elif payment.amount >= 500:
         user.vip_level = "Silver"
 
-    elif payment.amount >= 200:
+    elif payment.amount >= 10:
         user.vip_level = "Bronze"
 
     db.session.add(
