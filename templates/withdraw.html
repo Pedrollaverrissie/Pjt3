@@ -29,8 +29,8 @@
 
 body{
 
-    background:#1b1e24;
-    color:#f9f8f8;
+    background:#eef4ff;
+    color:#222;
 
 }
 
@@ -90,13 +90,13 @@ WALLET CARDS
 
 .wallet-card{
 
-    background:#ebef0026;
+    background:#fff;
 
     border-radius:18px;
 
     padding:25px;
 
-    box-shadow:0 10px 30px rgb(254, 254, 254);
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
 
     transition:.3s;
 
@@ -742,12 +742,13 @@ gap:10px;
 
 <div class="withdraw-container">
     <!-- ================= FLASH POPUPS ================= -->
+
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
 
 <div id="toast-container">
 
-{% for category,message in messages %}
+{% for category, message in messages %}
 
 <div class="toast {{ category }}">
 
@@ -756,37 +757,17 @@ gap:10px;
         &times;
     </span>
 
-    <div class="toast-header">
+    <div class="toast-title">
 
-        <div class="toast-icon">
-
-            {% if category=="success" %}
-                <i class="fas fa-circle-check"></i>
-
-            {% elif category=="danger" %}
-                <i class="fas fa-triangle-exclamation"></i>
-
-            {% elif category=="warning" %}
-                <i class="fas fa-circle-info"></i>
-
-            {% endif %}
-
-        </div>
-
-        <div class="toast-title">
-
-            {% if category=="success" %}
-                Withdrawal Submitted
-
-            {% elif category=="danger" %}
-                Withdrawal Not Allowed
-
-            {% elif category=="warning" %}
-                Attention Required
-
-            {% endif %}
-
-        </div>
+        {% if category=="success" %}
+            ✅ Success
+        {% elif category=="danger" %}
+            ❌ Withdrawal Blocked
+        {% elif category=="warning" %}
+            ⚠ Warning
+        {% else %}
+            ℹ Notice
+        {% endif %}
 
     </div>
 
@@ -796,27 +777,12 @@ gap:10px;
 
     </div>
 
-    <div class="toast-actions">
+    <button class="toast-btn"
+            onclick="this.parentElement.remove()">
 
-        {% if category=="danger" %}
+        OK
 
-            <button class="toast-btn toast-primary"
-                    onclick="window.location='/recharge'">
-
-                Recharge Now
-
-            </button>
-
-        {% endif %}
-
-        <button class="toast-btn toast-secondary"
-                onclick="this.closest('.toast').remove()">
-
-            OK
-
-        </button>
-
-    </div>
+    </button>
 
 </div>
 
