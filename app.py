@@ -716,7 +716,7 @@ def webhook():
                     #====================================
                     # ACTIVATE VIP MEMBERSHIP AFTER RECHARGE
                     # =====================================
-                    if payment.amount >= 200:
+                    if payment.amount >= 10:
 
                         now = datetime.utcnow()
 
