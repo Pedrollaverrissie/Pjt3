@@ -34,7 +34,7 @@ from flask_migrate import Migrate
 VIP_PLANS = {
 
     "Bronze": {
-        "price": 200,
+        "price": 10,
         "tasks": 1,
         "reward": 20,
         "withdrawal": 200,
