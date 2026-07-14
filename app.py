@@ -712,9 +712,9 @@ def webhook():
                         payment.amount,
                         "Wallet Recharge"
                     )
-                    # --------------------------------
-                    # Grant VIP Membership
-                    # --------------------------------
+                    # ==========================
+                    # Activate Bronze VIP
+                    # ==========================
 
                     if payment.amount >= 200:
 
@@ -729,6 +729,16 @@ def webhook():
                         user.last_task_date = None
 
                         user.contribution_deducted = False
+
+                        db.session.add(
+                            Notification(
+                                user_id=user.id,
+                                title="Bronze VIP Activated",
+                                message="Congratulations! Your Bronze VIP membership has been activated for 30 days. You can now access tasks and become eligible for withdrawals once all withdrawal requirements are met."
+                            )
+                        )
+
+                        
 
                     # ==========================
                     # Give 10% referral commission
