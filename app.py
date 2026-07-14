@@ -676,12 +676,85 @@ def webhook():
     print("WEBHOOK RECEIVED:")
     print(data)
 
+    topic = data.get("topic", "")
+    status = data.get("status", "").upper()
+    tracking_id = data.get("tracking_id")
+
+    print("TOPIC:", topic)
+    print("STATUS:", status)
+    print("TRACKING:", tracking_id)
+
+    # ===================================
+    # SEND MONEY (WITHDRAWAL) WEBHOOK
+    # ===================================
+
+    if topic == "send_money_event":
+
+        withdrawal = Withdrawal.query.filter_by(
+            intasend_transaction_id=tracking_id
+        ).first()
+
+        print("Withdrawal found:", withdrawal)
+
+        if withdrawal:
+
+            user = User.query.get(withdrawal.user_id)
+
+            # Successful payment
+            if status in [
+                "COMPLETED",
+                "SUCCESSFUL",
+                "PAID"
+            ]:
+
+                withdrawal.status = "Paid"
+                withdrawal.processed_at = datetime.utcnow()
+
+                user.main_wallet -= withdrawal.amount
+                user.withdrawn += withdrawal.amount
+
+                db.session.add(
+                    Transaction(
+                        user_id=user.id,
+                        transaction_type="withdrawal",
+                        wallet="main",
+                        amount=-withdrawal.amount,
+                        description="Automatic Withdrawal"
+                    )
+                )
+
+                db.session.add(
+                    Notification(
+                        user_id=user.id,
+                        title="Withdrawal Successful",
+                        message=f"KES {withdrawal.amount:.2f} has been sent to your M-Pesa."
+                    )
+                )
+
+                db.session.commit()
+
+                return jsonify({"status": "received"}), 200
+
+
+            elif status == "FAILED":
+
+                withdrawal.status = "Failed"
+
+                db.session.commit()
+
+                return jsonify({"status": "received"}), 200
+
+        return jsonify({"status": "received"}), 200
+
+
     invoice_id = data.get("invoice_id")
     state = data.get("state", "").upper()
     tracking_id = data.get("tracking_id")
 
+    print("WEBHOOK TRACKING ID:", tracking_id)
     print("INVOICE:", invoice_id)
     print("STATE:", state)
+
 
     payment = Payment.query.filter_by(
         transaction_code=invoice_id
@@ -2822,6 +2895,7 @@ def withdraw():
         "success"
     )
 
+    
     return redirect("/dashboard")
 
 
