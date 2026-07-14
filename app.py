@@ -1405,7 +1405,7 @@ def admin_required(f):
 def get_required_contribution(vip):
 
     requirements = {
-        "Bronze": 800,
+        "Bronze": 200,
         "Silver": 1500,
         "Gold": 3000,
         "Platinum": 7500,
@@ -1490,7 +1490,7 @@ def deduct_membership_contribution(user):
 
 def get_minimum_withdrawal(vip_level):
     minimums = {
-        "Bronze": 400,
+        "Bronze": 100,
         "Silver": 1000,
         "Gold": 2000,
         "Platinum": 5000,
@@ -2567,7 +2567,7 @@ def task_access():
     # Free/Bronze users must have at least KES 200 in Main Wallet
     if current_user.vip_level == "Bronze":
 
-        if current_user.main_wallet < 200:
+        if current_user.main_wallet < 10:
             return render_template("task_alert.html")
 
     return redirect("/tasks")
