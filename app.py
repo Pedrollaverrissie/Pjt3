@@ -439,14 +439,15 @@ def dashboard():
     # Automatically expire VIP
     # -------------------------------
     if (
-        current_user.vip_level != "Bronze"
+        current_user.vip_level != "Free"
         and current_user.vip_expires_at
         and current_user.vip_expires_at <= datetime.utcnow()
     ):
 
-        current_user.vip_level = "Bronze"
+        current_user.vip_level = "Free"
         current_user.vip_started_at = None
         current_user.vip_expires_at = None
+
 
         db.session.add(
             Notification(
@@ -2989,30 +2990,7 @@ def transaction_history():
         transactions=transactions
     )
 
-from datetime import datetime, timedelta
 
-payments = Payment.query.filter(
-    Payment.payment_type == "recharge",
-    Payment.status == "approved",
-    Payment.amount >= 200
-).all()
-
-for payment in payments:
-
-    user = User.query.get(payment.user_id)
-
-    if user.vip_level is None or user.vip_level == "Free":
-
-        user.vip_level = "Bronze"
-        user.vip_started_at = datetime.utcnow()
-        user.vip_expires_at = datetime.utcnow() + timedelta(days=30)
-        user.tasks_completed = 0
-        user.last_task_date = None
-        user.contribution_deducted = False
-
-db.session.commit()
-
-print("Existing users upgraded.")
 
     
 #======================================================
