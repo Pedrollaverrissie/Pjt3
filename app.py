@@ -2988,6 +2988,33 @@ def transaction_history():
         "transactions.html",
         transactions=transactions
     )
+
+
+from datetime import datetime, timedelta
+
+payments = Payment.query.filter(
+    Payment.payment_type == "recharge",
+    Payment.status == "approved",
+    Payment.amount >= 200
+).all()
+
+for payment in payments:
+
+    user = User.query.get(payment.user_id)
+
+    if user.vip_level is None or user.vip_level == "Free":
+
+        user.vip_level = "Bronze"
+        user.vip_started_at = datetime.utcnow()
+        user.vip_expires_at = datetime.utcnow() + timedelta(days=30)
+        user.tasks_completed = 0
+        user.last_task_date = None
+        user.contribution_deducted = False
+
+db.session.commit()
+
+print("Existing users upgraded.")
+
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
