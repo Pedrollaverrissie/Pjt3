@@ -712,15 +712,15 @@ def webhook():
                         payment.amount,
                         "Wallet Recharge"
                     )
-                    # ==========================
-                    # Activate Bronze VIP
-                    # ==========================
-
+                    #====================================
+                    # ACTIVATE VIP MEMBERSHIP AFTER RECHARGE
+                    # =====================================
                     if payment.amount >= 200:
 
-                        user.vip_level = "Bronze"
-
                         now = datetime.utcnow()
+
+                        # Activate membership
+                        user.vip_level = "Bronze"
 
                         user.vip_started_at = now
                         user.vip_expires_at = now + timedelta(days=30)
@@ -728,13 +728,13 @@ def webhook():
                         user.tasks_completed = 0
                         user.last_task_date = None
 
-                        user.contribution_deducted = False
+                        user.account_active = True
 
                         db.session.add(
                             Notification(
                                 user_id=user.id,
-                                title="Bronze VIP Activated",
-                                message="Congratulations! Your Bronze VIP membership has been activated for 30 days. You can now access tasks and become eligible for withdrawals once all withdrawal requirements are met."
+                                title="VIP Activated",
+                                message="Congratulations! Your Bronze VIP Membership has been activated for 30 days. You can now access tasks and become eligible for withdrawals after meeting the contribution requirement."
                             )
                         )
 
@@ -2435,6 +2435,9 @@ def approve_recharge(payment_id):
 
     elif payment.amount >= 500:
         user.vip_level = "Silver"
+
+    elif payment.amount >= 200:
+        user.vip_level = "Bronze"
 
     db.session.add(
     Notification(
