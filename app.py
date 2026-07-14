@@ -712,7 +712,23 @@ def webhook():
                         payment.amount,
                         "Wallet Recharge"
                     )
-               
+                    # --------------------------------
+                    # Grant VIP Membership
+                    # --------------------------------
+
+                    if payment.amount >= 200:
+
+                        user.vip_level = "Bronze"
+
+                        now = datetime.utcnow()
+
+                        user.vip_started_at = now
+                        user.vip_expires_at = now + timedelta(days=30)
+
+                        user.tasks_completed = 0
+                        user.last_task_date = None
+
+                        user.contribution_deducted = False
 
                     # ==========================
                     # Give 10% referral commission
