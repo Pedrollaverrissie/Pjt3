@@ -568,7 +568,6 @@
     </div>
 
 </div>
-
 {% with messages = get_flashed_messages(with_categories=true) %}
 {% if messages %}
 
@@ -576,22 +575,26 @@
 
     {% for category, message in messages %}
 
-    <div class="toast {{ category }}">
+        {% if category == "vip_success" or category == "vip_error" %}
 
-        {{ message }}
+        <div class="toast {{ 'success' if category == 'vip_success' else 'danger' }}">
 
-        {% if category == "danger" %}
-        <br><br>
+            {{ message }}
 
-        <a href="{{ url_for('recharge') }}">
-            <button class="toast-btn">
-                Recharge Now
-            </button>
-        </a>
+            {% if category == "vip_error" %}
+            <br><br>
+
+            <a href="{{ url_for('recharge') }}">
+                <button class="toast-btn">
+                    Recharge Now
+                </button>
+            </a>
+
+            {% endif %}
+
+        </div>
 
         {% endif %}
-
-    </div>
 
     {% endfor %}
 
