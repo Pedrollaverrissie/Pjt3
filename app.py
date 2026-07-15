@@ -1632,7 +1632,7 @@ RENEWAL_WINDOW_DAYS = 2
 def get_minimum_recharge(vip_level):
 
     recharge_requirements = {
-        "Bronze": 200,
+        "Bronze": 10,
         "Silver": 500,
         "Gold": 1000,
         "Platinum": 2500,
