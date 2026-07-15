@@ -1128,8 +1128,13 @@ h3{
     border-radius: 50%;
      height: 40px;
 }
-.wallets-img{
+.wallets-img1{
     width: 40px;
+    border-radius: 50%;
+}
+.withdrawable-img{
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
 }
 
