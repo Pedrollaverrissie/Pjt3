@@ -789,12 +789,13 @@ def webhook():
                     #====================================
                     # ACTIVATE VIP MEMBERSHIP AFTER RECHARGE
                     # =====================================
-                    if payment.amount >= 200:
+                    if payment.amount >= 10:
 
                         now = datetime.utcnow()
 
                         # Activate membership
                         user.vip_level = "Bronze"
+                        user.vip_locked_amount = payment.amount
 
                         user.vip_started_at = now
                         user.vip_expires_at = now + timedelta(days=30)
@@ -2809,11 +2810,20 @@ def withdraw():
     # ----------------------------
     # Wallet balance
     # ----------------------------
-    if amount > current_user.main_wallet:
+    withdrawable_balance = (
+        current_user.main_wallet
+        - current_user.vip_locked_amount
+    )
+    
+    withdrawable_balance = max(0, withdrawable_balance)
+
+    if amount > withdrawable_balance:
+
         flash(
-            "Insufficient Main Wallet balance.",
+            "Insufficient withdrawable balance.",
             "danger"
         )
+
         return redirect("/withdraw")
 
     # ----------------------------

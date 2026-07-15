@@ -111,7 +111,7 @@ class User(UserMixin, db.Model):
     default=False
     )
     recharge_balance = db.Column(db.Float, default=0)
-
+    vip_locked_amount = db.Column(db.Float, default=0)
     
 
 class Payment(db.Model):
