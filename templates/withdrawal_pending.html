@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Processing Withdrawal</title>
+
+    <style>
+
+        body{
+            margin:0;
+            font-family:Arial;
+            background:#0f172a;
+            color:white;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+        }
+
+        .box{
+            text-align:center;
+        }
+
+        .loader{
+            width:70px;
+            height:70px;
+            border:8px solid #ddd;
+            border-top:8px solid #00c853;
+            border-radius:50%;
+            animation:spin 1s linear infinite;
+            margin:auto;
+        }
+
+        @keyframes spin{
+            100%{
+                transform:rotate(360deg);
+            }
+        }
+
+        h2{
+            margin-top:25px;
+        }
+
+        p{
+            color:#ddd;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+    <div class="loader"></div>
+
+    <h2>Processing Withdrawal...</h2>
+
+    <p>
+        Please wait while we confirm your withdrawal.
+        Do not close this page.
+    </p>
+
+</div>
+
+<script>
+
+function checkWithdrawal(){
+
+    fetch("/check-withdrawal/{{ tracking_id }}")
+
+    .then(response => response.json())
+
+    .then(data => {
+
+        console.log(data);
+
+        if(data.status === "Paid"){
+
+            window.location.href="/dashboard";
+
+        }
+
+        else if(data.status === "Failed"){
+
+            alert("Your withdrawal failed.");
+
+            window.location.href="/withdraw";
+
+        }
+
+    })
+
+    .catch(error=>{
+
+        console.log(error);
+
+    });
+
+}
+
+setInterval(checkWithdrawal,3000);
+
+</script>
+
+</body>
+</html>

@@ -2913,15 +2913,14 @@ def withdraw():
 
     db.session.commit()
 
-    flash(
-        "Withdrawal submitted successfully.",
-        "success"
+    tracking_id = withdrawal.intasend_transaction_id
+
+    return render_template(
+        "withdraw_pending.html",
+        tracking_id=tracking_id
     )
 
-    
-    return redirect("/dashboard")
-
-
+#-----------stauts check route
 #----------withdrawal request route------------------
 @app.route("/request-withdrawal", methods=["POST"])
 @login_required
@@ -2996,7 +2995,25 @@ def request_withdrawal():
         "success": True,
         "message": "Withdrawal request submitted successfully."
     })
+#--------------stuatus check withdrawal route------------
+@app.route("/check-withdrawal/<tracking_id>")
+@login_required
+@active_account_required
+def check_withdrawal(tracking_id):
 
+    withdrawal = Withdrawal.query.filter_by(
+        intasend_transaction_id=tracking_id,
+        user_id=current_user.id
+    ).first()
+
+    if not withdrawal:
+        return jsonify({
+            "status": "NOT_FOUND"
+        })
+
+    return jsonify({
+        "status": withdrawal.status
+    })
 # ------------------ ADMIN WITHDRAWALS ------------------
 @app.route("/admin/withdrawals")
 @login_required
