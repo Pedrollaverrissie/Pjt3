@@ -789,13 +789,21 @@ def webhook():
                     # Amount that must remain locked for the current VIP plan
                     required_lock = get_minimum_recharge(user.vip_level)
 
-                    # Update the locked amount
-                    user.vip_locked_amount = required_lock
+                    # Amount still needed to satisfy the VIP lock
+                    remaining_lock = max(
+                        required_lock - user.vip_locked_amount,
+                        0
+                    )
 
-                    # Anything above the required recharge becomes withdrawable
-                    extra = max(payment.amount - required_lock, 0)
+                    # Lock only what is still required
+                    locked_now = min(payment.amount, remaining_lock)
 
-                    user.withdrawable_wallet += extra
+                    user.vip_locked_amount += locked_now
+
+                    # Everything else becomes withdrawable
+                    withdrawable_now = payment.amount - locked_now
+
+                    user.withdrawable_wallet += withdrawable_now
 
                     # Record the recharge transaction
                     db.session.add(
