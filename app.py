@@ -780,13 +780,36 @@ def webhook():
 
                 if user:
                     
+                    # Keep record of total recharges
                     user.recharge_balance += payment.amount
 
-                    add_to_main_wallet(
-                        user,
-                        payment.amount,
-                        "Wallet Recharge"
-                    )
+                    # Credit the user's total balance
+                    user.main_wallet += payment.amount
+
+                    # Amount that must remain locked for the current VIP plan
+                    required_lock = get_minimum_recharge(user.vip_level)
+
+                    # Update the locked amount
+                    user.vip_locked_amount = required_lock
+
+                    # Anything above the required recharge becomes withdrawable
+                    extra = max(payment.amount - required_lock, 0)
+
+                    user.withdrawable_wallet += extra
+
+                    # Record the recharge transaction
+                    db.session.add(
+                        Transaction(
+                            user_id=user.id,
+                            transaction_type="recharge",
+                            wallet="main",
+                            amount=payment.amount,
+                            description="Wallet Recharge"
+                        )
+                    ) 
+
+                    # Keep track of the locked amount
+                    user.vip_locked_amount = required_lock
                     #====================================
                     # ACTIVATE VIP MEMBERSHIP AFTER RECHARGE
                     # =====================================
@@ -1596,6 +1619,21 @@ def get_minimum_withdrawal(vip_level):
 from datetime import datetime, timedelta
 
 RENEWAL_WINDOW_DAYS = 2
+
+
+def get_minimum_recharge(vip_level):
+
+    recharge_requirements = {
+        "Bronze": 200,
+        "Silver": 500,
+        "Gold": 1000,
+        "Platinum": 2500,
+        "Diamond": 5000,
+        "VIP": 10000
+    }
+
+    return recharge_requirements.get(vip_level, 0)
+
 
 
 def get_vip_price(vip_level):
