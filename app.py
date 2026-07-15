@@ -786,24 +786,8 @@ def webhook():
                     # Credit the user's total balance
                     user.main_wallet += payment.amount
 
-                    # Amount that must remain locked for the current VIP plan
-                    required_lock = get_minimum_recharge(user.vip_level)
-
-                    # Amount still needed to satisfy the VIP lock
-                    remaining_lock = max(
-                        required_lock - user.vip_locked_amount,
-                        0
-                    )
-
-                    # Lock only what is still required
-                    locked_now = min(payment.amount, remaining_lock)
-
-                    user.vip_locked_amount += locked_now
-
-                    # Everything else becomes withdrawable
-                    withdrawable_now = payment.amount - locked_now
-
-                    user.withdrawable_wallet += withdrawable_now
+                    # Recalculate locked and withdrawable balances
+                    update_vip_lock(user)
 
                     # Record the recharge transaction
                     db.session.add(
@@ -814,8 +798,7 @@ def webhook():
                             amount=payment.amount,
                             description="Wallet Recharge"
                         )
-                    ) 
-
+                    )
                     # Keep track of the locked amount
                     user.vip_locked_amount = required_lock
                     #====================================
@@ -942,9 +925,17 @@ def webhook():
                     withdrawal.status = "Paid"
                     withdrawal.processed_at = datetime.utcnow()
 
-                    # Remove from wallets
+                    # Deduct ONLY the withdrawable funds
                     user.main_wallet -= withdrawal.amount
                     user.withdrawable_wallet -= withdrawal.amount
+
+                    user.withdrawn += withdrawal.amount
+
+                    # Safety check
+                    user.withdrawable_wallet = max(
+                        user.withdrawable_wallet,
+                        0
+                    )
 
                     # Prevent negative values
                     if user.main_wallet < 0:
@@ -1637,10 +1628,30 @@ def get_minimum_recharge(vip_level):
         "Gold": 1000,
         "Platinum": 2500,
         "Diamond": 5000,
-        "VIP": 10000
+        
     }
 
     return recharge_requirements.get(vip_level, 0)
+
+
+
+def update_vip_lock(user):
+
+    required_lock = get_minimum_recharge(user.vip_level)
+
+    # Lock only up to the required amount
+    user.vip_locked_amount = min(
+        required_lock,
+        user.main_wallet
+    )
+
+    # Everything else becomes withdrawable
+    user.withdrawable_wallet = max(
+        user.main_wallet - user.vip_locked_amount,
+        0
+    )yuerah
+
+
 
 
 
