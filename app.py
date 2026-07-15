@@ -1649,7 +1649,7 @@ def update_vip_lock(user):
     user.withdrawable_wallet = max(
         user.main_wallet - user.vip_locked_amount,
         0
-    )yuerah
+    )
 
 
 
