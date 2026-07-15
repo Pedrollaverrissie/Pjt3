@@ -1606,7 +1606,7 @@ def deduct_membership_contribution(user):
 
 def get_minimum_withdrawal(vip_level):
     minimums = {
-        "Bronze": 10,
+        "Bronze": 5,
         "Silver": 1000,
         "Gold": 2000,
         "Platinum": 5000,
