@@ -1537,6 +1537,15 @@ def can_withdraw(user):
             False,
             f"You need KES {remaining:.2f} more contribution to unlock withdrawals."
         )
+    
+        # Withdrawable balance
+    minimum = get_minimum_withdrawal(user.vip_level)
+
+    if user.withdrawable_wallet < minimum:
+        return (
+            False,
+            f"You need at least KES {minimum:.2f} in your withdrawable wallet."
+        )
 
     return True, "Withdrawal unlocked."
 
