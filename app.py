@@ -484,6 +484,7 @@ def dashboard():
 
         # Wallets
         main_wallet=current_user.main_wallet,
+        withdrawable_wallet=current_user.withdrawable_wallet,
         task_wallet=current_user.task_wallet,
         team_wallet=current_user.team_wallet,
         withdrawn=current_user.withdrawn,
@@ -840,6 +841,7 @@ def webhook():
 
                             referrer.commissions += referral_bonus
 
+                            referrer.withdrawable_wallet += referral_bonus
                             # ------------------------------
                             # Contribution Progress
                             # ------------------------------
@@ -909,8 +911,16 @@ def webhook():
                     withdrawal.status = "Paid"
                     withdrawal.processed_at = datetime.utcnow()
 
-                    # Deduct wallet NOW
+                    # Remove from wallets
                     user.main_wallet -= withdrawal.amount
+                    user.withdrawable_wallet -= withdrawal.amount
+
+                    # Prevent negative values
+                    if user.main_wallet < 0:
+                        user.main_wallet = 0
+
+                    if user.withdrawable_wallet < 0:
+                        user.withdrawable_wallet = 0
 
                     user.withdrawn += withdrawal.amount
 
@@ -1423,7 +1433,8 @@ def add_to_task_wallet(user, amount, description):
     user.task_wallet += amount
 
     user.main_wallet += amount
-    
+
+    user.withdrawable_wallet += amount
 
     transaction = Transaction(
         user_id=user.id,
@@ -2777,7 +2788,7 @@ def withdraw():
             minimum_withdrawal=minimum_withdrawal,
             can_withdraw=(
                 current_user.account_active
-                and current_user.main_wallet >= minimum_withdrawal
+                and current_user.withdrawable_wallet >= minimum_withdrawal
                 and current_user.referral_contribution_balance >= required_contribution
                 and pending_withdrawal is None
             )
@@ -2808,16 +2819,9 @@ def withdraw():
         return redirect("/withdraw")
 
     # ----------------------------
-    # Wallet balance
+    # Withdrawable balance
     # ----------------------------
-    withdrawable_balance = (
-        current_user.main_wallet
-        - current_user.vip_locked_amount
-    )
-    
-    withdrawable_balance = max(0, withdrawable_balance)
-
-    if amount > withdrawable_balance:
+    if amount > current_user.withdrawable_wallet:
 
         flash(
             "Insufficient withdrawable balance.",

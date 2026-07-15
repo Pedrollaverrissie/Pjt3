@@ -112,6 +112,10 @@ class User(UserMixin, db.Model):
     )
     recharge_balance = db.Column(db.Float, default=0)
     vip_locked_amount = db.Column(db.Float, default=0)
+    withdrawable_wallet = db.Column(
+    db.Float,
+    default=0
+    )
     
 
 class Payment(db.Model):
