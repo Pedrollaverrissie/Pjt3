@@ -2971,7 +2971,12 @@ def withdraw():
     db.session.commit()
 
     tracking_id = withdrawal.intasend_transaction_id
-
+    print("VIP:", current_user.vip_level)
+    print("Withdrawable Wallet:", current_user.withdrawable_wallet)
+    print("Minimum Withdrawal:", minimum_withdrawal)
+    print("Contribution:", current_user.referral_contribution_balance)
+    print("Required:", required_contribution)
+    print("Account Active:", current_user.account_active)
     return render_template(
         "withdraw_pending.html",
         tracking_id=tracking_id
