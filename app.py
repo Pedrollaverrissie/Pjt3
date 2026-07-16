@@ -1639,18 +1639,23 @@ def update_vip_lock(user):
 
     required_lock = get_minimum_recharge(user.vip_level)
 
-    # Lock only up to the required amount
+    # Lock only the recharge money required by the VIP
     user.vip_locked_amount = min(
         required_lock,
-        user.main_wallet
+        user.recharge_balance
     )
 
-    # Everything else becomes withdrawable
-    user.withdrawable_wallet = max(
-        user.main_wallet - user.vip_locked_amount,
+    # Extra recharge beyond the lock
+    extra_recharge = max(
+        user.recharge_balance - user.vip_locked_amount,
         0
     )
 
+    # Task earnings are always withdrawable
+    user.withdrawable_wallet = (
+        extra_recharge +
+        user.task_wallet
+    )
 
 
 
