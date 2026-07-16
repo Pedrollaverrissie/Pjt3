@@ -674,8 +674,10 @@ def webhook():
 
     data = request.get_json()
 
-    print("WEBHOOK RECEIVED:")
+    print("=" * 60)
+    print("WEBHOOK RECEIVED")
     print(data)
+    print("=" * 60)
 
     topic = data.get("topic", "")
     status = data.get("status", "").upper()
@@ -685,10 +687,9 @@ def webhook():
     print("STATUS:", status)
     print("TRACKING:", tracking_id)
 
-    # ===================================
-    # SEND MONEY (WITHDRAWAL) WEBHOOK
-    # ===================================
-
+    # ====================================================
+    # WITHDRAWAL WEBHOOK (B2C SEND MONEY)
+    # ====================================================
     if topic == "send_money_event":
 
         withdrawal = Withdrawal.query.filter_by(
@@ -697,53 +698,95 @@ def webhook():
 
         print("Withdrawal found:", withdrawal)
 
-        if withdrawal:
+        if not withdrawal:
+            return jsonify({"status": "received"}), 200
 
-            user = User.query.get(withdrawal.user_id)
+        user = User.query.get(withdrawal.user_id)
 
-            # Successful payment
-            if status in [
-                "COMPLETED",
-                "SUCCESSFUL",
-                "PAID"
-            ]:
+        # ----------------------------
+        # SUCCESSFUL WITHDRAWAL
+        # ----------------------------
+        if status in [
+            "COMPLETED",
+            "SUCCESSFUL",
+            "PAID"
+        ]:
 
-                withdrawal.status = "Paid"
-                withdrawal.processed_at = datetime.utcnow()
+            withdrawal.status = "Paid"
+            withdrawal.processed_at = datetime.utcnow()
 
-                user.main_wallet -= withdrawal.amount
-                user.withdrawn += withdrawal.amount
+            # Deduct wallets
+            user.main_wallet -= withdrawal.amount
+            user.withdrawable_wallet -= withdrawal.amount
+
+            # Prevent negatives
+            user.main_wallet = max(user.main_wallet, 0)
+            user.withdrawable_wallet = max(
+                user.withdrawable_wallet,
+                0
+            )
+
+            user.withdrawn += withdrawal.amount
+
+            # Consume contribution only once
+            if not user.contribution_deducted:
+
+                required = get_required_contribution(
+                    user.vip_level
+                )
+
+                user.referral_contribution_balance -= required
+
+                user.referral_contribution_balance = max(
+                    user.referral_contribution_balance,
+                    0
+                )
+
+                user.contribution_deducted = True
 
                 db.session.add(
-                    Transaction(
+                    ContributionHistory(
                         user_id=user.id,
-                        transaction_type="withdrawal",
-                        wallet="main",
-                        amount=-withdrawal.amount,
-                        description="Automatic Withdrawal"
+                        referred_user_id=user.id,
+                        amount=-required,
+                        description=f"{user.vip_level} contribution used"
                     )
                 )
 
-                db.session.add(
-                    Notification(
-                        user_id=user.id,
-                        title="Withdrawal Successful",
-                        message=f"KES {withdrawal.amount:.2f} has been sent to your M-Pesa."
-                    )
+            db.session.add(
+                Transaction(
+                    user_id=user.id,
+                    transaction_type="withdrawal",
+                    wallet="main",
+                    amount=-withdrawal.amount,
+                    description="Automatic Withdrawal"
                 )
+            )
 
-                db.session.commit()
+            db.session.add(
+                Notification(
+                    user_id=user.id,
+                    title="Withdrawal Successful",
+                    message=f"KES {withdrawal.amount:.2f} has been sent to your M-Pesa."
+                )
+            )
 
-                return jsonify({"status": "received"}), 200
+        # ----------------------------
+        # FAILED
+        # ----------------------------
+        elif status == "FAILED":
 
+            withdrawal.status = "Failed"
 
-            elif status == "FAILED":
+            db.session.add(
+                Notification(
+                    user_id=user.id,
+                    title="Withdrawal Failed",
+                    message="Your withdrawal could not be processed."
+                )
+            )
 
-                withdrawal.status = "Failed"
-
-                db.session.commit()
-
-                return jsonify({"status": "received"}), 200
+        db.session.commit()
 
         return jsonify({"status": "received"}), 200
 
@@ -778,275 +821,198 @@ def webhook():
 
                 user = User.query.get(payment.user_id)
 
-                if user:
-                    
-                    # Keep record of total recharges
-                    user.recharge_balance += payment.amount
+                if not user:
+                    return jsonify({"status": "received"}), 200
 
-                    # Credit the user's total balance
-                    user.main_wallet += payment.amount
+                # -----------------------------
+                # Credit Recharge
+                # -----------------------------
+                user.recharge_balance += payment.amount
+                user.main_wallet += payment.amount
 
-                    # Recalculate locked and withdrawable balances
-                    update_vip_lock(user)
+                # ---------------------------------
+                # ACTIVATE / RENEW VIP MEMBERSHIP
+                # ---------------------------------
 
-                    # Record the recharge transaction
-                    db.session.add(
-                        Transaction(
-                            user_id=user.id,
-                            transaction_type="recharge",
-                            wallet="main",
-                            amount=payment.amount,
-                            description="Wallet Recharge"
+                now = datetime.utcnow()
+
+                # New user (no VIP yet)
+                if not user.vip_level:
+
+                    if payment.amount >= 5000:
+                        user.vip_level = "Diamond"
+
+                    elif payment.amount >= 2500:
+                        user.vip_level = "Platinum"
+
+                    elif payment.amount >= 1000:
+                        user.vip_level = "Gold"
+
+                    elif payment.amount >= 500:
+                        user.vip_level = "Silver"
+
+                    elif payment.amount >= 10:
+                        user.vip_level = "Bronze"
+
+                # Existing member upgrading
+                else:
+
+                    if payment.amount >= 5000:
+                        user.vip_level = "Diamond"
+
+                    elif payment.amount >= 2500 and user.vip_level in ["Bronze", "Silver", "Gold"]:
+                        user.vip_level = "Platinum"
+
+                    elif payment.amount >= 1000 and user.vip_level in ["Bronze", "Silver"]:
+                        user.vip_level = "Gold"
+
+                    elif payment.amount >= 500 and user.vip_level == "Bronze":
+                        user.vip_level = "Silver"
+
+                # Renew membership
+                user.account_active = True
+                user.vip_started_at = now
+                user.vip_expires_at = now + timedelta(days=30)
+
+                user.tasks_completed = 0
+                user.last_task_date = None
+
+                # Allow contribution deduction again
+                user.contribution_deducted = False
+
+                # Recalculate locked and withdrawable wallets
+                update_vip_lock(user)
+
+                # -----------------------------
+                # Recharge Transaction
+                # -----------------------------
+                db.session.add(
+                    Transaction(
+                        user_id=user.id,
+                        transaction_type="recharge",
+                        wallet="main",
+                        amount=payment.amount,
+                        description="Wallet Recharge"
+                    )
+                )
+
+                # -----------------------------
+                # VIP Notification
+                # -----------------------------
+                db.session.add(
+                    Notification(
+                        user_id=user.id,
+                        title="Recharge Successful",
+                        message=(
+                            f"Recharge of KES {payment.amount:.2f} received.\n"
+                            f"Your {user.vip_level} membership is active."
                         )
                     )
-                    # Keep track of the locked amount
-                    user.vip_locked_amount = required_lock
-                    #====================================
-                    # ACTIVATE VIP MEMBERSHIP AFTER RECHARGE
-                    # =====================================
-                    if payment.amount >= 10:
+                )
 
-                        now = datetime.utcnow()
+                # =============================
+                # REFERRAL COMMISSION
+                # =============================
+                if user.referred_by:
 
-                        # Activate membership
-                        user.vip_level = "Bronze"
-                        user.vip_locked_amount = payment.amount
+                    referrer = User.query.filter_by(
+                        referral_code=user.referred_by
+                    ).first()
 
-                        user.vip_started_at = now
-                        user.vip_expires_at = now + timedelta(days=30)
+                    if referrer:
 
-                        user.tasks_completed = 0
-                        user.last_task_date = None
+                        referral_bonus = payment.amount * 0.10
 
-                        user.account_active = True
+                        add_to_main_wallet(
+                            referrer,
+                            referral_bonus,
+                            f"10% Referral Commission from {user.username}",
+                            transaction_type="referral_commission"
+                        )
+
+                        referrer.commissions += referral_bonus
+
+                        add_contribution(
+                            referrer,
+                            user,
+                            payment.amount,
+                            f"{user.username} recharged KES {payment.amount:.2f}"
+                        )
+
+                        update_withdrawal_status(referrer)
 
                         db.session.add(
                             Notification(
-                                user_id=user.id,
-                                title="VIP Activated",
-                                message="Congratulations! Your Bronze VIP Membership has been activated for 30 days. You can now access tasks and become eligible for withdrawals after meeting the contribution requirement."
-                            )
-                        )
-
-                        
-
-                    # ==========================
-                    # Give 10% referral commission
-                    # ==========================
-                    if user.referred_by:
-
-                        referrer = User.query.filter_by(
-                            referral_code=user.referred_by
-                        ).first()
-
-                        if referrer:
-
-                            referral_bonus = payment.amount * 0.10
-
-                            # ------------------------------
-                            # Referral Commission (10%)
-                            # ------------------------------
-                            add_to_main_wallet(
-                                referrer,
-                                referral_bonus,
-                                f"10% Referral commission from {user.username}'s recharge",
-                                transaction_type="referral_commission"
-                            )
-
-                            referrer.commissions += referral_bonus
-
-                            referrer.withdrawable_wallet += referral_bonus
-                            # ------------------------------
-                            # Contribution Progress
-                            # ------------------------------
-                            add_contribution(
-                                referrer,
-                                user,
-                                payment.amount,
-                                f"{user.username} recharged KES {payment.amount:.2f}"
-                            )
-
-                            # ------------------------------
-                            # Notification
-                            # ------------------------------
-                            notification = Notification(
                                 user_id=referrer.id,
                                 title="Referral Commission",
                                 message=(
-                                    f"You earned KES {referral_bonus:.2f} commission.\n"
-                                    f"Contribution Progress +KES {payment.amount:.2f}."
+                                    f"You earned KES {referral_bonus:.2f} from "
+                                    f"{user.username}'s recharge."
                                 )
                             )
-
-                            db.session.add(notification)
-
-                            print(
-                                f"Referral commission of KES {referral_bonus:.2f} awarded to {referrer.username}"
-                            )
-
-                            print(
-                                f"Contribution Wallet updated for {referrer.username}: +KES {payment.amount:.2f}"
-                            )
-
-                    
-                            update_withdrawal_status(referrer)
-
-                    notification = Notification(
-                        user_id=user.id,
-                        title="Recharge Successful",
-                        message=f"KES {payment.amount} has been added to your Main Wallet."
-                    )
-
-                    db.session.add(notification)
+                        )
 
                 db.session.commit()
 
-                print(f"Wallet recharged for {user.username}")
-
-                return jsonify({"status": "received"}), 200
-
-            # =====================================================
-            # WITHDRAWAL WEBHOOK
-            # =====================================================
-
-            withdrawal = Withdrawal.query.filter_by(
-                intasend_transaction_id=tracking_id
-            ).first()
-
-            if withdrawal:
-
-                user = User.query.get(withdrawal.user_id)
-
-                # ----------------------------------
-                # SUCCESSFUL WITHDRAWAL
-                # ----------------------------------
-                if state in ["SUCCESSFUL", "COMPLETED", "COMPLETE"]:
-
-                    withdrawal.status = "Paid"
-                    withdrawal.processed_at = datetime.utcnow()
-
-                    # Deduct ONLY the withdrawable funds
-                    user.main_wallet -= withdrawal.amount
-                    user.withdrawable_wallet -= withdrawal.amount
-
-                    user.withdrawn += withdrawal.amount
-
-                    # Safety check
-                    user.withdrawable_wallet = max(
-                        user.withdrawable_wallet,
-                        0
-                    )
-
-                    # Prevent negative values
-                    if user.main_wallet < 0:
-                        user.main_wallet = 0
-
-                    if user.withdrawable_wallet < 0:
-                        user.withdrawable_wallet = 0
-
-                    user.withdrawn += withdrawal.amount
-
-                    # Deduct contribution ONLY once
-                    if not user.contribution_deducted:
-
-                        required = get_required_contribution(user.vip_level)
-
-                        user.referral_contribution_balance -= required
-
-                        user.contribution_deducted = True
-
-                        db.session.add(
-                            ContributionHistory(
-                                user_id=user.id,
-                                referred_user_id=user.id,
-                                amount=-required,
-                                description=f"{user.vip_level} contribution used"
-                            )
-                        )
-
-                    db.session.add(
-                        Transaction(
-                            user_id=user.id,
-                            transaction_type="withdrawal",
-                            wallet="main",
-                            amount=-withdrawal.amount,
-                            description="Automatic Withdrawal"
-                        )
-                    )
-
-                    db.session.add(
-                        Notification(
-                            user_id=user.id,
-                            title="Withdrawal Successful",
-                            message=f"KES {withdrawal.amount:.2f} has been sent to your M-Pesa."
-                        )
-                    )
-
-                # ----------------------------------
-                # FAILED
-                # ----------------------------------
-                elif state == "FAILED":
-
-                    withdrawal.status = "Failed"
-
-                    db.session.add(
-                        Notification(
-                            user_id=user.id,
-                            title="Withdrawal Failed",
-                            message="Your withdrawal could not be processed. Please try again."
-                        )
-                    )
-
-                db.session.commit()
+                print("Recharge processed successfully.")
 
                 return jsonify({"status": "received"}), 200
 
 
-            pending_user = PendingUser.query.filter_by(
-                email=payment.email
+        # =====================================
+        # REGISTRATION PAYMENT
+        # =====================================
+
+        pending_user = PendingUser.query.filter_by(
+            email=payment.email
+        ).first()
+
+        print("PAYMENT EMAIL:", payment.email)
+        print("PENDING USER:", pending_user)
+
+        if pending_user:
+
+            existing_user = User.query.filter_by(
+                email=pending_user.email
             ).first()
 
-            print("PAYMENT EMAIL:", payment.email)
-            print("PENDING USER:", pending_user)
+            if not existing_user:
 
-            if pending_user:
+                new_user = User(
+                    username=pending_user.username,
+                    email=pending_user.email,
+                    phone=pending_user.phone,
+                    password=pending_user.password,
+                    referred_by=pending_user.referred_by,
 
-                existing_user = User.query.filter_by(
-                    email=pending_user.email
-                ).first()
+                    # Wallets
+                    main_wallet=0,
+                    withdrawable_wallet=0,
+                    vip_locked_amount=0,
+                    recharge_balance=0,
+                    task_wallet=0,
+                    team_wallet=0,
+                    withdrawn=0,
+                    commissions=0,
+                    referral_contribution_balance=0,
 
-                if not existing_user:
+                    account_active=False
+                )
 
-                    new_user = User(
-                        username=pending_user.username,
-                        email=pending_user.email,
-                        phone=pending_user.phone,
-                        password=pending_user.password,
-                        referred_by=pending_user.referred_by,
-                    
-                        # Wallets
-                        main_wallet=0,
-                        task_wallet=0,
-                        team_wallet=0,
-                        withdrawn=0,
-                        commissions=0,
+                db.session.add(new_user)
 
-                    )
-                    
-                    db.session.add(new_user)
-                    
-                    # Get user ID
-                    db.session.flush()
-                    
-                    # Referral code
-                    new_user.referral_code = f"SN{new_user.id}"
-    
-                    
-                    print("USER CREATED:", pending_user.username)
-                    print("REFERRAL CODE:", new_user.referral_code)
-                    print("REFERRED BY:", new_user.referred_by)
+                # Generate ID
+                db.session.flush()
 
-                db.session.delete(pending_user)
+                # Referral Code
+                new_user.referral_code = f"SN{new_user.id}"
+
+                print("USER CREATED:", new_user.username)
+                print("REFERRAL CODE:", new_user.referral_code)
+                print("REFERRED BY:", new_user.referred_by)
+
+            # Delete pending registration
+            db.session.delete(pending_user)
 
         elif state == "FAILED":
 
