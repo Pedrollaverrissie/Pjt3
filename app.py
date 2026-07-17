@@ -834,54 +834,13 @@ def webhook():
                 # ACTIVATE / RENEW VIP MEMBERSHIP
                 # ---------------------------------
 
-                now = datetime.utcnow()
+                # ---------------------------------
+                # PROCESS VIP MEMBERSHIP
+                # ---------------------------------
 
-                # New user (no VIP yet)
-                if not user.vip_level:
+                old_vip = user.vip_level
 
-                    if payment.amount >= 5000:
-                        user.vip_level = "Diamond"
-
-                    elif payment.amount >= 2500:
-                        user.vip_level = "Platinum"
-
-                    elif payment.amount >= 1000:
-                        user.vip_level = "Gold"
-
-                    elif payment.amount >= 500:
-                        user.vip_level = "Silver"
-
-                    elif payment.amount >= 10:
-                        user.vip_level = "Bronze"
-
-                # Existing member upgrading
-                else:
-
-                    if payment.amount >= 5000:
-                        user.vip_level = "Diamond"
-
-                    elif payment.amount >= 2500 and user.vip_level in ["Bronze", "Silver", "Gold"]:
-                        user.vip_level = "Platinum"
-
-                    elif payment.amount >= 1000 and user.vip_level in ["Bronze", "Silver"]:
-                        user.vip_level = "Gold"
-
-                    elif payment.amount >= 500 and user.vip_level == "Bronze":
-                        user.vip_level = "Silver"
-
-                # Renew membership
-                user.account_active = True
-                user.vip_started_at = now
-                user.vip_expires_at = now + timedelta(days=30)
-
-                user.tasks_completed = 0
-                user.last_task_date = None
-
-                # Allow contribution deduction again
-                user.contribution_deducted = False
-
-                # Recalculate locked and withdrawable wallets
-                update_vip_lock(user)
+                process_vip_recharge(user, payment.amount)
 
                 # -----------------------------
                 # Recharge Transaction
@@ -899,16 +858,29 @@ def webhook():
                 # -----------------------------
                 # VIP Notification
                 # -----------------------------
-                db.session.add(
-                    Notification(
-                        user_id=user.id,
-                        title="Recharge Successful",
-                        message=(
-                            f"Recharge of KES {payment.amount:.2f} received.\n"
-                            f"Your {user.vip_level} membership is active."
+                if old_vip != user.vip_level:
+
+                    db.session.add(
+                        Notification(
+                            user_id=user.id,
+                            title="VIP Upgraded",
+                            message=f"Congratulations! You have been upgraded to {user.vip_level}."
                         )
                     )
-                )
+
+                elif (
+                            old_vip == user.vip_level
+                            and user.vip_started_at
+                            and user.vip_started_at >= now - timedelta(seconds=5)
+                        ):
+
+                    db.session.add(
+                        Notification(
+                            user_id=user.id,
+                            title="VIP Renewed",
+                            message=f"Your {user.vip_level} membership has been renewed for another 30 days."
+                        )
+                    )
 
                 # =============================
                 # REFERRAL COMMISSION
@@ -963,60 +935,65 @@ def webhook():
         # REGISTRATION PAYMENT
         # =====================================
 
-        pending_user = PendingUser.query.filter_by(
-            email=payment.email
-        ).first()
+        elif payment.payment_type == "registration":
 
-        print("PAYMENT EMAIL:", payment.email)
-        print("PENDING USER:", pending_user)
-
-        if pending_user:
-
-            existing_user = User.query.filter_by(
-                email=pending_user.email
+            pending_user = PendingUser.query.filter_by(
+                email=payment.email
             ).first()
 
-            if not existing_user:
+            print("PAYMENT EMAIL:", payment.email)
+            print("PENDING USER:", pending_user)
 
-                new_user = User(
-                    username=pending_user.username,
-                    email=pending_user.email,
-                    phone=pending_user.phone,
-                    password=pending_user.password,
-                    referred_by=pending_user.referred_by,
+            if pending_user:
 
-                    # Wallets
-                    main_wallet=0,
-                    withdrawable_wallet=0,
-                    vip_locked_amount=0,
-                    recharge_balance=0,
-                    task_wallet=0,
-                    team_wallet=0,
-                    withdrawn=0,
-                    commissions=0,
-                    referral_contribution_balance=0,
+                existing_user = User.query.filter_by(
+                    email=pending_user.email
+                ).first()
 
-                    account_active=False
-                )
+                if not existing_user:
 
-                db.session.add(new_user)
+                    new_user = User(
+                        username=pending_user.username,
+                        email=pending_user.email,
+                        phone=pending_user.phone,
+                        password=pending_user.password,
+                        referred_by=pending_user.referred_by,
 
-                # Generate ID
-                db.session.flush()
+                        # Wallets
+                        main_wallet=0,
+                        withdrawable_wallet=0,
+                        vip_locked_amount=0,
+                        recharge_balance=0,
+                        task_wallet=0,
+                        team_wallet=0,
+                        withdrawn=0,
+                        commissions=0,
+                        referral_contribution_balance=0,
 
-                # Referral Code
-                new_user.referral_code = f"SN{new_user.id}"
+                        account_active=False
+                    )
 
-                print("USER CREATED:", new_user.username)
-                print("REFERRAL CODE:", new_user.referral_code)
-                print("REFERRED BY:", new_user.referred_by)
+                    db.session.add(new_user)
 
-            # Delete pending registration
-            db.session.delete(pending_user)
+                    # Generate ID
+                    db.session.flush()
 
+                    # Referral Code
+                    new_user.referral_code = f"SN{new_user.id}"
+
+                    print("USER CREATED:", new_user.username)
+                    print("REFERRAL CODE:", new_user.referral_code)
+                    print("REFERRED BY:", new_user.referred_by)
+
+                db.session.delete(pending_user)
+
+                db.session.commit()
+
+                return jsonify({"status": "received"}), 200
+             
         elif state == "FAILED":
 
-            payment.status = "failed"
+                payment.status = "failed"
 
         elif state in ["PENDING", "PROCESSING"]:
 
@@ -1026,7 +1003,7 @@ def webhook():
 
         print("UPDATED STATUS TO:", payment.status)
 
-    return jsonify({"status": "received"}), 200
+        return jsonify({"status": "received"}), 200
 
 
 #--------------PENDING PAYMENT/ CHECK PAYMENT--------------------
@@ -1776,6 +1753,67 @@ def get_upgrade_amount(user, new_level):
         user.vip_level,
         new_level
     )
+
+from datetime import datetime, timedelta
+
+def process_vip_recharge(user, amount):
+
+    now = datetime.utcnow()
+
+    # -----------------------------------------
+    # FIRST VIP ACTIVATION ONLY
+    # -----------------------------------------
+    if not user.vip_level:
+
+        if amount >= 5000:
+            user.vip_level = "Diamond"
+
+        elif amount >= 2500:
+            user.vip_level = "Platinum"
+
+        elif amount >= 1000:
+            user.vip_level = "Gold"
+
+        elif amount >= 500:
+            user.vip_level = "Silver"
+
+        elif amount >= 200:
+            user.vip_level = "Bronze"
+
+        else:
+            return
+
+        # Start first membership
+        user.account_active = True
+        user.vip_started_at = now
+        user.vip_expires_at = now + timedelta(days=30)
+
+        user.tasks_completed = 0
+        user.last_task_date = None
+        user.contribution_deducted = False
+
+    # -----------------------------------------
+    # Existing VIP
+    # -----------------------------------------
+    else:
+
+        # VIP is still active
+        if user.vip_expires_at and user.vip_expires_at > now:
+
+            # Recharge only.
+            # No renewal.
+            # No upgrade.
+            pass
+
+        # VIP expired
+        else:
+
+            # Recharge only.
+            # User must click Renew.
+            user.account_active = False
+
+    # Update locked/withdrawable wallets
+    update_vip_lock(user)
 
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
