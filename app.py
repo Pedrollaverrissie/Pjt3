@@ -685,6 +685,7 @@ def webhook():
     topic = data.get("topic", "")
     status = data.get("status", "").upper()
     tracking_id = data.get("tracking_id")
+    
 
     print("TOPIC:", topic)
     print("STATUS:", status)
@@ -788,8 +789,12 @@ def webhook():
                     message="Your withdrawal could not be processed."
                 )
             )
-
+        print("Saving withdrawal status:", withdrawal.status)
         db.session.commit()
+
+        db.session.refresh(withdrawal)
+
+        print("Saved status in database:", withdrawal.status)
 
         return jsonify({"status": "received"}), 200
 

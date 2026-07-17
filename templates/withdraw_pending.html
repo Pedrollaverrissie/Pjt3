@@ -77,11 +77,15 @@ function checkWithdrawal(){
 
         if(data.status === "Paid"){
 
+            clearInterval(interval);
+
             window.location.href="/dashboard";
 
         }
 
         else if(data.status === "Failed"){
+
+            clearInterval(interval);
 
             alert("Your withdrawal failed.");
 
@@ -99,7 +103,11 @@ function checkWithdrawal(){
 
 }
 
-setInterval(checkWithdrawal,3000);
+// Check immediately
+checkWithdrawal();
+
+// Then check every 2 seconds
+const interval = setInterval(checkWithdrawal,2000);
 
 </script>
 
