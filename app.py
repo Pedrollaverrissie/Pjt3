@@ -871,19 +871,7 @@ def webhook():
                         )
                     )
 
-                elif (
-                            old_vip == user.vip_level
-                            and user.vip_started_at
-                            and user.vip_started_at >= now - timedelta(seconds=5)
-                        ):
 
-                    db.session.add(
-                        Notification(
-                            user_id=user.id,
-                            title="VIP Renewed",
-                            message=f"Your {user.vip_level} membership has been renewed for another 30 days."
-                        )
-                    )
 
                 # =============================
                 # REFERRAL COMMISSION
