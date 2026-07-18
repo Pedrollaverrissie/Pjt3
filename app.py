@@ -685,7 +685,16 @@ def webhook():
     topic = data.get("topic", "")
     status = data.get("status", "").upper()
     tracking_id = data.get("tracking_id")
-    
+    transaction_status = ""
+
+    if data.get("transactions"):
+        transaction_status = (
+            data["transactions"][0]
+            .get("status", "")
+            .upper()
+        )
+
+    print("TRANSACTION STATUS:", transaction_status)
 
     print("TOPIC:", topic)
     print("STATUS:", status)
@@ -710,11 +719,11 @@ def webhook():
         # ----------------------------
         # SUCCESSFUL WITHDRAWAL
         # ----------------------------
-        if status in [
-            "COMPLETED",
-            "SUCCESSFUL",
-            "PAID"
-        ]:
+        if (
+            status in ["COMPLETED", "SUCCESSFUL", "PAID"]
+            or
+            transaction_status in ["SUCCESSFUL", "SUCCESS", "COMPLETED"]
+        ):
 
             withdrawal.status = "Paid"
             withdrawal.processed_at = datetime.utcnow()
@@ -778,7 +787,11 @@ def webhook():
         # ----------------------------
         # FAILED
         # ----------------------------
-        elif status == "FAILED":
+        elif (
+                status == "FAILED"
+                or
+                transaction_status == "FAILED"
+            ):
 
             withdrawal.status = "Failed"
 
