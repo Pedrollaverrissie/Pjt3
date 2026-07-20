@@ -730,14 +730,16 @@ def webhook():
 
             # Deduct wallets
             user.main_wallet -= withdrawal.amount
-            user.withdrawable_wallet -= withdrawal.amount
+
+            # Remove the withdrawn amount from recharge balance
+            user.recharge_balance -= withdrawal.amount
 
             # Prevent negatives
             user.main_wallet = max(user.main_wallet, 0)
-            user.withdrawable_wallet = max(
-                user.withdrawable_wallet,
-                0
-            )
+            user.recharge_balance = max(user.recharge_balance, 0)
+
+            # Recalculate locked and withdrawable balances
+            update_vip_lock(user)
 
             user.withdrawn += withdrawal.amount
 
@@ -1746,7 +1748,7 @@ def get_withdrawable_balance(user):
     )
 
     # Task earnings
-    task_available = 0
+    task_available = 0 
 
     if can_withdraw(user)[0]:
         task_available = user.task_wallet
