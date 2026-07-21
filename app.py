@@ -785,6 +785,16 @@ def webhook():
                     message=f"KES {withdrawal.amount:.2f} has been sent to your M-Pesa."
                 )
             )
+            print("BEFORE WITHDRAW")
+            print("Recharge:", user.recharge_balance)
+            print("Withdrawable:", user.withdrawable_wallet)
+
+            user.main_wallet -= withdrawal.amount
+            user.withdrawable_wallet -= withdrawal.amount
+
+            print("AFTER WITHDRAW")
+            print("Recharge:", user.recharge_balance)
+            print("Withdrawable:", user.withdrawable_wallet)
 
         # ----------------------------
         # FAILED
