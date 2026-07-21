@@ -713,6 +713,10 @@ def webhook():
 
         if not withdrawal:
             return jsonify({"status": "received"}), 200
+        # Ignore duplicate successful webhooks
+        if withdrawal.status == "Paid":
+            print("Withdrawal already processed.")
+            return jsonify({"status": "already processed"}), 200
 
         user = User.query.get(withdrawal.user_id)
 
@@ -789,8 +793,6 @@ def webhook():
             print("Recharge:", user.recharge_balance)
             print("Withdrawable:", user.withdrawable_wallet)
 
-            user.main_wallet -= withdrawal.amount
-            user.withdrawable_wallet -= withdrawal.amount
 
             print("AFTER WITHDRAW")
             print("Recharge:", user.recharge_balance)
