@@ -1445,9 +1445,11 @@ def add_to_main_wallet(user, amount, description, transaction_type="deposit"):
     )
 
     db.session.add(transaction)
+    
 def add_to_referral_wallet(user, amount, description):
 
     user.referral_wallet += amount
+    user.main_wallet += amount
 
     transaction = Transaction(
         user_id=user.id,
@@ -3249,17 +3251,6 @@ def transaction_history():
     )
 
 
-@app.route("/sync-referral-wallet")
-def sync_referral_wallet():
-
-    users = User.query.all()
-
-    for user in users:
-        user.main_wallet += user.referral_wallet
-
-    db.session.commit()
-
-    return "Referral wallets synced successfully!"
     
 #======================================================
 if __name__ == "__main__":
