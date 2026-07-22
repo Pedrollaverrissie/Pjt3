@@ -748,7 +748,12 @@ def webhook():
             user.team_wallet -= team_used
             remaining -= team_used
 
-            # 3. Consume ONLY extra recharge
+            # 3. Consume referral wallet
+            referral_used = min(user.referral_wallet, remaining)
+            user.referral_wallet -= referral_used
+            remaining -= referral_used
+
+            # 4. Consume ONLY extra recharge
             extra_recharge = max(
                 user.recharge_balance - user.vip_locked_amount,
                 0
@@ -761,9 +766,10 @@ def webhook():
 
             # Recalculate the main wallet
             user.main_wallet = (
-                user.recharge_balance +
-                user.task_wallet +
-                user.team_wallet
+                user.recharge_balance
+                + user.task_wallet
+                + user.team_wallet
+                + user.referral_wallet
             )
 
             # Recalculate VIP lock and withdrawable balance
@@ -942,11 +948,10 @@ def webhook():
 
                         referral_bonus = payment.amount * 0.10
 
-                        add_to_main_wallet(
+                        add_to_referral_wallet(
                             referrer,
                             referral_bonus,
-                            f"10% Referral Commission from {user.username}",
-                            transaction_type="referral_commission"
+                            f"10% Referral Commission from {user.username}"
                         )
 
                         referrer.commissions += referral_bonus
@@ -1012,6 +1017,7 @@ def webhook():
                         vip_locked_amount=0,
                         recharge_balance=0,
                         task_wallet=0,
+                        referral_wallet=0,
                         team_wallet=0,
                         withdrawn=0,
                         commissions=0,
@@ -1439,6 +1445,19 @@ def add_to_main_wallet(user, amount, description, transaction_type="deposit"):
     )
 
     db.session.add(transaction)
+def add_to_referral_wallet(user, amount, description):
+
+    user.referral_wallet += amount
+
+    transaction = Transaction(
+        user_id=user.id,
+        transaction_type="referral_commission",
+        wallet="referral",
+        amount=amount,
+        description=description
+    )
+
+    db.session.add(transaction)
 
 def add_to_task_wallet(user, amount, description):
 
@@ -1640,9 +1659,10 @@ def update_vip_lock(user):
     )
 
     user.withdrawable_wallet = (
-        extra_recharge +
-        user.task_wallet +
-        user.team_wallet
+        extra_recharge
+        + user.task_wallet
+        + user.team_wallet
+        + user.referral_wallet
     )
 
     user.main_wallet = (

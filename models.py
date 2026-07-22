@@ -46,7 +46,10 @@ class User(UserMixin, db.Model):
     
     team_wallet = db.Column(db.Float, default=0)
     
+    referral_wallet = db.Column(db.Float, default=0)
+
     withdrawn = db.Column(db.Float, default=0)
+    
     commissions = db.Column(db.Float, default=0)
     # ================= ACCOUNT =================
 
