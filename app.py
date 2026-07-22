@@ -3131,9 +3131,9 @@ def check_withdrawal(tracking_id):
     ).first()
 
     if not withdrawal:
-        return jsonify({
-            "status": "NOT_FOUND"
-        })
+        return jsonify({"status": "NOT_FOUND"})
+
+    print("CHECK ROUTE STATUS:", withdrawal.status)
 
     return jsonify({
         "status": withdrawal.status
