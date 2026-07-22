@@ -729,20 +729,44 @@ def webhook():
             transaction_status in ["SUCCESSFUL", "SUCCESS", "COMPLETED"]
         ):
 
-            withdrawal.status = "Paid"
+            withdrawal.status = "Pai d"
             withdrawal.processed_at = datetime.utcnow()
 
-            # Deduct wallets
-            user.main_wallet -= withdrawal.amount
+            # ---------------------------------------
+            # Deduct the withdrawn amount correctly
+            # ---------------------------------------
 
-            # Remove the withdrawn amount from recharge balance
-            user.recharge_balance -= withdrawal.amount
+            remaining = withdrawal.amount
 
-            # Prevent negatives
-            user.main_wallet = max(user.main_wallet, 0)
-            user.recharge_balance = max(user.recharge_balance, 0)
+            # 1. Consume task earnings first
+            task_used = min(user.task_wallet, remaining)
+            user.task_wallet -= task_used
+            remaining -= task_used
 
-            # Recalculate locked and withdrawable balances
+            # 2. Consume TEAM wallet if you allow it to be withdrawn
+            team_used = min(user.team_wallet, remaining)
+            user.team_wallet -= team_used
+            remaining -= team_used
+
+            # 3. Consume ONLY extra recharge
+            extra_recharge = max(
+                user.recharge_balance - user.vip_locked_amount,
+                0
+            )
+
+            recharge_used = min(extra_recharge, remaining)
+
+            user.recharge_balance -= recharge_used
+            remaining -= recharge_used
+
+            # Recalculate the main wallet
+            user.main_wallet = (
+                user.recharge_balance +
+                user.task_wallet +
+                user.team_wallet
+            )
+
+            # Recalculate VIP lock and withdrawable balance
             update_vip_lock(user)
 
             user.withdrawn += withdrawal.amount
@@ -1605,22 +1629,26 @@ def update_vip_lock(user):
 
     required_lock = get_minimum_recharge(user.vip_level)
 
-    # Lock only the recharge money required by the VIP
     user.vip_locked_amount = min(
         required_lock,
         user.recharge_balance
     )
 
-    # Extra recharge beyond the lock
     extra_recharge = max(
         user.recharge_balance - user.vip_locked_amount,
         0
     )
 
-    # Task earnings are always withdrawable
     user.withdrawable_wallet = (
         extra_recharge +
-        user.task_wallet
+        user.task_wallet +
+        user.team_wallet
+    )
+
+    user.main_wallet = (
+        user.recharge_balance +
+        user.task_wallet +
+        user.team_wallet
     )
 
 

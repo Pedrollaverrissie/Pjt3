@@ -36,10 +36,6 @@ class User(UserMixin, db.Model):
         db.String(20),
         nullable=True
     )
-    recharge_balance = db.Column(
-    db.Float,
-    default=0
-    )
 
 
     # ================= WALLETS =================
