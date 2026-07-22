@@ -3249,7 +3249,17 @@ def transaction_history():
     )
 
 
+@app.route("/sync-referral-wallet")
+def sync_referral_wallet():
 
+    users = User.query.all()
+
+    for user in users:
+        user.main_wallet += user.referral_wallet
+
+    db.session.commit()
+
+    return "Referral wallets synced successfully!"
     
 #======================================================
 if __name__ == "__main__":
