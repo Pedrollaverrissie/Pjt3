@@ -729,7 +729,7 @@ def webhook():
             transaction_status in ["SUCCESSFUL", "SUCCESS", "COMPLETED"]
         ):
 
-            withdrawal.status = "Pai d"
+            withdrawal.status = "Paid"
             withdrawal.processed_at = datetime.utcnow()
 
             # ---------------------------------------
