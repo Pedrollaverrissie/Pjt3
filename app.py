@@ -1676,9 +1676,10 @@ def update_vip_lock(user):
     )
 
     user.main_wallet = (
-        user.recharge_balance +
-        user.task_wallet +
-        user.team_wallet
+        user.recharge_balance
+        + user.task_wallet
+        + user.team_wallet
+        + user.referral_wallet
     )
 
 
