@@ -1844,7 +1844,7 @@ def process_vip_recharge(user, amount):
     if (
         user.vip_level == "Bronze"
         and user.vip_started_at is None
-        and amount >= 200
+        and amount >= 10
     ):
 
         user.account_active = True
