@@ -1011,6 +1011,8 @@ def webhook():
                         password=pending_user.password,
                         referred_by=pending_user.referred_by,
 
+                         vip_level="Free",
+
                         # Wallets
                         main_wallet=0,
                         withdrawable_wallet=0,
