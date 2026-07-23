@@ -2079,11 +2079,17 @@ def upgrade_vip(plan):
 #---------------TASK ROUTE---------------------
 from datetime import date
 from models import Task, UserTask
-
 @app.route("/tasks")
 @login_required
 @active_account_required
 def tasks():
+
+    # Bronze has not been activated yet
+    if (
+        current_user.vip_level == "Bronze"
+        and current_user.vip_started_at is None
+    ):
+        return render_template("vip_activation_required.html")
 
     # Get today's tasks for the current VIP
     tasks = Task.query.filter_by(
@@ -2103,7 +2109,6 @@ def tasks():
     ).all()
 
     completed_ids = [t.task_id for t in completed_tasks]
-
     completed_today = len(completed_ids)
 
     return render_template(
