@@ -1011,7 +1011,10 @@ def webhook():
                         password=pending_user.password,
                         referred_by=pending_user.referred_by,
 
-                         vip_level="Free",
+                        # Default VIP
+                        vip_level="Bronze",
+                        vip_started_at=None,
+                        vip_expires_at=None,
 
                         # Wallets
                         main_wallet=0,
@@ -1835,30 +1838,15 @@ def process_vip_recharge(user, amount):
 
     now = datetime.utcnow()
 
-    # -----------------------------------------
-    # FIRST VIP ACTIVATION ONLY
-    # -----------------------------------------
-    if not user.vip_level:
+    # ------------------------------
+    # First Bronze activation
+    # ------------------------------
+    if (
+        user.vip_level == "Bronze"
+        and user.vip_started_at is None
+        and amount >= 200
+    ):
 
-        if amount >= 5000:
-            user.vip_level = "Diamond"
-
-        elif amount >= 2500:
-            user.vip_level = "Platinum"
-
-        elif amount >= 1000:
-            user.vip_level = "Gold"
-
-        elif amount >= 500:
-            user.vip_level = "Silver"
-
-        elif amount >= 200:
-            user.vip_level = "Bronze"
-
-        else:
-            return
-
-        # Start first membership
         user.account_active = True
         user.vip_started_at = now
         user.vip_expires_at = now + timedelta(days=30)
@@ -1867,27 +1855,13 @@ def process_vip_recharge(user, amount):
         user.last_task_date = None
         user.contribution_deducted = False
 
-    # -----------------------------------------
-    # Existing VIP
-    # -----------------------------------------
-    else:
+        update_vip_lock(user)
+        return
 
-        # VIP is still active
-        if user.vip_expires_at and user.vip_expires_at > now:
+    # Existing VIP logic
+    if user.vip_expires_at and user.vip_expires_at <= now:
+        user.account_active = False
 
-            # Recharge only.
-            # No renewal.
-            # No upgrade.
-            pass
-
-        # VIP expired
-        else:
-
-            # Recharge only.
-            # User must click Renew.
-            user.account_active = False
-
-    # Update locked/withdrawable wallets
     update_vip_lock(user)
 
 #------------------VIP TASK ROUTE---------------------
