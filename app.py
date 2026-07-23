@@ -3235,7 +3235,16 @@ def transaction_history():
     )
 
 
+from models import User, db
 
+users = User.query.all()
+
+for user in users:
+    update_vip_lock(user)
+
+db.session.commit()
+
+print("All users updated successfully.")
     
 #======================================================
 if __name__ == "__main__":
