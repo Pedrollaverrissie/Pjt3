@@ -1928,7 +1928,7 @@ def upgrade_vip(plan):
     # ----------------------------
     if plan not in VIP_PLANS:
 
-        flash("Invalid VIP plan.", "danger")
+        flash("Invalid VIP plan.", "vip_error")
         return redirect(url_for("vip"))
 
     # ----------------------------
@@ -1941,7 +1941,7 @@ def upgrade_vip(plan):
 
         if new_index <= current_index:
 
-            flash("You can only upgrade to a higher VIP.", "warning")
+            flash("You can only upgrade to a higher VIP.", "vip_error")
             return redirect(url_for("vip"))
 
     # ----------------------------
@@ -1965,7 +1965,7 @@ def upgrade_vip(plan):
 
         flash(
             f"Insufficient Main Wallet balance. You need KES {amount_required:.2f} to upgrade to {plan}.",
-            "danger"
+            "vip_error"
         )
 
         return redirect(url_for("vip"))
@@ -1983,7 +1983,7 @@ def upgrade_vip(plan):
 
             flash(
                 "Task earnings cannot be used for VIP upgrades until you meet the withdrawal requirements.",
-                "warning"
+                "vip_error"
             )
 
             return redirect(url_for("vip"))
@@ -2020,64 +2020,43 @@ def upgrade_vip(plan):
     # Membership History
     # ----------------------------
     db.session.add(
-
         MembershipHistory(
-
             user_id=current_user.id,
-
             vip_level=plan,
-
             contribution_used=0,
-
             withdrawal_unlocked=False
-
         )
-
     )
 
     # ----------------------------
     # Transaction
     # ----------------------------
     db.session.add(
-
         Transaction(
-
             user_id=current_user.id,
-
             transaction_type="vip_upgrade",
-
             wallet="main",
-
             amount=-amount_required,
-
             description=f"VIP upgraded to {plan}"
-
         )
-
     )
 
     # ----------------------------
     # Notification
     # ----------------------------
     db.session.add(
-
         Notification(
-
             user_id=current_user.id,
-
             title="VIP Upgraded",
-
             message=f"You successfully upgraded to {plan}."
-
         )
-
     )
 
     db.session.commit()
 
     flash(
         f"Congratulations! You are now a {plan} member.",
-        "success"
+        "vip_success"
     )
 
     return redirect(url_for("vip"))
@@ -3237,15 +3216,6 @@ def transaction_history():
     )
 
 
-from models import User, db
-
-with app.app_context():
-    users = User.query.all()
-
-    for user in users:
-        update_vip_lock(user)
-
-    db.session.commit()
     
 #======================================================
 if __name__ == "__main__":
