@@ -1023,7 +1023,7 @@ def webhook():
                         commissions=0,
                         referral_contribution_balance=0,
 
-                        account_active=False
+                        account_active=True
                     )
 
                     db.session.add(new_user)
@@ -1445,7 +1445,7 @@ def add_to_main_wallet(user, amount, description, transaction_type="deposit"):
     )
 
     db.session.add(transaction)
-    
+
 def add_to_referral_wallet(user, amount, description):
 
     user.referral_wallet += amount
@@ -3249,6 +3249,7 @@ def transaction_history():
         "transactions.html",
         transactions=transactions
     )
+
 
 
     
