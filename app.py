@@ -2089,7 +2089,7 @@ def tasks():
         current_user.vip_level == "Bronze"
         and current_user.vip_started_at is None
     ):
-        return render_template("vip_activation_required.html")
+        return render_template("task_alert.html")
 
     # Get today's tasks for the current VIP
     tasks = Task.query.filter_by(
