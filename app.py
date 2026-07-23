@@ -434,9 +434,11 @@ def dashboard():
 
     # -----------------------------------
     # Total Income
-    # Main Wallet + Deposits
     # -----------------------------------
-    total_income = current_user.main_wallet + total_deposits
+    total_income = (
+        current_user.main_wallet
+        + current_user.withdrawn
+    )
 
     # -------------------------------
     # Automatically expire VIP
@@ -1383,9 +1385,8 @@ def profile():
     ).count()
 
     total_income = (
-        current_user.main_wallet +
-        current_user.task_wallet +
-        current_user.team_wallet
+        current_user.main_wallet
+        + current_user.withdrawn
     )
 
     active_tasks = 0
