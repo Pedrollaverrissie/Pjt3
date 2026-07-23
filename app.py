@@ -1456,6 +1456,9 @@ def add_to_referral_wallet(user, amount, description):
     user.referral_wallet += amount
     user.main_wallet += amount
 
+    # Recalculate withdrawable wallet
+    update_vip_lock(user)
+
     transaction = Transaction(
         user_id=user.id,
         transaction_type="referral_commission",
