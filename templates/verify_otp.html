@@ -187,6 +187,45 @@ button:hover{
     color:#bdbdbd;
 
 }
+.otp-container{
+
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+
+    margin:25px 0;
+
+}
+
+.otp-input{
+
+    width:48px;
+    height:58px;
+
+    border-radius:12px;
+
+    border:2px solid #444;
+
+    background:#fff;
+
+    text-align:center;
+
+    font-size:24px;
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+.otp-input:focus{
+
+    border-color:#16b364;
+
+    box-shadow:0 0 12px rgba(22,179,100,.45);
+
+    outline:none;
+
+}
 
 </style>
 
@@ -216,13 +255,18 @@ button:hover{
 
     <form method="POST">
 
-        <input
-            type="text"
-            name="otp"
-            maxlength="6"
-            placeholder="000000"
-            required
-        >
+        <div class="otp-container">
+
+            <input type="text" maxlength="1" class="otp-input">
+            <input type="text" maxlength="1" class="otp-input">
+            <input type="text" maxlength="1" class="otp-input">
+            <input type="text" maxlength="1" class="otp-input">
+            <input type="text" maxlength="1" class="otp-input">
+            <input type="text" maxlength="1" class="otp-input">
+
+        </div>
+
+        <input type="hidden" name="otp" id="otp">
 
         <button type="submit">
 
@@ -256,6 +300,89 @@ button:hover{
     </div>
 
 </div>
+<script>
+
+const inputs = document.querySelectorAll(".otp-input");
+const hiddenOTP = document.getElementById("otp");
+
+// Move to next input
+inputs.forEach((input, index) => {
+
+    input.addEventListener("input", function () {
+
+        // Only allow numbers
+        this.value = this.value.replace(/[^0-9]/g, "");
+
+        if(this.value.length === 1 && index < inputs.length - 1){
+
+            inputs[index + 1].focus();
+
+        }
+
+        updateOTP();
+
+    });
+
+    input.addEventListener("keydown", function(e){
+
+        if(e.key === "Backspace" && this.value === "" && index > 0){
+
+            inputs[index - 1].focus();
+
+        }
+
+    });
+
+});
+
+// Paste entire OTP
+inputs[0].addEventListener("paste", function(e){
+
+    e.preventDefault();
+
+    const pasted = e.clipboardData.getData("text").replace(/\D/g,"");
+
+    for(let i = 0; i < inputs.length; i++){
+
+        inputs[i].value = pasted[i] || "";
+
+    }
+
+    updateOTP();
+
+});
+
+// Combine all digits
+function updateOTP(){
+
+    let code = "";
+
+    inputs.forEach(input =>{
+
+        code += input.value;
+
+    });
+
+    hiddenOTP.value = code;
+
+}
+
+// Prevent incomplete OTP submission
+document.querySelector("form").addEventListener("submit", function(e){
+
+    updateOTP();
+
+    if(hiddenOTP.value.length !== 6){
+
+        e.preventDefault();
+
+        alert("Please enter the complete 6-digit OTP.");
+
+    }
+
+});
+
+</script>
 
 <script>
 
