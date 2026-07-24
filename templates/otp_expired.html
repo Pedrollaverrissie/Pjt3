@@ -6,12 +6,156 @@
     <title>Document</title>
      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
    <script src="{{ url_for('static', filename='script.js') }}"></script>
+   <style>
+    body{
+
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+
+    background:#000;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    min-height:100vh;
+
+}
+
+.otp-expired{
+
+    width:340px;
+    max-width:90%;
+
+    background:rgb(24,10,42);
+
+    border:1px solid white;
+
+    border-radius:22px;
+
+    padding:35px 25px;
+
+    text-align:center;
+
+    box-shadow:0 20px 45px rgba(0,0,0,.45);
+
+    box-sizing:border-box;
+
+}
+
+.otp-expired h2{
+
+    margin:0;
+
+    color:#ff4d4d;
+
+    font-size:32px;
+
+    margin-bottom:20px;
+
+}
+
+.otp-expired p{
+
+    color:white;
+
+    font-size:16px;
+
+    line-height:1.7;
+
+    margin-bottom:30px;
+
+}
+
+.otp-expired a{
+
+    display:block;
+
+    width:100%;
+
+    padding:15px 0;
+
+    background:#16b364;
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    border-radius:12px;
+
+    transition:.3s;
+
+}
+
+.otp-expired a:hover{
+
+    background:#119455;
+
+}
+
+@media(max-width:480px){
+
+    .otp-expired{
+
+        width:92%;
+
+        padding:30px 18px;
+
+    }
+
+    .otp-expired h2{
+
+        font-size:28px;
+
+    }
+
+}
+
+.expired-icon{
+
+    width:90px;
+    height:90px;
+
+    margin:0 auto 20px;
+
+    border-radius:50%;
+
+    background:#ff4d4d;
+
+    color:white;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:45px;
+
+    box-shadow:0 0 25px rgba(255,77,77,.45);
+
+}
+   </style>
 </head>
 <body>
-    <div class="otp-expired">
-           <h2>OTP Expired</h2>
-            <p>Your OTP has expired. Please request a new one.</p>
-            <a href="/forgot-password">Try again</a>
-    </div>
+<div class="otp-expired">
+
+    <div class="expired-icon">⏰</div>
+
+    <h2>OTP Expired</h2>
+
+    <p>
+        Your verification code has expired.
+        <br>
+        Please request a new OTP to continue.
+    </p>
+
+    <a href="/forgot-password">
+        Request New OTP
+    </a>
+
+</div>
 </body>
 </html>
