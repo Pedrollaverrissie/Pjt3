@@ -653,39 +653,56 @@ def resend_otp(email):
     if not user:
         return "User not found"
 
-    otp = str(random.randint(100000, 999999))
+    otp = str(random.randint(100000,999999))
 
     otp_store[email] = {
         "otp": otp,
         "time": time.time()
     }
 
-    msg = Message(
-        "New OTP Code",
-        sender=app.config['MAIL_USERNAME'],
-        recipients=[email]
+    url = "https://api.brevo.com/v3/smtp/email"
+
+    headers = {
+        "accept":"application/json",
+        "api-key": os.getenv("BREVO_API_KEY"),
+        "content-type":"application/json"
+    }
+
+    payload = {
+        "sender":{
+            "name":"SUPERNOVA EARN",
+            "email":"petersongitonga02@gmail.com"
+        },
+        "to":[{"email":email}],
+        "subject":"SUPERNOVA EARN New OTP Code",
+        "htmlContent":f"""
+        <div style="font-family:Arial,sans-serif;padding:20px;">
+            <h2>SUPERNOVA EARN</h2>
+
+            <p>Your new OTP code is:</p>
+
+            <h1 style="letter-spacing:5px;">{otp}</h1>
+
+            <p>This code expires in <strong>5 minutes</strong>.</p>
+
+            <hr>
+
+            <small>© Supernova Earn</small>
+        </div>
+        """
+    }
+
+    response = requests.post(
+        url,
+        json=payload,
+        headers=headers,
+        timeout=15
     )
 
-    msg.body = f"Your new OTP is: {otp}"
+    if response.status_code in [200,201]:
+        return redirect(f"/verify-otp/{email}")
 
-    try:
-        mail.send(msg)
-        print("Email sent successfully")
-    except Exception as e:
-        print("SMTP ERROR:", e)
-        return f"SMTP ERROR: {e}"
-        
-    import traceback
-
-    try:
-        with mail.connect() as conn:
-            conn.send(msg)
-        print("Email sent successfully")
-    except Exception as e:
-        traceback.print_exc()
-        return str(e)
-
-    return redirect(f"/verify-otp/{email}")
+    return response.text
 
 #--------------WEBHOOK------------------
 @app.route("/webhook", methods=["POST"])
