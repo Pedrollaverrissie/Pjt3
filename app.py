@@ -674,6 +674,15 @@ def resend_otp(email):
     except Exception as e:
         print("SMTP ERROR:", e)
         return f"SMTP ERROR: {e}"
+        
+    import traceback
+
+    try:
+        mail.send(msg)
+        print("Email sent successfully")
+    except Exception as e:
+        traceback.print_exc()
+        return str(e)
 
     return redirect(f"/verify-otp/{email}")
 
