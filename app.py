@@ -631,7 +631,11 @@ def reset_password(email):
 
         # 🔴 PASSWORD MATCH CHECK
         if new_password != confirm_password:
-            return "Passwords do not match"
+            return render_template(
+                "reset_password.html",
+                email=email,
+                password_error=True
+            )
 
         user.password = generate_password_hash(new_password)
         db.session.commit()
