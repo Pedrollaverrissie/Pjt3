@@ -678,7 +678,8 @@ def resend_otp(email):
     import traceback
 
     try:
-        mail.send(msg)
+        with mail.connect() as conn:
+            conn.send(msg)
         print("Email sent successfully")
     except Exception as e:
         traceback.print_exc()
