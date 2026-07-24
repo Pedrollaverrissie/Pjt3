@@ -1,62 +1,302 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Verify OTP</title>
-     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-   <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Verify OTP</title>
+
+<link rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}">
+
+<style>
+
+body{
+
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+
+    background:#000;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+
+}
+
+.verify-card{
+
+    width:340px;
+    max-width:90%;
+
+    background:rgb(24,10,42);
+
+    border:1px solid white;
+
+    border-radius:20px;
+
+    padding:35px;
+
+    text-align:center;
+
+    box-shadow:0 20px 45px rgba(0,0,0,.5);
+
+}
+
+.logo{
+
+    margin-bottom:15px;
+
+}
+
+.logo img{
+
+    width:60px;
+    border-radius:15px;
+
+}
+
+.verify-card h2{
+
+    color:#16b364;
+    margin-bottom:10px;
+
+}
+
+.verify-card p{
+
+    color:white;
+    line-height:1.6;
+
+}
+
+.email{
+
+    color:gold;
+    font-size:13px;
+
+}
+
+input{
+
+    width:100%;
+    padding:15px;
+
+    margin-top:20px;
+    margin-bottom:20px;
+
+    border-radius:10px;
+    border:1px solid #ccc;
+
+    text-align:center;
+
+    font-size:24px;
+    letter-spacing:6px;
+
+    box-sizing:border-box;
+
+}
+
+input:focus{
+
+    outline:none;
+    border-color:#16b364;
+
+    box-shadow:0 0 10px rgba(22,179,100,.4);
+
+}
+
+button{
+
+    width:100%;
+    padding:15px;
+
+    border:none;
+    border-radius:10px;
+
+    background:#16b364;
+
+    color:white;
+
+    font-size:17px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+button:hover{
+
+    background:#119455;
+
+}
+
+.resend{
+
+    display:inline-block;
+
+    margin-top:20px;
+
+    color:gold;
+
+    text-decoration:none;
+
+    font-weight:bold;
+
+}
+
+.resend:hover{
+
+    text-decoration:underline;
+
+}
+
+.timer{
+
+    margin-top:25px;
+
+    width:90px;
+    height:90px;
+
+    border-radius:50%;
+
+    margin-left:auto;
+    margin-right:auto;
+
+    border:5px solid #ff4d4d;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+
+    font-size:22px;
+    font-weight:bold;
+
+}
+
+.small{
+
+    margin-top:12px;
+    color:#bdbdbd;
+
+}
+
+</style>
+
 </head>
-<body style="background: rgba(6, 10, 10, 0.932);
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-">
 
-    <div class="verify-otp">
-                
-                <h5>ENTER THE OTP CODE SENT TO <br><br><span>{{ email }}</span></h5>
+<body>
 
-            
+<div class="verify-card">
 
-                <form method="POST">
-                    <input type="text" name="otp" placeholder="Enter OTP">
-                    <button type="submit">VERIFY</button>
-                </form>
+    <div class="logo">
 
-                <p>Didn't get code?</p>
-                <a href="/resend-otp/{{ email }}">Resend OTP</a>
-                <p>OTP expires in: <span id="timer">05:00</span></p>
+        <img src="{{ url_for('static', filename='images/supernova earn logo.png') }}">
 
+    </div>
 
+    <h2>Verify OTP</h2>
 
-     </div>
-     <script>
-        
-document.addEventListener("DOMContentLoaded", function () {
+    <p>
 
-    let timeLeft = 300; // 5 minutes
-    const timerDisplay = document.getElementById("timer");
+        Enter the verification code sent to
 
-    function updateTimer() {
+        <br>
+
+        <span class="email">{{ email }}</span>
+
+    </p>
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="otp"
+            maxlength="6"
+            placeholder="000000"
+            required
+        >
+
+        <button type="submit">
+
+            Verify OTP
+
+        </button>
+
+    </form>
+
+    <a class="resend"
+       href="/resend-otp/{{ email }}">
+
+       Resend OTP
+
+    </a>
+
+    <div class="timer">
+
+        <span id="timer">
+
+            05:00
+
+        </span>
+
+    </div>
+
+    <div class="small">
+
+        OTP expires in
+
+    </div>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+    let timeLeft = 300;
+
+    const timer = document.getElementById("timer");
+
+    function updateTimer(){
 
         let minutes = Math.floor(timeLeft / 60);
         let seconds = timeLeft % 60;
 
-        if (seconds < 10) seconds = "0" + seconds;
+        if(seconds < 10){
 
-        timerDisplay.textContent = minutes + ":" + seconds;
+            seconds = "0" + seconds;
 
-        if (timeLeft <= 0) {
+        }
+
+        timer.innerHTML = minutes + ":" + seconds;
+
+        if(timeLeft <= 0){
+
             clearInterval(countdown);
-            timerDisplay.textContent = "Expired";
+
+            timer.innerHTML = "Expired";
+
         }
 
         timeLeft--;
+
     }
 
-    const countdown = setInterval(updateTimer, 1000);
+    const countdown = setInterval(updateTimer,1000);
+
     updateTimer();
+
 });
-     </script>
+
+</script>
+
 </body>
 </html>
