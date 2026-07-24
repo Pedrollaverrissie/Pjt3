@@ -29,33 +29,35 @@ body{
 
 .verify-card{
 
-    width:340px;
-    max-width:90%;
+    width:380px;
+    max-width:95%;
 
     background:rgb(24,10,42);
 
     border:1px solid white;
 
-    border-radius:20px;
+    border-radius:22px;
 
-    padding:35px;
+    padding:35px 25px;
 
     text-align:center;
 
     box-shadow:0 20px 45px rgba(0,0,0,.5);
 
+    box-sizing:border-box;
+
 }
 
 .logo{
-
+    text-align:center;
     margin-bottom:15px;
 
 }
 
 .logo img{
 
-    width:60px;
-    border-radius:15px;
+    width:50px;
+    border-radius:20% 10%;
 
 }
 
@@ -112,21 +114,24 @@ input:focus{
 button{
 
     width:100%;
+
     padding:15px;
 
+    margin-top:10px;
+
     border:none;
-    border-radius:10px;
+
+    border-radius:12px;
 
     background:#16b364;
 
     color:white;
 
     font-size:17px;
+
     font-weight:bold;
 
     cursor:pointer;
-
-    transition:.3s;
 
 }
 
@@ -191,7 +196,11 @@ button:hover{
 
     display:flex;
     justify-content:space-between;
-    gap:10px;
+    align-items:center;
+
+    gap:8px;
+
+    width:100%;
 
     margin:25px 0;
 
@@ -199,19 +208,26 @@ button:hover{
 
 .otp-input{
 
-    width:48px;
+    flex:1;
+
+    max-width:52px;
     height:58px;
 
     border-radius:12px;
 
-    border:2px solid #444;
+    border:2px solid #ffffff;
 
-    background:#fff;
+    background:#ffffff;
+
+    color:#000;
 
     text-align:center;
 
     font-size:24px;
+
     font-weight:bold;
+
+    box-sizing:border-box;
 
     transition:.3s;
 
