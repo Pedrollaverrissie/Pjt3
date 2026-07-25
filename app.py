@@ -605,15 +605,27 @@ def verify_otp(email):
         data = otp_store.get(email)
 
         if not data:
-         return render_template("otp_expired.html")
+            return render_template("otp_expired.html")
 
         if time.time() - data["time"] > 300:
+            otp_store.pop(email, None)
             return render_template("otp_expired.html")
 
         if data["otp"] == user_otp:
+            otp_store.pop(email, None)
             return redirect(f"/reset-password/{email}")
-        
-    return render_template("verify_otp.html", email=email,  invalid_otp=True)
+
+        return render_template(
+            "verify_otp.html",
+            email=email,
+            invalid_otp=True
+        )
+
+    return render_template(
+        "verify_otp.html",
+        email=email,
+        invalid_otp=False
+    )
 
 #-------------RESET PASSWORD----------------
 
