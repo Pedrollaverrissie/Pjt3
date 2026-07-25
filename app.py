@@ -612,10 +612,8 @@ def verify_otp(email):
 
         if data["otp"] == user_otp:
             return redirect(f"/reset-password/{email}")
-
-        return "Invalid OTP"
-
-    return render_template("verify_otp.html", email=email)
+        
+    return render_template("verify_otp.html", email=email,  invalid_otp=True)
 
 #-------------RESET PASSWORD----------------
 
