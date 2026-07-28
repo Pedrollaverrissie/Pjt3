@@ -224,6 +224,209 @@ body{
 }
 
 }
+/*================ HERO =================*/
+
+.hero{
+
+    min-height:90vh;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:80px 8%;
+
+    gap:60px;
+
+}
+
+.hero-left{
+
+    flex:1;
+
+}
+
+.hero-tag{
+
+    display:inline-block;
+
+    padding:8px 18px;
+
+    border-radius:40px;
+
+    background:rgba(22,179,100,.12);
+
+    color:#16b364;
+
+    border:1px solid rgba(22,179,100,.3);
+
+    margin-bottom:25px;
+
+}
+
+.hero-left h1{
+
+    font-size:56px;
+
+    color:white;
+
+    line-height:1.2;
+
+    margin-bottom:25px;
+
+}
+
+.hero-left h1 span{
+
+    color:#FFD54A;
+
+}
+
+.hero-left p{
+
+    color:#d7d7d7;
+
+    font-size:18px;
+
+    line-height:1.9;
+
+    max-width:650px;
+
+    margin-bottom:40px;
+
+}
+
+.hero-buttons{
+
+    display:flex;
+
+    gap:18px;
+
+    margin-bottom:40px;
+
+}
+
+.hero-badges{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:18px;
+
+}
+
+.hero-badges span{
+
+    color:white;
+
+    font-size:15px;
+
+}
+
+.hero-right{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+
+}
+
+.dashboard-preview{
+
+    width:340px;
+
+    background:rgb(24,10,42);
+
+    border-radius:25px;
+
+    padding:30px;
+
+    border:1px solid rgba(22,179,100,.25);
+
+    animation:floatCard 4s ease-in-out infinite;
+
+    box-shadow:0 0 40px rgba(22,179,100,.12);
+
+}
+
+.wallet-card{
+
+    background:#16b364;
+
+    color:white;
+
+    padding:25px;
+
+    border-radius:18px;
+
+    margin-bottom:25px;
+
+}
+
+.wallet-card small{
+
+    opacity:.8;
+
+}
+
+.wallet-card h2{
+
+    margin-top:10px;
+
+    font-size:34px;
+
+}
+
+.wallet-small{
+
+    background:#12071d;
+
+    padding:20px;
+
+    border-radius:16px;
+
+    margin-top:18px;
+
+    color:white;
+
+}
+
+.wallet-small span{
+
+    color:#FFD54A;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+}
+
+@keyframes floatCard{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-12px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+    }
+
+}
 
 @media(max-width:900px){
 
