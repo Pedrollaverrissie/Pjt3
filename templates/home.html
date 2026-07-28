@@ -2371,7 +2371,21 @@ menuBtn.addEventListener("click",()=>{
 
 });
 </script>
+<script>
+    document.querySelectorAll(".mobile-menu a").forEach(link=>{
 
+    link.addEventListener("click",()=>{
+
+        mobileMenu.classList.remove("active");
+
+        menuBtn.classList.remove("active");
+
+        menuBtn.innerHTML="☰";
+
+    });
+
+});
+</script>
 <script>
     const glow=document.getElementById("cursor-glow");
 
