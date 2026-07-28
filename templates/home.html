@@ -367,6 +367,8 @@ body{
 
 }
 
+/*================ MOBILE MENU =================*/
+
 .mobile-menu{
 
     position:absolute;
@@ -377,35 +379,85 @@ body{
 
     width:100%;
 
-    background:#0b0715;
+    background:rgba(12,11,20,.96);
 
-    display:none;
+    backdrop-filter:blur(18px);
 
-    flex-direction:column;
+    -webkit-backdrop-filter:blur(18px);
 
-    padding:25px;
+    overflow:hidden;
 
-    border-top:1px solid rgba(255,255,255,.08);
+    max-height:0;
 
-    z-index:999;
+    transition:max-height .45s ease;
 
-}
+    z-index:9999;
 
-.mobile-menu a{
+    border-bottom:1px solid rgba(22,179,100,.25);
 
-    color:white;
-
-    text-decoration:none;
-
-    padding:15px 0;
-
-    border-bottom:1px solid rgba(255,255,255,.06);
+    box-shadow:0 18px 40px rgba(0,0,0,.45);
 
 }
 
 .mobile-menu.active{
 
-    display:flex;
+    max-height:500px;
+
+}
+
+.mobile-menu a{
+
+    display:block;
+
+    padding:18px 30px;
+
+    text-decoration:none;
+
+    color:white;
+
+    font-size:17px;
+
+    border-bottom:1px solid rgba(255,255,255,.05);
+
+    transition:.3s;
+
+}
+
+.mobile-menu a:hover{
+
+    background:rgba(22,179,100,.12);
+
+    color:#FFD54A;
+
+    padding-left:42px;
+
+}
+
+@media(max-width:900px){
+
+.navbar,
+.header-buttons{
+
+    display:none;
+
+}
+
+.menu-btn{
+
+    display:block;
+
+}
+
+}
+
+@media(min-width:901px){
+
+.menu-btn,
+.mobile-menu{
+
+    display:none;
+
+}
 
 }
 /*================ HERO =================*/
@@ -2294,7 +2346,45 @@ body{
     </div>
 
 </footer>
+<script>
 <div id="cursor-glow"></div>
+const menuBtn = document.getElementById("menu-btn");
+
+const mobileMenu = document.getElementById("mobile-menu");
+
+menuBtn.addEventListener("click",()=>{
+
+    mobileMenu.classList.toggle("active");
+
+    menuBtn.classList.toggle("active");
+
+    if(mobileMenu.classList.contains("active")){
+
+        menuBtn.innerHTML="✕";
+
+    }else{
+
+        menuBtn.innerHTML="☰";
+
+    }
+
+});
+</script>
+<script>
+    document.querySelectorAll(".mobile-menu a").forEach(link=>{
+
+    link.addEventListener("click",()=>{
+
+        mobileMenu.classList.remove("active");
+
+        menuBtn.classList.remove("active");
+
+        menuBtn.innerHTML="☰";
+
+    });
+
+});
+</script>
 <script>
     const glow=document.getElementById("cursor-glow");
 
