@@ -433,6 +433,193 @@ body{
     width: 90%;
 }
 
+
+/*================ VIP =================*/
+
+.vip-section{
+
+    width:90%;
+
+    margin:100px auto;
+
+}
+
+.section-title{
+
+    text-align:center;
+
+    margin-bottom:60px;
+
+}
+
+.section-title h2{
+
+    color:#FFD54A;
+
+    font-size:42px;
+
+    margin-bottom:15px;
+
+}
+
+.section-title p{
+
+    color:#d8d8d8;
+
+    font-size:18px;
+
+}
+
+.vip-container{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+
+    gap:30px;
+
+}
+
+.vip-card{
+
+    background:rgb(24,10,42);
+
+    border-radius:25px;
+
+    padding:35px;
+
+    position:relative;
+
+    text-align:center;
+
+    transition:.4s;
+
+    overflow:hidden;
+
+}
+
+.vip-card:hover{
+
+    transform:translateY(-12px);
+
+}
+
+.vip-icon{
+
+    font-size:55px;
+
+    margin-bottom:20px;
+
+}
+
+.vip-card h3{
+
+    color:white;
+
+    margin-bottom:15px;
+
+}
+
+.vip-card h1{
+
+    color:#FFD54A;
+
+    margin-bottom:30px;
+
+    font-size:42px;
+
+}
+
+.vip-card ul{
+
+    list-style:none;
+
+    text-align:left;
+
+    margin-bottom:35px;
+
+}
+
+.vip-card ul li{
+
+    color:white;
+
+    margin:15px 0;
+
+}
+
+.vip-card a{
+
+    display:inline-block;
+
+    text-decoration:none;
+
+    background:#16b364;
+
+    color:white;
+
+    padding:13px 30px;
+
+    border-radius:12px;
+
+    transition:.3s;
+
+}
+
+.vip-card a:hover{
+
+    transform:scale(1.05);
+
+}
+
+.bronze{
+
+    border:2px solid #CD7F32;
+
+}
+
+.silver{
+
+    border:2px solid silver;
+
+}
+
+.gold{
+
+    border:2px solid gold;
+
+    box-shadow:0 0 25px rgba(255,215,0,.25);
+
+}
+
+.diamond{
+
+    border:2px solid #00E5FF;
+
+}
+
+.popular{
+
+    position:absolute;
+
+    top:18px;
+
+    right:-35px;
+
+    background:#FFD54A;
+
+    color:black;
+
+    padding:8px 40px;
+
+    font-size:12px;
+
+    font-weight:bold;
+
+    transform:rotate(45deg);
+
+}
+
 .features h2{
     text-align:center;
     margin-bottom:50px;
@@ -681,6 +868,131 @@ footer{
         <div id="activity-feed">
 
             🟢 Welcome to Supernova Earn
+
+        </div>
+
+    </div>
+
+</section>
+<section class="vip-section" id="vip">
+
+    <div class="section-title">
+
+        <h2>Choose Your VIP Membership</h2>
+
+        <p>Upgrade your earning potential with higher daily rewards and exclusive benefits.</p>
+
+    </div>
+
+    <div class="vip-container">
+
+        <!-- Bronze -->
+
+        <div class="vip-card bronze">
+
+            <div class="vip-icon">🥉</div>
+
+            <h3>VIP Bronze</h3>
+
+            <h1>KES 500</h1>
+
+            <ul>
+
+                <li>✔ Daily Tasks</li>
+
+                <li>✔ Referral Bonus</li>
+
+                <li>✔ Daily Income</li>
+
+                <li>✔ Fast Withdrawals</li>
+
+            </ul>
+
+            <a href="/signup">Join Now</a>
+
+        </div>
+
+        <!-- Silver -->
+
+        <div class="vip-card silver">
+
+            <div class="vip-icon">🥈</div>
+
+            <h3>VIP Silver</h3>
+
+            <h1>KES 2,000</h1>
+
+            <ul>
+
+                <li>✔ Higher Daily Income</li>
+
+                <li>✔ Priority Tasks</li>
+
+                <li>✔ Bigger Referral Bonus</li>
+
+                <li>✔ Faster Withdrawals</li>
+
+            </ul>
+
+            <a href="/signup">Join Now</a>
+
+        </div>
+
+        <!-- Gold -->
+
+        <div class="vip-card gold">
+
+            <span class="popular">
+
+                MOST POPULAR
+
+            </span>
+
+            <div class="vip-icon">🥇</div>
+
+            <h3>VIP Gold</h3>
+
+            <h1>KES 5,000</h1>
+
+            <ul>
+
+                <li>✔ Premium Tasks</li>
+
+                <li>✔ Maximum Daily Earnings</li>
+
+                <li>✔ VIP Support</li>
+
+                <li>✔ Highest Referral Rewards</li>
+
+            </ul>
+
+            <a href="/signup">Join Now</a>
+
+        </div>
+
+        <!-- Diamond -->
+
+        <div class="vip-card diamond">
+
+            <div class="vip-icon">💎</div>
+
+            <h3>VIP Diamond</h3>
+
+            <h1>KES 10,000</h1>
+
+            <ul>
+
+                <li>✔ Elite Earnings</li>
+
+                <li>✔ Unlimited Opportunities</li>
+
+                <li>✔ Dedicated Support</li>
+
+                <li>✔ Exclusive Bonuses</li>
+
+            </ul>
+
+            <a href="/signup">Join Now</a>
 
         </div>
 
