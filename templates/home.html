@@ -225,67 +225,44 @@ body{
 
 }
 
+@media(max-width:900px){
+
 .hero{
-    min-height:55vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+
+    flex-direction:column;
+
     text-align:center;
-    align-self: auto;
-    color: aqua;
-    margin-top: 30px;
-   
+
+    padding-top:50px;
+
 }
 
-.hero-content h2{
-    font-size:25px;
-    margin-bottom:20px;
-    color:#c5a91e;
-}
+.hero-left h1{
 
-.hero-content p{
-    font-size:16px;
-    color:#f1f3f7;
-    max-width:700px;
-    margin:auto;
-    line-height:1.8;
-    padding: 20px;
+    font-size:38px;
+
 }
 
 .hero-buttons{
-    display: flex;
-    align-items: center;
-    margin-top:35px;
-    justify-content: center;
+
+    justify-content:center;
+
 }
 
-.hero-buttons a{
-    text-decoration:none;
-    margin:10px;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-size: 13px;
-    
+.hero-badges{
+
+    justify-content:center;
+
 }
 
-.start-btn{
-    background:#3468cfda;
-    color:rgb(243, 244, 244);
-    padding:10px 35px;
-    border-radius:10px;
-    font-size:18px;
-    font-weight:bold;
-    box-shadow: 0 -0 2px rgb(232, 253, 1);
-    vertical-align: middle;
+.dashboard-preview{
+
+    width:100%;
+
+    max-width:340px;
+
 }
 
-.learn-btn{
-    background:#101003;
-    color:rgb(255, 200, 0);
-    box-shadow: 0 -0 2px rgb(34, 255, 0);
-    padding:10px 35px;
-    border-radius:10px;
-    font-size:18px;
-    font-weight:bold;
 }
 
 .features{
@@ -423,22 +400,78 @@ footer{
 
 <section class="hero">
 
-<div class="hero-content">
+    <div class="hero-left">
 
-<h2>Earn Money Online With Confidence</h2>
+        <span class="hero-tag">
+            ⭐ Trusted by Growing Online Earners
+        </span>
 
-<p>
-Join thousands of members earning through tasks, referrals,
-commissions and online opportunities. Fast registration,
-secure payments and a simple earning experience.
-</p>
+        <h1>
+            Power Your <span>Financial Growth</span><br>
+            Every Single Day
+        </h1>
 
-<div class="hero-buttons">
-    <a href="/signup" class="start-btn">Get Started</a>
-    <a href="/login" class="learn-btn">Login</a>
-</div>
+        <p>
+            Join Supernova Earn and unlock daily earning opportunities through
+            tasks, referrals, VIP memberships and secure M-Pesa withdrawals.
+            Start building your income with a trusted platform.
+        </p>
 
-</div>
+        <div class="hero-buttons">
+
+            <a href="/signup" class="start-btn">
+                Create Account
+            </a>
+
+            <a href="/login" class="learn-btn">
+                Login
+            </a>
+
+        </div>
+
+        <div class="hero-badges">
+
+            <span>✔ Secure Payments</span>
+
+            <span>✔ M-Pesa Supported</span>
+
+            <span>✔ Daily Opportunities</span>
+
+        </div>
+
+    </div>
+
+    <div class="hero-right">
+
+        <div class="dashboard-preview">
+
+            <div class="wallet-card">
+
+                <small>Main Wallet</small>
+
+                <h2>KES 12,450</h2>
+
+            </div>
+
+            <div class="wallet-small">
+
+                <h3>Today's Earnings</h3>
+
+                <span>KES 650</span>
+
+            </div>
+
+            <div class="wallet-small">
+
+                <h3>VIP Status</h3>
+
+                <span>Gold</span>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </section>
 
