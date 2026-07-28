@@ -366,6 +366,48 @@ body{
 }
 
 }
+
+.mobile-menu{
+
+    position:absolute;
+
+    top:80px;
+
+    left:0;
+
+    width:100%;
+
+    background:#0b0715;
+
+    display:none;
+
+    flex-direction:column;
+
+    padding:25px;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+    z-index:999;
+
+}
+
+.mobile-menu a{
+
+    color:white;
+
+    text-decoration:none;
+
+    padding:15px 0;
+
+    border-bottom:1px solid rgba(255,255,255,.06);
+
+}
+
+.mobile-menu.active{
+
+    display:flex;
+
+}
 /*================ HERO =================*/
 
 .hero{
@@ -1675,13 +1717,28 @@ body{
 
     </div>
 
-    <div class="menu-btn">
-
+    <div class="menu-btn" id="menu-btn">
         ☰
-
     </div>
 
+    
+
 </header>
+<div class="mobile-menu" id="mobile-menu">
+
+    <a href="/">Home</a>
+
+    <a href="#features">Features</a>
+
+    <a href="#vip">VIP</a>
+
+    <a href="#contact">Contact</a>
+
+    <a href="/login">Login</a>
+
+    <a href="/signup">Register</a>
+
+</div>
 
 <section class="hero">
 
