@@ -2347,7 +2347,7 @@ body{
 
 </footer>
 
-<div id="cursor-glow"></div>
+<div id="cursor-low"></div>
 <script>
 const menuBtn = document.getElementById("menu-btn");
 
@@ -2371,21 +2371,7 @@ menuBtn.addEventListener("click",()=>{
 
 });
 </script>
-<script>
-    document.querySelectorAll(".mobile-menu a").forEach(link=>{
 
-    link.addEventListener("click",()=>{
-
-        mobileMenu.classList.remove("active");
-
-        menuBtn.classList.remove("active");
-
-        menuBtn.innerHTML="☰";
-
-    });
-
-});
-</script>
 <script>
     const glow=document.getElementById("cursor-glow");
 
