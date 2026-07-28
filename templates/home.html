@@ -371,7 +371,7 @@ body{
 
 .mobile-menu{
 
-    position:absolute;
+    position:fixed;
 
     top:80px;
 
@@ -379,29 +379,30 @@ body{
 
     width:100%;
 
-    background:rgba(12,11,20,.96);
+    height:calc(100vh - 80px);
+
+    background:rgba(12,11,20,.97);
 
     backdrop-filter:blur(18px);
-
     -webkit-backdrop-filter:blur(18px);
 
-    overflow:hidden;
+    display:flex;
+    flex-direction:column;
 
-    max-height:0;
-
-    transition:max-height .45s ease;
+    transform:translateY(-120%);
+    transition:transform .45s ease;
 
     z-index:9999;
 
-    border-bottom:1px solid rgba(22,179,100,.25);
+    overflow-y:auto;
 
-    box-shadow:0 18px 40px rgba(0,0,0,.45);
+    padding:30px 0;
 
 }
 
 .mobile-menu.active{
 
-    max-height:500px;
+    transform:translateY(0);
 
 }
 
@@ -409,15 +410,15 @@ body{
 
     display:block;
 
-    padding:18px 30px;
+    padding:18px 35px;
 
     text-decoration:none;
 
     color:white;
 
-    font-size:17px;
+    font-size:18px;
 
-    border-bottom:1px solid rgba(255,255,255,.05);
+    border-bottom:1px solid rgba(255,255,255,.06);
 
     transition:.3s;
 
@@ -425,11 +426,11 @@ body{
 
 .mobile-menu a:hover{
 
-    background:rgba(22,179,100,.12);
+    background:rgba(22,179,100,.15);
 
     color:#FFD54A;
 
-    padding-left:42px;
+    padding-left:45px;
 
 }
 
