@@ -15,12 +15,154 @@
     font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
+
+/*================ BACKGROUND =================*/
+
 body{
-    background:#0c0b14;
-    color:#e0c8c8;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
+
+    background:#0b0715;
+
+    overflow-x:hidden;
+
+    position:relative;
+
+}
+
+.background-animation{
+
+    position:fixed;
+
+    inset:0;
+
+    overflow:hidden;
+
+    z-index:-1;
+
+}
+
+.background-animation span{
+
+    position:absolute;
+
+    display:block;
+
+    width:12px;
+
+    height:12px;
+
+    border-radius:50%;
+
+    background:rgba(22,179,100,.18);
+
+    animation:floatParticle linear infinite;
+
+    bottom:-100px;
+
+}
+
+.background-animation span:nth-child(1){
+
+    left:8%;
+
+    animation-duration:18s;
+
+    width:10px;
+
+    height:10px;
+
+}
+
+.background-animation span:nth-child(2){
+
+    left:20%;
+
+    animation-duration:24s;
+
+    background:rgba(255,213,74,.15);
+
+}
+
+.background-animation span:nth-child(3){
+
+    left:38%;
+
+    animation-duration:20s;
+
+}
+
+.background-animation span:nth-child(4){
+
+    left:62%;
+
+    animation-duration:27s;
+
+}
+
+.background-animation span:nth-child(5){
+
+    left:82%;
+
+    animation-duration:19s;
+
+    background:rgba(255,213,74,.18);
+
+}
+
+.background-animation span:nth-child(6){
+
+    left:92%;
+
+    animation-duration:25s;
+
+}
+
+@keyframes floatParticle{
+
+    from{
+
+        transform:translateY(0) scale(.5);
+
+        opacity:0;
+
+    }
+
+    20%{
+
+        opacity:1;
+
+    }
+
+    80%{
+
+        opacity:.5;
+
+    }
+
+    to{
+
+        transform:translateY(-120vh) scale(1.3);
+
+        opacity:0;
+
+    }
+
+}
+.reveal{
+
+    opacity:0;
+
+    transform:translateY(60px);
+
+    transition:1s;
+
+}
+
+.reveal.active{
+
+    opacity:1;
+
+    transform:translateY(0);
+
 }
 
 /*================ HEADER ================*/
@@ -1387,9 +1529,41 @@ body{
     padding-bottom:30px;
 
 }
+#cursor-glow{
+
+    position:fixed;
+
+    width:280px;
+
+    height:280px;
+
+    border-radius:50%;
+
+    background:radial-gradient(circle,
+    rgba(22,179,100,.12),
+    transparent 70%);
+
+    pointer-events:none;
+
+    transform:translate(-50%,-50%);
+
+    z-index:-1;
+
+}
 </style>
 </head>
 <body>
+
+<div class="background-animation">
+
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+
+</div>
 
 <header class="header">
 
@@ -1429,7 +1603,7 @@ body{
 
 <section class="hero">
 
-    <div class="hero-left">
+    <div class="hero reveal" class="hero-left">
 
         <span class="hero-tag">
             ⭐ Trusted by Growing Online Earners
@@ -1503,7 +1677,7 @@ body{
     </div>
 
 </section>
-<section class="stats-section">
+<section class="hero reveal" class="stats-section">
 
     <div class="stat-card">
 
@@ -1553,7 +1727,7 @@ body{
     </div>
 
 </section>
-<section class="vip-section" id="vip">
+<section class="vip-section reveal" class="vip-section" id="vip">
 
     <div class="section-title">
 
@@ -1703,7 +1877,7 @@ body{
 
 </section>
 
-<section class="dashboard-section">
+<section  class="vip-section reveal" class="dashboard-section">
 
     <div class="dashboard-left">
 
@@ -1981,6 +2155,37 @@ body{
     </div>
 
 </footer>
+<div id="cursor-glow"></div>
+<script>
+    const glow=document.getElementById("cursor-glow");
+
+document.addEventListener("mousemove",(e)=>{
+
+    glow.style.left=e.clientX+"px";
+
+    glow.style.top=e.clientY+"px";
+
+});
+</script>
+<script>
+const reveals=document.querySelectorAll(".reveal");
+
+window.addEventListener("scroll",()=>{
+
+    reveals.forEach(section=>{
+
+        const top=section.getBoundingClientRect().top;
+
+        if(top<window.innerHeight-120){
+
+            section.classList.add("active");
+
+        }
+
+    });
+
+});
+</script>
 <script>
 
 const activities=[
