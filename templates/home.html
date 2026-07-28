@@ -620,6 +620,242 @@ body{
 
 }
 
+/*================ DASHBOARD =================*/
+
+.dashboard-section{
+
+    width:90%;
+
+    margin:120px auto;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:70px;
+
+}
+
+.dashboard-left{
+
+    flex:1;
+
+}
+
+.section-badge{
+
+    display:inline-block;
+
+    background:rgba(22,179,100,.12);
+
+    color:#16b364;
+
+    border:1px solid rgba(22,179,100,.3);
+
+    padding:10px 20px;
+
+    border-radius:40px;
+
+    margin-bottom:25px;
+
+}
+
+.dashboard-left h2{
+
+    color:#FFD54A;
+
+    font-size:42px;
+
+    margin-bottom:20px;
+
+}
+
+.dashboard-left p{
+
+    color:#d8d8d8;
+
+    font-size:18px;
+
+    line-height:1.8;
+
+    margin-bottom:35px;
+
+}
+
+.dashboard-item{
+
+    background:rgb(24,10,42);
+
+    color:white;
+
+    padding:18px;
+
+    margin-bottom:15px;
+
+    border-radius:12px;
+
+    border-left:4px solid #16b364;
+
+    transition:.3s;
+
+}
+
+.dashboard-item:hover{
+
+    transform:translateX(8px);
+
+}
+
+.dashboard-right{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+
+}
+
+.phone-preview{
+
+    width:360px;
+
+    background:#161122;
+
+    border-radius:35px;
+
+    padding:30px;
+
+    border:2px solid rgba(22,179,100,.3);
+
+    box-shadow:0 0 35px rgba(22,179,100,.18);
+
+    animation:phoneFloat 5s ease-in-out infinite;
+
+}
+
+.phone-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:25px;
+
+}
+
+.phone-header h3{
+
+    color:white;
+
+}
+
+.phone-header span{
+
+    color:#16b364;
+
+}
+
+.wallet-preview{
+
+    background:#16b364;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    color:white;
+
+    margin-bottom:25px;
+
+}
+
+.wallet-preview h1{
+
+    margin-top:12px;
+
+}
+
+.dashboard-cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:15px;
+
+}
+
+.mini-card{
+
+    background:#0f0919;
+
+    padding:18px;
+
+    border-radius:14px;
+
+    color:white;
+
+}
+
+.mini-card small{
+
+    color:#bbbbbb;
+
+}
+
+.mini-card h3{
+
+    margin-top:10px;
+
+    color:#FFD54A;
+
+}
+
+@keyframes phoneFloat{
+
+    0%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-12px);
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+    }
+
+}
+
+@media(max-width:900px){
+
+.dashboard-section{
+
+    flex-direction:column;
+
+}
+
+.phone-preview{
+
+    width:100%;
+
+    max-width:360px;
+
+}
+
+}
+
 .features h2{
     text-align:center;
     margin-bottom:50px;
@@ -993,6 +1229,109 @@ footer{
             </ul>
 
             <a href="/signup">Join Now</a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="dashboard-section">
+
+    <div class="dashboard-left">
+
+        <span class="section-badge">
+            Member Dashboard
+        </span>
+
+        <h2>Everything You Need In One Dashboard</h2>
+
+        <p>
+            Monitor your wallet, withdrawals, referrals, bonuses,
+            VIP status and daily earnings from one beautiful dashboard.
+        </p>
+
+        <div class="dashboard-list">
+
+            <div class="dashboard-item">
+                ✔ Main Wallet
+            </div>
+
+            <div class="dashboard-item">
+                ✔ Withdrawal History
+            </div>
+
+            <div class="dashboard-item">
+                ✔ Referral Earnings
+            </div>
+
+            <div class="dashboard-item">
+                ✔ Recharge Records
+            </div>
+
+            <div class="dashboard-item">
+                ✔ Daily Tasks
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="dashboard-right">
+
+        <div class="phone-preview">
+
+            <div class="phone-header">
+
+                <h3>Supernova Dashboard</h3>
+
+                <span>Online</span>
+
+            </div>
+
+            <div class="wallet-preview">
+
+                <small>Main Wallet</small>
+
+                <h1>KES 12,450</h1>
+
+            </div>
+
+            <div class="dashboard-cards">
+
+                <div class="mini-card">
+
+                    <small>Today's Earnings</small>
+
+                    <h3>KES 650</h3>
+
+                </div>
+
+                <div class="mini-card">
+
+                    <small>Referral Bonus</small>
+
+                    <h3>KES 1,200</h3>
+
+                </div>
+
+                <div class="mini-card">
+
+                    <small>VIP Status</small>
+
+                    <h3>Gold</h3>
+
+                </div>
+
+                <div class="mini-card">
+
+                    <small>Withdrawal</small>
+
+                    <h3 style="color:#16b364;">Completed</h3>
+
+                </div>
+
+            </div>
 
         </div>
 
