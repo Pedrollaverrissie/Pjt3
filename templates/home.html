@@ -1282,94 +1282,111 @@ body{
     margin-bottom:40px;
 
 }
-.features h2{
-    text-align:center;
-    margin-bottom:50px;
-    font-size:18px;
-    width: 100%;
+/*================ FOOTER =================*/
+
+.footer{
+
+    width:100%;
+
+    background:#08040f;
+
+    margin-top:120px;
+
+    padding-top:70px;
+
+    border-top:1px solid rgba(22,179,100,.2);
+
 }
 
-.feature-grid{
+.footer-container{
+
+    width:90%;
+
+    margin:auto;
+
     display:grid;
+
     grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:25px;
-}
 
-.card{
-    background:#150712;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 -0 3px rgb(60, 255, 0);
-}
-
-.card h3{
-    margin-bottom:18px;
-    color:#fff702b9;
-    font-size: 12px;
+    gap:50px;
 
 }
 
-.card p{
-    color:#f4f4f3c1;
-    line-height:1.7;
-    font-size: 16px;
-}
+.footer-logo{
 
-.cta{
-    background:#140a0a;
-    color:white;
-    text-align:center;
-    padding:40px 10px;
-    width: 90%;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 -0 3px rgb(64, 255, 0);
-   
-}
+    width:70px;
 
-.cta h3{
-    font-size:18px;
     margin-bottom:20px;
-    color: #f7e305b5;
+
 }
 
-.cta p{
-    font-size:14px;
-    margin-bottom:30px;
-}
+.footer-column h2{
 
-.cta a{
-    background:rgb(28, 8, 16);
-    color:#fde800d0;
-    text-decoration:none;
-    padding:10px 20px;
-    border-radius:10px;
-    font-weight:bold;
-    box-shadow: 0 -0 3px rgb(255, 0, 166);
-    font-size: 12px;
-}
-
-footer{
-    background:#111827;
     color:white;
+
+    margin-bottom:20px;
+
+}
+
+.footer-column h3{
+
+    color:#FFD54A;
+
+    margin-bottom:20px;
+
+}
+
+.footer-column p{
+
+    color:#cfcfcf;
+
+    line-height:1.9;
+
+}
+
+.footer-column a{
+
+    display:block;
+
+    color:#cfcfcf;
+
+    text-decoration:none;
+
+    margin-bottom:15px;
+
+    transition:.3s;
+
+}
+
+.footer-column a:hover{
+
+    color:#16b364;
+
+    transform:translateX(6px);
+
+}
+
+.footer hr{
+
+    width:90%;
+
+    margin:50px auto 25px;
+
+    border:none;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+.footer-bottom{
+
     text-align:center;
-    padding:25px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}
 
-@media(max-width:768px){
+    color:#9d9d9d;
 
-.hero-content h2{
-    font-size:20px;
-}
-
-.hero-content p{
-    font-size:16px;
-}
+    padding-bottom:30px;
 
 }
-
 </style>
 </head>
 <body>
@@ -1869,59 +1886,75 @@ footer{
 
 </section>
 
-<section class="features">
 
-<h2>Why Choose Supernova?</h2>
+<footer class="footer" id="contact">
 
-<div class="feature-grid">
+    <div class="footer-container">
 
-<div class="card">
-<h3>Secure Payments</h3>
-<p>
-Receive payments through M-Pesa with secure transaction processing.
-</p>
-</div>
+        <div class="footer-column">
 
-<div class="card">
-<h3>Referral Rewards</h3>
-<p>
-Grow your team and earn commissions from successful referrals.
-</p>
-</div>
+            <img src="{{ url_for('static', filename='images/supernova earn logo.png') }}" class="footer-logo">
 
-<div class="card">
-<h3>Daily Opportunities</h3>
-<p>
-Access tasks and earning opportunities designed to increase your income.
-</p>
-</div>
+            <h2>SUPERNOVA EARN</h2>
 
-<div class="card">
-<h3>Fast Registration</h3>
-<p>
-Create your account within minutes and start earning immediately.
-</p>
-</div>
+            <p>
+                Powering your financial growth through secure online earning
+                opportunities and fast M-Pesa withdrawals.
+            </p>
 
-</div>
+        </div>
 
-</section>
+        <div class="footer-column">
 
-<section class="cta">
+            <h3>Quick Links</h3>
 
-<h3>Start Your Earning Journey Today</h3>
+            <a href="/">Home</a>
 
-<p>
-Create your account and become part of a growing community.
-</p>
+            <a href="#features">Features</a>
 
-<a href="/signup">Create Account</a>
+            <a href="#vip">VIP Plans</a>
 
-</section>
+            <a href="#faq">FAQ</a>
 
-<footer>
+        </div>
 
-<p>© 2026 supernova earn. All Rights Reserved.</p>
+        <div class="footer-column">
+
+            <h3>Account</h3>
+
+            <a href="/signup">Create Account</a>
+
+            <a href="/login">Login</a>
+
+            <a href="/forgot-password">Forgot Password</a>
+
+        </div>
+
+        <div class="footer-column">
+
+            <h3>Support</h3>
+
+            <p>📧 support@supernovaearn.com</p>
+
+            <p>📱 +254 700 000 000</p>
+
+            <p>🕒 24/7 Customer Support</p>
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    <div class="footer-bottom">
+
+        <p>
+
+            © 2026 Supernova Earn. All Rights Reserved.
+
+        </p>
+
+    </div>
 
 </footer>
 <script>
