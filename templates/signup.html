@@ -178,9 +178,78 @@
 <body>
    
 
-    <div class="container-signup">
-       
-         <form class="signup-page" action="/signup" method="POST">  
+<div class="signup-container">
+
+    <div class="signup-wrapper">
+
+        <!-- LEFT PANEL -->
+
+        <div class="signup-left">
+
+            <div class="signup-brand">
+
+                <img src="{{ url_for('static', filename='images/supernova earn logo.png') }}">
+
+                <h1>SUPERNOVA EARN</h1>
+
+                <p>
+
+                    Build your financial future with secure online earning
+                    opportunities.
+
+                </p>
+
+            </div>
+
+            <div class="signup-feature">
+
+                <span>🚀</span>
+
+                <div>
+
+                    <h3>Daily Earnings</h3>
+
+                    <p>Complete tasks and earn every day.</p>
+
+                </div>
+
+            </div>
+
+            <div class="signup-feature">
+
+                <span>💰</span>
+
+                <div>
+
+                    <h3>Fast Withdrawals</h3>
+
+                    <p>Receive payments directly to M-Pesa.</p>
+
+                </div>
+
+            </div>
+
+            <div class="signup-feature">
+
+                <span>👥</span>
+
+                <div>
+
+                    <h3>Referral Rewards</h3>
+
+                    <p>Invite friends and earn commissions.</p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT PANEL -->
+
+        <div class="signup-right">
+
+            <form class="signup-page" action="/signup" method="POST">  
             <div class="login-header">
                     <div class="top2">
                         <div class="login-logo"><img src="static/images/supernova earn logo.png" alt=""></div>
@@ -234,8 +303,13 @@
                     name="referral_code"
                     value="{{ ref }}"
                 >
-         </form>    
-    </div> 
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
     
     {% if email_exists %}
 
