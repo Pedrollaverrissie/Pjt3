@@ -250,7 +250,10 @@ def signup():
         existing_user = User.query.filter_by(email=email).first()
 
         if existing_user:
-            return "Email already exists! Please login."
+            return render_template(
+                "signup.html",
+                email_exists=True
+            )
 
         hashed_pw = generate_password_hash(
             request.form["password"]
