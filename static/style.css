@@ -58,7 +58,7 @@ font-weight:bold;
 
 /*================ SIGNUP PAGE =================*/
 
-.container-signup{
+.signup-container{
 
     display:flex;
 
@@ -68,7 +68,77 @@ font-weight:bold;
 
     min-height:100vh;
 
-    padding:20px;
+    padding:30px;
+
+    background:#0b0815;
+
+}
+
+.signup-wrapper{
+
+    width:100%;
+
+    max-width:980px;
+
+    display:flex;
+
+    overflow:hidden;
+
+    border-radius:25px;
+
+    box-shadow:0 25px 60px rgba(0,0,0,.45);
+
+}
+
+.signup-left{
+
+    flex:1;
+
+    background:linear-gradient(160deg,#180a2a,#111827);
+
+    color:white;
+
+    padding:50px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+}
+
+.signup-right{
+
+    flex:1;
+
+    background:#180a2a;
+
+    padding:45px;
+
+}
+
+@media(max-width:900px){
+
+.signup-wrapper{
+
+    flex-direction:column;
+
+}
+
+.signup-left{
+
+    display:none;
+
+}
+
+.signup-right{
+
+    width:100%;
+
+    padding:30px 22px;
+
+}
 
 }
 
