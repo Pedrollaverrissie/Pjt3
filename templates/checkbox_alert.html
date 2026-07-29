@@ -1,25 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</head>
-<body style="background: rgb(208, 247, 250);">
-    
-        <div class="checkbox-alert" id="alertBox" >
-            <img src="static/images/alert.jfif" alt="">
-            <p>You must agree to the terms and conditons</p>
-             <a href="/signup">
-                 <button class="alert-cancel" onclick="alertClose()">&#215</button>
 
-             </a>
-           
-        </div>
-        
-       
-        
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Agreement Required</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <style>
+        .agreement-page{
+    background:rgb(208,247,250);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.agreement-alert-box{
+    /* Your custom styling */
+}
+
+.agreement-close-btn{
+    /* Your custom button styling */
+}
+    </style>
+</head>
+
+<body class="agreement-page">
+
+    <div class="agreement-alert-box" id="agreementAlertBox">
+
+        <img src="{{ url_for('static', filename='images/alert.jfif') }}" alt="Alert">
+
+        <p>You must agree to the Terms and Conditions before continuing.</p>
+
+        <a href="/signup">
+
+            <button class="agreement-close-btn" onclick="alertClose()">
+
+                &#215;
+
+            </button>
+
+        </a>
+
+    </div>
+
 </body>
+
 </html>
