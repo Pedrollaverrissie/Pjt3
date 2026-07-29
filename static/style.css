@@ -57,8 +57,15 @@ font-weight:bold;
 }
 
 /*================ SIGNUP PAGE =================*/
+/*====================================================
+                NEW AUTHENTICATION DESIGN
+====================================================*/
 
-.signup-container{
+.auth-bg{
+
+    min-height:100vh;
+
+    background:linear-gradient(135deg,#0b0815,#180a2a,#111827);
 
     display:flex;
 
@@ -66,39 +73,129 @@ font-weight:bold;
 
     align-items:center;
 
-    min-height:100vh;
+    padding:40px 20px;
 
-    padding:30px;
-
-    background:#0b0815;
-
-}
-
-.signup-wrapper{
-
-    width:100%;
-
-    max-width:980px;
-
-    display:flex;
+    position:relative;
 
     overflow:hidden;
 
-    border-radius:25px;
+}
 
-    box-shadow:0 25px 60px rgba(0,0,0,.45);
+/* Floating Background */
+
+.blob{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(70px);
+
+    opacity:.18;
+
+    animation:floatBlob 12s ease-in-out infinite;
 
 }
 
-.signup-left{
+.blob1{
+
+    width:260px;
+
+    height:260px;
+
+    background:#16b364;
+
+    top:-80px;
+
+    left:-80px;
+
+}
+
+.blob2{
+
+    width:340px;
+
+    height:340px;
+
+    background:#7b2ff7;
+
+    bottom:-120px;
+
+    right:-120px;
+
+    animation-delay:3s;
+
+}
+
+.blob3{
+
+    width:220px;
+
+    height:220px;
+
+    background:#FFD54A;
+
+    top:40%;
+
+    right:15%;
+
+    animation-delay:6s;
+
+}
+
+@keyframes floatBlob{
+
+    0%,100%{
+
+        transform:translateY(0);
+
+    }
+
+    50%{
+
+        transform:translateY(-25px);
+
+    }
+
+}
+
+/* Main Card */
+
+.auth-container{
+
+    width:100%;
+
+    max-width:1150px;
+
+    min-height:700px;
+
+    display:flex;
+
+    border-radius:30px;
+
+    overflow:hidden;
+
+    background:rgba(255,255,255,.05);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    box-shadow:0 30px 70px rgba(0,0,0,.45);
+
+    z-index:2;
+
+}
+
+/* LEFT */
+
+.auth-left{
 
     flex:1;
 
-    background:linear-gradient(160deg,#180a2a,#111827);
+    padding:60px;
 
     color:white;
-
-    padding:50px;
 
     display:flex;
 
@@ -106,17 +203,73 @@ font-weight:bold;
 
     justify-content:center;
 
-    align-items:center;
-
-    overflow:hidden;
+    background:linear-gradient(160deg,#180a2a,#111827);
 
 }
 
-.signup-right{
+.auth-logo{
+
+    width:95px;
+
+    margin-bottom:25px;
+
+}
+
+.auth-left h1{
+
+    font-size:40px;
+
+    margin-bottom:15px;
+
+}
+
+.auth-left h2{
+
+    font-size:30px;
+
+    margin-bottom:20px;
+
+    color:#FFD54A;
+
+}
+
+.auth-left p{
+
+    color:#d7d7d7;
+
+    line-height:1.9;
+
+    margin-bottom:35px;
+
+}
+
+.auth-feature{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    margin:14px 0;
+
+    font-size:17px;
+
+}
+
+.auth-feature span{
+
+    color:#16b364;
+
+    font-size:22px;
+
+}
+
+/* RIGHT */
+
+.auth-right{
 
     flex:1;
-
-    background:#180a2a;
 
     display:flex;
 
@@ -125,6 +278,26 @@ font-weight:bold;
     align-items:center;
 
     padding:40px;
+
+}
+
+/* Existing form */
+
+.signup-page{
+
+    width:100%;
+
+    max-width:430px;
+
+    margin:0;
+
+    background:rgba(24,10,42,.85);
+
+    backdrop-filter:blur(15px);
+
+    border:1px solid rgba(255,255,255,.15);
+
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
 
 }
 .signup-brand{
@@ -452,6 +625,101 @@ a{
 
 .line2::after {
     margin-left: 5px;
+}
+
+
+.identity input{
+
+    width:100%;
+
+    height:52px;
+
+    border-radius:12px;
+
+    border:1px solid rgba(255,255,255,.15);
+
+    background:rgba(255,255,255,.08);
+
+    color:white;
+
+    padding:0 18px;
+
+    transition:.35s;
+
+}
+
+.identity input::placeholder{
+
+    color:#b8b8b8;
+
+}
+
+.identity input:focus{
+
+    outline:none;
+
+    border-color:#16b364;
+
+    box-shadow:0 0 18px rgba(22,179,100,.35);
+
+}
+.create-account{
+
+    width:100%;
+
+    height:55px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:linear-gradient(90deg,#16b364,#19d57c);
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+}
+
+.create-account:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 12px 25px rgba(22,179,100,.35);
+
+}
+@media(max-width:900px){
+
+.auth-container{
+
+    flex-direction:column;
+
+}
+
+.auth-left{
+
+    display:none;
+
+}
+
+.auth-right{
+
+    padding:25px;
+
+}
+
+.signup-page{
+
+    max-width:380px;
+
+}
+
 }
 
 /*Login page*/

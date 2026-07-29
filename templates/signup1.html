@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+       <style>
+    .email-exists-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.6);
+
+    backdrop-filter:blur(6px);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:99999;
+
+}
+
+.email-exists-popup{
+
+    position:relative;
+
+    width:300px;
+    max-width:82%;
+
+    background:#ffffff;
+
+    border-radius:18px;
+
+    padding:24px 20px;
+
+    text-align:center;
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.35),
+        0 0 25px rgba(22,179,100,.18);
+
+    animation:agreementPopup .45s cubic-bezier(.22,1,.36,1);
+
+}
+
+.email-exists-popup img{
+
+    width:70px;
+    height:70px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    border:5px solid #fff;
+
+    margin-top:-55px;
+    margin-bottom:15px;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+
+}
+
+.email-exists-popup h2{
+
+    font-size:22px;
+
+    margin-bottom:12px;
+
+}
+
+.email-exists-popup p{
+
+    font-size:15px;
+
+    line-height:1.6;
+
+    margin-bottom:22px;
+
+}
+
+.email-login-btn{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    width:100%;
+
+    height:52px;
+
+    margin:20px auto 0;
+
+    text-decoration:none;
+
+    background:#16b364;
+
+    color:white;
+
+    border-radius:12px;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.email-login-btn:hover{
+
+    background:#119455;
+
+}
+
+.email-exists-close{
+
+    position:absolute;
+
+    top:12px;
+
+    right:12px;
+
+    width:34px;
+
+    height:34px;
+
+    border:none;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+    font-size:22px;
+
+    background:#eee;
+
+}
+
+.email-exists-close:hover{
+
+    background:#d32f2f;
+
+    color:white;
+
+}
+
+@keyframes popupShow{
+
+    from{
+
+        opacity:0;
+
+        transform:scale(.8);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:scale(1);
+
+    }
+
+}
+   </style>
+</head>
+<body>
+
+<div class="auth-bg">
+
+    <div class="blob blob1"></div>
+    <div class="blob blob2"></div>
+    <div class="blob blob3"></div>
+
+    <div class="auth-container">
+
+        <!-- LEFT PANEL -->
+
+        <div class="auth-left">
+
+            <img src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
+                 class="auth-logo">
+
+            <h1>SUPERNOVA EARN</h1>
+
+            <h2>Welcome to the Future of Online Earnings</h2>
+
+            <p>
+                Build your financial future with secure investments,
+                daily income, M-Pesa withdrawals and powerful referral rewards.
+            </p>
+
+            <div class="auth-feature">
+                <span>✓</span>
+                Daily Earnings
+            </div>
+
+            <div class="auth-feature">
+                <span>✓</span>
+                Instant M-Pesa Withdrawals
+            </div>
+
+            <div class="auth-feature">
+                <span>✓</span>
+                Referral Bonuses
+            </div>
+
+            <div class="auth-feature">
+                <span>✓</span>
+                VIP Membership
+            </div>
+
+        </div>
+
+        <!-- RIGHT PANEL -->
+
+        <div class="auth-right">
+
+            <form class="signup-page" action="/signup" method="POST">  
+                        <div class="login-header">
+                                <div class="top2">
+                                    <div class="login-logo"><img src="static/images/supernova earn logo.png" alt=""></div>
+                                    <div class="web-name">
+                                        <h3>SUPERNOVA EARN</h3>
+                                        <p>Sign up a new account</p>
+                                    </div>
+                                </div>
+                                    <div class="notice2">
+                                        <img class="admin" src="static/images/admin.jfif" alt="">
+                                            <p>Invented by <span>Admin</span></p>
+                                    </div>
+                        </div> 
+                        
+                        <div class="identity">
+                            <label for="">Username <span class="bracket"></span></label>
+                            <input name="username" type="text" placeholder="Your display name" required>
+
+                            <label for="">Email</label>
+                            <input type="email" placeholder="yourname@gmail.com" name="email" required>
+
+                            <label for="">Phone number</label>
+                            <input 
+                                
+                                type="tel" 
+                                name="phone" 
+                                placeholder="07XXXXXXXX or 01XXXXXXXX"
+                                pattern="^(07|01)\d{8}$"
+                                required
+                                >
+                            
+
+                            <label for="">Password</label>
+                            <div class="show-password2">
+                                <input type="password"  id="password" placeholder="Min. 6 characters" name="password" required>
+                                <div class="eye2" onclick="togglePassword()" ><img id="eyeIcon"  src="static/images/close-eye.jfif" alt=""></div> 
+                            </div>
+
+                        
+                            <div class="checkbox2">
+                                <input type="checkbox" name="terms" require>
+                                <p>I agree to the <span class="signup-span">Terms of Service </span>and <span class="signup-span">No-Refund Policy</span></p>
+                            </div>
+                        </div>
+
+                        <button class="create-account" type="submit">Create Account</button>
+                        <div class="signup-line"></div>
+                        <p class="signup-root">Already  have an account? <a href="/login" target="_blank">Sign in</a></span></p>
+                            <input
+                                type="hidden"
+                                name="referral_code"
+                                value="{{ ref }}"
+                            >
+                </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+    {% if email_exists %}
+
+<div class="email-exists-overlay">
+
+    <div class="email-exists-popup">
+
+        <button class="email-exists-close"
+                onclick="closeEmailPopup()">
+
+            &times;
+
+        </button>
+
+        <img src="{{ url_for('static', filename='images/alert.jfif') }}">
+
+        <h2>Email Already Registered</h2>
+
+        <p>
+
+            This email is already associated with an account.
+
+            Please login instead.
+
+        </p>
+
+        <a href="/login" class="email-login-btn">
+
+            Go to Login
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+<script>
+    function closeEmailPopup(){
+
+    document.querySelector(".email-exists-overlay").style.display="none";
+
+}
+</script>
+</body>
+</html>
