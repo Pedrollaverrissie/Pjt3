@@ -56,41 +56,71 @@ font-weight:bold;
 
 }
 
-/*signup page*/
-.container-signup{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: auto;
-    
-  
-    
-   
-}
-.signup-page{
-   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-   display: flex;
-   flex-direction: column;
-   background-color: rgb(24, 10, 42);
-   border: 2px solid white;
-   justify-content: center;
-   align-items: center;
-   color: white;
-   border-radius: 20px; 
-   margin-top: 40px;
-   font-size: 13px;  
-   margin-bottom: 10px;
-   padding-left: 20px;
-   padding-right: 20px;
-   width:88%;
-  
-  
-  
+/*================ SIGNUP PAGE =================*/
 
-   
-   
-  
+.container-signup{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    min-height:100vh;
+
+    padding:20px;
+
+}
+
+.signup-page{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    width:100%;
+
+    max-width:420px;
+
+    padding:35px 25px;
+
+    background:#180a2a;
+
+    color:#fff;
+
+    border:2px solid rgba(255,255,255,.15);
+
+    border-radius:20px;
+
+    box-shadow:
+        0 15px 40px rgba(0,0,0,.35),
+        0 0 20px rgba(22,179,100,.12);
+
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+
+    font-size:14px;
+
+    margin:30px auto;
+
+}
+@media(max-width:768px){
+
+.signup-page{
+
+    width:90%;
+
+    max-width:340px;
+
+    padding:30px 18px;
+
+    border-radius:18px;
+
+}
+
 }
 .signup-page span{
     color:  rgb(234, 179, 8);
