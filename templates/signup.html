@@ -7,6 +7,462 @@
 
    <script src="{{ url_for('static', filename='script.js') }}"></script>
          <style>
+
+    /*=====================================================
+            SUPERNOVA AUTHENTICATION V2
+======================================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+
+    background:#090510;
+
+    overflow-x:hidden;
+
+}
+
+/*================ BACKGROUND ================*/
+
+.auth-bg{
+
+    width:100%;
+
+    min-height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:50px 20px;
+
+    background:
+    radial-gradient(circle at top left,#48267b 0%,transparent 35%),
+    radial-gradient(circle at bottom right,#16b36433 0%,transparent 35%),
+    linear-gradient(135deg,#07040d,#140a23,#090510);
+
+    position:relative;
+
+    overflow:hidden;
+
+}
+
+/*============== FLOATING LIGHTS ==============*/
+
+.blob{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(80px);
+
+    opacity:.28;
+
+    animation:floatBlob 14s ease-in-out infinite;
+
+}
+
+.blob1{
+
+    width:320px;
+
+    height:320px;
+
+    background:#16b364;
+
+    left:-120px;
+
+    top:-100px;
+
+}
+
+.blob2{
+
+    width:420px;
+
+    height:420px;
+
+    background:#7b2ff7;
+
+    right:-160px;
+
+    bottom:-150px;
+
+    animation-delay:4s;
+
+}
+
+.blob3{
+
+    width:240px;
+
+    height:240px;
+
+    background:#ffd54a;
+
+    top:45%;
+
+    right:25%;
+
+    animation-delay:8s;
+
+}
+
+@keyframes floatBlob{
+
+0%,100%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-35px);
+
+}
+
+}
+
+/*================ MAIN CARD =================*/
+
+.auth-container{
+
+    width:100%;
+
+    max-width:1180px;
+
+    min-height:720px;
+
+    display:flex;
+
+    overflow:hidden;
+
+    border-radius:32px;
+
+    background:rgba(255,255,255,.06);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+
+    0 40px 90px rgba(0,0,0,.55),
+
+    inset 0 0 0 1px rgba(255,255,255,.03);
+
+    position:relative;
+
+}
+
+/* decorative border */
+
+.auth-container::before{
+
+content:"";
+
+position:absolute;
+
+inset:0;
+
+border-radius:32px;
+
+padding:1px;
+
+background:linear-gradient(135deg,
+
+rgba(255,255,255,.20),
+
+transparent,
+
+rgba(22,179,100,.30));
+
+-webkit-mask:
+
+linear-gradient(#fff 0 0) content-box,
+
+linear-gradient(#fff 0 0);
+
+-webkit-mask-composite:xor;
+
+mask-composite:exclude;
+
+pointer-events:none;
+
+}
+
+/*============== LEFT PANEL ==============*/
+
+.auth-left{
+
+flex:1;
+
+padding:70px;
+
+background:
+
+linear-gradient(
+
+160deg,
+
+rgba(22,179,100,.08),
+
+rgba(123,47,247,.15)
+
+);
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:center;
+
+}
+
+/*============== RIGHT PANEL ==============*/
+
+.auth-right{
+
+flex:1;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+padding:60px;
+
+background:rgba(13,8,22,.45);
+
+}
+
+/*================ MOBILE =================*/
+
+@media(max-width:950px){
+
+.auth-container{
+
+flex-direction:column;
+
+max-width:420px;
+
+min-height:auto;
+
+}
+
+.auth-left{
+
+display:none;
+
+}
+
+.auth-right{
+
+padding:35px 25px;
+
+}
+
+}
+
+@media(max-width:500px){
+
+.auth-bg{
+
+padding:25px 12px;
+
+}
+
+.auth-container{
+
+border-radius:24px;
+
+}
+
+.auth-right{
+
+padding:25px 18px;
+
+}
+
+}
+
+/*=========================================
+            LEFT BRANDING PANEL
+==========================================*/
+
+.auth-left{
+
+    flex:1;
+
+    padding:70px 65px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    color:#fff;
+
+}
+
+.auth-logo{
+
+    width:120px;
+
+    height:120px;
+
+    object-fit:contain;
+
+    margin-bottom:30px;
+
+    filter:drop-shadow(0 0 18px rgba(22,179,100,.45));
+
+}
+
+.auth-left h1{
+
+    font-size:44px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
+
+    margin-bottom:15px;
+
+    color:#fff;
+
+}
+
+.auth-left h2{
+
+    font-size:31px;
+
+    font-weight:700;
+
+    color:#16b364;
+
+    margin-bottom:22px;
+
+    line-height:1.3;
+
+}
+
+.auth-left>p{
+
+    font-size:17px;
+
+    line-height:1.9;
+
+    color:#d8d8d8;
+
+    max-width:430px;
+
+    margin-bottom:45px;
+
+}
+
+/*============== FEATURE LIST ==============*/
+
+.auth-feature{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    padding:18px 20px;
+
+    margin-bottom:18px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.35s;
+
+}
+
+.auth-feature:hover{
+
+    transform:translateX(10px);
+
+    background:rgba(22,179,100,.12);
+
+    border-color:rgba(22,179,100,.35);
+
+}
+
+.auth-feature span{
+
+    width:46px;
+
+    height:46px;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:22px;
+
+    background:#16b364;
+
+    color:#fff;
+
+    flex-shrink:0;
+
+}
+
+.auth-feature h3{
+
+    font-size:19px;
+
+    margin-bottom:6px;
+
+    color:white;
+
+}
+
+.auth-feature p{
+
+    color:#cfcfcf;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+}
+
+/*============== MOBILE ==============*/
+
+@media(max-width:950px){
+
+.auth-left{
+
+    display:none;
+
+}
+
+}
+
     .email-exists-overlay{
 
     position:fixed;
@@ -201,10 +657,61 @@
                 daily income, M-Pesa withdrawals and powerful referral rewards.
             </p>
 
-            <div class="auth-feature">
-                <span>✓</span>
-                Daily Earnings
-            </div>
+<div class="auth-feature">
+
+    <span>💰</span>
+
+    <div>
+
+        <h3>Daily Earnings</h3>
+
+        <p>Complete simple tasks and earn every day.</p>
+
+    </div>
+
+</div>
+
+<div class="auth-feature">
+
+    <span>📲</span>
+
+    <div>
+
+        <h3>Fast M-Pesa Withdrawals</h3>
+
+        <p>Receive your earnings directly to your phone.</p>
+
+    </div>
+
+</div>
+
+<div class="auth-feature">
+
+    <span>👥</span>
+
+    <div>
+
+        <h3>Referral Rewards</h3>
+
+        <p>Invite friends and earn generous commissions.</p>
+
+    </div>
+
+    </div>
+
+    <div class="auth-feature">
+
+        <span>👑</span>
+
+        <div>
+
+            <h3>VIP Membership</h3>
+
+            <p>Unlock higher earning opportunities with VIP levels.</p>
+
+        </div>
+
+    </div>
 
             <div class="auth-feature">
                 <span>✓</span>
