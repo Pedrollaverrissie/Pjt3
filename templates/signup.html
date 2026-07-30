@@ -462,6 +462,290 @@ padding:25px 18px;
 }
 
 }
+/*=========================================
+            RIGHT PANEL
+==========================================*/
+
+.auth-right{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:60px;
+
+}
+
+.auth-form{
+
+    width:100%;
+
+    max-width:450px;
+
+    padding:45px 40px;
+
+    border-radius:28px;
+
+    background:rgba(255,255,255,.06);
+
+    backdrop-filter:blur(25px);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    box-shadow:
+
+    0 20px 45px rgba(0,0,0,.35),
+
+    inset 0 0 0 1px rgba(255,255,255,.03);
+
+}
+
+.auth-form-header{
+
+    text-align:center;
+
+    margin-bottom:35px;
+
+}
+
+.auth-form-header img{
+
+    width:75px;
+
+    margin-bottom:18px;
+
+}
+
+.auth-form-header h2{
+
+    color:white;
+
+    font-size:30px;
+
+    margin-bottom:8px;
+
+}
+
+.auth-form-header p{
+
+    color:#cfcfcf;
+
+}
+
+/*================ INPUTS =================*/
+
+.auth-group{
+
+    margin-bottom:22px;
+
+}
+
+.auth-group label{
+
+    display:block;
+
+    color:white;
+
+    margin-bottom:8px;
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+.auth-group input{
+
+    width:100%;
+
+    height:54px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.08);
+
+    color:white;
+
+    padding:0 18px;
+
+    font-size:15px;
+
+    transition:.35s;
+
+}
+
+.auth-group input::placeholder{
+
+    color:#b7b7b7;
+
+}
+
+.auth-group input:focus{
+
+    outline:none;
+
+    background:rgba(255,255,255,.12);
+
+    box-shadow:0 0 18px rgba(22,179,100,.35);
+
+    border:1px solid #16b364;
+
+}
+
+/*============= PASSWORD =============*/
+
+.auth-password{
+
+    position:relative;
+
+}
+
+.auth-password input{
+
+    padding-right:55px;
+
+}
+
+.auth-eye{
+
+    position:absolute;
+
+    top:50%;
+
+    right:18px;
+
+    transform:translateY(-50%);
+
+    cursor:pointer;
+
+}
+
+.auth-eye img{
+
+    width:22px;
+
+}
+
+/*============= CHECKBOX =============*/
+
+.auth-check{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    gap:12px;
+
+    margin:18px 0 25px;
+
+}
+
+.auth-check input{
+
+    width:18px;
+
+    height:18px;
+
+    margin-top:3px;
+
+}
+
+.auth-check p{
+
+    color:#ddd;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+}
+
+.auth-check span{
+
+    color:#16b364;
+
+    font-weight:600;
+
+}
+
+/*============= BUTTON =============*/
+
+.auth-btn{
+
+    width:100%;
+
+    height:56px;
+
+    border:none;
+
+    border-radius:15px;
+
+    background:linear-gradient(90deg,#16b364,#21d17d);
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+}
+
+.auth-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 15px 30px rgba(22,179,100,.35);
+
+}
+
+/*============= FOOTER =============*/
+
+.auth-footer{
+
+    margin-top:28px;
+
+    text-align:center;
+
+    color:#ccc;
+
+}
+
+.auth-footer a{
+
+    color:#16b364;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+}
+
+.auth-footer a:hover{
+
+    color:white;
+
+}
+
+@media(max-width:900px){
+
+.auth-form{
+
+    padding:35px 25px;
+
+}
+
+}
+
 
     .email-exists-overlay{
 
@@ -734,61 +1018,139 @@ padding:25px 18px;
 
         <div class="auth-right">
 
-            <form class="signup-page" action="/signup" method="POST">  
-                        <div class="login-header">
-                                <div class="top2">
-                                    <div class="login-logo"><img src="{{ url_for('static', filename='images/supernova earn logo.png') }}" alt=""></div>
-                                    <div class="web-name">
-                                        <h3>SUPERNOVA EARN</h3>
-                                        <p>Sign up a new account</p>
-                                    </div>
-                                </div>
-                                    <div class="notice2">
-                                        <img class="admin" src="{{ url_for('static', filename='images/admin.jfif') }}" alt="">
-                                            <p>Invented by <span>Admin</span></p>
-                                    </div>
-                        </div> 
-                        
-                        <div class="identity">
-                            <label for="">Username <span class="bracket"></span></label>
-                            <input name="username" type="text" placeholder="Your display name" required>
+           
 
-                            <label for="">Email</label>
-                            <input type="email" placeholder="yourname@gmail.com" name="email" required>
+            <form class="auth-form" action="/signup" method="POST">
 
-                            <label for="">Phone number</label>
-                            <input 
-                                
-                                type="tel" 
-                                name="phone" 
-                                placeholder="07XXXXXXXX or 01XXXXXXXX"
-                                pattern="^(07|01)\d{8}$"
-                                required
-                                >
-                            
+                <div class="auth-form-header">
 
-                            <label for="">Password</label>
-                            <div class="show-password2">
-                                <input type="password"  id="password" placeholder="Min. 6 characters" name="password" required>
-                                <div class="eye2" onclick="togglePassword()" ><img id="eyeIcon" src="{{ url_for('static', filename='images/close-eye.jfif') }}" alt=""></div> 
-                            </div>
+                    <img src="{{ url_for('static', filename='images/supernova earn logo.png') }}" alt="Logo">
 
-                        
-                            <div class="checkbox2">
-                                <input type="checkbox" name="terms" required>
-                                <p>I agree to the <span class="signup-span">Terms of Service </span>and <span class="signup-span">No-Refund Policy</span></p>
-                            </div>
+                    <h2>Create Account</h2>
+
+                    <p>Join Supernova Earn and start earning today.</p>
+
+                </div>
+
+                <!-- Username -->
+
+                <div class="auth-group">
+
+                    <label>Username</label>
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Enter your username"
+                        required>
+
+                </div>
+
+                <!-- Email -->
+
+                <div class="auth-group">
+
+                    <label>Email Address</label>
+
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="example@gmail.com"
+                        required>
+
+                </div>
+
+                <!-- Phone -->
+
+                <div class="auth-group">
+
+                    <label>Phone Number</label>
+
+                    <input
+                        type="tel"
+                        name="phone"
+                        placeholder="07XXXXXXXX"
+                        pattern="^(07|01)\d{8}$"
+                        required>
+
+                </div>
+
+                <!-- Password -->
+
+                <div class="auth-group">
+
+                    <label>Password</label>
+
+                    <div class="auth-password">
+
+                        <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Minimum 6 characters"
+                            required>
+
+                        <div class="auth-eye" onclick="togglePassword()">
+
+                            <img
+                                id="eyeIcon"
+                                src="{{ url_for('static', filename='images/close-eye.jfif') }}">
+
                         </div>
 
-                        <button class="create-account" type="submit">Create Account</button>
-                        <div class="signup-line"></div>
-                        <p class="signup-root">Already  have an account? <a href="/login" >Sign in</a></p>
-                            <input
-                                type="hidden"
-                                name="referral_code"
-                                value="{{ ref }}"
-                            >
-                </form>
+                    </div>
+
+                </div>
+
+                <!-- Terms -->
+
+                <div class="auth-check">
+
+                    <input
+                        type="checkbox"
+                        name="terms"
+                        required>
+
+                    <p>
+
+                        I agree to the
+
+                        <span>Terms of Service</span>
+
+                        and
+
+                        <span>No Refund Policy</span>
+
+                    </p>
+
+                </div>
+
+                <button class="auth-btn" type="submit">
+
+                    Create Account
+
+                </button>
+
+                <div class="auth-footer">
+
+                    Already have an account?
+
+                    <a href="/login">
+
+                        Login
+
+                    </a>
+
+                </div>
+
+                <input
+                    type="hidden"
+                    name="referral_code"
+                    value="{{ ref }}">
+
+            </form>
+
+        
 
         </div>
 
