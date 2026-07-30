@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login-page</title>
 
-   <script src="{{ url_for('static', filename='script.js') }}"></script>
-         <style>
+    <title>Supernova Earn | Create Account</title>
 
-    /*=====================================================
-            SUPERNOVA AUTHENTICATION V2
-======================================================*/
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <style>
+        /*=========================================================
+                SUPERNOVA AUTH PAGE
+=========================================================*/
 
 *{
     margin:0;
@@ -18,19 +27,29 @@
     box-sizing:border-box;
 }
 
+html{
+
+    scroll-behavior:smooth;
+
+}
+
 body{
 
-    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+    font-family:'Poppins',sans-serif;
 
     background:#090510;
 
     overflow-x:hidden;
 
+    color:white;
+
 }
 
-/*================ BACKGROUND ================*/
+/*=========================================================
+                    BACKGROUND
+=========================================================*/
 
-.auth-bg{
+.background{
 
     width:100%;
 
@@ -42,20 +61,22 @@ body{
 
     align-items:center;
 
-    padding:50px 20px;
-
-    background:
-    radial-gradient(circle at top left,#48267b 0%,transparent 35%),
-    radial-gradient(circle at bottom right,#16b36433 0%,transparent 35%),
-    linear-gradient(135deg,#07040d,#140a23,#090510);
+    padding:40px;
 
     position:relative;
 
     overflow:hidden;
 
+    background:
+    radial-gradient(circle at top left,#5634b8 0%,transparent 32%),
+    radial-gradient(circle at bottom right,#16b36433 0%,transparent 35%),
+    linear-gradient(135deg,#090510,#12091d,#090510);
+
 }
 
-/*============== FLOATING LIGHTS ==============*/
+/*=========================================================
+                    GLOWING BLOBS
+=========================================================*/
 
 .blob{
 
@@ -63,25 +84,25 @@ body{
 
     border-radius:50%;
 
-    filter:blur(80px);
+    filter:blur(90px);
 
-    opacity:.28;
+    opacity:.25;
 
-    animation:floatBlob 14s ease-in-out infinite;
+    animation:floating 12s ease-in-out infinite;
 
 }
 
 .blob1{
 
-    width:320px;
+    width:340px;
 
-    height:320px;
+    height:340px;
 
     background:#16b364;
 
-    left:-120px;
+    top:-120px;
 
-    top:-100px;
+    left:-100px;
 
 }
 
@@ -91,33 +112,33 @@ body{
 
     height:420px;
 
-    background:#7b2ff7;
+    background:#6d3cff;
 
-    right:-160px;
+    right:-170px;
 
-    bottom:-150px;
+    bottom:-170px;
 
-    animation-delay:4s;
+    animation-delay:3s;
 
 }
 
 .blob3{
 
-    width:240px;
+    width:250px;
 
-    height:240px;
+    height:250px;
 
     background:#ffd54a;
 
-    top:45%;
-
     right:25%;
 
-    animation-delay:8s;
+    top:40%;
+
+    animation-delay:6s;
 
 }
 
-@keyframes floatBlob{
+@keyframes floating{
 
 0%,100%{
 
@@ -133,15 +154,17 @@ transform:translateY(-35px);
 
 }
 
-/*================ MAIN CARD =================*/
+/*=========================================================
+                    MAIN CARD
+=========================================================*/
 
-.auth-container{
+.auth-card{
 
     width:100%;
 
-    max-width:1180px;
+    max-width:1250px;
 
-    min-height:720px;
+    height:700px;
 
     display:flex;
 
@@ -149,163 +172,30 @@ transform:translateY(-35px);
 
     border-radius:32px;
 
-    background:rgba(255,255,255,.06);
-
     backdrop-filter:blur(18px);
 
-    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.10);
 
     box-shadow:
 
-    0 40px 90px rgba(0,0,0,.55),
-
-    inset 0 0 0 1px rgba(255,255,255,.03);
+    0 35px 80px rgba(0,0,0,.45);
 
     position:relative;
 
-}
-
-/* decorative border */
-
-.auth-container::before{
-
-content:"";
-
-position:absolute;
-
-inset:0;
-
-border-radius:32px;
-
-padding:1px;
-
-background:linear-gradient(135deg,
-
-rgba(255,255,255,.20),
-
-transparent,
-
-rgba(22,179,100,.30));
-
--webkit-mask:
-
-linear-gradient(#fff 0 0) content-box,
-
-linear-gradient(#fff 0 0);
-
--webkit-mask-composite:xor;
-
-mask-composite:exclude;
-
-pointer-events:none;
+    z-index:2;
 
 }
+/*=========================================================
+                    LEFT PANEL
+=========================================================*/
 
-/*============== LEFT PANEL ==============*/
-
-.auth-left{
-
-flex:1;
-
-padding:70px;
-
-background:
-
-linear-gradient(
-
-160deg,
-
-rgba(22,179,100,.08),
-
-rgba(123,47,247,.15)
-
-);
-
-display:flex;
-
-flex-direction:column;
-
-justify-content:center;
-
-}
-
-/*============== RIGHT PANEL ==============*/
-
-.auth-right{
-
-flex:1;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-padding:60px;
-
-background:rgba(13,8,22,.45);
-
-}
-
-/*================ MOBILE =================*/
-
-@media(max-width:950px){
-
-.auth-container{
-
-flex-direction:column;
-
-max-width:420px;
-
-min-height:auto;
-
-}
-
-.auth-left{
-
-display:none;
-
-}
-
-.auth-right{
-
-padding:35px 25px;
-
-}
-
-}
-
-@media(max-width:500px){
-
-.auth-bg{
-
-padding:25px 12px;
-
-}
-
-.auth-container{
-
-border-radius:24px;
-
-}
-
-.auth-right{
-
-padding:25px 18px;
-
-}
-
-}
-
-/*=========================================
-            LEFT BRANDING PANEL
-==========================================*/
-
-.auth-left{
+.left-panel{
 
     flex:1;
 
-    padding:70px 65px;
+    padding:60px;
 
     display:flex;
 
@@ -313,69 +203,71 @@ padding:25px 18px;
 
     justify-content:center;
 
-    color:#fff;
+    background:linear-gradient(
+        160deg,
+        rgba(22,179,100,.08),
+        rgba(123,47,247,.12)
+    );
 
 }
 
-.auth-logo{
+.main-logo{
 
-    width:120px;
+    width:110px;
 
-    height:120px;
+    height:110px;
 
     object-fit:contain;
 
-    margin-bottom:30px;
+    margin-bottom:28px;
 
     filter:drop-shadow(0 0 18px rgba(22,179,100,.45));
 
 }
 
-.auth-left h1{
+.left-panel h1{
 
-    font-size:44px;
+    font-size:42px;
 
     font-weight:800;
 
     letter-spacing:1px;
 
-    margin-bottom:15px;
-
-    color:#fff;
+    margin-bottom:12px;
 
 }
 
-.auth-left h2{
+.left-panel h2{
 
-    font-size:31px;
-
-    font-weight:700;
-
-    color:#16b364;
-
-    margin-bottom:22px;
+    font-size:30px;
 
     line-height:1.3;
 
+    color:#16b364;
+
+    margin-bottom:18px;
+
 }
 
-.auth-left>p{
+.left-description{
 
-    font-size:17px;
+    color:#d6d6d6;
 
-    line-height:1.9;
+    font-size:16px;
 
-    color:#d8d8d8;
+    line-height:1.8;
+
+    margin-bottom:40px;
 
     max-width:430px;
 
-    margin-bottom:45px;
-
 }
 
-/*============== FEATURE LIST ==============*/
+/*=========================================================
+                    FEATURES
+=========================================================*/
 
-.auth-feature{
+.feature{
 
     display:flex;
 
@@ -383,9 +275,9 @@ padding:25px 18px;
 
     gap:18px;
 
-    padding:18px 20px;
+    padding:18px 22px;
 
-    margin-bottom:18px;
+    margin-bottom:16px;
 
     border-radius:18px;
 
@@ -397,23 +289,25 @@ padding:25px 18px;
 
 }
 
-.auth-feature:hover{
+.feature:hover{
 
-    transform:translateX(10px);
+    transform:translateX(8px);
 
     background:rgba(22,179,100,.12);
 
-    border-color:rgba(22,179,100,.35);
+    border-color:rgba(22,179,100,.30);
 
 }
 
-.auth-feature span{
+.feature-icon{
 
-    width:46px;
+    width:48px;
 
-    height:46px;
+    height:48px;
 
     border-radius:50%;
+
+    background:#16b364;
 
     display:flex;
 
@@ -421,341 +315,219 @@ padding:25px 18px;
 
     align-items:center;
 
+    color:white;
+
+    font-weight:700;
+
     font-size:22px;
-
-    background:#16b364;
-
-    color:#fff;
 
     flex-shrink:0;
 
 }
 
-.auth-feature h3{
+.feature h3{
 
-    font-size:19px;
+    font-size:18px;
 
-    margin-bottom:6px;
+    margin-bottom:4px;
 
     color:white;
 
 }
 
-.auth-feature p{
-
-    color:#cfcfcf;
+.feature p{
 
     font-size:14px;
+
+    color:#d7d7d7;
 
     line-height:1.6;
 
 }
 
-/*============== MOBILE ==============*/
+/*=========================================================
+                    RESPONSIVE DESIGN
+=========================================================*/
 
-@media(max-width:950px){
+@media (max-width:1100px){
 
-.auth-left{
+.auth-card{
+
+    width:95%;
+
+    height:auto;
+
+}
+
+.left-panel{
+
+    padding:45px;
+
+}
+
+.right-panel{
+
+    padding:35px;
+
+}
+
+.left-panel h1{
+
+    font-size:34px;
+
+}
+
+.left-panel h2{
+
+    font-size:24px;
+
+}
+
+}
+
+/*================ TABLETS =================*/
+
+@media (max-width:900px){
+
+.auth-card{
+
+    flex-direction:column;
+
+    max-width:520px;
+
+    height:auto;
+
+}
+
+.left-panel{
 
     display:none;
 
 }
 
-}
-/*=========================================
-            RIGHT PANEL
-==========================================*/
-
-.auth-right{
-
-    flex:1;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    padding:60px;
-
-}
-
-.auth-form{
+.right-panel{
 
     width:100%;
 
-    max-width:450px;
-
-    padding:45px 40px;
-
-    border-radius:28px;
-
-    background:rgba(255,255,255,.06);
-
-    backdrop-filter:blur(25px);
-
-    border:1px solid rgba(255,255,255,.12);
-
-    box-shadow:
-
-    0 20px 45px rgba(0,0,0,.35),
-
-    inset 0 0 0 1px rgba(255,255,255,.03);
+    padding:30px;
 
 }
 
-.auth-form-header{
+.form-card{
 
-    text-align:center;
+    max-width:100%;
 
-    margin-bottom:35px;
-
-}
-
-.auth-form-header img{
-
-    width:75px;
-
-    margin-bottom:18px;
+    padding:35px 30px;
 
 }
 
-.auth-form-header h2{
+.background{
 
-    color:white;
-
-    font-size:30px;
-
-    margin-bottom:8px;
+    padding:25px;
 
 }
 
-.auth-form-header p{
+}
 
-    color:#cfcfcf;
+/*================ PHONES =================*/
+
+@media (max-width:600px){
+
+.background{
+
+    padding:15px;
 
 }
 
-/*================ INPUTS =================*/
-
-.auth-group{
-
-    margin-bottom:22px;
-
-}
-
-.auth-group label{
-
-    display:block;
-
-    color:white;
-
-    margin-bottom:8px;
-
-    font-size:15px;
-
-    font-weight:600;
-
-}
-
-.auth-group input{
+.auth-card{
 
     width:100%;
 
-    height:54px;
-
-    border:none;
-
-    border-radius:14px;
-
-    background:rgba(255,255,255,.08);
-
-    color:white;
-
-    padding:0 18px;
-
-    font-size:15px;
-
-    transition:.35s;
+    border-radius:22px;
 
 }
 
-.auth-group input::placeholder{
+.right-panel{
 
-    color:#b7b7b7;
-
-}
-
-.auth-group input:focus{
-
-    outline:none;
-
-    background:rgba(255,255,255,.12);
-
-    box-shadow:0 0 18px rgba(22,179,100,.35);
-
-    border:1px solid #16b364;
+    padding:18px;
 
 }
 
-/*============= PASSWORD =============*/
+.form-card{
 
-.auth-password{
+    width:100%;
 
-    position:relative;
+    padding:28px 22px;
 
-}
-
-.auth-password input{
-
-    padding-right:55px;
+    border-radius:22px;
 
 }
 
-.auth-eye{
+.form-logo{
 
-    position:absolute;
+    width:60px;
 
-    top:50%;
-
-    right:18px;
-
-    transform:translateY(-50%);
-
-    cursor:pointer;
+    margin-bottom:15px;
 
 }
 
-.auth-eye img{
+.form-card h2{
 
-    width:22px;
-
-}
-
-/*============= CHECKBOX =============*/
-
-.auth-check{
-
-    display:flex;
-
-    align-items:flex-start;
-
-    gap:12px;
-
-    margin:18px 0 25px;
+    font-size:26px;
 
 }
 
-.auth-check input{
-
-    width:18px;
-
-    height:18px;
-
-    margin-top:3px;
-
-}
-
-.auth-check p{
-
-    color:#ddd;
+.subtitle{
 
     font-size:14px;
 
-    line-height:1.6;
+    margin-bottom:25px;
 
 }
 
-.auth-check span{
+.input-group{
 
-    color:#16b364;
-
-    font-weight:600;
+    margin-bottom:15px;
 
 }
 
-/*============= BUTTON =============*/
+.input-group input{
 
-.auth-btn{
+    height:46px;
 
-    width:100%;
-
-    height:56px;
-
-    border:none;
-
-    border-radius:15px;
-
-    background:linear-gradient(90deg,#16b364,#21d17d);
-
-    color:white;
-
-    font-size:17px;
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:.35s;
+    font-size:14px;
 
 }
 
-.auth-btn:hover{
+.signup-btn{
 
-    transform:translateY(-3px);
+    height:48px;
 
-    box-shadow:0 15px 30px rgba(22,179,100,.35);
-
-}
-
-/*============= FOOTER =============*/
-
-.auth-footer{
-
-    margin-top:28px;
-
-    text-align:center;
-
-    color:#ccc;
+    font-size:16px;
 
 }
 
-.auth-footer a{
+.login-link{
 
-    color:#16b364;
-
-    text-decoration:none;
-
-    font-weight:600;
-
-}
-
-.auth-footer a:hover{
-
-    color:white;
-
-}
-
-@media(max-width:900px){
-
-.auth-form{
-
-    padding:35px 25px;
+    font-size:13px;
 
 }
 
 }
 
+/*=========================================================
+                EMAIL EXISTS POPUP
+=========================================================*/
 
-    .email-exists-overlay{
+.email-exists-overlay{
 
     position:fixed;
 
     inset:0;
 
-    background:rgba(0,0,0,.6);
+    background:rgba(0,0,0,.65);
 
-    backdrop-filter:blur(6px);
+    backdrop-filter:blur(8px);
 
     display:flex;
 
@@ -763,64 +535,63 @@ padding:25px 18px;
 
     align-items:center;
 
-    z-index:99999;
+    z-index:9999;
 
 }
 
 .email-exists-popup{
 
-    position:relative;
+    width:340px;
 
-    width:300px;
-    max-width:82%;
+    max-width:90%;
 
-    background:#ffffff;
+    background:#fff;
 
-    border-radius:18px;
+    border-radius:22px;
 
-    padding:24px 20px;
+    padding:30px 25px;
 
     text-align:center;
 
-    box-shadow:
-        0 25px 60px rgba(0,0,0,.35),
-        0 0 25px rgba(22,179,100,.18);
+    position:relative;
 
-    animation:agreementPopup .45s cubic-bezier(.22,1,.36,1);
+    animation:popup .35s ease;
 
 }
 
 .email-exists-popup img{
 
-    width:70px;
-    height:70px;
+    width:80px;
+
+    height:80px;
 
     object-fit:cover;
 
     border-radius:50%;
 
-    border:5px solid #fff;
+    margin-top:-70px;
 
-    margin-top:-55px;
-    margin-bottom:15px;
+    border:5px solid white;
 
-    box-shadow:0 10px 25px rgba(0,0,0,.25);
+    box-shadow:0 12px 30px rgba(0,0,0,.25);
 
 }
 
 .email-exists-popup h2{
 
-    font-size:22px;
+    margin-top:15px;
 
     margin-bottom:12px;
+
+    color:#111;
 
 }
 
 .email-exists-popup p{
 
-    font-size:15px;
+    color:#555;
 
-    line-height:1.6;
+    line-height:1.7;
 
     margin-bottom:22px;
 
@@ -836,19 +607,15 @@ padding:25px 18px;
 
     width:100%;
 
-    height:52px;
-
-    margin:20px auto 0;
-
-    text-decoration:none;
+    height:50px;
 
     background:#16b364;
 
-    color:white;
+    color:#fff;
+
+    text-decoration:none;
 
     border-radius:12px;
-
-    font-size:17px;
 
     font-weight:600;
 
@@ -866,9 +633,9 @@ padding:25px 18px;
 
     position:absolute;
 
-    top:12px;
-
     right:12px;
+
+    top:12px;
 
     width:34px;
 
@@ -878,11 +645,11 @@ padding:25px 18px;
 
     border-radius:50%;
 
+    background:#eee;
+
     cursor:pointer;
 
     font-size:22px;
-
-    background:#eee;
 
 }
 
@@ -890,267 +657,249 @@ padding:25px 18px;
 
     background:#d32f2f;
 
-    color:white;
+    color:#fff;
 
 }
 
-@keyframes popupShow{
+@keyframes popup{
 
-    from{
+from{
 
-        opacity:0;
+opacity:0;
 
-        transform:scale(.8);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:scale(1);
-
-    }
+transform:scale(.85);
 
 }
-   </style>
+
+to{
+
+opacity:1;
+
+transform:scale(1);
+
+}
+
+}
+
+    </style>
+
 </head>
+
 <body>
 
-<div class="auth-bg">
+<div class="background">
 
-    <div class="blob blob1"></div>
-    <div class="blob blob2"></div>
-    <div class="blob blob3"></div>
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
 
-    <div class="auth-container">
+    <div class="auth-card">
 
-        <!-- LEFT PANEL -->
+        <!-- LEFT SIDE -->
 
-        <div class="auth-left">
+        <div class="left-panel">
 
-            <img src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
-                 class="auth-logo">
+            <img
+                src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
+                class="main-logo"
+            >
 
             <h1>SUPERNOVA EARN</h1>
+                        <h2>Welcome to the Future of Online Earnings</h2>
 
-            <h2>Welcome to the Future of Online Earnings</h2>
-
-            <p>
-                Build your financial future with secure investments,
-                daily income, M-Pesa withdrawals and powerful referral rewards.
+            <p class="left-description">
+                Join thousands of members earning every day through
+                secure investments, referral bonuses, daily income and
+                fast M-Pesa withdrawals.
             </p>
 
-<div class="auth-feature">
+            <div class="feature">
 
-    <span>💰</span>
+                <div class="feature-icon">✓</div>
 
-    <div>
+                <div>
 
-        <h3>Daily Earnings</h3>
+                    <h3>Daily Earnings</h3>
 
-        <p>Complete simple tasks and earn every day.</p>
+                    <p>Earn income every day from active plans.</p>
 
-    </div>
+                </div>
 
-</div>
-
-<div class="auth-feature">
-
-    <span>📲</span>
-
-    <div>
-
-        <h3>Fast M-Pesa Withdrawals</h3>
-
-        <p>Receive your earnings directly to your phone.</p>
-
-    </div>
-
-</div>
-
-<div class="auth-feature">
-
-    <span>👥</span>
-
-    <div>
-
-        <h3>Referral Rewards</h3>
-
-        <p>Invite friends and earn generous commissions.</p>
-
-    </div>
-
-    </div>
-
-    <div class="auth-feature">
-
-        <span>👑</span>
-
-        <div>
-
-            <h3>VIP Membership</h3>
-
-            <p>Unlock higher earning opportunities with VIP levels.</p>
-
-        </div>
-
-    </div>
-
-            <div class="auth-feature">
-                <span>✓</span>
-                Instant M-Pesa Withdrawals
             </div>
 
-            <div class="auth-feature">
-                <span>✓</span>
-                Referral Bonuses
+            <div class="feature">
+
+                <div class="feature-icon">✓</div>
+
+                <div>
+
+                    <h3>Instant Withdrawals</h3>
+
+                    <p>Withdraw directly to your M-Pesa account.</p>
+
+                </div>
+
             </div>
 
-            <div class="auth-feature">
-                <span>✓</span>
-                VIP Membership
+            <div class="feature">
+
+                <div class="feature-icon">✓</div>
+
+                <div>
+
+                    <h3>Referral Rewards</h3>
+
+                    <p>Invite friends and receive lifetime bonuses.</p>
+
+                </div>
+
+            </div>
+
+            <div class="feature">
+
+                <div class="feature-icon">✓</div>
+
+                <div>
+
+                    <h3>Secure Platform</h3>
+
+                    <p>Your account and earnings are protected.</p>
+
+                </div>
+
             </div>
 
         </div>
 
         <!-- RIGHT PANEL -->
 
-        <div class="auth-right">
+        <div class="right-panel">
 
-           
+            <div class="form-card">
 
-            <form class="auth-form" action="/signup" method="POST">
+                <img
+                    src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
+                    class="form-logo"
+                >
 
-                <div class="auth-form-header">
+                <h2>Create Account</h2>
 
-                    <img src="{{ url_for('static', filename='images/supernova earn logo.png') }}" alt="Logo">
+                <p class="subtitle">
+                    Join Supernova Earn and start earning today.
+                </p>
 
-                    <h2>Create Account</h2>
+                <form class="form-card" action="/signup" method="POST">
+                                        <div class="input-group">
 
-                    <p>Join Supernova Earn and start earning today.</p>
-
-                </div>
-
-                <!-- Username -->
-
-                <div class="auth-group">
-
-                    <label>Username</label>
-
-                    <input
-                        type="text"
-                        name="username"
-                        placeholder="Enter your username"
-                        required>
-
-                </div>
-
-                <!-- Email -->
-
-                <div class="auth-group">
-
-                    <label>Email Address</label>
-
-                    <input
-                        type="email"
-                        name="email"
-                        placeholder="example@gmail.com"
-                        required>
-
-                </div>
-
-                <!-- Phone -->
-
-                <div class="auth-group">
-
-                    <label>Phone Number</label>
-
-                    <input
-                        type="tel"
-                        name="phone"
-                        placeholder="07XXXXXXXX"
-                        pattern="^(07|01)\d{8}$"
-                        required>
-
-                </div>
-
-                <!-- Password -->
-
-                <div class="auth-group">
-
-                    <label>Password</label>
-
-                    <div class="auth-password">
+                        <label>Username</label>
 
                         <input
-                            id="password"
-                            type="password"
-                            name="password"
-                            placeholder="Minimum 6 characters"
+                            type="text"
+                            name="username"
+                            placeholder="Enter your username"
                             required>
 
-                        <div class="auth-eye" onclick="togglePassword()">
+                    </div>
 
-                            <img
-                                id="eyeIcon"
-                                src="{{ url_for('static', filename='images/close-eye.jfif') }}">
+                    <div class="input-group">
+
+                        <label>Email Address</label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="example@gmail.com"
+                            required>
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>Phone Number</label>
+
+                        <input
+                            type="tel"
+                            name="phone"
+                            placeholder="07XXXXXXXX"
+                            pattern="^(07|01)\d{8}$"
+                            required>
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>Password</label>
+
+                        <div class="password-box">
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Minimum 6 characters"
+                                required>
+
+                            <span class="password-toggle" onclick="togglePassword()">
+
+                                <img
+                                    id="eyeIcon"
+                                    src="{{ url_for('static', filename='images/close-eye.jfif') }}"
+                                    alt="Toggle Password">
+
+                            </span>
 
                         </div>
 
                     </div>
 
-                </div>
+                    <div class="terms-box">
 
-                <!-- Terms -->
+                        <input
+                            type="checkbox"
+                            name="terms"
+                            required>
 
-                <div class="auth-check">
+                        <p>
+
+                            I agree to the
+
+                            <span>Terms of Service</span>
+
+                            and
+
+                            <span>No Refund Policy</span>
+
+                        </p>
+
+                    </div>
 
                     <input
-                        type="checkbox"
-                        name="terms"
-                        required>
+                        type="hidden"
+                        name="referral_code"
+                        value="{{ ref }}">
 
-                    <p>
+                    <button
+                        type="submit"
+                        class="signup-btn">
 
-                        I agree to the
+                        Create Account
 
-                        <span>Terms of Service</span>
+                    </button>
 
-                        and
+                    <div class="login-link">
 
-                        <span>No Refund Policy</span>
+                        Already have an account?
 
-                    </p>
+                        <a href="/login">
 
-                </div>
+                            Sign In
 
-                <button class="auth-btn" type="submit">
+                        </a>
 
-                    Create Account
+                    </div>
+                </form>
 
-                </button>
-
-                <div class="auth-footer">
-
-                    Already have an account?
-
-                    <a href="/login">
-
-                        Login
-
-                    </a>
-
-                </div>
-
-                <input
-                    type="hidden"
-                    name="referral_code"
-                    value="{{ ref }}">
-
-            </form>
-
-        
+            </div>
 
         </div>
 
@@ -1158,32 +907,37 @@ padding:25px 18px;
 
 </div>
 
-    {% if email_exists %}
+{% if email_exists %}
 
 <div class="email-exists-overlay">
 
     <div class="email-exists-popup">
 
-        <button class="email-exists-close"
-                onclick="closeEmailPopup()">
+        <button
+            class="email-exists-close"
+            onclick="closeEmailPopup()">
 
             &times;
 
         </button>
 
-        <img src="{{ url_for('static', filename='images/alert.jfif') }}">
+        <img
+            src="{{ url_for('static', filename='images/alert.jfif') }}"
+            alt="Alert">
 
         <h2>Email Already Registered</h2>
 
         <p>
 
-            This email is already associated with an account.
+            This email address is already associated with an account.
 
             Please login instead.
 
         </p>
 
-        <a href="/login" class="email-login-btn">
+        <a
+            href="/login"
+            class="email-login-btn">
 
             Go to Login
 
@@ -1196,11 +950,23 @@ padding:25px 18px;
 {% endif %}
 
 <script>
-    function closeEmailPopup(){
 
-    document.querySelector(".email-exists-overlay").style.display="none";
+function closeEmailPopup(){
+
+    const popup = document.querySelector(".email-exists-overlay");
+
+    if(popup){
+
+        popup.style.display="none";
+
+    }
 
 }
+
 </script>
+
 </body>
+
 </html>
+                
+                    

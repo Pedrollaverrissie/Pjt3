@@ -1,19 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-       <style>
-    .email-exists-overlay{
 
-    position:fixed;
+    <title>Supernova Earn | Create Account</title>
 
-    inset:0;
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    background:rgba(0,0,0,.6);
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    backdrop-filter:blur(6px);
+
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <style>
+        /*=========================================================
+                SUPERNOVA AUTH PAGE
+=========================================================*/
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:#090510;
+
+    overflow-x:hidden;
+
+    color:white;
+
+}
+
+/*=========================================================
+                    BACKGROUND
+=========================================================*/
+
+.background{
+
+    width:100%;
+
+    min-height:100vh;
 
     display:flex;
 
@@ -21,64 +61,537 @@
 
     align-items:center;
 
-    z-index:99999;
-
-}
-
-.email-exists-popup{
+    padding:40px;
 
     position:relative;
 
-    width:300px;
-    max-width:82%;
+    overflow:hidden;
 
-    background:#ffffff;
-
-    border-radius:18px;
-
-    padding:24px 20px;
-
-    text-align:center;
-
-    box-shadow:
-        0 25px 60px rgba(0,0,0,.35),
-        0 0 25px rgba(22,179,100,.18);
-
-    animation:agreementPopup .45s cubic-bezier(.22,1,.36,1);
+    background:
+    radial-gradient(circle at top left,#5634b8 0%,transparent 32%),
+    radial-gradient(circle at bottom right,#16b36433 0%,transparent 35%),
+    linear-gradient(135deg,#090510,#12091d,#090510);
 
 }
 
-.email-exists-popup img{
+/*=========================================================
+                    GLOWING BLOBS
+=========================================================*/
 
-    width:70px;
-    height:70px;
+.blob{
 
-    object-fit:cover;
+    position:absolute;
 
     border-radius:50%;
 
-    border:5px solid #fff;
+    filter:blur(90px);
 
-    margin-top:-55px;
-    margin-bottom:15px;
+    opacity:.25;
 
-    box-shadow:0 10px 25px rgba(0,0,0,.25);
+    animation:floating 12s ease-in-out infinite;
 
 }
 
-.email-exists-popup h2{
+.blob1{
 
-    font-size:22px;
+    width:340px;
+
+    height:340px;
+
+    background:#16b364;
+
+    top:-120px;
+
+    left:-100px;
+
+}
+
+.blob2{
+
+    width:420px;
+
+    height:420px;
+
+    background:#6d3cff;
+
+    right:-170px;
+
+    bottom:-170px;
+
+    animation-delay:3s;
+
+}
+
+.blob3{
+
+    width:250px;
+
+    height:250px;
+
+    background:#ffd54a;
+
+    right:25%;
+
+    top:40%;
+
+    animation-delay:6s;
+
+}
+
+@keyframes floating{
+
+0%,100%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-35px);
+
+}
+
+}
+
+/*=========================================================
+                    MAIN CARD
+=========================================================*/
+
+.auth-card{
+
+    width:100%;
+
+    max-width:1250px;
+
+    height:700px;
+
+    display:flex;
+
+    overflow:hidden;
+
+    border-radius:32px;
+
+    backdrop-filter:blur(18px);
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.10);
+
+    box-shadow:
+
+    0 35px 80px rgba(0,0,0,.45);
+
+    position:relative;
+
+    z-index:2;
+
+}
+/*=========================================================
+                    LEFT PANEL
+=========================================================*/
+
+.left-panel{
+
+    flex:1;
+
+    padding:60px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    background:linear-gradient(
+        160deg,
+        rgba(22,179,100,.08),
+        rgba(123,47,247,.12)
+    );
+
+}
+
+.main-logo{
+
+    width:110px;
+
+    height:110px;
+
+    object-fit:contain;
+
+    margin-bottom:28px;
+
+    filter:drop-shadow(0 0 18px rgba(22,179,100,.45));
+
+}
+
+.left-panel h1{
+
+    font-size:42px;
+
+    font-weight:800;
+
+    letter-spacing:1px;
 
     margin-bottom:12px;
 
 }
 
-.email-exists-popup p{
+.left-panel h2{
 
-    font-size:15px;
+    font-size:30px;
+
+    line-height:1.3;
+
+    color:#16b364;
+
+    margin-bottom:18px;
+
+}
+
+.left-description{
+
+    color:#d6d6d6;
+
+    font-size:16px;
+
+    line-height:1.8;
+
+    margin-bottom:40px;
+
+    max-width:430px;
+
+}
+
+/*=========================================================
+                    FEATURES
+=========================================================*/
+
+.feature{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:18px;
+
+    padding:18px 22px;
+
+    margin-bottom:16px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.35s;
+
+}
+
+.feature:hover{
+
+    transform:translateX(8px);
+
+    background:rgba(22,179,100,.12);
+
+    border-color:rgba(22,179,100,.30);
+
+}
+
+.feature-icon{
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:50%;
+
+    background:#16b364;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-weight:700;
+
+    font-size:22px;
+
+    flex-shrink:0;
+
+}
+
+.feature h3{
+
+    font-size:18px;
+
+    margin-bottom:4px;
+
+    color:white;
+
+}
+
+.feature p{
+
+    font-size:14px;
+
+    color:#d7d7d7;
 
     line-height:1.6;
+
+}
+
+/*=========================================================
+                    RESPONSIVE DESIGN
+=========================================================*/
+
+@media (max-width:1100px){
+
+.auth-card{
+
+    width:95%;
+
+    height:auto;
+
+}
+
+.left-panel{
+
+    padding:45px;
+
+}
+
+.right-panel{
+
+    padding:35px;
+
+}
+
+.left-panel h1{
+
+    font-size:34px;
+
+}
+
+.left-panel h2{
+
+    font-size:24px;
+
+}
+
+}
+
+/*================ TABLETS =================*/
+
+@media (max-width:900px){
+
+.auth-card{
+
+    flex-direction:column;
+
+    max-width:520px;
+
+    height:auto;
+
+}
+
+.left-panel{
+
+    display:none;
+
+}
+
+.right-panel{
+
+    width:100%;
+
+    padding:30px;
+
+}
+
+.form-card{
+
+    max-width:100%;
+
+    padding:35px 30px;
+
+}
+
+.background{
+
+    padding:25px;
+
+}
+
+}
+
+/*================ PHONES =================*/
+
+@media (max-width:600px){
+
+.background{
+
+    padding:15px;
+
+}
+
+.auth-card{
+
+    width:100%;
+
+    border-radius:22px;
+
+}
+
+.right-panel{
+
+    padding:18px;
+
+}
+
+.form-card{
+
+    width:100%;
+
+    padding:28px 22px;
+
+    border-radius:22px;
+
+}
+
+.form-logo{
+
+    width:60px;
+
+    margin-bottom:15px;
+
+}
+
+.form-card h2{
+
+    font-size:26px;
+
+}
+
+.subtitle{
+
+    font-size:14px;
+
+    margin-bottom:25px;
+
+}
+
+.input-group{
+
+    margin-bottom:15px;
+
+}
+
+.input-group input{
+
+    height:46px;
+
+    font-size:14px;
+
+}
+
+.signup-btn{
+
+    height:48px;
+
+    font-size:16px;
+
+}
+
+.login-link{
+
+    font-size:13px;
+
+}
+
+}
+
+/*=========================================================
+                EMAIL EXISTS POPUP
+=========================================================*/
+
+.email-exists-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.65);
+
+    backdrop-filter:blur(8px);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+
+}
+
+.email-exists-popup{
+
+    width:340px;
+
+    max-width:90%;
+
+    background:#fff;
+
+    border-radius:22px;
+
+    padding:30px 25px;
+
+    text-align:center;
+
+    position:relative;
+
+    animation:popup .35s ease;
+
+}
+
+.email-exists-popup img{
+
+    width:80px;
+
+    height:80px;
+
+    object-fit:cover;
+
+    border-radius:50%;
+
+    margin-top:-70px;
+
+    border:5px solid white;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.25);
+
+}
+
+.email-exists-popup h2{
+
+    margin-top:15px;
+
+    margin-bottom:12px;
+
+    color:#111;
+
+}
+
+.email-exists-popup p{
+
+    color:#555;
+
+    line-height:1.7;
 
     margin-bottom:22px;
 
@@ -94,19 +607,15 @@
 
     width:100%;
 
-    height:52px;
-
-    margin:20px auto 0;
-
-    text-decoration:none;
+    height:50px;
 
     background:#16b364;
 
-    color:white;
+    color:#fff;
+
+    text-decoration:none;
 
     border-radius:12px;
-
-    font-size:17px;
 
     font-weight:600;
 
@@ -124,9 +633,9 @@
 
     position:absolute;
 
-    top:12px;
-
     right:12px;
+
+    top:12px;
 
     width:34px;
 
@@ -136,11 +645,11 @@
 
     border-radius:50%;
 
+    background:#eee;
+
     cursor:pointer;
 
     font-size:22px;
-
-    background:#eee;
 
 }
 
@@ -148,138 +657,249 @@
 
     background:#d32f2f;
 
-    color:white;
+    color:#fff;
 
 }
 
-@keyframes popupShow{
+@keyframes popup{
 
-    from{
+from{
 
-        opacity:0;
+opacity:0;
 
-        transform:scale(.8);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:scale(1);
-
-    }
+transform:scale(.85);
 
 }
-   </style>
+
+to{
+
+opacity:1;
+
+transform:scale(1);
+
+}
+
+}
+
+    </style>
+
 </head>
+
 <body>
 
-<div class="auth-bg">
+<div class="background">
 
-    <div class="blob blob1"></div>
-    <div class="blob blob2"></div>
-    <div class="blob blob3"></div>
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
 
-    <div class="auth-container">
+    <div class="auth-card">
 
-        <!-- LEFT PANEL -->
+        <!-- LEFT SIDE -->
 
-        <div class="auth-left">
+        <div class="left-panel">
 
-            <img src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
-                 class="auth-logo">
+            <img
+                src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
+                class="main-logo"
+            >
 
             <h1>SUPERNOVA EARN</h1>
+                        <h2>Welcome to the Future of Online Earnings</h2>
 
-            <h2>Welcome to the Future of Online Earnings</h2>
-
-            <p>
-                Build your financial future with secure investments,
-                daily income, M-Pesa withdrawals and powerful referral rewards.
+            <p class="left-description">
+                Join thousands of members earning every day through
+                secure investments, referral bonuses, daily income and
+                fast M-Pesa withdrawals.
             </p>
 
-            <div class="auth-feature">
-                <span>✓</span>
-                Daily Earnings
+            <div class="feature">
+
+                <div class="feature-icon">✓</div>
+
+                <div>
+
+                    <h3>Daily Earnings</h3>
+
+                    <p>Earn income every day from active plans.</p>
+
+                </div>
+
             </div>
 
-            <div class="auth-feature">
-                <span>✓</span>
-                Instant M-Pesa Withdrawals
+            <div class="feature">
+
+                <div class="feature-icon">✓</div>
+
+                <div>
+
+                    <h3>Instant Withdrawals</h3>
+
+                    <p>Withdraw directly to your M-Pesa account.</p>
+
+                </div>
+
             </div>
 
-            <div class="auth-feature">
-                <span>✓</span>
-                Referral Bonuses
+            <div class="feature">
+
+                <div class="feature-icon">✓</div>
+
+                <div>
+
+                    <h3>Referral Rewards</h3>
+
+                    <p>Invite friends and receive lifetime bonuses.</p>
+
+                </div>
+
             </div>
 
-            <div class="auth-feature">
-                <span>✓</span>
-                VIP Membership
+            <div class="feature">
+
+                <div class="feature-icon">✓</div>
+
+                <div>
+
+                    <h3>Secure Platform</h3>
+
+                    <p>Your account and earnings are protected.</p>
+
+                </div>
+
             </div>
 
         </div>
 
         <!-- RIGHT PANEL -->
 
-        <div class="auth-right">
+        <div class="right-panel">
 
-            <form class="signup-page" action="/signup" method="POST">  
-                        <div class="login-header">
-                                <div class="top2">
-                                    <div class="login-logo"><img src="static/images/supernova earn logo.png" alt=""></div>
-                                    <div class="web-name">
-                                        <h3>SUPERNOVA EARN</h3>
-                                        <p>Sign up a new account</p>
-                                    </div>
-                                </div>
-                                    <div class="notice2">
-                                        <img class="admin" src="static/images/admin.jfif" alt="">
-                                            <p>Invented by <span>Admin</span></p>
-                                    </div>
-                        </div> 
-                        
-                        <div class="identity">
-                            <label for="">Username <span class="bracket"></span></label>
-                            <input name="username" type="text" placeholder="Your display name" required>
+            <div class="form-card">
 
-                            <label for="">Email</label>
-                            <input type="email" placeholder="yourname@gmail.com" name="email" required>
+                <img
+                    src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
+                    class="form-logo"
+                >
 
-                            <label for="">Phone number</label>
-                            <input 
-                                
-                                type="tel" 
-                                name="phone" 
-                                placeholder="07XXXXXXXX or 01XXXXXXXX"
-                                pattern="^(07|01)\d{8}$"
-                                required
-                                >
-                            
+                <h2>Create Account</h2>
 
-                            <label for="">Password</label>
-                            <div class="show-password2">
-                                <input type="password"  id="password" placeholder="Min. 6 characters" name="password" required>
-                                <div class="eye2" onclick="togglePassword()" ><img id="eyeIcon"  src="static/images/close-eye.jfif" alt=""></div> 
-                            </div>
+                <p class="subtitle">
+                    Join Supernova Earn and start earning today.
+                </p>
 
-                        
-                            <div class="checkbox2">
-                                <input type="checkbox" name="terms" require>
-                                <p>I agree to the <span class="signup-span">Terms of Service </span>and <span class="signup-span">No-Refund Policy</span></p>
-                            </div>
+                <form class="form-card" action="/signup" method="POST">
+                                        <div class="input-group">
+
+                        <label>Username</label>
+
+                        <input
+                            type="text"
+                            name="username"
+                            placeholder="Enter your username"
+                            required>
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>Email Address</label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="example@gmail.com"
+                            required>
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>Phone Number</label>
+
+                        <input
+                            type="tel"
+                            name="phone"
+                            placeholder="07XXXXXXXX"
+                            pattern="^(07|01)\d{8}$"
+                            required>
+
+                    </div>
+
+                    <div class="input-group">
+
+                        <label>Password</label>
+
+                        <div class="password-box">
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Minimum 6 characters"
+                                required>
+
+                            <span class="password-toggle" onclick="togglePassword()">
+
+                                <img
+                                    id="eyeIcon"
+                                    src="{{ url_for('static', filename='images/close-eye.jfif') }}"
+                                    alt="Toggle Password">
+
+                            </span>
+
                         </div>
 
-                        <button class="create-account" type="submit">Create Account</button>
-                        <div class="signup-line"></div>
-                        <p class="signup-root">Already  have an account? <a href="/login" target="_blank">Sign in</a></span></p>
-                            <input
-                                type="hidden"
-                                name="referral_code"
-                                value="{{ ref }}"
-                            >
+                    </div>
+
+                    <div class="terms-box">
+
+                        <input
+                            type="checkbox"
+                            name="terms"
+                            required>
+
+                        <p>
+
+                            I agree to the
+
+                            <span>Terms of Service</span>
+
+                            and
+
+                            <span>No Refund Policy</span>
+
+                        </p>
+
+                    </div>
+
+                    <input
+                        type="hidden"
+                        name="referral_code"
+                        value="{{ ref }}">
+
+                    <button
+                        type="submit"
+                        class="signup-btn">
+
+                        Create Account
+
+                    </button>
+
+                    <div class="login-link">
+
+                        Already have an account?
+
+                        <a href="/login">
+
+                            Sign In
+
+                        </a>
+
+                    </div>
                 </form>
+
+            </div>
 
         </div>
 
@@ -287,32 +907,37 @@
 
 </div>
 
-    {% if email_exists %}
+{% if email_exists %}
 
 <div class="email-exists-overlay">
 
     <div class="email-exists-popup">
 
-        <button class="email-exists-close"
-                onclick="closeEmailPopup()">
+        <button
+            class="email-exists-close"
+            onclick="closeEmailPopup()">
 
             &times;
 
         </button>
 
-        <img src="{{ url_for('static', filename='images/alert.jfif') }}">
+        <img
+            src="{{ url_for('static', filename='images/alert.jfif') }}"
+            alt="Alert">
 
         <h2>Email Already Registered</h2>
 
         <p>
 
-            This email is already associated with an account.
+            This email address is already associated with an account.
 
             Please login instead.
 
         </p>
 
-        <a href="/login" class="email-login-btn">
+        <a
+            href="/login"
+            class="email-login-btn">
 
             Go to Login
 
@@ -325,11 +950,23 @@
 {% endif %}
 
 <script>
-    function closeEmailPopup(){
 
-    document.querySelector(".email-exists-overlay").style.display="none";
+function closeEmailPopup(){
+
+    const popup = document.querySelector(".email-exists-overlay");
+
+    if(popup){
+
+        popup.style.display="none";
+
+    }
 
 }
+
 </script>
+
 </body>
+
 </html>
+                
+                    
