@@ -345,9 +345,16 @@ transform:translateY(-35px);
 
 }
 .form-logo{
-    display:flex;
-    justify-content:center;
-    margin-bottom:20px;
+
+    width:90px;
+    height:90px;
+
+    object-fit:contain;
+
+    display:block;
+
+    margin:0 auto 20px;
+
 }
 
 .form-logo img{
@@ -710,6 +717,29 @@ transform:scale(1);
     object-fit: contain;
     display: block;
 }
+.signup-form{
+
+    width:100%;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+.password-box{
+
+    position:relative;
+
+    width:100%;
+
+}
+.password-box input{
+
+    width:100%;
+
+}
 
     </style>
 
@@ -818,7 +848,7 @@ transform:scale(1);
                     Join Supernova Earn and start earning today.
                 </p>
 
-                <form class="form-card" action="/signup" method="POST">
+                <form class="signup-form" action="/signup" method="POST">
                                         <div class="input-group">
 
                         <label>Username</label>
