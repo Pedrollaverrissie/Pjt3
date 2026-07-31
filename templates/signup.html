@@ -1238,7 +1238,7 @@ transform:scale(1);
                         </p>
                     </div>
                 </div>
-                <form class="signup-form" action="/signup" method="POST">
+                <form class="signup-form" action="/signup" method="POST" autocomplete="off">
                                         <div class="input-group">
 
                         <label>Username</label>
@@ -1247,6 +1247,7 @@ transform:scale(1);
                             type="text"
                             name="username"
                             placeholder="Enter your username"
+                             autocomplete="off"
                             required>
 
                     </div>
@@ -1287,6 +1288,7 @@ transform:scale(1);
                                 id="password"
                                 name="password"
                                 placeholder="Minimum 6 characters"
+                                autocomplete="new-password"
                                 required>
 
                             <span class="password-toggle" onclick="togglePassword()">
