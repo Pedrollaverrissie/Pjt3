@@ -6,7 +6,213 @@
     <title>Document</title>
      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-   
+<style>
+
+
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    background:#090510;
+    color:white;
+    overflow-x:hidden;
+}
+
+.background{
+
+    width:100%;
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:40px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(circle at top left,#5634b8 0%,transparent 32%),
+        radial-gradient(circle at bottom right,#16b36433 0%,transparent 35%),
+        linear-gradient(135deg,#090510,#12091d,#090510);
+
+}
+
+.blob{
+
+    position:absolute;
+
+    border-radius:50%;
+
+    filter:blur(90px);
+
+    opacity:.25;
+
+    animation:floating 12s ease-in-out infinite;
+
+}
+
+.blob1{
+
+    width:340px;
+    height:340px;
+
+    background:#16b364;
+
+    top:-120px;
+    left:-100px;
+
+}
+
+.blob2{
+
+    width:420px;
+    height:420px;
+
+    background:#6d3cff;
+
+    right:-170px;
+    bottom:-170px;
+
+    animation-delay:3s;
+
+}
+
+.blob3{
+
+    width:250px;
+    height:250px;
+
+    background:#ffd54a;
+
+    right:25%;
+    top:40%;
+
+    animation-delay:6s;
+
+}
+
+@keyframes floating{
+
+0%,100%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-35px);
+
+}
+
+}
+
+.auth-card{
+
+    width:100%;
+
+    max-width:1250px;
+
+    height:700px;
+
+    display:flex;
+
+    overflow:hidden;
+
+    border-radius:32px;
+
+    background:rgba(255,255,255,.05);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.10);
+
+    box-shadow:0 35px 80px rgba(0,0,0,.45);
+
+}
+
+
+/*================ LEFT PANEL ================*/
+
+.left-panel{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    padding:70px;
+
+    background:linear-gradient(
+        160deg,
+        rgba(22,179,100,.08),
+        rgba(123,47,247,.12)
+    );
+
+}
+
+.main-logo{
+
+    width:140px;
+    height:140px;
+
+    object-fit:contain;
+
+    margin-bottom:35px;
+
+}
+
+.left-panel h1{
+
+    font-size:52px;
+
+    font-weight:800;
+
+    margin-bottom:10px;
+
+}
+
+.left-panel h2{
+
+    font-size:34px;
+
+    color:#F6C000;
+
+    margin-bottom:25px;
+
+    font-weight:700;
+
+}
+
+.left-description{
+
+    max-width:480px;
+
+    font-size:18px;
+
+    line-height:2;
+
+    color:#dddddd;
+
+}
+
+
+   </style>
 </head>
 <body>
 
@@ -47,7 +253,6 @@
         </div>
 
         <!-- RIGHT PANEL -->
-
         <div class="right-panel">
 
             <div class="form-card">
@@ -55,109 +260,106 @@
                 <img
                     src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
                     class="form-logo"
-                >
+                    alt="Logo">
 
-                <h2>Login</h2>
+                <h2>Sign In</h2>
 
                 <p class="subtitle">
-
-                    Sign in to continue earning.
-
+                    Welcome back! Login to continue earning with Supernova Earn.
                 </p>
 
-                <form class="signup-form" action="/login" method="POST">
+                <form class="login-form" action="/login" method="POST">
 
-                  
-                        <div class="input-group">
+                    <div class="input-group">
 
-                            <label>Username or Email</label>
+                        <label>Username or Email</label>
 
-                            <input
-                                type="text"
-                                name="login"
-                                placeholder="Enter your username or email"
-                                required>
+                        <input
+                            type="text"
+                            name="login"
+                            placeholder="Username or Email"
+                            autocomplete="off"
+                            required>
 
-                        </div>
+                    </div>
 
-                        <div class="input-group">
+                    <div class="input-group">
 
-                            <div class="password">
+                        <div class="password-header">
 
-                                <label>Password</label>
+                            <label>Password</label>
 
-                                <a class="forgot" href="/forgot-password">
-
-                                    Forgot Password?
-
-                                </a>
-
-                            </div>
-
-                            <div class="password-box">
-
-                                <input
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    placeholder="Enter your password"
-                                    required>
-
-                                <span class="password-toggle" onclick="togglePassword()">
-
-                                    <img
-                                        id="eyeIcon"
-                                        src="{{ url_for('static', filename='images/close-eye.jfif') }}"
-                                        alt="Toggle Password">
-
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                        <div class="checkbox">
-
-                            <input
-                                type="checkbox"
-                                id="remember_me"
-                                name="remember_me">
-
-                            <label for="remember_me">
-
-                                Remember Me
-
-                            </label>
-
-                        </div>
-
-                        <button
-                            type="submit"
-                            class="signup-btn">
-
-                            Sign In
-
-                        </button>
-
-                        <div class="login-link">
-
-                            Don't have an account?
-
-                            <a href="/signup">
-
-                                Create Account
-
+                            <a href="/forgot-password">
+                                Forgot password?
                             </a>
 
                         </div>
 
+                        <div class="password-box">
 
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="••••••••"
+                                autocomplete="new-password"
+                                required>
+
+                            <span
+                                class="password-toggle"
+                                onclick="togglePassword()">
+
+                                <img
+                                    id="eyeIcon"
+                                    src="{{ url_for('static', filename='images/close-eye.jfif') }}"
+                                    alt="Toggle Password">
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <div class="remember-box">
+
+                        <input
+                            type="checkbox"
+                            id="remember_me"
+                            name="remember_me">
+
+                        <label for="remember_me">
+                            Remember Me
+                        </label>
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="login-btn">
+
+                        Sign In
+
+                    </button>
+
+                    <div class="login-link">
+
+                        Don't have an account?
+
+                        <a href="/signup">
+
+                            Create one
+
+                        </a>
+
+                    </div>
 
                 </form>
 
             </div>
 
         </div>
+
+
 
     </div>
 
