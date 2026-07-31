@@ -211,6 +211,337 @@ transform:translateY(-35px);
 
 }
 
+/*=========================================================
+                    RIGHT PANEL
+=========================================================*/
+
+.right-panel{
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:60px;
+
+}
+
+.form-card{
+
+    width:100%;
+
+    max-width:480px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+}
+
+.form-logo{
+
+    width:90px;
+
+    height:90px;
+
+    object-fit:contain;
+
+    margin:0 auto 18px;
+
+}
+
+.form-card h2{
+
+    text-align:center;
+
+    font-size:40px;
+
+    font-weight:700;
+
+    margin-bottom:8px;
+
+}
+
+.subtitle{
+
+    text-align:center;
+
+    color:#d0d0d0;
+
+    font-size:16px;
+
+    line-height:1.8;
+
+    margin-bottom:40px;
+
+}
+
+/*================ FORM =================*/
+
+.login-form{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.input-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:8px;
+
+}
+
+.input-group label{
+
+    font-size:15px;
+
+    font-weight:600;
+
+    color:#ffffff;
+
+}
+
+/*================ UNDERLINE INPUTS =================*/
+
+.input-group input{
+
+    width:100%;
+
+    background:transparent;
+
+    border:none;
+
+    border-bottom:2px solid rgba(255,255,255,.25);
+
+    padding:14px 5px;
+
+    color:white;
+
+    font-size:16px;
+
+    transition:.3s;
+
+}
+
+.input-group input::placeholder{
+
+    color:#888;
+
+}
+
+.input-group input:focus{
+
+    outline:none;
+
+    border-bottom:2px solid #F6C000;
+
+}
+
+/*================ PASSWORD =================*/
+
+.password-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+}
+
+.password-header a{
+
+    color:#F6C000;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+}
+
+.password-header a:hover{
+
+    text-decoration:underline;
+
+}
+
+.password-box{
+
+    position:relative;
+
+}
+
+.password-box input{
+
+    padding-right:40px;
+
+}
+
+.password-toggle{
+
+    position:absolute;
+
+    right:0;
+
+    top:50%;
+
+    transform:translateY(-50%);
+
+    cursor:pointer;
+
+}
+
+.password-toggle img{
+
+    width:22px;
+
+}
+
+/*================ REMEMBER =================*/
+
+.remember-box{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    margin-top:5px;
+
+}
+
+.remember-box label{
+
+    color:#d5d5d5;
+
+    font-size:14px;
+
+}
+
+/*================ BUTTON =================*/
+
+.login-btn{
+
+    margin-top:20px;
+
+    height:56px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:linear-gradient(90deg,#0D6EFD,#2F80ED);
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.35s;
+
+}
+
+.login-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 12px 30px rgba(47,128,237,.45);
+
+}
+
+/*================ LOGIN LINK =================*/
+
+.login-link{
+
+    text-align:center;
+
+    margin-top:30px;
+
+    color:#d5d5d5;
+
+}
+
+.login-link a{
+
+    color:#F6C000;
+
+    text-decoration:none;
+
+    font-weight:700;
+
+}
+
+.login-link a:hover{
+
+    text-decoration:underline;
+
+}
+
+/*================ MOBILE =================*/
+
+@media(max-width:900px){
+
+.right-panel{
+
+    padding:30px;
+
+}
+
+.form-card{
+
+    max-width:100%;
+
+}
+
+}
+
+@media(max-width:600px){
+
+.right-panel{
+
+    padding:20px;
+
+}
+
+.form-card h2{
+
+    font-size:30px;
+
+}
+
+.subtitle{
+
+    font-size:14px;
+
+    margin-bottom:30px;
+
+}
+
+.login-btn{
+
+    height:50px;
+
+}
+
+}
+
+
 
    </style>
 </head>
