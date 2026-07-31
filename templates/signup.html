@@ -982,9 +982,10 @@ transform:scale(1);
     align-items: center;
     justify-content: center;
     margin-bottom: 8px;
+    background-color: #16b364;
 
 }
-.top1 img{
+.top1 .img{
     flex: 1;
     display: flex;
     justify-content: center;
@@ -1164,10 +1165,12 @@ transform:scale(1);
 
             <div class="form-card">
                <div class="top1">
-                <img
-                    src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
-                    class="form-logo"
-                >
+                <div class="img">
+                    <img
+                        src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
+                        class="form-logo"
+                    >
+                </div>
                 <div class="names">
                     <h2>Create Account</h2>
 
