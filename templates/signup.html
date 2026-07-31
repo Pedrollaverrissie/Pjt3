@@ -1041,6 +1041,18 @@ transform:scale(1);
 }
 
 }
+
+.top2{
+    display: flex;
+    flex-direction: row;
+
+}
+.top2 img{
+    flex: 1;
+}
+.top2 .names{
+ flex: 2;
+}
     </style>
 
 </head>
@@ -1136,18 +1148,19 @@ transform:scale(1);
         <div class="right-panel">
 
             <div class="form-card">
-
+               <div class="top1">
                 <img
                     src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
                     class="form-logo"
                 >
+                <div class="names">
+                    <h2>Create Account</h2>
 
-                <h2>Create Account</h2>
-
-                <p class="subtitle">
-                    Join Supernova Earn and start earning today.
-                </p>
-
+                    <p class="subtitle">
+                        Join Supernova Earn and start earning today.
+                    </p>
+                </div>
+            </div>
                 <form class="signup-form" action="/signup" method="POST">
                                         <div class="input-group">
 
