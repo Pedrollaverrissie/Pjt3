@@ -963,7 +963,7 @@ transform:scale(1);
 
 .right-panel{
 
-    padding: 4px;
+    padding: 2px;
     background: rgb(24, 10, 42);
     border: solid 2px white;
     border-radius: 24px;
@@ -990,6 +990,7 @@ transform:scale(1);
     align-items: center;
     justify-content: center;
     margin-bottom: 10px;
+    background-color: rgba(255, 0, 0, 0.189);
   
 
 }
@@ -1188,20 +1189,20 @@ transform:scale(1);
 
             <div class="form-card">
                <div class="top1">
-                <div class="imgs">
-                    <img
-                        src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
-                        class="form-logo"
-                    >
-                </div>
-                <div class="names">
-                    <h2>Create Account</h2>
+                    <div class="imgs">
+                        <img
+                            src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
+                            class="form-logo"
+                        >
+                    </div>
+                    <div class="names">
+                        <h2>Create Account</h2>
 
-                    <p class="subtitle">
-                        Join Supernova Earn and start earning today.
-                    </p>
+                        <p class="subtitle">
+                            Join Supernova Earn and start earning today.
+                        </p>
+                    </div>
                 </div>
-            </div>
                 <form class="signup-form" action="/signup" method="POST">
                                         <div class="input-group">
 
