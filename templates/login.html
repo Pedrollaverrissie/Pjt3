@@ -10,75 +10,156 @@
 </head>
 <body>
 
+<div class="background">
 
-    <form action="/login" method="POST">
-    <div class="login-container">
-        <div class="login-header">
-            <div class="top">
-                <div class="login-logo"><img src="static/images/supernova earn logo.png" alt=""></div>
-                <div class="web-name">
-                    <h3>SUPERNOVA EARN</h3>
-                    <p>Sign into your account</p>
-                </div>
-            </div>
+    <span class="blob blob1"></span>
+    <span class="blob blob2"></span>
+    <span class="blob blob3"></span>
 
-            <div class="notice">
-                <p>Use your <span>username or email to sign in</span></p>
-            </div>
-        </div>
+    <div class="auth-card">
 
-        <div class="credentials">
-            <label for="">Username or Email</label>
-            <input 
-                class="email-input" type="text" name="login" id="" placeholder="username or yourname@email.com" required
-                
-            
+        <!-- LEFT PANEL -->
+
+        <div class="left-panel">
+
+            <img
+                src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
+                class="main-logo"
             >
-            <div class="password">
-               <label>Password</label>
-                <a class="forgot" href="/forgot-password">Forgot password?</a>
-            </div> 
-            <div class="show-password">
-                <input type="password"  id="password" placeholder="••••••••" name="password" required>
-               <div class="eye"  onclick="togglePassword()"  ><img  id="eyeIcon" src="static/images/close-eye.jfif" alt=""></div> 
-            </div>
-            <div class="checkbox">
-                <input type="checkbox" id="remember_me" name="remember_me">
-                <p for="remember_me">Remember me</p>
-            </div>
-        </div>
-        
-        <div class="bottom">
-            <button class="login-btn" type="submit"><p> Sign In</p></button>
-            <p class="line2">OR CONTINUE WITH</p>
-          
-            <div class="media">
-                <button><img src="static/images/x.jfif" alt=""></button>
-                <button><img src="static/images/fb.jfif" alt=""></button>
-                <button><img src="static/images/whatsp.jfif" alt=""></button>
-            </div>
-            <p class="root">
-                Don't have an account?<span>
-                    <a href="/signup" target="_blank">Sign Up</a>
-                </span> 
+
+            <h1>SUPERNOVA EARN</h1>
+
+            <h2>WELCOME BACK</h2>
+
+            
+            <p class="left-description">
+
+            Welcome back to Supernova Earn.
+
+            Sign in to access your dashboard, monitor your earnings,
+            manage your investments, withdraw directly to M-Pesa,
+            and continue building your financial future with confidence.
+
             </p>
+            
+
+
+        </div>
+
+        <!-- RIGHT PANEL -->
+
+        <div class="right-panel">
+
+            <div class="form-card">
+
+                <img
+                    src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
+                    class="form-logo"
+                >
+
+                <h2>Login</h2>
+
+                <p class="subtitle">
+
+                    Sign in to continue earning.
+
+                </p>
+
+                <form class="signup-form" action="/login" method="POST">
+
+                  
+                        <div class="input-group">
+
+                            <label>Username or Email</label>
+
+                            <input
+                                type="text"
+                                name="login"
+                                placeholder="Enter your username or email"
+                                required>
+
+                        </div>
+
+                        <div class="input-group">
+
+                            <div class="password">
+
+                                <label>Password</label>
+
+                                <a class="forgot" href="/forgot-password">
+
+                                    Forgot Password?
+
+                                </a>
+
+                            </div>
+
+                            <div class="password-box">
+
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    placeholder="Enter your password"
+                                    required>
+
+                                <span class="password-toggle" onclick="togglePassword()">
+
+                                    <img
+                                        id="eyeIcon"
+                                        src="{{ url_for('static', filename='images/close-eye.jfif') }}"
+                                        alt="Toggle Password">
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="checkbox">
+
+                            <input
+                                type="checkbox"
+                                id="remember_me"
+                                name="remember_me">
+
+                            <label for="remember_me">
+
+                                Remember Me
+
+                            </label>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            class="signup-btn">
+
+                            Sign In
+
+                        </button>
+
+                        <div class="login-link">
+
+                            Don't have an account?
+
+                            <a href="/signup">
+
+                                Create Account
+
+                            </a>
+
+                        </div>
+
+
+
+                </form>
+
+            </div>
+
         </div>
 
     </div>
-   </form> 
-   <script>
-function togglePassword() {
-    const password = document.getElementById("password");
-    const eyeIcon = document.getElementById("eyeIcon");
 
-    if (password.type === "password") {
-        password.type = "text";
-        eyeIcon.src = "{{ url_for('static', filename='images/open-eye.jfif') }}";
-    } else {
-        password.type = "password";
-        eyeIcon.src = "{{ url_for('static', filename='images/close-eye.jfif') }}";
-    }
-}
-</script>
-</body>
+</div>
 </html>
