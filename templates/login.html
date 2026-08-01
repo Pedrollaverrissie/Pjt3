@@ -748,10 +748,17 @@ transform:translateY(-35px);
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-top: -30px;
+    gap: 5px;
+}
+.img{
+    display: flex;
 }
 .top1-left{
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
    </style>
@@ -792,10 +799,12 @@ transform:translateY(-35px);
 
             <div class="form-card">
                 <div class="top1">
-                        <img
-                            src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
-                            class="form-logo"
-                            alt="Logo">
+                        <div class="img">
+                            <img
+                                src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
+                                class="form-logo"
+                                alt="Logo">
+                        </div>    
                         <div class="top-left">
                             <h2>Sign In</h2>
 
