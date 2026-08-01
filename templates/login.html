@@ -743,8 +743,16 @@ transform:translateY(-35px);
 }
 
 }
-
-
+.top1{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.top1-left{
+    display: flex;
+    flex-direction: column;
+}
 
    </style>
 </head>
@@ -783,18 +791,19 @@ transform:translateY(-35px);
         <div class="right-panel">
 
             <div class="form-card">
+                <div class="top1">
+                        <img
+                            src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
+                            class="form-logo"
+                            alt="Logo">
+                        <div class="top-left">
+                            <h2>Sign In</h2>
 
-                <img
-                    src="{{ url_for('static', filename='images/supernova earn logo.png') }}"
-                    class="form-logo"
-                    alt="Logo">
-
-                <h2>Sign In</h2>
-
-                <p class="subtitle">
-                    Welcome back! Login to continue earning with Supernova Earn.
-                </p>
-
+                            <p class="subtitle">
+                                Welcome back! Login to continue earning with Supernova Earn.
+                            </p>
+                        </div>
+                </div>
                 <form class="login-form" action="/login" method="POST">
 
                     <div class="input-group">
