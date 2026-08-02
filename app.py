@@ -1527,6 +1527,13 @@ def add_to_referral_wallet(user, amount, description):
     )
 
     db.session.add(transaction)
+    
+    create_notification(
+    user.id,
+    "Referral Bonus Received",
+    f"You have received KES {amount:,.2f} referral commission.",
+    "referral"
+    )
 
 def add_to_task_wallet(user, amount, description):
 
