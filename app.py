@@ -1936,6 +1936,24 @@ def create_notification(user_id, title, message, category="general"):
 
     db.session.add(notification)
     db.session.commit()
+
+@app.context_processor
+def inject_notifications():
+
+    if current_user.is_authenticated:
+
+        unread_notifications = Notification.query.filter_by(
+            user_id=current_user.id,
+            is_read=False
+        ).count()
+
+        return dict(
+            unread_notifications=unread_notifications
+        )
+
+    return dict(
+        unread_notifications=0
+    )
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
