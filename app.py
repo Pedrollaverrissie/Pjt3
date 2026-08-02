@@ -270,12 +270,7 @@ def signup():
 
         db.session.add(pending_user)
         db.session.commit()
-        create_notification(
-        new_user.id,
-        "Welcome to Supernova Earn",
-        "Welcome! Your account has been created successfully. Complete your activation payment to unlock all earning features.",
-        "welcome"
-    )
+  
 
         print("SIGNUP PASSED VALIDATION")
         print("USER SAVED:")
@@ -1103,6 +1098,14 @@ def webhook():
                 db.session.delete(pending_user)
 
                 db.session.commit()
+
+                if not existing_user:
+                    create_notification(
+                        new_user.id,
+                        "Welcome to Supernova Earn",
+                        "Your account has been activated successfully. Welcome to Supernova Earn! You can now start earning.",
+                        "welcome"
+                    )
 
                 return jsonify({"status": "received"}), 200
              
