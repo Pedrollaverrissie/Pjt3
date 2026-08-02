@@ -1527,7 +1527,7 @@ def add_to_referral_wallet(user, amount, description):
     )
 
     db.session.add(transaction)
-    
+
     create_notification(
     user.id,
     "Referral Bonus Received",
@@ -3187,15 +3187,14 @@ def request_withdrawal():
 
     db.session.add(withdrawal)
 
-    db.session.add(
-        Notification(
-            user_id=current_user.id,
-            title="Withdrawal Requested",
-            message=f"Your withdrawal request of KES {amount:.2f} has been received."
-        )
-    )
-
     db.session.commit()
+
+    create_notification(
+    current_user.id,
+    "Withdrawal Submitted",
+    f"Your withdrawal request of KES {amount:,.2f} has been received and is awaiting approval.",
+    "withdrawal"
+    )
 
     return jsonify({
         "success": True,
