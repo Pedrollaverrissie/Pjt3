@@ -10,7 +10,30 @@
        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
      <style>
+        .badge{
+    position:absolute;
+    top:-6px;
+    right:-6px;
 
+    min-width:20px;
+    height:20px;
+
+    padding:0 6px;
+
+    background:#ff3b30;
+    color:#fff;
+
+    border-radius:999px;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:11px;
+    font-weight:700;
+
+    border:2px solid white;
+}
      </style>
 </head>
     
@@ -29,11 +52,13 @@
             
                    <a href="/notifications">
                                     
-                         <div class="notification-icon">
-                                        
-                                &#x1F514 <span class="badge">3</span>
-                                        
-                         </div>
+                        <div class="notification-icon">
+                            &#128276;
+
+                            {% if unread_notifications > 0 %}
+                                <span class="badge">{{ unread_notifications }}</span>
+                            {% endif %}
+                        </div>
                                     
                     </a>
                                     

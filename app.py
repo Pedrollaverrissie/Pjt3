@@ -270,6 +270,12 @@ def signup():
 
         db.session.add(pending_user)
         db.session.commit()
+        create_notification(
+        new_user.id,
+        "Welcome to Supernova Earn",
+        "Welcome! Your account has been created successfully. Complete your activation payment to unlock all earning features.",
+        "welcome"
+    )
 
         print("SIGNUP PASSED VALIDATION")
         print("USER SAVED:")
@@ -485,10 +491,15 @@ def dashboard():
         db.func.date(Transaction.created_at) == date.today()
     ).scalar() or 0
 
+    unread_notifications = Notification.query.filter_by(
+    user_id=current_user.id,
+    is_read=False
+    ).count()
     return render_template(
         "dashboard.html",
 
         username=current_user.username,
+         unread_notifications=unread_notifications,
 
         # Wallets
         main_wallet=current_user.main_wallet,
@@ -1913,6 +1924,18 @@ def process_vip_recharge(user, amount):
 
     update_vip_lock(user)
 
+
+def create_notification(user_id, title, message, category="general"):
+
+    notification = Notification(
+        user_id=user_id,
+        title=title,
+        message=message,
+        category=category
+    )
+
+    db.session.add(notification)
+    db.session.commit()
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required

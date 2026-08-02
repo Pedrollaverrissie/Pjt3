@@ -91,11 +91,7 @@ class User(UserMixin, db.Model):
     default=True
     )
 
-    notifications = db.relationship(
-        "Notification",
-        backref="user",
-        lazy=True
-    )
+
     withdrawals = db.relationship(
     "Withdrawal",
     backref="user",
@@ -114,6 +110,11 @@ class User(UserMixin, db.Model):
     withdrawable_wallet = db.Column(
     db.Float,
     default=0
+    )
+    notifications = db.relationship(
+    "Notification",
+    backref="user",
+    lazy=True
     )
     
 
@@ -164,25 +165,7 @@ class PendingUser(db.Model):
         db.String(20),
         nullable=True
     )
-class Notification(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
 
-    user_id = db.Column(
-        db.Integer,
-        db.ForeignKey("user.id"),
-        nullable=False
-    )
-
-    title = db.Column(db.String(100))
-
-    message = db.Column(db.Text)
-
-    is_read = db.Column(db.Boolean, default=False)
-
-    created_at = db.Column(
-        db.DateTime,
-        default=datetime.utcnow
-    )
 
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -415,4 +398,27 @@ class Withdrawal(db.Model):
     db.String(50),
     nullable=True
     )
-    
+
+from datetime import datetime
+
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=False
+    )
+
+    title = db.Column(db.String(120), nullable=False)
+
+    message = db.Column(db.Text, nullable=False)
+
+    category = db.Column(db.String(30), default="general")
+
+    is_read = db.Column(db.Boolean, default=False)
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )   
