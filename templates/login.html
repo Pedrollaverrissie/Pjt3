@@ -234,7 +234,7 @@ transform:translateY(-35px);
 
     width:100%;
 
-    max-width:440px;
+    max-width:460px;
 
     display:flex;
 
@@ -618,8 +618,8 @@ transform:translateY(-35px);
 .auth-card{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content:flex-start;
+    align-items:stretch;
     width: 100%;
     
     border-radius:22px;
@@ -629,13 +629,17 @@ transform:translateY(-35px);
 }
 
 .right-panel{
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items:flex-start;
-        width: 100%;
-        
-    }
+    flex:none;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    align-items:stretch;
+    width:100%;
+    height:auto;
+    min-height:auto;
+    padding:10px 15px;
+    margin:0;
+}
 
 .form-card{
     flex-direction: column;
