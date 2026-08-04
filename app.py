@@ -3394,6 +3394,19 @@ def delete_notification(notification_id):
     db.session.commit()
 
     return redirect("/notifications")  
+
+#-----------delete all notifications--
+@app.route("/notifications/delete-all")
+@login_required
+def delete_all_notifications():
+
+    Notification.query.filter_by(
+        user_id=current_user.id
+    ).delete()
+
+    db.session.commit()
+
+    return redirect("/notifications")
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
