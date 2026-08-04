@@ -347,7 +347,39 @@ padding:18px;
 
 <div class="notification-card {% if not note.is_read %}unread{% endif %}">
 
-<h3>{{ note.title }}</h3>
+<h3>
+
+{% if note.category == "welcome" %}
+🎉
+
+{% elif note.category == "task" %}
+🎬
+
+{% elif note.category == "withdrawal" %}
+💸
+
+{% elif note.category == "membership" %}
+👑
+
+{% elif note.category == "security" %}
+🔒
+
+{% elif note.category == "referral" %}
+👥
+
+{% elif note.category == "recharge" %}
+💰
+
+{% elif note.category == "vip" %}
+⭐
+
+{% else %}
+🔔
+{% endif %}
+
+{{ note.title }}
+
+</h3>
 
 <p>{{ note.message }}</p>
 
