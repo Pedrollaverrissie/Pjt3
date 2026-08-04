@@ -3362,7 +3362,8 @@ def open_notification(notification_id):
         db.session.commit()
 
     return redirect("/notifications")
-===================================================
+
+#----------read all notifications------------
 @app.route("/notifications/read-all")
 @login_required
 def read_all_notifications():
