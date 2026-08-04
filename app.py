@@ -3362,7 +3362,21 @@ def open_notification(notification_id):
         db.session.commit()
 
     return redirect("/notifications")
-    
+===================================================
+@app.route("/notifications/read-all")
+@login_required
+def read_all_notifications():
+
+    Notification.query.filter_by(
+        user_id=current_user.id,
+        is_read=False
+    ).update(
+        {"is_read": True}
+    )
+
+    db.session.commit()
+
+    return redirect("/notifications")   
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
