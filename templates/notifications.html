@@ -344,6 +344,37 @@ background:#00b7d8;
 transform:translateY(-2px);
 
 }
+.note-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:10px;
+
+}
+
+.delete-note{
+
+text-decoration:none;
+
+font-size:20px;
+
+opacity:.4;
+
+transition:.3s;
+
+}
+
+.delete-note:hover{
+
+opacity:1;
+
+transform:scale(1.2);
+
+}
 </style>
 
 </head>
@@ -386,32 +417,26 @@ Mark all as read
 
 <div class="notification-card {% if not note.is_read %}unread{% endif %}">
 
+<div class="note-header">
+
 <h3>
 
 {% if note.category == "welcome" %}
 🎉
-
 {% elif note.category == "task" %}
 🎬
-
 {% elif note.category == "withdrawal" %}
 💸
-
 {% elif note.category == "membership" %}
 👑
-
 {% elif note.category == "security" %}
 🔒
-
 {% elif note.category == "referral" %}
 👥
-
 {% elif note.category == "recharge" %}
 💰
-
 {% elif note.category == "vip" %}
 ⭐
-
 {% else %}
 🔔
 {% endif %}
@@ -419,6 +444,16 @@ Mark all as read
 {{ note.title }}
 
 </h3>
+
+<a href="{{ url_for('delete_notification', notification_id=note.id) }}"
+   class="delete-note"
+   onclick="return confirm('Delete this notification?')">
+
+🗑
+
+</a>
+
+</div>
 
 <p>{{ note.message }}</p>
 

@@ -3376,7 +3376,23 @@ def read_all_notifications():
 
     db.session.commit()
 
-    return redirect("/notifications")   
+    return redirect("/notifications") 
+
+#---------delete notifications---------------
+
+@app.route("/notification/delete/<int:notification_id>")
+@login_required
+def delete_notification(notification_id):
+
+    note = Notification.query.get_or_404(notification_id)
+
+    if note.user_id != current_user.id:
+        abort(403)
+
+    db.session.delete(note)
+    db.session.commit()
+
+    return redirect("/notifications")  
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
