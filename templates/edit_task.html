@@ -288,6 +288,11 @@
 
 <select name="vip_level">
 
+    <option value="Bronze"
+    {% if task.vip_level=="Bronze" %}selected{% endif %}>
+    Bronze
+    </option>
+
     <option value="Silver"
     {% if task.vip_level=="Silver" %}selected{% endif %}>
     Silver
