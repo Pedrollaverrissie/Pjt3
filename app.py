@@ -3307,7 +3307,22 @@ def transaction_history():
         transactions=transactions
     )
 
+from flask import abort
 
+@app.route("/notification/<int:notification_id>")
+@login_required
+def open_notification(notification_id):
+
+    note = Notification.query.get_or_404(notification_id)
+
+    if note.user_id != current_user.id:
+        abort(403)
+
+    if not note.is_read:
+        note.is_read = True
+        db.session.commit()
+
+    return redirect("/notifications")
     
 #======================================================
 if __name__ == "__main__":

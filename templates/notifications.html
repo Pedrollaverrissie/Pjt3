@@ -122,6 +122,30 @@ font-size:14px;
 
 }
 
+.notification-link{
+
+text-decoration:none;
+
+display:block;
+
+color:inherit;
+
+}
+
+.unread{
+
+border:1px solid #00e5ff;
+
+box-shadow:0 0 18px rgba(0,229,255,.18);
+
+}
+
+.unread::before{
+
+background:linear-gradient(#00ff95,#00d9ff);
+
+}
+
 /* Notification Card */
 
 .notification-card{
@@ -318,7 +342,10 @@ padding:18px;
 
 {% for note in notes %}
 
-<div class="notification-card">
+<a href="{{ url_for('open_notification', notification_id=note.id) }}"
+   class="notification-link">
+
+<div class="notification-card {% if not note.is_read %}unread{% endif %}">
 
 <h3>{{ note.title }}</h3>
 
@@ -327,6 +354,8 @@ padding:18px;
 <small>{{ note.created_at }}</small>
 
 </div>
+
+</a>
 
 {% else %}
 
