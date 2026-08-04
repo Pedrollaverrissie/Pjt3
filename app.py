@@ -363,7 +363,7 @@ def payment():
 
             response = service.collect.mpesa_stk_push(
                 phone_number=phone,
-                amount=10,
+                amount=100,
                 narrative="Account Activation"
             )
 
@@ -1596,9 +1596,9 @@ def admin_required(f):
 def get_required_contribution(vip):
 
     requirements = {
-        "Bronze":10,
+        "Bronze":800,
         "Silver": 1500,
-        "Gold": 3000,
+        "Gold": 3000,              
         "Platinum": 7500,
         "Diamond": 15000
     }
@@ -1707,7 +1707,7 @@ RENEWAL_WINDOW_DAYS = 2
 def get_minimum_recharge(vip_level):
 
     recharge_requirements = {
-        "Bronze": 10,
+        "Bronze":200,
         "Silver": 500,
         "Gold": 1000,
         "Platinum": 2500,
@@ -1913,7 +1913,7 @@ def process_vip_recharge(user, amount):
     if (
         user.vip_level == "Bronze"
         and user.vip_started_at is None
-        and amount >= 10
+        and amount >= 200
     ):
 
         user.account_active = True
