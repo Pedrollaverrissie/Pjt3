@@ -1645,13 +1645,16 @@ def can_withdraw(user):
         )
     
         # Withdrawable balance
-    minimum = get_minimum_withdrawal(user.vip_level)
+    if not user.withdrawal_unlocked:
 
-    if user.withdrawable_wallet < minimum:
-        return (
-            False,
-            f"You need at least KES {minimum:.2f} in your withdrawable wallet."
-        )
+        minimum = get_minimum_withdrawal(user.vip_level)
+
+        if user.withdrawable_wallet < minimum:
+
+            return (
+                False,
+                f"You need at least KES {minimum:.2f} in your withdrawable wallet."
+            )
 
     return True, "Withdrawal unlocked."
 
@@ -1659,12 +1662,19 @@ def can_withdraw(user):
 
 def update_withdrawal_status(user):
 
-    required = get_required_contribution(user.vip_level)
+    # Already unlocked for this VIP membership.
+    if user.withdrawal_unlocked:
+        return
 
-    if user.referral_contribution_balance >= required:
+    required = get_required_contribution(user.vip_level)
+    minimum = get_minimum_withdrawal(user.vip_level)
+
+    if (
+        user.referral_contribution_balance >= required
+        and
+        user.withdrawable_wallet >= minimum
+    ):
         user.withdrawal_unlocked = True
-    else:
-        user.withdrawal_unlocked = False
 
 
 
