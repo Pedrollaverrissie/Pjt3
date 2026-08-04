@@ -44,7 +44,7 @@ VIP_PLANS = {
     "Silver": {
         "price": 500,
         "tasks": 3,
-        "reward": 16.67,
+        "reward": 16.5,
         "withdrawal": 500,
         "required_referrals": 3
     },
@@ -1690,7 +1690,7 @@ def deduct_membership_contribution(user):
 
 def get_minimum_withdrawal(vip_level):
     minimums = {
-        "Bronze": 5,
+        "Bronze":400,
         "Silver": 1000,
         "Gold": 2000,
         "Platinum": 5000,
