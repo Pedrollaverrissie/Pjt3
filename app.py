@@ -363,7 +363,7 @@ def payment():
 
             response = service.collect.mpesa_stk_push(
                 phone_number=phone,
-                amount=100,
+                amount=4,
                 narrative="Account Activation"
             )
 
@@ -375,7 +375,7 @@ def payment():
                 phone=phone,
                 email=pending_user.email,
                 transaction_code=invoice_id,
-                amount=100,
+                amount=4,
                 status="pending",
                 payment_type="registration"
             )
