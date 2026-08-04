@@ -4,61 +4,64 @@
     <title>Tasks Locked</title>
 
     <style>
-        body{
-            background:#0b1020;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            height:100vh;
-            font-family:Arial;
-        }
+body{
+    background:#0b1020;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family:Arial;
+}
 
-        .card{
-            width:500px;
-            background:white;
-            padding:30px;
-            border-radius:15px;
-            text-align:center;
-            height: 340px;
-            vertical-align: middle;
-        }
+.card{
+    width:700px;          /* Increased from 500px */
+    min-height:500px;     /* Increased height */
+    background:white;
+    padding:50px;
+    border-radius:20px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}
 
-        h2{
-            color:#ff3b30;
-            margin-bottom:15px;
-            font-size: 40px;
-        }
+h2{
+    color:#ff3b30;
+    margin-bottom:25px;
+    font-size:56px;       /* Increased from 40px */
+}
 
-        p{
-            color:#444;
-            line-height:1.6;
-            font-size: 24px;
-        }
+p{
+    color:#444;
+    line-height:1.8;
+    font-size:30px;       /* Increased from 24px */
+}
 
-        a{
-            display:inline-block;
-            margin-top:25px;
-            text-decoration:none;
-            background:#16b364;
-            color:white;
-            padding:12px 30px;
-            border-radius:10px;
-            font-size: 20px;
-        }
-        .back-btn{
-            display:inline-block;
-            margin-top:15px;
-            text-decoration:none;
-            background:#374151;
-            color:white;
-            padding:12px 30px;
-            border-radius:10px;
-            transition:.3s;
-        }
+a{
+    display:inline-block;
+    margin-top:30px;
+    text-decoration:none;
+    background:#16b364;
+    color:white;
+    padding:18px 45px;    /* Larger button */
+    border-radius:12px;
+    font-size:28px;       /* Increased from 20px */
+}
 
-        .back-btn:hover{
-            background:#1f2937;
-        }
+.back-btn{
+    display:inline-block;
+    margin-top:20px;
+    text-decoration:none;
+    background:#374151;
+    color:white;
+    padding:18px 45px;
+    border-radius:12px;
+    transition:.3s;
+}
+
+.back-btn:hover{
+    background:#1f2937;
+}
             </style>
 
 </head>
