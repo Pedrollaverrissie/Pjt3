@@ -2225,7 +2225,14 @@ def tasks():
     ).all()
 
     # VIP plan details
-    plan = VIP_PLANS[current_user.vip_level]
+    vip_level = (current_user.vip_level or "").strip()
+
+    plan = VIP_PLANS.get(vip_level)
+
+    if plan is None:
+        flash("Invalid VIP level. Please upgrade your account.", "warning")
+        return redirect(url_for("vip"))
+
     daily_limit = int(plan["tasks"])
     daily_reward = int(plan["tasks"] * plan["reward"])
 
