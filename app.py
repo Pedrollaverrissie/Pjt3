@@ -1963,6 +1963,13 @@ def inject_notifications():
     return dict(
         unread_notifications=0
     )
+
+@app.context_processor
+def utility_processor():
+
+    return dict(
+        time_ago=time_ago
+    )
 #------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
@@ -2154,6 +2161,38 @@ def upgrade_vip(plan):
     )
 
     return redirect(url_for("vip"))
+
+
+from datetime import datetime
+
+def time_ago(dt):
+
+    now = datetime.utcnow()
+
+    diff = now - dt
+
+    seconds = diff.total_seconds()
+
+    if seconds < 60:
+        return "Just now"
+
+    elif seconds < 3600:
+        minutes = int(seconds // 60)
+        return f"{minutes} minute{'s' if minutes != 1 else ''} ago"
+
+    elif seconds < 86400:
+        hours = int(seconds // 3600)
+        return f"{hours} hour{'s' if hours != 1 else ''} ago"
+
+    elif seconds < 172800:
+        return "Yesterday"
+
+    elif seconds < 604800:
+        days = int(seconds // 86400)
+        return f"{days} days ago"
+
+    else:
+        return dt.strftime("%d %b %Y")
 #---------------TASK ROUTE---------------------
 from datetime import date
 from models import Task, UserTask
