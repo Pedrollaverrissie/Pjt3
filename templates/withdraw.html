@@ -734,11 +734,12 @@ gap:10px;
 </style>
 
 <body
-    data-main-wallet="{{ current_user.main_wallet }}"
+    data-main-wallet="{{ current_user.withdrawable_wallet }}"
     data-current-contribution="{{ current_user.referral_contribution_balance }}"
     data-required-contribution="{{ required_contribution }}"
     data-minimum-withdrawal="{{ minimum_withdrawal }}"
-    data-pending-withdrawal="{{ 'true' if pending_withdrawal else 'false' }}">
+    data-pending-withdrawal="{{ 'true' if pending_withdrawal else 'false' }}"
+    data-withdrawal-unlocked="{{ 'true' if current_user.withdrawal_unlocked else 'false' }}">
 
 <div class="withdraw-container">
     <!-- ================= FLASH POPUPS ================= -->
@@ -854,7 +855,7 @@ gap:10px;
             <h3>Main Wallet</h3>
 
             <h2>
-                KES {{ "{:,.2f}".format(current_user.main_wallet) }}
+                {{ "{:,.2f}".format(current_user.withdrawable_wallet) }}
             </h2>
 
         </div>
@@ -926,7 +927,7 @@ gap:10px;
 
             <div class="check-item">
 
-                {% if current_user.main_wallet >= minimum_withdrawal %}
+                {% if current_user.withdrawal_unlocked or current_user.withdrawable_wallet >= minimum_withdrawal %}
                     <i class="fas fa-circle-check success"></i>
                 {% else %}
                     <i class="fas fa-circle-xmark danger"></i>
@@ -1014,7 +1015,11 @@ gap:10px;
                 type="number"
                 name="amount"
                 min="{{ minimum_withdrawal }}"
+                {% if current_user.withdrawal_unlocked %}
+                placeholder="Enter withdrawal amount"
+                {% else %}
                 placeholder="Minimum KES {{ minimum_withdrawal }}"
+                {% endif %}
                 required>
 
             <label>
@@ -1055,10 +1060,14 @@ gap:10px;
         <ul>
 
             <li>
-                Minimum withdrawal for your
-                <strong>{{ current_user.vip_level }}</strong>
-                account is
-                <strong>KES {{ "{:,.0f}".format(minimum_withdrawal) }}</strong>.
+                Your first withdrawal requires at least
+                <strong>KES {{ "{:,.0f}".format(minimum_withdrawal) }}</strong>
+                in your withdrawable wallet.
+            </li>
+
+            <li>
+                After your first successful withdrawal,
+                you may withdraw any amount you earn while your VIP membership remains active.
             </li>
 
             <li>Only one pending withdrawal is allowed.</li>
@@ -1258,6 +1267,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const hasPending =
         document.body.dataset.pendingWithdrawal === "true";
 
+    const minimumWithdrawal =
+    Number(document.body.dataset.minimumWithdrawal || 0);
+
+    const withdrawalUnlocked =
+        document.body.dataset.withdrawalUnlocked === "true";
+
     // -----------------------------
     // Progress Bar
     // -----------------------------
@@ -1283,12 +1298,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Minimum
 
-        if (amount < minimumWithdrawal) {
+        if (!withdrawalUnlocked && amount < minimumWithdrawal) {
 
             submitBtn.disabled = true;
 
             submitBtn.innerHTML =
-                "Minimum Withdrawal is KES ${minimumWithdrawal}";
+                `Minimum Withdrawal is KES ${minimumWithdrawal}`;
 
             return;
         }
