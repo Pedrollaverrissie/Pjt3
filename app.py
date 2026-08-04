@@ -657,7 +657,15 @@ def reset_password(email):
             )
 
         user.password = generate_password_hash(new_password)
+
         db.session.commit()
+
+        create_notification(
+            user.id,
+            "Password Changed",
+            "Your account password was changed successfully. If you did not make this change, please contact support immediately.",
+            "security"
+        )
 
         return redirect("/login")
 
@@ -864,12 +872,11 @@ def webhook():
                 )
             )
 
-            db.session.add(
-                Notification(
-                    user_id=user.id,
-                    title="Withdrawal Successful",
-                    message=f"KES {withdrawal.amount:.2f} has been sent to your M-Pesa."
-                )
+            create_notification(
+                user.id,
+                "Withdrawal Successful",
+                f"KES {withdrawal.amount:,.2f} has been sent to your M-Pesa.",
+                "withdrawal"
             )
             print("BEFORE WITHDRAW")
             print("Recharge:", user.recharge_balance)
@@ -891,12 +898,11 @@ def webhook():
 
             withdrawal.status = "Failed"
 
-            db.session.add(
-                Notification(
-                    user_id=user.id,
-                    title="Withdrawal Failed",
-                    message="Your withdrawal could not be processed."
-                )
+            create_notification(
+                user.id,
+                "Withdrawal Failed",
+                "Your withdrawal could not be processed. Please try again or contact support.",
+                "withdrawal"
             )
         print("Saving withdrawal status:", withdrawal.status)
         db.session.commit()
@@ -971,20 +977,24 @@ def webhook():
                         description="Wallet Recharge"
                     )
                 )
+                create_notification(
+                    user.id,
+                    "Recharge Successful",
+                    f"Your recharge of KES {payment.amount:,.2f} has been credited to your account.",
+                    "recharge"
+                )
 
                 # -----------------------------
                 # VIP Notification
                 # -----------------------------
                 if old_vip != user.vip_level:
 
-                    db.session.add(
-                        Notification(
-                            user_id=user.id,
-                            title="VIP Upgraded",
-                            message=f"Congratulations! You have been upgraded to {user.vip_level}."
-                        )
+                    create_notification(
+                        user.id,
+                        "VIP Upgraded",
+                        f"Congratulations! Your membership has been upgraded to {user.vip_level}.",
+                        "vip"
                     )
-
 
 
                 # =============================
@@ -1017,15 +1027,11 @@ def webhook():
 
                         update_withdrawal_status(referrer)
 
-                        db.session.add(
-                            Notification(
-                                user_id=referrer.id,
-                                title="Referral Commission",
-                                message=(
-                                    f"You earned KES {referral_bonus:.2f} from "
-                                    f"{user.username}'s recharge."
-                                )
-                            )
+                        create_notification(
+                            referrer.id,
+                            "Referral Commission",
+                            f"You earned KES {referral_bonus:,.2f} from {user.username}'s recharge.",
+                            "referral"
                         )
 
                 db.session.commit()
@@ -1324,21 +1330,14 @@ def renew_membership():
     # Notification
     # ---------------------------------
 
-    db.session.add(
-
-        Notification(
-
-            user_id=current_user.id,
-
-            title="Membership Renewed",
-
-            message=f"Your {current_user.vip_level} membership has been renewed successfully."
-
-        )
-
+    create_notification(
+        current_user.id,
+        "Membership Renewed",
+        f"Your {current_user.vip_level} membership has been renewed successfully until {current_user.vip_expires_at.strftime('%d %B %Y')}.",
+        "membership"
     )
 
-    db.session.commit()
+
 
     flash(
         "Membership renewed successfully!",
@@ -2438,12 +2437,11 @@ def claim_task(task_id):
     )
 
     # Notification
-    db.session.add(
-        Notification(
-            user_id=current_user.id,
-            title="Task Completed",
-            message=f"You earned KES {task.reward:.2f}."
-        )
+    create_notification(
+        current_user.id,
+        "Task Completed",
+        f"Congratulations! You earned KES {task.reward:,.2f} for completing '{task.title}'.",
+        "task"
     )
 
     # Delete the session so it cannot be reused
