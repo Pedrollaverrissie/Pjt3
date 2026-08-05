@@ -82,7 +82,36 @@ VIP_ORDER = [
     "Platinum",
     "Diamond"
 ]
+from datetime import datetime
 
+def get_current_task_reward(user):
+
+    # Bronze never changes
+    if user.vip_level == "Bronze":
+        return VIP_PLANS["Bronze"]["reward"]
+
+    # If membership hasn't started, use the normal reward
+    if not user.vip_started_at:
+        return VIP_PLANS[user.vip_level]["reward"]
+
+    days_active = (datetime.utcnow() - user.vip_started_at).days
+
+    # First 10 days
+    if days_active < 10:
+        return VIP_PLANS[user.vip_level]["reward"]
+
+    # Day 11 onwards (60%)
+    reduced_rewards = {
+        "Silver": 10,
+        "Gold": 15,
+        "Platinum": 30,
+        "Diamond": 60
+    }
+
+    return reduced_rewards.get(
+        user.vip_level,
+        VIP_PLANS[user.vip_level]["reward"]
+    )
 
 load_dotenv()
 
@@ -2468,9 +2497,11 @@ def claim_task(task_id):
     session.completed = True
 
     # Credit Task Wallet
+    reward = get_current_task_reward(current_user)
+
     add_to_task_wallet(
         current_user,
-        task.reward,
+        reward,
         task.title
     )
 
@@ -2489,7 +2520,7 @@ def claim_task(task_id):
     create_notification(
         current_user.id,
         "Task Completed",
-        f"Congratulations! You earned KES {task.reward:,.2f} for completing '{task.title}'.",
+        f"Congratulations! You earned KES {reward:,.2f} for completing '{task.title}'.",
         "task"
     )
 
