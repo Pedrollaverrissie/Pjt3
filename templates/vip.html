@@ -467,7 +467,7 @@
 
             <h3>{{ plan.name }}</h3>
 
-            <p>KES {{ plan.tasks * plan.reward }}</p>
+            <p><p>KES {{ (plan.tasks * plan.daily_income)|round|int }}</p></p>
 
             <p>Daily Income: {{ plan.daily_income }}</p>
 
