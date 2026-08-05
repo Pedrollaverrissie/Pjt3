@@ -2256,7 +2256,9 @@ def tasks():
     # VIP plan details
     plan = VIP_PLANS[current_user.vip_level]
     daily_limit = int(plan["tasks"])
-    daily_reward = int(plan["tasks"] * plan["reward"])
+    reward = get_current_task_reward(current_user)
+
+    daily_reward = reward * plan["tasks"]
 
     # Tasks completed today
     completed_tasks = UserTask.query.filter(
@@ -2270,12 +2272,13 @@ def tasks():
     return render_template(
         "tasks.html",
         tasks=tasks,
+        reward=reward,
         completed_ids=completed_ids,
         completed_today=completed_today,
         daily_limit=daily_limit,
         daily_reward=daily_reward
     )
-#-----------TEAM ROUTE----------------
+    #-----------TEAM ROUTE----------------
 @app.route("/team")
 @login_required
 @active_account_required
