@@ -7,97 +7,279 @@
     <title>Login Failed</title>
 
 <style>
-    *{
-        margin:0;
-        padding:0;
-        box-sizing:border-box;
-        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
 
-    body{
-        height:90vh;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        background:rgb(0, 0, 2);
-        padding:20px;
-    }
+body{
 
-    .container{
-        width:90%;
-        max-width:420px;
-        background:rgba(255,255,255,0.08);
-        border:1px solid rgba(255,255,255,0.15);
-        border-radius:20px;
-        padding:20px 10px;
-        text-align:center;
-        box-shadow:0 -0 3px rgb(98, 252, 2);
-       
-    }
+min-height:100vh;
 
-    .icon{
-        width:50px;
-        height:50px;
-        margin:0 auto 20px;
-        border-radius:50%;
-        background:#ef4444;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        color:white;
-        font-size:20px;
-        font-weight:bold;
-    }
+display:flex;
 
-    h1{
-        color:rgb(243, 198, 1);
-        margin-bottom:12px;
-        font-size:18px;
-    }
+justify-content:center;
 
-    p{
-        color:#f9f9f9;
-        line-height:1.6;
-        margin-bottom:30px;
-        font-size:12px;
-    }
+align-items:center;
 
-    .btn{
-        display:inline-block;
-        width:50%;
-        font-size:13px;
-        padding:14px;
-        border-radius:10px;
-        background:#020607;
-        color:rgb(253, 216, 5);
-        text-decoration:none;
-        font-weight:600;
-        transition:.3s;
-        box-shadow: 0 -0 2px rgb(102, 255, 0);
-    }
+padding:20px;
 
-    .btn:hover{
-        background:#0e0d06;
-        transform:translateY(-2px);
-        box-shadow: 0 -0 5px rgb(255, 0, 179);
-    }
+background:linear-gradient(
+135deg,
+#071122,
+#0c1d3d,
+#162a55
+);
 
-    @keyframes fadeIn{
-        from{
-            opacity:0;
-            transform:translateY(20px);
-        }
-        to{
-            opacity:1;
-            transform:translateY(0);
-        }
-    }
+overflow:hidden;
 
-    .footer{
-        margin-top:20px;
-        color:#0a6df7;
-        font-size:13px;
-    }
+position:relative;
+
+}
+
+/* Glow Background */
+
+body::before,
+body::after{
+
+content:"";
+
+position:absolute;
+
+border-radius:50%;
+
+filter:blur(120px);
+
+opacity:.35;
+
+z-index:-1;
+
+}
+
+body::before{
+
+width:320px;
+height:320px;
+
+background:#00d9ff;
+
+top:-120px;
+left:-120px;
+
+}
+
+body::after{
+
+width:280px;
+height:280px;
+
+background:#ff00b3;
+
+bottom:-100px;
+right:-100px;
+
+}
+
+/* Card */
+
+.container{
+
+width:100%;
+max-width:450px;
+
+padding:40px 35px;
+
+border-radius:28px;
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(20px);
+
+border:1px solid rgba(255,255,255,.08);
+
+box-shadow:
+0 20px 60px rgba(0,0,0,.45);
+
+text-align:center;
+
+animation:fadeIn .6s ease;
+
+}
+
+/* Icon */
+
+.icon{
+
+width:95px;
+
+height:95px;
+
+margin:auto;
+
+margin-bottom:25px;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+background:linear-gradient(
+135deg,
+#ff4b4b,
+#ff0000
+);
+
+color:white;
+
+font-size:42px;
+
+box-shadow:
+0 0 25px rgba(255,0,0,.4);
+
+}
+
+/* Title */
+
+h1{
+
+font-size:30px;
+
+font-weight:700;
+
+color:#FFD54A;
+
+margin-bottom:15px;
+
+}
+
+/* Message */
+
+p{
+
+font-size:15px;
+
+line-height:1.8;
+
+color:#d8dff3;
+
+margin-bottom:35px;
+
+}
+
+/* Button */
+
+.btn{
+
+display:inline-block;
+
+width:100%;
+
+padding:16px;
+
+border-radius:14px;
+
+text-decoration:none;
+
+font-size:17px;
+
+font-weight:600;
+
+background:linear-gradient(
+135deg,
+#00d9ff,
+#0077ff
+);
+
+color:white;
+
+transition:.35s;
+
+box-shadow:
+0 10px 30px rgba(0,217,255,.35);
+
+}
+
+.btn:hover{
+
+transform:translateY(-4px);
+
+box-shadow:
+0 15px 35px rgba(0,217,255,.55);
+
+}
+
+/* Footer */
+
+.footer{
+
+margin-top:25px;
+
+font-size:13px;
+
+color:#8aa7ff;
+
+letter-spacing:.5px;
+
+}
+
+/* Animation */
+
+@keyframes fadeIn{
+
+from{
+
+opacity:0;
+
+transform:translateY(30px) scale(.95);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0) scale(1);
+
+}
+
+}
+
+/* Mobile */
+
+@media(max-width:600px){
+
+.container{
+
+padding:30px 22px;
+
+}
+
+h1{
+
+font-size:25px;
+
+}
+
+.icon{
+
+width:80px;
+height:80px;
+font-size:36px;
+
+}
+
+.btn{
+
+font-size:16px;
+
+}
+
+}
 </style>
 
 
@@ -106,9 +288,9 @@
 
 <div class="container">
 
-    <div class="icon">
-        ✕
-    </div>
+<div class="icon">
+    🔒
+</div>
 
     <h1>Login Failed</h1>
 
