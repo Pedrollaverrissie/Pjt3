@@ -1363,8 +1363,28 @@ h3{
     .sidebar{
         overflow-y: auto;
         padding-right: 8px;
-        
-    }
+     }
+     /* Width of scrollbar */
+.sidebar-content::-webkit-scrollbar{
+    width:8px;
+}
+
+/* Background (track) */
+.sidebar-content::-webkit-scrollbar-track{
+    background:#0b1018;
+    border-radius:10px;
+}
+
+/* Scroll thumb */
+.sidebar-content::-webkit-scrollbar-thumb{
+    background:linear-gradient(180deg,#ff9800,#ffcc00);
+    border-radius:10px;
+}
+
+/* Hover */
+.sidebar-content::-webkit-scrollbar-thumb:hover{
+    background:linear-gradient(180deg,#ffd54f,#ff9800);
+}
 
 }
 
