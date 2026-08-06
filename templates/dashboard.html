@@ -528,70 +528,72 @@
 
                
             </div>
-<div class="invite-link">
 
-    <div class="referral-header">
+        <div class="link-container">
+                <div class="invite-link">
 
-        <div class="referral-title">
+                    <div class="referral-header">
 
-            👥 Referral Center
+                        <div class="referral-title">
 
-        </div>
+                            👥 Referral Center
 
-        <div class="referral-badge">
+                        </div>
 
-            {{ total_referrals }} Members
+                        <div class="referral-badge">
 
-        </div>
+                            {{ total_referrals }} Members
 
-    </div>
+                        </div>
 
-    <p class="referral-text">
-        Invite your friends and earn commissions whenever they recharge.
-    </p>
+                    </div>
 
-    <div class="referral-summary">
+                    <p class="referral-text">
+                        Invite your friends and earn commissions whenever they recharge.
+                    </p>
 
-        <div class="summary-card">
+                    <div class="referral-summary">
 
-            <h4>{{ total_referrals }}</h4>
+                        <div class="summary-card">
 
-            <p>Total Referrals</p>
+                            <h4>{{ total_referrals }}</h4>
 
-        </div>
+                            <p>Total Referrals</p>
 
-        <div class="summary-card">
+                        </div>
 
-            <h4>KES {{ commissions }}</h4>
+                        <div class="summary-card">
 
-            <p>Commission Earned</p>
+                            <h4>KES {{ commissions }}</h4>
 
-        </div>
+                            <p>Commission Earned</p>
 
-    </div>
+                        </div>
 
-    <div class="link-box">
+                    </div>
 
-        <input
-            type="text"
-            id="referralLink"
-            value="{{ referral_link }}"
-            readonly
-        >
+                    <div class="link-box">
 
-        <button
-            id="copyBtn"
-            onclick="copyReferralLink()">
+                        <input
+                            type="text"
+                            id="referralLink"
+                            value="{{ referral_link }}"
+                            readonly
+                        >
 
-            📋 COPY LINK
+                        <button
+                            id="copyBtn"
+                            onclick="copyReferralLink()">
 
-        </button>
+                            📋 COPY LINK
 
-    </div>
+                        </button>
 
-</div>
-         </div>
-           
+                    </div>
+
+                </div>
+             </div>
+        </div>   
             
 
         </div>
