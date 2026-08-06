@@ -35,219 +35,163 @@
     border:1px solid white;
 }
 
-.referral-card{
+.invite-link{
 
-width:100%;
+    width:90%;
 
-margin:25px 0;
+    background:rgb(25,45,61);
 
-padding:25px;
+    border-radius:10px;
 
-border-radius:22px;
+    padding:18px;
 
-background:rgba(255,255,255,.08);
+    margin-bottom:25px;
 
-backdrop-filter:blur(18px);
-
-border:1px solid rgba(255,255,255,.08);
-
-box-shadow:0 15px 40px rgba(0,0,0,.35);
-
-position:relative;
-
-overflow:hidden;
+    box-shadow:0 -0 10px rgb(6,6,0);
 
 }
 
-.referral-card::before{
+.referral-header{
 
-content:"";
+    display:flex;
 
-position:absolute;
+    justify-content:space-between;
 
-width:180px;
-height:180px;
+    align-items:center;
 
-background:#00d9ff;
-
-filter:blur(120px);
-
-opacity:.2;
-
-top:-70px;
-left:-70px;
+    margin-bottom:15px;
 
 }
 
-.referral-icon{
+.referral-title{
 
-width:90px;
-height:90px;
+    color:#f69503;
 
-margin:auto;
+    font-size:18px;
 
-margin-bottom:20px;
-
-border-radius:50%;
-
-display:flex;
-
-justify-content:center;
-
-align-items:center;
-
-font-size:42px;
-
-background:linear-gradient(
-135deg,
-#ffb400,
-#ff7b00
-);
-
-box-shadow:0 0 25px rgba(0,217,255,.4);
+    font-weight:bold;
 
 }
 
-.referral-card h2{
+.referral-badge{
 
-color:rgb(255,145,0);
+    background:#010e0f;
 
-margin-bottom:10px;
+    color:#42d392;
 
-font-size:14px;
+    padding:5px 10px;
 
-}
+    border-radius:20px;
 
-.referral-subtitle{
-
-color:#d9dff5;
-
-line-height:1.7;
-
-margin-bottom:30px;
-font-size: 12px;
+    font-size:11px;
 
 }
 
-.referral-stats{
+.referral-text{
 
-display:flex;
+    color:#c8c8c8;
 
-gap:15px;
+    font-size:12px;
 
-justify-content:center;
-
-margin-bottom:30px;
-
-flex-wrap:wrap;
+    margin-bottom:20px;
 
 }
 
-.stat-box{
+.referral-summary{
 
-flex:1;
+    display:flex;
 
-min-width:140px;
+    gap:15px;
 
-padding:18px;
-
-border-radius:18px;
-
-background:rgba(255,255,255,.06);
+    margin-bottom:20px;
 
 }
 
-.stat-number{
+.summary-card{
 
-display:block;
+    flex:1;
 
-font-size:22px;
+    background:#010e0f;
 
-font-weight:bold;
+    border-radius:8px;
 
-color:#00e5ff;
+    padding:15px;
 
-}
-
-.stat-label{
-
-font-size:13px;
-
-color:#bfcfff;
+    text-align:center;
 
 }
 
-.referral-link-box{
+.summary-card h4{
 
-display:flex;
+    margin:0;
 
-gap:10px;
+    color:white;
 
-margin-top:20px;
-
-flex-wrap:wrap;
+    font-size:18px;
 
 }
 
-.referral-link-box input{
+.summary-card p{
 
-flex:1;
+    margin-top:6px;
 
-padding:15px;
+    color:#bcbcbc;
 
-border:none;
-
-border-radius:12px;
-
-background:rgba(255,255,255,.08);
-
-color:white;
-
-outline:none;
+    font-size:11px;
 
 }
 
-.referral-link-box button{
+.link-box{
 
-padding:15px 22px;
+    display:flex;
 
-border:none;
+    flex-direction:column;
 
-border-radius:12px;
-
-cursor:pointer;
-
-font-weight:bold;
-
-color:white;
-
-background:linear-gradient(135deg,#00d9ff,#0077ff);
-
-transition:.3s;
+    gap:12px;
 
 }
 
-.referral-link-box button:hover{
+.link-box input{
 
-transform:translateY(-3px);
+    background:#010e0f;
 
-box-shadow:0 10px 25px rgba(0,217,255,.4);
+    color:white;
+
+    border:none;
+
+    border-radius:8px;
+
+    padding:12px;
+
+    font-size:12px;
+
+}
+
+.link-box button{
+
+    width:100%;
+
+    height:42px;
+
+    background:#f69503;
+
+    color:black;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
 
 }
 
-@media(max-width:700px){
+.link-box button:hover{
 
-.referral-link-box{
-
-flex-direction:column;
-
-}
-
-.referral-link-box button{
-
-width:100%;
-
-}
+    background:#ffb000;
 
 }
      </style>
