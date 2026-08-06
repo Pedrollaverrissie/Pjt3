@@ -125,23 +125,19 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /*----------------COPYING LINK--------------------*/
-function copyReferralLink(){
+function copyReferralLink() {
 
-    const input = document.getElementById("referralLink");
+    const link = document.getElementById("referralLink").value;
 
-    navigator.clipboard.writeText(copyText.value);
-
-    navigator.clipboard.writeText(input.value);
+    navigator.clipboard.writeText(link);
 
     const btn = document.getElementById("copyBtn");
 
-    btn.innerHTML = "✅ Copied";
+    btn.innerHTML = "✅ Copied!";
 
-    setTimeout(function(){
-
-        btn.innerHTML = "📋 Copy Link";
-
-    },2000);
+    setTimeout(() => {
+        btn.innerHTML = "📋 COPY LINK";
+    }, 2000);
 
 }
 
