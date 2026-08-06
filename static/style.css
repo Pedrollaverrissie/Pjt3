@@ -1198,7 +1198,10 @@ a{
   
    
 }
-
+.sidebar-top img{
+    height: 40px;
+    width: 40px;
+}
 .logo{
     
     width:25px;
@@ -1308,7 +1311,7 @@ h3{
     .sidebar-top{
         position: relative;
         display: flex;
-        height: 30px;
+        height: 40px;
         padding-top: 5px;
         padding-bottom: 15px;
         align-items: center;
