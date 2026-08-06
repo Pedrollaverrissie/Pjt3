@@ -1237,6 +1237,7 @@ h3{
     width: 30px;
     height: 30px;
     border-radius: 50%;
+    margin-bottom: 8px;
     
  }
  .main, .finance, .account{
@@ -1282,7 +1283,7 @@ h3{
 }
 
 .finance div img{
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
 
