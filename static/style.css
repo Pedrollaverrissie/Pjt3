@@ -1281,6 +1281,9 @@ h3{
     color: #ffc400;
 }
 
+.finance div img{
+    margin: 10px;
+}
 
 
 @media (min-width: 768px) {
