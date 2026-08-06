@@ -1359,12 +1359,19 @@ h3{
 
 
 @media (max-height: 770px) {
-
     .sidebar{
+    overflow:hidden;
+}
+
+.sidebar-content{
+    overflow-y:auto;
+    padding-right:8px;
+}
+    .sidebar-content{
         overflow-y: auto;
         padding-right: 8px;
      }
-     .sidebar{
+     .sidebar-content{
     overflow-y: auto;
     padding-right: 8px;
     scrollbar-width: thin;              /* Firefox */
@@ -1372,21 +1379,21 @@ h3{
 }
 
 /* Chrome, Edge, Safari */
-.sidebar::-webkit-scrollbar{
+.sidebar-content::-webkit-scrollbar{
     width:8px;
 }
 
-.sidebar::-webkit-scrollbar-track{
+.sidebar-content::-webkit-scrollbar-track{
     background:#010e0f;
     border-radius:10px;
 }
 
-.sidebar::-webkit-scrollbar-thumb{
+.sidebar-content::-webkit-scrollbar-thumb{
     background:#ff9800;
     border-radius:10px;
 }
 
-.sidebar::-webkit-scrollbar-thumb:hover{
+.sidebar-content::-webkit-scrollbar-thumb:hover{
     background:#ffc107;
 }
 
