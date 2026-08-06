@@ -1356,6 +1356,15 @@ h3{
 }
 
 
+@media (max-height: 770px) {
+
+    .sidebar{
+        overflow-y: auto;
+    }
+
+}
+
+
 /* BACKGROUND BLUR LAYER */
 .overlay{
     position: fixed;
