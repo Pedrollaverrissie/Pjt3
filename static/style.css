@@ -1162,9 +1162,9 @@ a{
     width: 160px;
     border-radius: 2px;
     left: -180px;
-    bottom: 10px;
+    bottom: 0px;
     top: 0;
-    height: 100vh;
+   
     background-color: #010e0f;
     color: white;
     padding-left: 10px;
@@ -1176,6 +1176,7 @@ a{
     column-gap: 30px;
     padding-top: 15px;
     z-index: 100;
+    
 
  }
  .sidebar.active{
@@ -1361,6 +1362,8 @@ h3{
 
     .sidebar{
         overflow-y: auto;
+        padding-right: 8px;
+        
     }
 
 }
