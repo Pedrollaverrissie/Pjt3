@@ -129,9 +129,7 @@ function copyReferralLink(){
 
     const input = document.getElementById("referralLink");
 
-    input.select();
-
-    input.setSelectionRange(0,99999);
+    navigator.clipboard.writeText(copyText.value);
 
     navigator.clipboard.writeText(input.value);
 
