@@ -1164,6 +1164,7 @@ a{
     left: -180px;
     bottom: 10px;
     top: 0;
+    height: 100vh;
     background-color: #010e0f;
     color: white;
     padding-left: 10px;
