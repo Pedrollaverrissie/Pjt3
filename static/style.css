@@ -1514,7 +1514,7 @@ h3{
     color: #f4f5f5;
 }
 
-.wallet-container{
+.wallet-container, .link-container{
     display: flex;
     flex-direction: column;
     justify-content: center;
