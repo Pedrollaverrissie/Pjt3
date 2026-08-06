@@ -34,6 +34,217 @@
 
     border:1px solid white;
 }
+
+.referral-card{
+
+margin-top:30px;
+
+padding:30px;
+
+border-radius:25px;
+
+background:rgba(255,255,255,.08);
+
+backdrop-filter:blur(18px);
+
+border:1px solid rgba(255,255,255,.08);
+
+box-shadow:0 15px 40px rgba(0,0,0,.35);
+
+text-align:center;
+
+position:relative;
+
+overflow:hidden;
+
+}
+
+.referral-card::before{
+
+content:"";
+
+position:absolute;
+
+width:180px;
+height:180px;
+
+background:#00d9ff;
+
+filter:blur(120px);
+
+opacity:.2;
+
+top:-70px;
+left:-70px;
+
+}
+
+.referral-icon{
+
+width:90px;
+height:90px;
+
+margin:auto;
+
+margin-bottom:20px;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+font-size:42px;
+
+background:linear-gradient(135deg,#00d9ff,#0088ff);
+
+box-shadow:0 0 25px rgba(0,217,255,.4);
+
+}
+
+.referral-card h2{
+
+color:#FFD54A;
+
+margin-bottom:10px;
+
+font-size:28px;
+
+}
+
+.referral-subtitle{
+
+color:#d9dff5;
+
+line-height:1.7;
+
+margin-bottom:30px;
+
+}
+
+.referral-stats{
+
+display:flex;
+
+gap:15px;
+
+justify-content:center;
+
+margin-bottom:30px;
+
+flex-wrap:wrap;
+
+}
+
+.stat-box{
+
+flex:1;
+
+min-width:140px;
+
+padding:18px;
+
+border-radius:18px;
+
+background:rgba(255,255,255,.06);
+
+}
+
+.stat-number{
+
+display:block;
+
+font-size:22px;
+
+font-weight:bold;
+
+color:#00e5ff;
+
+}
+
+.stat-label{
+
+font-size:13px;
+
+color:#bfcfff;
+
+}
+
+.referral-link-box{
+
+display:flex;
+
+gap:10px;
+
+margin-top:20px;
+
+flex-wrap:wrap;
+
+}
+
+.referral-link-box input{
+
+flex:1;
+
+padding:15px;
+
+border:none;
+
+border-radius:12px;
+
+background:rgba(255,255,255,.08);
+
+color:white;
+
+outline:none;
+
+}
+
+.referral-link-box button{
+
+padding:15px 22px;
+
+border:none;
+
+border-radius:12px;
+
+cursor:pointer;
+
+font-weight:bold;
+
+color:white;
+
+background:linear-gradient(135deg,#00d9ff,#0077ff);
+
+transition:.3s;
+
+}
+
+.referral-link-box button:hover{
+
+transform:translateY(-3px);
+
+box-shadow:0 10px 25px rgba(0,217,255,.4);
+
+}
+
+@media(max-width:700px){
+
+.referral-link-box{
+
+flex-direction:column;
+
+}
+
+.referral-link-box button{
+
+width:100%;
+
+}
+
+}
      </style>
 </head>
     
@@ -370,23 +581,62 @@
           </div>
            
             
-            <div class="invite-link">
-                    <div class="invite">
-                        <img src="static/images/Link Icon Svg, Pdf, Vector, Eps, Dxf - Etsy.jfif" alt="">
-                        <p>Your Invite Link</p>
-                    </div>
-                    <div class="link">
-                        <h4>Total Referrals: {{ total_referrals }}</h4>
-                        
-                            <input
-                                type="text"
-                                id="referralLink"
-                                value="{{ referral_link }}"
-                                readonly
-                            >
-                        <button><span placeholder="COPY LINK" onclick="copyReferralLink()">COPY LINK</span></button>
-                    </div>
-            </div>
+<div class="referral-card">
+
+    <div class="referral-icon">
+        👥
+    </div>
+
+    <h2>Invite Friends & Earn</h2>
+
+    <p class="referral-subtitle">
+        Share your referral link and earn commissions every time your team recharges.
+    </p>
+
+    <div class="referral-stats">
+
+        <div class="stat-box">
+            <span class="stat-number">
+                {{ total_referrals }}
+            </span>
+
+            <span class="stat-label">
+                Referrals
+            </span>
+        </div>
+
+        <div class="stat-box">
+            <span class="stat-number">
+                KES {{ commissions }}
+            </span>
+
+            <span class="stat-label">
+                Commission Earned
+            </span>
+        </div>
+
+    </div>
+
+        <div class="referral-link-box">
+
+            <input
+                type="text"
+                id="referralLink"
+                value="{{ referral_link }}"
+                readonly
+            >
+
+            <button
+                id="copyBtn"
+                onclick="copyReferralLink()">
+
+                📋 Copy Link
+
+            </button>
+
+        </div>
+
+    </div>
         </div>
       
     </div>
