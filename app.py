@@ -967,6 +967,11 @@ def webhook():
 
     if payment:
 
+         # Prevent processing the same successful payment twice
+        if payment.status == "approved":
+            print("PAYMENT ALREADY APPROVED:", payment.transaction_code)
+            return jsonify({"status": "already processed"}), 200
+        
         if state in ["COMPLETE", "COMPLETED", "SUCCESSFUL"]:
             
             payment.status = "approved"
