@@ -1077,77 +1077,126 @@ def webhook():
                 return jsonify({"status": "received"}), 200
 
 
-        # =====================================
-        # REGISTRATION PAYMENT
-        # =====================================
+            # =====================================
+            # REGISTRATION PAYMENT
+            # =====================================
 
-        elif payment.payment_type == "registration":
+            elif payment.payment_type == "registration":
 
-            pending_user = PendingUser.query.filter_by(
-                email=payment.email
-            ).first()
+                # -------------------------------------
+                # SECURITY CHECKS
+                # -------------------------------------
 
-            print("PAYMENT EMAIL:", payment.email)
-            print("PENDING USER:", pending_user)
+                # Payment must be approved
+                if payment.status != "approved":
+                    print("REGISTRATION PAYMENT NOT APPROVED")
+                    print("PAYMENT STATUS:", payment.status)
 
-            if pending_user:
+                    return jsonify({"status": "ignored"}), 200
+
+                # Registration fee MUST be exactly KES 100
+                if payment.amount != 100:
+                    print("INVALID REGISTRATION PAYMENT AMOUNT")
+                    print("EXPECTED: 100")
+                    print("RECEIVED:", payment.amount)
+
+                    return jsonify({"status": "ignored"}), 200
+
+                # -------------------------------------
+                # FIND PENDING USER
+                # -------------------------------------
+
+                pending_user = PendingUser.query.filter_by(
+                    email=payment.email
+                ).first()
+
+                print("PAYMENT EMAIL:", payment.email)
+                print("PENDING USER:", pending_user)
+
+                if not pending_user:
+
+                    print("NO PENDING USER FOUND")
+
+                    return jsonify({"status": "received"}), 200
+
+                # -------------------------------------
+                # CHECK IF USER ALREADY EXISTS
+                # -------------------------------------
 
                 existing_user = User.query.filter_by(
                     email=pending_user.email
                 ).first()
 
-                if not existing_user:
+                if existing_user:
 
-                    new_user = User(
-                        username=pending_user.username,
-                        email=pending_user.email,
-                        phone=pending_user.phone,
-                        password=pending_user.password,
-                        referred_by=pending_user.referred_by,
+                    print("USER ALREADY EXISTS:", existing_user.email)
 
-                        # Default VIP
-                        vip_level="Bronze",
-                        vip_started_at=None,
-                        vip_expires_at=None,
+                    db.session.delete(pending_user)
+                    db.session.commit()
 
-                        # Wallets
-                        main_wallet=0,
-                        withdrawable_wallet=0,
-                        vip_locked_amount=0,
-                        recharge_balance=0,
-                        task_wallet=0,
-                        referral_wallet=0,
-                        team_wallet=0,
-                        withdrawn=0,
-                        commissions=0,
-                        referral_contribution_balance=0,
+                    return jsonify({"status": "received"}), 200
 
-                        account_active=True
-                    )
+                # -------------------------------------
+                # CREATE ACTIVE USER
+                # -------------------------------------
 
-                    db.session.add(new_user)
+                new_user = User(
+                    username=pending_user.username,
+                    email=pending_user.email,
+                    phone=pending_user.phone,
+                    password=pending_user.password,
+                    referred_by=pending_user.referred_by,
 
-                    # Generate ID
-                    db.session.flush()
+                    # Default VIP
+                    vip_level="Bronze",
+                    vip_started_at=None,
+                    vip_expires_at=None,
 
-                    # Referral Code
-                    new_user.referral_code = f"SN{new_user.id}"
+                    # Wallets
+                    main_wallet=0,
+                    withdrawable_wallet=0,
+                    vip_locked_amount=0,
+                    recharge_balance=0,
+                    task_wallet=0,
+                    referral_wallet=0,
+                    team_wallet=0,
+                    withdrawn=0,
+                    commissions=0,
+                    referral_contribution_balance=0,
 
-                    print("USER CREATED:", new_user.username)
-                    print("REFERRAL CODE:", new_user.referral_code)
-                    print("REFERRED BY:", new_user.referred_by)
+                    # ACTIVATED ONLY AFTER SUCCESSFUL PAYMENT
+                    account_active=True
+                )
 
+                db.session.add(new_user)
+
+                # Generate ID
+                db.session.flush()
+
+                # Referral Code
+                new_user.referral_code = f"SN{new_user.id}"
+
+                print("=====================================")
+                print("REGISTRATION PAYMENT VERIFIED")
+                print("USER CREATED:", new_user.username)
+                print("EMAIL:", new_user.email)
+                print("AMOUNT:", payment.amount)
+                print("REFERRAL CODE:", new_user.referral_code)
+                print("REFERRED BY:", new_user.referred_by)
+                print("=====================================")
+
+                # Remove pending signup
                 db.session.delete(pending_user)
 
                 db.session.commit()
 
-                if not existing_user:
-                    create_notification(
-                        new_user.id,
-                        "Welcome to Supernova Earn",
-                        "Your account has been activated successfully. Welcome to Supernova Earn! You can now start earning.",
-                        "welcome"
-                    )
+                # Welcome notification
+                create_notification(
+                    new_user.id,
+                    "Welcome to Supernova Earn",
+                    "Your account has been activated successfully. Welcome to Supernova Earn! You can now start earning.",
+                    "welcome"
+                )
 
                 return jsonify({"status": "received"}), 200
              
