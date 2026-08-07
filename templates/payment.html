@@ -10,7 +10,7 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
-    <form action="/payment" method="POST">
+    <form method="POST" action="{{ url_for('payment', pending_id=request.args.get('pending_id')) }}">
         <div class="payment-page">
             <div class="payment-top"> 
                 <div class="transact">

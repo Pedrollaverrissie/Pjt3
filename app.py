@@ -308,7 +308,9 @@ def signup():
         print(pending_user.phone)
         print("REFERRED BY:", ref)
 
-        return redirect("/payment")
+        return redirect(
+            url_for("payment", pending_id=pending_user.id)
+        )
 
     return render_template(
         "signup.html",
@@ -380,15 +382,20 @@ def payment():
 
         try:
 
-            # Get latest pending user
-            pending_user = PendingUser.query.order_by(
-                PendingUser.id.desc()
-            ).first()
+           # Get the exact pending user from the signup
+            pending_id = request.args.get("pending_id", type=int)
+
+            if not pending_id:
+                return "Invalid or missing signup."
+
+            pending_user = PendingUser.query.get(pending_id)
 
             if not pending_user:
-                return "No pending signup found"
+                return "Pending signup not found."
 
-
+            # Make sure the payment phone belongs to this signup
+            if phone != pending_user.phone:
+                return "The phone number does not match your signup."
 
             response = service.collect.mpesa_stk_push(
                 phone_number=phone,
