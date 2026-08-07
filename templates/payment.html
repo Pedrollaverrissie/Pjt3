@@ -10,25 +10,22 @@
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 
     <style>
-.phone-error-overlay {
+        .phone-error-overlay {
     position: fixed;
     inset: 0;
 
-    width: 100%;
-    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
 
-    background: rgba(0, 0, 0, 0.45);
-
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-
+    
     display: flex;
     justify-content: center;
     align-items: center;
 
-    padding: 20px;
-
     z-index: 9999;
+
+    padding: 20px;
 }
 
 .phone-error-popup {
