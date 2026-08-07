@@ -565,7 +565,22 @@ transform:translateY(-35px);
     mix-blend-mode: multiply;
 
 }
+.password-requirements {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 5px;
+}
 
+.password-requirements small {
+    font-size: 11px;
+    color: #999;
+}
+
+#passwordMatch {
+    font-size: 11px;
+    margin-top: 3px;
+}
 /*================ TERMS ================*/
 
 .terms-box{
@@ -975,7 +990,10 @@ transform:scale(1);
     padding:12px;
     background-color: rgb(9, 9, 9);
 }
-
+.password-requirements small,
+#passwordMatch {
+    font-size: 10px;
+}
 .auth-card{
     background: rgb(21, 21, 21);
     width:100%;
@@ -1284,7 +1302,7 @@ transform:scale(1);
                                 type="password"
                                 id="password"
                                 name="password"
-                                placeholder="Minimum 6 characters"
+                                placeholder="Create a strong password"
                                 autocomplete="new-password"
                                 required>
 
@@ -1299,7 +1317,40 @@ transform:scale(1);
 
                         </div>
 
+                        <div class="password-requirements">
+
+                            <small id="lengthRule">✗ At least 8 characters</small>
+
+                            <small id="upperRule">✗ One uppercase letter</small>
+
+                            <small id="lowerRule">✗ One lowercase letter</small>
+
+                            <small id="numberRule">✗ One number</small>
+
+                        </div>
+
                     </div>
+
+
+                    <div class="input-group">
+
+    <label>Confirm Password</label>
+
+    <div class="password-box">
+
+        <input
+            type="password"
+            id="confirm_password"
+            name="confirm_password"
+            placeholder="Re-enter your password"
+            autocomplete="new-password"
+            required>
+
+    </div>
+
+    <small id="passwordMatch"></small>
+
+</div>
 
                     <div class="terms-box">
 
@@ -1413,7 +1464,83 @@ function closeEmailPopup(){
 }
 
 </script>
+<script>
 
+const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirm_password");
+
+const lengthRule = document.getElementById("lengthRule");
+const upperRule = document.getElementById("upperRule");
+const lowerRule = document.getElementById("lowerRule");
+const numberRule = document.getElementById("numberRule");
+const passwordMatch = document.getElementById("passwordMatch");
+
+
+function updatePasswordRules() {
+
+    const password = passwordInput.value;
+
+    const hasLength = password.length >= 8;
+    const hasUpper = /[A-Z]/.test(password);
+    const hasLower = /[a-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+
+
+    lengthRule.textContent =
+        (hasLength ? "✓" : "✗") + " At least 8 characters";
+
+    upperRule.textContent =
+        (hasUpper ? "✓" : "✗") + " One uppercase letter";
+
+    lowerRule.textContent =
+        (hasLower ? "✓" : "✗") + " One lowercase letter";
+
+    numberRule.textContent =
+        (hasNumber ? "✓" : "✗") + " One number";
+}
+
+
+function checkPasswordMatch() {
+
+    const password = passwordInput.value;
+    const confirmPassword = confirmPasswordInput.value;
+
+    if (confirmPassword === "") {
+
+        passwordMatch.textContent = "";
+
+        return;
+    }
+
+    if (password === confirmPassword) {
+
+        passwordMatch.textContent = "✓ Passwords match";
+
+    } else {
+
+        passwordMatch.textContent = "✗ Passwords do not match";
+
+    }
+
+}
+
+
+passwordInput.addEventListener(
+    "input",
+    updatePasswordRules
+);
+
+passwordInput.addEventListener(
+    "input",
+    checkPasswordMatch
+);
+
+confirmPasswordInput.addEventListener(
+    "input",
+    checkPasswordMatch
+);
+
+</script>
 </body>
 
 </html>
