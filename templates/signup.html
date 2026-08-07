@@ -1351,7 +1351,25 @@ transform:scale(1);
     <small id="passwordMatch"></small>
 
 </div>
+{% if password_error %}
+<div style="
+    color:#ff6b6b;
+    font-size:13px;
+    margin-top:5px;
+">
+    {{ password_error }}
+</div>
+{% endif %}
 
+{% if password_match_error %}
+<div style="
+    color:#ff6b6b;
+    font-size:13px;
+    margin-top:5px;
+">
+    Passwords do not match.
+</div>
+{% endif %}
                     <div class="terms-box">
 
                         <input
