@@ -395,7 +395,11 @@ def payment():
 
             # Make sure the payment phone belongs to this signup
             if phone != pending_user.phone:
-                return "The phone number does not match your signup."
+                return render_template(
+                    "payment.html",
+                    phone_error=True,
+                    pending_id=pending_id
+                )
 
             response = service.collect.mpesa_stk_push(
                 phone_number=phone,

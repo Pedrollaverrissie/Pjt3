@@ -8,6 +8,139 @@
           href="{{ url_for('static', filename='style.css') }}">
 
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+    <style>
+        .phone-error-overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.7);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    z-index: 9999;
+
+    padding: 20px;
+}
+
+.phone-error-popup {
+
+    width: 100%;
+    max-width: 380px;
+
+    padding: 30px 25px;
+
+    text-align: center;
+
+    border-radius: 22px;
+
+    background: rgba(20, 25, 45, 0.97);
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.6);
+
+    animation: phonePopup .25s ease;
+}
+
+.phone-error-icon {
+
+    width: 65px;
+    height: 65px;
+
+    margin: 0 auto 15px;
+
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 30px;
+
+    background: rgba(255, 165, 0, 0.15);
+
+    border: 1px solid rgba(255, 165, 0, 0.4);
+}
+
+.phone-error-popup h3 {
+
+    margin: 0 0 12px;
+
+    color: #ff9d00;
+
+    font-size: 20px;
+}
+
+.phone-error-popup p {
+
+    color: #e5e9f5;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    margin-bottom: 10px;
+}
+
+.phone-error-small {
+
+    color: #aeb8d0 !important;
+
+    font-size: 12px !important;
+}
+
+.phone-error-popup button {
+
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 13px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: linear-gradient(
+        135deg,
+        #ffb000,
+        #ff7000
+    );
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .25s;
+}
+
+.phone-error-popup button:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 8px 20px rgba(255, 140, 0, .35);
+}
+
+@keyframes phonePopup {
+
+    from {
+        opacity: 0;
+        transform: scale(.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+    </style>
 </head>
 <body>
     <form method="POST" action="{{ url_for('payment', pending_id=request.args.get('pending_id')) }}">
@@ -43,6 +176,51 @@
             </div>
             <button class="pay" type="submit">PAY WITH M-PESA</button>
         </div>
-    </form>    
+    </form>  
+    
+    {% if phone_error %}
+
+<div class="phone-error-overlay" id="phoneErrorPopup">
+
+    <div class="phone-error-popup">
+
+        <div class="phone-error-icon">
+            ⚠️
+        </div>
+
+        <h3>Incorrect Phone Number</h3>
+
+        <p>
+            The phone number you entered does not match
+            the phone number used during signup.
+        </p>
+
+        <p class="phone-error-small">
+            Please enter the same M-Pesa number you used
+            when creating your account.
+        </p>
+
+        <button
+            type="button"
+            onclick="closePhoneError()">
+            TRY AGAIN
+        </button>
+
+    </div>
+
+</div>
+
+{% endif %}
+<script>
+    function closePhoneError() {
+
+    const popup = document.getElementById("phoneErrorPopup");
+
+    if (popup) {
+        popup.remove();
+    }
+
+}
+</script>
 </body>
 </html>
