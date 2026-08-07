@@ -1019,29 +1019,119 @@ def verify_otp(email):
         invalid_otp=False
     )
 
-#-------------RESET PASSWORD----------------
+# ---------------- RESET PASSWORD ----------------
 
 @app.route("/reset-password/<email>", methods=["GET", "POST"])
 def reset_password(email):
 
     user = User.query.filter_by(email=email).first()
 
+    if not user:
+        return "Invalid password reset request.", 404
+
     if request.method == "POST":
 
-        new_password = request.form["new_password"]
-        confirm_password = request.form["confirm_password"]
+        new_password = request.form.get("new_password", "")
+        confirm_password = request.form.get("confirm_password", "")
 
-        # 🔴 PASSWORD MATCH CHECK
+        # =========================================
+        # PASSWORD MATCH
+        # =========================================
+
         if new_password != confirm_password:
+
             return render_template(
                 "reset_password.html",
                 email=email,
-                password_error=True
+                password_error="Passwords do not match."
             )
 
-        user.password = generate_password_hash(new_password)
+        # =========================================
+        # PASSWORD LENGTH
+        # =========================================
+
+        if len(new_password) < 8:
+
+            return render_template(
+                "reset_password.html",
+                email=email,
+                password_error="Password must contain at least 8 characters."
+            )
+
+        # =========================================
+        # UPPERCASE
+        # =========================================
+
+        if not re.search(r"[A-Z]", new_password):
+
+            return render_template(
+                "reset_password.html",
+                email=email,
+                password_error="Password must contain at least one uppercase letter."
+            )
+
+        # =========================================
+        # LOWERCASE
+        # =========================================
+
+        if not re.search(r"[a-z]", new_password):
+
+            return render_template(
+                "reset_password.html",
+                email=email,
+                password_error="Password must contain at least one lowercase letter."
+            )
+
+        # =========================================
+        # NUMBER
+        # =========================================
+
+        if not re.search(r"\d", new_password):
+
+            return render_template(
+                "reset_password.html",
+                email=email,
+                password_error="Password must contain at least one number."
+            )
+
+        # =========================================
+        # SPECIAL CHARACTER
+        # =========================================
+
+        if not re.search(r"[^A-Za-z0-9]", new_password):
+
+            return render_template(
+                "reset_password.html",
+                email=email,
+                password_error="Password must contain at least one special character."
+            )
+
+        # =========================================
+        # PREVENT REUSING CURRENT PASSWORD
+        # =========================================
+
+        if check_password_hash(user.password, new_password):
+
+            return render_template(
+                "reset_password.html",
+                email=email,
+                password_error="You cannot reuse your current password."
+            )
+
+        # =========================================
+        # HASH NEW PASSWORD
+        # =========================================
+
+        user.password = generate_password_hash(
+            new_password,
+            method="scrypt"
+        )
 
         db.session.commit()
+
+        # =========================================
+        # SECURITY NOTIFICATION
+        # =========================================
 
         create_notification(
             user.id,
@@ -1052,7 +1142,12 @@ def reset_password(email):
 
         return redirect("/login")
 
-    return render_template("reset_password.html", email=email)
+    return render_template(
+        "reset_password.html",
+        email=email
+    )
+
+
 
 #-----------RESEND OTP BUTTON----------
 @app.route("/resend-otp/<email>")
