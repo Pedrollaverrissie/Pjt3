@@ -240,12 +240,11 @@ def home():
 
 
 # ---------------- SIGNUP ----------------
-# ---------------- SIGNUP ----------------
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
 
-    # Get referral code from URL, e.g. /signup?ref=SN1
+    # Get referral code from URL or form
     ref = request.args.get("ref") or request.form.get("referral_code")
 
     # Validate referral code
@@ -262,75 +261,126 @@ def signup():
         username = request.form["username"].strip()
         email = request.form["email"].strip().lower()
         phone = request.form["phone"].strip()
+
         password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
+
         terms = request.form.get("terms")
 
         print("REFERRAL CODE:", ref)
 
-        # --------------------------------
-        # VALIDATION
-        # --------------------------------
-
-        email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
-        phone_pattern = r"^(07|01)\d{8}$"
-
-        password_pattern = (
-            r"^(?=.*[a-z])"
-            r"(?=.*[A-Z])"
-            r"(?=.*\d)"
-            r"(?=.*[@$!%*?&])"
-            r".{8,}$"
-        )
+        # =========================================
+        # TERMS
+        # =========================================
 
         if not terms:
-            return render_template("checkbox_alert.html")
+            return render_template(
+                "signup.html",
+                ref=ref,
+                terms_error=True
+            )
+
+        # =========================================
+        # EMAIL FORMAT
+        # =========================================
+
+        email_pattern = r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
 
         if not re.match(email_pattern, email):
+
             return render_template(
                 "signup.html",
-                email_error=True,
-                ref=ref
+                ref=ref,
+                email_error=True
             )
+
+        # =========================================
+        # PHONE FORMAT
+        # =========================================
+
+        phone_pattern = r"^(07|01)\d{8}$"
 
         if not re.match(phone_pattern, phone):
+
             return render_template(
                 "signup.html",
-                phone_error=True,
-                ref=ref
+                ref=ref,
+                phone_error=True
             )
 
-        if not re.match(password_pattern, password):
-            return render_template(
-                "signup.html",
-                password_error=True,
-                ref=ref
-            )
-
-        # --------------------------------
-        # CONVERT PHONE
-        # --------------------------------
+        # Convert 07xxxxxxxx / 01xxxxxxxx
+        # to 2547xxxxxxxx / 2541xxxxxxxx
 
         if phone.startswith("0"):
             phone = "254" + phone[1:]
 
-        # --------------------------------
+        # =========================================
+        # PASSWORD SECURITY
+        # =========================================
+
+        if len(password) < 8:
+
+            return render_template(
+                "signup.html",
+                ref=ref,
+                password_error="Password must contain at least 8 characters."
+            )
+
+        if not re.search(r"[A-Z]", password):
+
+            return render_template(
+                "signup.html",
+                ref=ref,
+                password_error="Password must contain at least one uppercase letter."
+            )
+
+        if not re.search(r"[a-z]", password):
+
+            return render_template(
+                "signup.html",
+                ref=ref,
+                password_error="Password must contain at least one lowercase letter."
+            )
+
+        if not re.search(r"\d", password):
+
+            return render_template(
+                "signup.html",
+                ref=ref,
+                password_error="Password must contain at least one number."
+            )
+
+        # =========================================
+        # CONFIRM PASSWORD
+        # =========================================
+
+        if password != confirm_password:
+
+            return render_template(
+                "signup.html",
+                ref=ref,
+                password_match_error=True
+            )
+
+        # =========================================
         # CHECK EXISTING USER
-        # --------------------------------
+        # =========================================
 
         existing_user = User.query.filter_by(
             email=email
         ).first()
 
         if existing_user:
+
             return render_template(
                 "signup.html",
-                email_exists=True,
-                ref=ref
+                ref=ref,
+                email_exists=True
             )
 
-        # --------------------------------
-        # CHECK PENDING SIGNUP
-        # --------------------------------
+        # =========================================
+        # CHECK EXISTING PENDING SIGNUP
+        # =========================================
 
         existing_pending = PendingUser.query.filter_by(
             email=email
@@ -338,158 +388,62 @@ def signup():
 
         if existing_pending:
 
-            db.session.delete(existing_pending)
-            db.session.commit()
-
-        # --------------------------------
-        # HASH PASSWORD
-        # --------------------------------
-
-        hashed_pw = generate_password_hash(
-            password
-        )
-
-        # --------------------------------
-        # CREATE EMAIL OTP
-        # --------------------------------
-
-        otp = str(
-            random.randint(100000, 999999)
-        )
-
-        otp_store[email] = {
-            "otp": otp,
-            "time": time.time(),
-            "purpose": "signup",
-            "username": username,
-            "phone": phone,
-            "password": hashed_pw,
-            "referred_by": ref
-        }
-
-        # --------------------------------
-        # SEND EMAIL
-        # --------------------------------
-
-        url = "https://api.brevo.com/v3/smtp/email"
-
-        headers = {
-            "accept": "application/json",
-            "api-key": os.getenv("BREVO_API_KEY"),
-            "content-type": "application/json"
-        }
-
-        payload = {
-            "sender": {
-                "name": "SUPERNOVA EARN",
-                "email": "petersongitonga02@gmail.com"
-            },
-
-            "to": [
-                {
-                    "email": email
-                }
-            ],
-
-            "subject": "SUPERNOVA EARN Email Verification",
-
-            "htmlContent": f"""
-            <div style="font-family:Arial,sans-serif;padding:20px;">
-
-                <h2 style="color:#ff9100;">
-                    SUPERNOVA EARN
-                </h2>
-
-                <p>Hello <strong>{username}</strong>,</p>
-
-                <p>
-                    Thank you for creating your Supernova Earn account.
-                </p>
-
-                <p>
-                    Please use the verification code below
-                    to verify your email address:
-                </p>
-
-                <h1 style="
-                    letter-spacing:8px;
-                    color:#00d9ff;
-                ">
-                    {otp}
-                </h1>
-
-                <p>
-                    This code expires in
-                    <strong>5 minutes</strong>.
-                </p>
-
-                <p>
-                    If you did not create this account,
-                    you can safely ignore this email.
-                </p>
-
-                <hr>
-
-                <small>
-                    © Supernova Earn
-                </small>
-
-            </div>
-            """
-        }
-
-        try:
-
-            response = requests.post(
-                url,
-                json=payload,
-                headers=headers,
-                timeout=15
-            )
-
-            print(
-                "Signup Email Status:",
-                response.status_code
-            )
-
-            print(
-                "Signup Email Response:",
-                response.text
-            )
-
-            if response.status_code in [200, 201]:
-
-                return redirect(
-                    url_for(
-                        "verify_signup_email",
-                        email=email
-                    )
-                )
-
-            else:
-
-                otp_store.pop(email, None)
-
-                return render_template(
-                    "signup.html",
-                    email_error_message=True,
-                    ref=ref
-                )
-
-        except Exception as e:
-
-            print(
-                "Signup Email Error:",
-                e
-            )
-
-            otp_store.pop(email, None)
-
             return render_template(
                 "signup.html",
-                email_error_message=True,
-                ref=ref
+                ref=ref,
+                pending_exists=True
             )
+
+        # =========================================
+        # HASH PASSWORD
+        # =========================================
+
+        hashed_pw = generate_password_hash(
+            password,
+            method="scrypt"
+        )
+
+        # =========================================
+        # CREATE PENDING USER
+        # =========================================
+
+        pending_user = PendingUser(
+
+            username=username,
+
+            email=email,
+
+            phone=phone,
+
+            password=hashed_pw,
+
+            referred_by=ref
+        )
+
+        db.session.add(pending_user)
+
+        db.session.commit()
+
+        print("=====================================")
+        print("SIGNUP PASSED VALIDATION")
+        print("USER SAVED:")
+        print(pending_user.username)
+        print(pending_user.email)
+        print(pending_user.phone)
+        print("REFERRED BY:", ref)
+        print("PENDING USER ID:", pending_user.id)
+        print("=====================================")
+
+        # =========================================
+        # GO TO PAYMENT
+        # =========================================
+
+        return redirect(
+            url_for(
+                "payment",
+                pending_id=pending_user.id
+            )
+        )
 
     return render_template(
         "signup.html",
