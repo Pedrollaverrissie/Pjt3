@@ -404,46 +404,116 @@ def signup():
         )
 
         # =========================================
-        # CREATE PENDING USER
+        # GENERATE EMAIL VERIFICATION OTP
         # =========================================
 
-        pending_user = PendingUser(
+        otp = str(random.randint(100000, 999999))
 
-            username=username,
+        otp_store[email] = {
 
-            email=email,
+            "otp": otp,
 
-            phone=phone,
+            "time": time.time(),
 
-            password=hashed_pw,
+            "purpose": "signup_verification",
 
-            referred_by=ref
-        )
+            "signup_data": {
+                "username": username,
+                "phone": phone,
+                "password": hashed_pw,
+                "referred_by": ref
+            }
+        }
 
-        db.session.add(pending_user)
+        url = "https://api.brevo.com/v3/smtp/email"
 
-        db.session.commit()
+        headers = {
+            "accept": "application/json",
+            "api-key": os.getenv("BREVO_API_KEY"),
+            "content-type": "application/json"
+        }
 
-        print("=====================================")
-        print("SIGNUP PASSED VALIDATION")
-        print("USER SAVED:")
-        print(pending_user.username)
-        print(pending_user.email)
-        print(pending_user.phone)
-        print("REFERRED BY:", ref)
-        print("PENDING USER ID:", pending_user.id)
-        print("=====================================")
+        payload = {
+            "sender": {
+                "name": "SUPERNOVA EARN",
+                "email": "petersongitonga02@gmail.com"
+            },
 
-        # =========================================
-        # GO TO PAYMENT
-        # =========================================
+            "to": [
+                {
+                    "email": email
+                }
+            ],
 
-        return redirect(
-            url_for(
-                "payment",
-                pending_id=pending_user.id
+            "subject": "SUPERNOVA EARN Email Verification",
+
+            "htmlContent": f"""
+            <div style="font-family:Arial,sans-serif;padding:20px;">
+
+                <h2>SUPERNOVA EARN</h2>
+
+                <p>Hello {username},</p>
+
+                <p>
+                    Use the verification code below to verify
+                    your email address.
+                </p>
+
+                <h1 style="letter-spacing:8px;">
+                    {otp}
+                </h1>
+
+                <p>
+                    This code expires in
+                    <strong>5 minutes</strong>.
+                </p>
+
+                <p>
+                    If you did not create this account,
+                    you can ignore this email.
+                </p>
+
+                <hr>
+
+                <small>
+                    © SUPERNOVA EARN
+                </small>
+
+            </div>
+            """
+        }
+
+        try:
+
+            response = requests.post(
+                url,
+                json=payload,
+                headers=headers,
+                timeout=15
             )
-        )
+
+            print("Signup verification email status:",
+                response.status_code)
+
+            print("Brevo response:",
+                response.text)
+
+            if response.status_code in [200, 201]:
+
+                return redirect(
+                    url_for(
+                        "verify_signup_email",
+                        email=email
+                    )
+                )
+
+            return f"Email verification failed: {response.text}"
+
+        except Exception as e:
+
+            print("Signup email error:", str(e))
+
+            return f"Error sending verification email: {str(e)}"
 
     return render_template(
         "signup.html",
@@ -452,42 +522,48 @@ def signup():
 
 # ---------------- SIGNUP EMAIL VERIFICATION ----------------
 
-@app.route(
-    "/verify-signup-email/<email>",
-    methods=["GET", "POST"]
-)
+@app.route("/verify-signup-email/<email>", methods=["GET", "POST"])
 def verify_signup_email(email):
 
-    email = email.lower()
-
-    data = otp_store.get(email)
-
-    if not data or data.get("purpose") != "signup":
-
-        return render_template(
-            "otp_expired.html"
-        )
+    email = email.lower().strip()
 
     if request.method == "POST":
 
         user_otp = request.form["otp"].strip()
 
-        # ----------------------------
-        # OTP EXPIRATION
-        # ----------------------------
+        data = otp_store.get(email)
 
+        # No OTP found
+        if not data:
+            return render_template(
+                "verify_signup_email.html",
+                email=email,
+                otp_expired=True
+            )
+
+        # Make sure this OTP belongs to signup verification
+        if data.get("purpose") != "signup_verification":
+
+            otp_store.pop(email, None)
+
+            return render_template(
+                "verify_signup_email.html",
+                email=email,
+                otp_expired=True
+            )
+
+        # OTP expires after 5 minutes
         if time.time() - data["time"] > 300:
 
             otp_store.pop(email, None)
 
             return render_template(
-                "otp_expired.html"
+                "verify_signup_email.html",
+                email=email,
+                otp_expired=True
             )
 
-        # ----------------------------
-        # INVALID OTP
-        # ----------------------------
-
+        # Incorrect OTP
         if data["otp"] != user_otp:
 
             return render_template(
@@ -496,45 +572,89 @@ def verify_signup_email(email):
                 invalid_otp=True
             )
 
-        # ----------------------------
-        # EMAIL VERIFIED
-        # ----------------------------
+        # =========================================
+        # OTP SUCCESSFUL
+        # =========================================
+
+        signup_data = data.get("signup_data")
+
+        if not signup_data:
+
+            otp_store.pop(email, None)
+
+            return "Signup session expired. Please register again."
+
+        # Remove OTP after successful verification
+        otp_store.pop(email, None)
+
+        # =========================================
+        # CREATE PENDING USER
+        # =========================================
+
+        existing_user = User.query.filter_by(
+            email=email
+        ).first()
+
+        if existing_user:
+
+            return render_template(
+                "signup.html",
+                email_exists=True
+            )
+
+        existing_pending = PendingUser.query.filter_by(
+            email=email
+        ).first()
+
+        if existing_pending:
+
+            return redirect(
+                url_for(
+                    "payment",
+                    pending_id=existing_pending.id
+                )
+            )
 
         pending_user = PendingUser(
-            username=data["username"],
+
+            username=signup_data["username"],
+
             email=email,
-            phone=data["phone"],
-            password=data["password"],
-            referred_by=data["referred_by"]
+
+            phone=signup_data["phone"],
+
+            password=signup_data["password"],
+
+            referred_by=signup_data["referred_by"]
         )
 
         db.session.add(pending_user)
 
         db.session.commit()
 
-        pending_id = pending_user.id
-
-        # Remove OTP after successful verification
-        otp_store.pop(email, None)
-
-        print("=" * 50)
+        print("=====================================")
         print("EMAIL VERIFIED")
-        print("EMAIL:", email)
-        print("PENDING USER:", pending_user.username)
-        print("PENDING ID:", pending_id)
-        print("=" * 50)
+        print("PENDING USER CREATED")
+        print("USERNAME:", pending_user.username)
+        print("EMAIL:", pending_user.email)
+        print("PHONE:", pending_user.phone)
+        print("REFERRED BY:", pending_user.referred_by)
+        print("PENDING ID:", pending_user.id)
+        print("=====================================")
 
+        # Go to KES 100 registration payment
         return redirect(
             url_for(
                 "payment",
-                pending_id=pending_id
+                pending_id=pending_user.id
             )
         )
 
     return render_template(
         "verify_signup_email.html",
         email=email,
-        invalid_otp=False
+        invalid_otp=False,
+        otp_expired=False
     )
 #............CHECHBOX ALERT..............
 
