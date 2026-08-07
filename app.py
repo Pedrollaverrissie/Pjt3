@@ -240,83 +240,348 @@ def home():
 
 
 # ---------------- SIGNUP ----------------
+# ---------------- SIGNUP ----------------
+
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
+
     # Get referral code from URL, e.g. /signup?ref=SN1
     ref = request.args.get("ref") or request.form.get("referral_code")
 
     # Validate referral code
     if ref:
-        referrer = User.query.filter_by(referral_code=ref).first()
+        referrer = User.query.filter_by(
+            referral_code=ref
+        ).first()
+
         if not referrer:
             ref = None
 
     if request.method == "POST":
 
-        email = request.form["email"]
-        phone = request.form["phone"]
+        username = request.form["username"].strip()
+        email = request.form["email"].strip().lower()
+        phone = request.form["phone"].strip()
+        password = request.form["password"]
         terms = request.form.get("terms")
 
         print("REFERRAL CODE:", ref)
 
-        # Validation patterns
+        # --------------------------------
+        # VALIDATION
+        # --------------------------------
+
         email_pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
         phone_pattern = r"^(07|01)\d{8}$"
+
+        password_pattern = (
+            r"^(?=.*[a-z])"
+            r"(?=.*[A-Z])"
+            r"(?=.*\d)"
+            r"(?=.*[@$!%*?&])"
+            r".{8,}$"
+        )
 
         if not terms:
             return render_template("checkbox_alert.html")
 
         if not re.match(email_pattern, email):
-            return "Invalid email format!"
+            return render_template(
+                "signup.html",
+                email_error=True,
+                ref=ref
+            )
 
         if not re.match(phone_pattern, phone):
-            return "Invalid phone number!"
+            return render_template(
+                "signup.html",
+                phone_error=True,
+                ref=ref
+            )
 
-        # Convert 07xxxxxxxx to 2547xxxxxxxx
+        if not re.match(password_pattern, password):
+            return render_template(
+                "signup.html",
+                password_error=True,
+                ref=ref
+            )
+
+        # --------------------------------
+        # CONVERT PHONE
+        # --------------------------------
+
         if phone.startswith("0"):
             phone = "254" + phone[1:]
 
-        existing_user = User.query.filter_by(email=email).first()
+        # --------------------------------
+        # CHECK EXISTING USER
+        # --------------------------------
+
+        existing_user = User.query.filter_by(
+            email=email
+        ).first()
 
         if existing_user:
             return render_template(
                 "signup.html",
-                email_exists=True
+                email_exists=True,
+                ref=ref
             )
 
+        # --------------------------------
+        # CHECK PENDING SIGNUP
+        # --------------------------------
+
+        existing_pending = PendingUser.query.filter_by(
+            email=email
+        ).first()
+
+        if existing_pending:
+
+            db.session.delete(existing_pending)
+            db.session.commit()
+
+        # --------------------------------
+        # HASH PASSWORD
+        # --------------------------------
+
         hashed_pw = generate_password_hash(
-            request.form["password"]
+            password
         )
 
-        # Save pending user together with who referred them
-        pending_user = PendingUser(
-            username=request.form["username"],
-            email=email,
-            phone=phone,
-            password=hashed_pw,
-            referred_by=ref
+        # --------------------------------
+        # CREATE EMAIL OTP
+        # --------------------------------
+
+        otp = str(
+            random.randint(100000, 999999)
         )
 
-        db.session.add(pending_user)
-        db.session.commit()
-  
+        otp_store[email] = {
+            "otp": otp,
+            "time": time.time(),
+            "purpose": "signup",
+            "username": username,
+            "phone": phone,
+            "password": hashed_pw,
+            "referred_by": ref
+        }
 
-        print("SIGNUP PASSED VALIDATION")
-        print("USER SAVED:")
-        print(pending_user.username)
-        print(pending_user.email)
-        print(pending_user.phone)
-        print("REFERRED BY:", ref)
+        # --------------------------------
+        # SEND EMAIL
+        # --------------------------------
 
-        return redirect(
-            url_for("payment", pending_id=pending_user.id)
-        )
+        url = "https://api.brevo.com/v3/smtp/email"
+
+        headers = {
+            "accept": "application/json",
+            "api-key": os.getenv("BREVO_API_KEY"),
+            "content-type": "application/json"
+        }
+
+        payload = {
+            "sender": {
+                "name": "SUPERNOVA EARN",
+                "email": "petersongitonga02@gmail.com"
+            },
+
+            "to": [
+                {
+                    "email": email
+                }
+            ],
+
+            "subject": "SUPERNOVA EARN Email Verification",
+
+            "htmlContent": f"""
+            <div style="font-family:Arial,sans-serif;padding:20px;">
+
+                <h2 style="color:#ff9100;">
+                    SUPERNOVA EARN
+                </h2>
+
+                <p>Hello <strong>{username}</strong>,</p>
+
+                <p>
+                    Thank you for creating your Supernova Earn account.
+                </p>
+
+                <p>
+                    Please use the verification code below
+                    to verify your email address:
+                </p>
+
+                <h1 style="
+                    letter-spacing:8px;
+                    color:#00d9ff;
+                ">
+                    {otp}
+                </h1>
+
+                <p>
+                    This code expires in
+                    <strong>5 minutes</strong>.
+                </p>
+
+                <p>
+                    If you did not create this account,
+                    you can safely ignore this email.
+                </p>
+
+                <hr>
+
+                <small>
+                    © Supernova Earn
+                </small>
+
+            </div>
+            """
+        }
+
+        try:
+
+            response = requests.post(
+                url,
+                json=payload,
+                headers=headers,
+                timeout=15
+            )
+
+            print(
+                "Signup Email Status:",
+                response.status_code
+            )
+
+            print(
+                "Signup Email Response:",
+                response.text
+            )
+
+            if response.status_code in [200, 201]:
+
+                return redirect(
+                    url_for(
+                        "verify_signup_email",
+                        email=email
+                    )
+                )
+
+            else:
+
+                otp_store.pop(email, None)
+
+                return render_template(
+                    "signup.html",
+                    email_error_message=True,
+                    ref=ref
+                )
+
+        except Exception as e:
+
+            print(
+                "Signup Email Error:",
+                e
+            )
+
+            otp_store.pop(email, None)
+
+            return render_template(
+                "signup.html",
+                email_error_message=True,
+                ref=ref
+            )
 
     return render_template(
         "signup.html",
         ref=ref
     )
 
+# ---------------- SIGNUP EMAIL VERIFICATION ----------------
+
+@app.route(
+    "/verify-signup-email/<email>",
+    methods=["GET", "POST"]
+)
+def verify_signup_email(email):
+
+    email = email.lower()
+
+    data = otp_store.get(email)
+
+    if not data or data.get("purpose") != "signup":
+
+        return render_template(
+            "otp_expired.html"
+        )
+
+    if request.method == "POST":
+
+        user_otp = request.form["otp"].strip()
+
+        # ----------------------------
+        # OTP EXPIRATION
+        # ----------------------------
+
+        if time.time() - data["time"] > 300:
+
+            otp_store.pop(email, None)
+
+            return render_template(
+                "otp_expired.html"
+            )
+
+        # ----------------------------
+        # INVALID OTP
+        # ----------------------------
+
+        if data["otp"] != user_otp:
+
+            return render_template(
+                "verify_signup_email.html",
+                email=email,
+                invalid_otp=True
+            )
+
+        # ----------------------------
+        # EMAIL VERIFIED
+        # ----------------------------
+
+        pending_user = PendingUser(
+            username=data["username"],
+            email=email,
+            phone=data["phone"],
+            password=data["password"],
+            referred_by=data["referred_by"]
+        )
+
+        db.session.add(pending_user)
+
+        db.session.commit()
+
+        pending_id = pending_user.id
+
+        # Remove OTP after successful verification
+        otp_store.pop(email, None)
+
+        print("=" * 50)
+        print("EMAIL VERIFIED")
+        print("EMAIL:", email)
+        print("PENDING USER:", pending_user.username)
+        print("PENDING ID:", pending_id)
+        print("=" * 50)
+
+        return redirect(
+            url_for(
+                "payment",
+                pending_id=pending_id
+            )
+        )
+
+    return render_template(
+        "verify_signup_email.html",
+        email=email,
+        invalid_otp=False
+    )
 #............CHECHBOX ALERT..............
 
 @app.route("/checkboxAlert")
@@ -584,7 +849,8 @@ def forgot_password():
 
         otp_store[email] = {
             "otp": otp,
-            "time": time.time()
+            "time": time.time(),
+            "purpose": "password_reset"
         }
 
         url = "https://api.brevo.com/v3/smtp/email"
@@ -656,6 +922,9 @@ def verify_otp(email):
         if not data:
             return render_template("otp_expired.html")
 
+        if data.get("purpose") != "password_reset":
+            return render_template("otp_expired.html")
+
         if time.time() - data["time"] > 300:
             otp_store.pop(email, None)
             return render_template("otp_expired.html")
@@ -724,7 +993,8 @@ def resend_otp(email):
 
     otp_store[email] = {
         "otp": otp,
-        "time": time.time()
+        "time": time.time(),
+        "purpose": "password_reset"
     }
 
     url = "https://api.brevo.com/v3/smtp/email"
