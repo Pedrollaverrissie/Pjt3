@@ -418,12 +418,12 @@ body::after{
 
 .vip-grid{
     display:grid;
-    grid-template-columns:repeat(4,1fr);
+    grid-template-columns:repeat(5,1fr);
     gap:15px;
 }
 
 .vip-card{
-    padding:25px 20px;
+    padding:25px 18px;
     text-align:center;
     background:#120b20;
     border:1px solid rgba(255,255,255,.07);
@@ -446,17 +446,47 @@ body::after{
 
 .vip-price{
     color:#FFD54A;
-    font-size:25px;
+    font-size:24px;
     font-weight:bold;
-    margin-bottom:18px;
+    margin-bottom:15px;
 }
 
 .vip-card p{
     color:#aaa;
-    font-size:14px;
+    font-size:13px;
     line-height:1.6;
 }
 
+/* Platinum highlight */
+
+.vip-card.platinum{
+    border:1px solid #FFD54A;
+    box-shadow:0 0 25px rgba(255,213,74,.12);
+}
+
+.vip-card.platinum .icon{
+    filter:drop-shadow(0 0 8px rgba(255,213,74,.4));
+}
+
+/* Tablet */
+
+@media(max-width:1100px){
+
+    .vip-grid{
+        grid-template-columns:repeat(3,1fr);
+    }
+
+}
+
+/* Mobile */
+
+@media(max-width:650px){
+
+    .vip-grid{
+        grid-template-columns:1fr;
+    }
+
+}
 /* ================= HOW ================= */
 
 .how{
@@ -922,8 +952,9 @@ body::after{
 
     </div>
 
-
     <div class="vip-grid">
+
+        <!-- BRONZE -->
 
         <div class="vip-card">
 
@@ -942,6 +973,8 @@ body::after{
         </div>
 
 
+        <!-- SILVER -->
+
         <div class="vip-card">
 
             <div class="icon">🥈</div>
@@ -958,6 +991,8 @@ body::after{
 
         </div>
 
+
+        <!-- GOLD -->
 
         <div class="vip-card">
 
@@ -976,6 +1011,27 @@ body::after{
         </div>
 
 
+        <!-- PLATINUM -->
+
+        <div class="vip-card platinum">
+
+            <div class="icon">👑</div>
+
+            <h3>Platinum</h3>
+
+            <div class="vip-price">
+                KES 2,500
+            </div>
+
+            <p>
+                Premium tasks, higher rewards and VIP benefits.
+            </p>
+
+        </div>
+
+
+        <!-- DIAMOND -->
+
         <div class="vip-card">
 
             <div class="icon">💎</div>
@@ -987,7 +1043,7 @@ body::after{
             </div>
 
             <p>
-                Access the highest membership level.
+                Access the highest membership level and rewards.
             </p>
 
         </div>
@@ -995,7 +1051,6 @@ body::after{
     </div>
 
 </section>
-
 
 <!-- ================= HOW IT WORKS ================= -->
 
