@@ -896,6 +896,26 @@ transform:scale(1);
 
 }
 
+.password-requirements {
+    width: 96%;
+    margin-top: -10px;
+    margin-bottom: 15px;
+}
+
+.password-requirements p {
+    margin: 4px 0;
+    font-size: 12px;
+    color: #ff4d4d;
+}
+
+.password-requirements p.valid {
+    color: #16b364;
+}
+
+.password-requirements i {
+    margin-right: 6px;
+}
+
 /*=========================================================
                     RESPONSIVE DESIGN
 =========================================================*/
@@ -1326,17 +1346,34 @@ transform:scale(1);
 
                         </div>
 
-                        <div class="password-requirements">
+<div class="password-requirements">
 
-                            <small id="lengthRule">✗ At least 8 characters</small>
+    <p id="length">
+        <i class="fa-solid fa-circle-xmark"></i>
+        At least 8 characters
+    </p>
 
-                            <small id="upperRule">✗ One uppercase letter</small>
+    <p id="uppercase">
+        <i class="fa-solid fa-circle-xmark"></i>
+        One uppercase letter
+    </p>
 
-                            <small id="lowerRule">✗ One lowercase letter</small>
+    <p id="lowercase">
+        <i class="fa-solid fa-circle-xmark"></i>
+        One lowercase letter
+    </p>
 
-                            <small id="numberRule">✗ One number</small>
+    <p id="number">
+        <i class="fa-solid fa-circle-xmark"></i>
+        One number
+    </p>
 
-                        </div>
+    <p id="special">
+        <i class="fa-solid fa-circle-xmark"></i>
+        One special character
+    </p>
+
+</div>
 
                     </div>
 
@@ -1493,7 +1530,7 @@ function closeEmailPopup(){
 }
 
 </script>
-<script>
+<scrip>
 
 const passwordInput = document.getElementById("password");
 const confirmPasswordInput = document.getElementById("confirm_password");
@@ -1569,6 +1606,82 @@ confirmPasswordInput.addEventListener(
     checkPasswordMatch
 );
 
+</script>
+
+
+
+<script>
+const passwordInput = document.getElementById("new_password");
+
+passwordInput.addEventListener("input", function () {
+
+    const password = this.value;
+
+    updateRequirement(
+        "length",
+        password.length >= 8
+    );
+
+    updateRequirement(
+        "uppercase",
+        /[A-Z]/.test(password)
+    );
+
+    updateRequirement(
+        "lowercase",
+        /[a-z]/.test(password)
+    );
+
+    updateRequirement(
+        "number",
+        /\d/.test(password)
+    );
+
+    updateRequirement(
+        "special",
+        /[^A-Za-z0-9]/.test(password)
+    );
+});
+
+
+function updateRequirement(id, valid) {
+
+    const element = document.getElementById(id);
+    const icon = element.querySelector("i");
+
+    if (valid) {
+
+        element.classList.add("valid");
+
+        icon.className = "fa-solid fa-circle-check";
+
+    } else {
+
+        element.classList.remove("valid");
+
+        icon.className = "fa-solid fa-circle-xmark";
+    }
+}
+
+
+function togglePassword(id, element) {
+
+    const input = document.getElementById(id);
+    const icon = element.querySelector("i");
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+        icon.className = "fa-solid fa-eye-slash";
+
+    } else {
+
+        input.type = "password";
+
+        icon.className = "fa-solid fa-eye";
+    }
+}
 </script>
 </body>
 
