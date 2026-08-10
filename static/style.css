@@ -1361,7 +1361,11 @@ h3{
  }
 }
 
-
+@media(max-width:600){
+ .page-content{
+   padding: 0 4px;
+ }
+}
 @media (max-height: 770px) {
     .sidebar{
     overflow:hidden;
