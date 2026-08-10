@@ -1361,12 +1361,7 @@ h3{
  }
 }
 
-@media(max-width: 600px){
-.page-content{
-    width: 100%;
-    margin: 0;
-}
-}
+
 @media (max-height: 770px) {
     .sidebar{
     overflow:hidden;
@@ -1473,6 +1468,12 @@ h3{
     border-radius: 5px;
    
   
+}
+@media(max-width: 600px){
+.page-content{
+    width: 100%;
+   
+}
 }
 .vip-status-card{
 
