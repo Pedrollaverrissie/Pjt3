@@ -1074,6 +1074,7 @@ a{
   display: flex;
    /*background: linear-gradient(1989deg, #0a0941, #051e34, #291456);*/
    flex-direction: column;
+   
    margin-top: 35px;
   
    width: 100%;
@@ -1469,7 +1470,7 @@ h3{
 @media(max-width: 600px){
 .page-content{
     width: 100%;
-    margin: 1px;
+    margin:1px;
     
    
 }
