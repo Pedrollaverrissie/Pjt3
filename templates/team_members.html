@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Team Members | Supernova Earn</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #090510;
+            color: white;
+        }
+
+        .team-page {
+            width: 100%;
+            max-width: 900px;
+            margin: auto;
+            padding: 25px;
+            box-sizing: border-box;
+        }
+
+        .team-header {
+            background: rgb(24, 10, 42);
+            border: 1px solid white;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .team-header h1 {
+            margin: 0 0 10px;
+            color: rgb(234, 179, 8);
+        }
+
+        .team-header p {
+            color: #ccc;
+        }
+
+        .team-count {
+            font-size: 30px;
+            font-weight: bold;
+            color: #16b364;
+        }
+
+        .member-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            background: rgb(24, 10, 42);
+
+            border: 1px solid rgba(255,255,255,.15);
+
+            border-radius: 15px;
+
+            padding: 18px;
+
+            margin-bottom: 12px;
+        }
+
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+
+            border-radius: 50%;
+
+            background: #16b364;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-info h3 {
+            margin: 0 0 5px;
+        }
+
+        .member-info p {
+            margin: 3px 0;
+            color: #bbb;
+            font-size: 13px;
+        }
+
+        .member-status {
+            color: #16b364;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .back-btn {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+
+            text-align: center;
+
+            padding: 14px;
+
+            background: #16b364;
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 10px;
+
+            font-weight: bold;
+
+            margin-top: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="team-page">
+
+    <div class="team-header">
+
+        <h1>My Team</h1>
+
+        <p>
+            Members who joined using your referral code
+        </p>
+
+        <div class="team-count">
+            {{ members|length }}
+        </div>
+
+        <p>
+            Total Team Members
+        </p>
+
+    </div>
+
+
+    {% if members %}
+
+        {% for member in members %}
+
+        <div class="member-card">
+
+            <div class="member-avatar">
+                {{ member.username[0]|upper }}
+            </div>
+
+            <div class="member-info">
+
+                <h3>
+                    {{ member.username }}
+                </h3>
+
+                <p>
+                    Joined: {{ member.email }}
+                </p>
+
+                <p>
+                    VIP: {{ member.vip_level }}
+                </p>
+
+            </div>
+
+            <div class="member-status">
+                Active
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="team-header">
+
+            <h2>No Team Members Yet</h2>
+
+            <p>
+                Share your referral link to invite your first member.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    <a href="{{ url_for('dashboard') }}" class="back-btn">
+        ← Back to Dashboard
+    </a>
+
+    <div class="referral-box">
+
+    <div>
+        <small>Your Referral Link</small>
+
+        <div class="referral-link">
+            {{ referral_link }}
+        </div>
+    </div>
+
+    <button
+        type="button"
+        onclick="copyReferralLink()">
+        Copy
+    </button>
+
+</div>
+
+</div>
+<script>
+function copyReferralLink() {
+
+    const link = "{{ referral_link }}";
+
+    navigator.clipboard.writeText(link);
+
+    alert("Referral link copied!");
+}
+</script>
+</body>
+</html>

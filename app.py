@@ -3955,6 +3955,59 @@ def delete_all_notifications():
     db.session.commit()
 
     return redirect("/notifications")
+#-----------------Team members-----------------
+@app.route("/team-members")
+@login_required
+def team_members():
+
+    members = User.query.filter_by(
+        referred_by=current_user.referral_code
+    ).all()
+
+    total_members = len(members)
+
+    active_members = sum(
+        1 for member in members
+        if member.account_active
+    )
+
+    bronze_members = sum(
+        1 for member in members
+        if member.vip_level == "Bronze"
+    )
+
+    silver_members = sum(
+        1 for member in members
+        if member.vip_level == "Silver"
+    )
+
+    gold_members = sum(
+        1 for member in members
+        if member.vip_level == "Gold"
+    )
+
+    platinum_members = sum(
+        1 for member in members
+        if member.vip_level == "Platinum"
+    )
+
+    referral_link = url_for(
+        "signup",
+        ref=current_user.referral_code,
+        _external=True
+    )
+
+    return render_template(
+        "team_members.html",
+        members=members,
+        total_members=total_members,
+        active_members=active_members,
+        bronze_members=bronze_members,
+        silver_members=silver_members,
+        gold_members=gold_members,
+        platinum_members=platinum_members,
+        referral_link=referral_link
+    )
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
