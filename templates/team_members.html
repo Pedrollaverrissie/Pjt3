@@ -147,6 +147,24 @@
             Total Team Members
         </p>
 
+        <div class="referral-box">
+
+    <div>
+        <small>Your Referral Link</small>
+
+        <div class="referral-link">
+            {{ referral_link }}
+        </div>
+    </div>
+
+    <button
+        type="button"
+        onclick="copyReferralLink()">
+        Copy
+    </button>
+
+</div>
+
     </div>
 
 
@@ -205,21 +223,7 @@
 
     <div class="referral-box">
 
-    <div>
-        <small>Your Referral Link</small>
 
-        <div class="referral-link">
-            {{ referral_link }}
-        </div>
-    </div>
-
-    <button
-        type="button"
-        onclick="copyReferralLink()">
-        Copy
-    </button>
-
-</div>
 
 </div>
 <script>
