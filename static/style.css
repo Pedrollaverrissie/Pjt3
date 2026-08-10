@@ -1362,9 +1362,9 @@ h3{
 }
 
 @media(max-width: 600px){
- .page1{
-   padding: 0 4px;
- }
+.page-content{
+    width: 100%;
+}
 }
 @media (max-height: 770px) {
     .sidebar{
