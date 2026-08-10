@@ -1455,10 +1455,6 @@ h3{
 .header-profile2 span{
     font-size: 24px;
 }
-.top-content h5{
-    
-}
-
 /*PAGE CONTENT*/
 .page-content{
     display: flex;
@@ -1470,7 +1466,7 @@ h3{
     width: 99.9%;
     margin:0.6px;
     border-radius: 5px;
-    margin-top: 18px;
+    margin-top: 40px;
   
 }
 .vip-status-card{
