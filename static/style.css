@@ -1074,6 +1074,8 @@ a{
   display: flex;
    /*background: linear-gradient(1989deg, #0a0941, #051e34, #291456);*/
    flex-direction: column;
+   justify-content: center;
+   align-items: center;
    
    margin-top: 35px;
   
@@ -1109,7 +1111,7 @@ a{
 .dashboard-header{
  display: flex;
  position: fixed;
- top: 4px;
+ top: 0;
  left: 0;
  right: 0;
  height: 40px;
