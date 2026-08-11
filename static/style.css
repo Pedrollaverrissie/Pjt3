@@ -1429,13 +1429,29 @@ h3{
     backdrop-filter: blur(6px);
 }
 .top-content{
-    display: flex;
-   vertical-align: middle;
-    align-items: center;
-    width: 100%;
-    color: white;
-    
-   
+    display:flex;
+    align-items:center;
+    width:100%;
+    color:white;
+}
+
+.greeting{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-left:10px;
+}
+
+.greeting h2{
+    margin:0;
+    font-size:24px;
+    font-weight:700;
+}
+
+.greeting p{
+    margin:4px 0 0;
+    color:#bdbdbd;
+    font-size:14px;
 }
 .header-profile2{
     height: 40px;

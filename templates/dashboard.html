@@ -423,15 +423,18 @@
 
 
             
-            <div class="top-content" >
+<div class="top-content">
 
+    <a href="/profile" class="header-profile2">
+        <span id="profile" data-username="{{ username }}"></span>
+    </a>
 
-                
-                    <a href="/profile" class="header-profile2">
-                        <span id="profile" data-username="{{ username }}"></span>
-                    </a>
-                    <h5 >Welcom Again <br> {{ username }}</h5> 
-            </div>
+    <div class="greeting">
+        <h5 id="greetingText">Good morning</h5>
+        <p>{{ username }}</p>
+    </div>
+
+</div>
 
             <div class="vip-status-card">
 
@@ -649,6 +652,26 @@
 
         </div>
     </div>
-  
+<script>
+function updateGreeting() {
+    const hour = new Date().getHours();
+
+    let greeting;
+
+    if (hour >= 0 && hour < 12) {
+        greeting = "Good morning";
+    } else if (hour >= 12 && hour < 16) {
+        greeting = "Good afternoon";
+    } else if (hour >= 16 && hour < 19) {
+        greeting = "Good evening";
+    } else {
+        greeting = "Good night";
+    }
+
+    document.getElementById("greetingText").textContent = greeting;
+}
+
+updateGreeting();
+</script>
 </body>
 </html>
