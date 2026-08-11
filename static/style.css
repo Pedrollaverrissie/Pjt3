@@ -1543,6 +1543,7 @@ h3{
     margin-left: auto;
     transform: scale(0.6);
     transform-origin: right;
+    flex: 1.4;
 }
 .header-profile2{
     margin: 0;
