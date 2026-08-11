@@ -1456,6 +1456,7 @@ h3{
 .greeting {
 
  vertical-align: middle;
+ align-content: center;
 }
 
 .greeting h5 {
