@@ -1498,7 +1498,7 @@ h3{
     font-size: 14px;
 }
 .supernova-pulse{
-    transform: scale(0.75);
+    transform: scale(0.6);
     text-align: center;
     padding: 0;
 }
