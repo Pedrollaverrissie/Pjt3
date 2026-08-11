@@ -1540,7 +1540,7 @@ h3{
 
 .topright{
 
-    
+    margin-left: auto;
     transform: scale(0.6);
 }
 .header-profile2{
