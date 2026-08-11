@@ -1441,7 +1441,7 @@ h3{
 .topleft{
     display: flex;
     flex: 1.2;
-    margin-left: 10px;
+    padding-left: 10px;
     gap: 6px;
 
 }
