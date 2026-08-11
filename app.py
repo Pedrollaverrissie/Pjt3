@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify, f
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 import re, random ,time,os,requests
+
 from flask_mail import Mail, Message
 
 from models import (
@@ -869,6 +870,9 @@ def dashboard():
     user_id=current_user.id,
     is_read=False
     ).count()
+
+    pulse = get_supernova_pulse()
+
     return render_template(
         "dashboard.html",
 
@@ -895,7 +899,9 @@ def dashboard():
         # VIP
         vip_level=current_user.vip_level,
         vip_expires_at=current_user.vip_expires_at,
-        vip_days_left=vip_days_left
+        vip_days_left=vip_days_left,
+
+         pulse=pulse
     )
 # ---------------- LOGOUT ----------------
 @app.route("/logout")
@@ -4008,6 +4014,111 @@ def team_members():
         platinum_members=platinum_members,
         referral_link=referral_link
     )
+
+#---------SUPERNOVA PULSE------
+from datetime import datetime, timedelta
+from sqlalchemy import func
+
+
+def get_supernova_pulse():
+
+    now = datetime.utcnow()
+    last_24h = now - timedelta(hours=24)
+
+    # -----------------------------------
+    # 1. NEW ACTIVE USERS
+    # -----------------------------------
+    new_users = User.query.filter(
+        User.joined_at >= last_24h,
+        User.account_active == True
+    ).count()
+
+    # -----------------------------------
+    # 2. SUCCESSFUL RECHARGES
+    # -----------------------------------
+    successful_recharges = Payment.query.filter(
+        Payment.created_at >= last_24h,
+        Payment.payment_type == "recharge",
+        Payment.status == "approved"
+    ).count()
+
+    # -----------------------------------
+    # 3. COMPLETED TASKS
+    # -----------------------------------
+    completed_tasks = UserTask.query.filter(
+        UserTask.completed_at >= last_24h
+    ).count()
+
+    # -----------------------------------
+    # 4. SUCCESSFUL WITHDRAWALS
+    # -----------------------------------
+    successful_withdrawals = Withdrawal.query.filter(
+        Withdrawal.processed_at >= last_24h,
+        Withdrawal.status == "Paid"
+    ).count()
+
+    # -----------------------------------
+    # 5. REFERRAL ACTIVITY
+    # -----------------------------------
+    referral_activity = Transaction.query.filter(
+        Transaction.created_at >= last_24h,
+        Transaction.transaction_type == "referral_commission",
+        Transaction.status == "Completed"
+    ).count()
+
+    # -----------------------------------
+    # TOTAL ACTIVITY
+    # -----------------------------------
+    total_activity = (
+        new_users
+        + successful_recharges
+        + completed_tasks
+        + successful_withdrawals
+        + referral_activity
+    )
+
+    # -----------------------------------
+    # ACTIVITY SCORE
+    # -----------------------------------
+    #
+    # This gives each activity a reasonable
+    # contribution toward the pulse.
+    #
+
+    score = (
+        (new_users * 10)
+        + (successful_recharges * 15)
+        + (completed_tasks * 2)
+        + (successful_withdrawals * 10)
+        + (referral_activity * 5)
+    )
+
+    # Maximum displayed pulse = 100
+    pulse = min(score, 100)
+
+    # -----------------------------------
+    # ACTIVITY LEVEL
+    # -----------------------------------
+
+    if pulse <= 20:
+        activity_level = "LOW"
+    elif pulse <= 50:
+        activity_level = "MODERATE"
+    elif pulse <= 80:
+        activity_level = "HIGH"
+    else:
+        activity_level = "VERY HIGH"
+
+    return {
+        "pulse": pulse,
+        "activity_level": activity_level,
+        "new_users": new_users,
+        "successful_recharges": successful_recharges,
+        "completed_tasks": completed_tasks,
+        "successful_withdrawals": successful_withdrawals,
+        "referral_activity": referral_activity,
+        "total_activity": total_activity
+    }
 #======================================================
 if __name__ == "__main__":
     app.run(debug=True)
