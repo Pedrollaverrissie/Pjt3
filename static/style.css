@@ -1547,7 +1547,8 @@ h3{
 }
 .header-profile2{
     margin: 0;
-    transform: scaleX(1.5);
+    height: 60px;
+    width: 60px;
 }
 }
 .vip-status-card{
