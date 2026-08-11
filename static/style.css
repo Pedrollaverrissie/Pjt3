@@ -1431,8 +1431,10 @@ h3{
 .top-content {
     display: flex;
     align-items: center;
+    vertical-align: middle;
     width: 100%;
     color: white;
+    margin-top: 8px;
 }
 
 .greeting {
