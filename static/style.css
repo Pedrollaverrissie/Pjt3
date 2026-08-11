@@ -1499,6 +1499,7 @@ h3{
 }
 .supernova-pulse{
     transform: scale(0.75);
+    text-align: center;
 }
 }
 .vip-status-card{
