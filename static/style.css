@@ -1457,6 +1457,7 @@ h3{
 
  vertical-align: middle;
  align-content: center;
+
 }
 
 .greeting h5 {
@@ -1538,6 +1539,7 @@ h3{
 
 
 .topright{
+    display: flex;
     justify-content: right;
     padding-right: 0;
 }
