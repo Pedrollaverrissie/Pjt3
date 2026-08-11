@@ -1542,6 +1542,7 @@ h3{
 
     margin-left: auto;
     transform: scale(0.6);
+    transform-origin: right;
 }
 .header-profile2{
     margin: 0;
