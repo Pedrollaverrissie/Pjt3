@@ -23,10 +23,7 @@ from models import (
 
 import phonenumbers
 from phonenumbers import geocoder
-from phonenumbers.phonenumberutil import (
-    country_code_for_number,
-    region_code_for_number
-)
+
 from functools import wraps
 from flask import abort
 
@@ -95,28 +92,50 @@ def get_phone_country(phone):
     try:
         phone = str(phone).strip()
 
-        # Convert Kenyan/local format to international format
+        # Remove spaces, hyphens and brackets
+        phone = (
+            phone.replace(" ", "")
+                 .replace("-", "")
+                 .replace("(", "")
+                 .replace(")", "")
+        )
+
+        # Convert Kenyan/local format:
+        # 0712345678 -> +254712345678
+        # 0112345678 -> +254112345678
         if phone.startswith("0"):
             phone = "254" + phone[1:]
 
-        # Add +
+        # Add + if missing
         if not phone.startswith("+"):
             phone = "+" + phone
 
         print("PHONE BEING PARSED:", phone)
 
+        # Parse international number
         parsed = phonenumbers.parse(phone, None)
 
-        # Get country/region
+        # Check whether the number is valid
+        if not phonenumbers.is_valid_number(parsed):
+            print("INVALID PHONE NUMBER:", phone)
+
+            return {
+                "name": "Unknown",
+                "code": f"+{parsed.country_code}" if parsed.country_code else "",
+                "region": ""
+            }
+
+        # Country/region
         region = region_code_for_number(parsed)
 
-        # Get calling code
-        calling_code = country_code_for_number(parsed)
+        # Calling code
+        calling_code = parsed.country_code
 
         print("PHONE REGION:", region)
         print("PHONE CALLING CODE:", calling_code)
 
         country_names = {
+
             "KE": "Kenya",
             "TZ": "Tanzania",
             "UG": "Uganda",
@@ -128,12 +147,50 @@ def get_phone_country(phone):
             "ZA": "South Africa",
             "NG": "Nigeria",
             "GH": "Ghana",
+
             "IN": "India",
             "AE": "United Arab Emirates",
+
             "GB": "United Kingdom",
             "US": "United States",
             "CA": "Canada",
-            "AU": "Australia"
+            "AU": "Australia",
+
+            "DE": "Germany",
+            "FR": "France",
+            "IT": "Italy",
+            "ES": "Spain",
+            "NL": "Netherlands",
+            "BE": "Belgium",
+            "CH": "Switzerland",
+            "SE": "Sweden",
+            "NO": "Norway",
+            "DK": "Denmark",
+            "FI": "Finland",
+            "PL": "Poland",
+
+            "BR": "Brazil",
+            "MX": "Mexico",
+            "AR": "Argentina",
+
+            "CN": "China",
+            "JP": "Japan",
+            "KR": "South Korea",
+
+            "PK": "Pakistan",
+            "BD": "Bangladesh",
+
+            "SA": "Saudi Arabia",
+            "QA": "Qatar",
+            "KW": "Kuwait",
+            "OM": "Oman",
+
+            "MY": "Malaysia",
+            "SG": "Singapore",
+            "ID": "Indonesia",
+            "PH": "Philippines",
+
+            "NZ": "New Zealand"
         }
 
         country_name = country_names.get(
