@@ -1515,6 +1515,7 @@ h3{
     transform: scale(0.6);
     text-align: center;
     padding: 0; 
+    align-self: auto;
 }
 .pulse-header {
 
@@ -1533,31 +1534,7 @@ h3{
     font-weight: 700;
 }
 
-.pulse-bar {
-    width: 80%;
-    height: 6px;
-    background: rgba(255,255,255,.12);
-    border-radius: 20px;
-    overflow: hidden;
-    margin: 8px 0;
-}
 
-.pulse-progress {
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        #16b364,
-        #20d97f
-    );
-    border-radius: 20px;
-    transition: width .6s ease;
-    
-}
-
-.supernova-pulse small {
-    font-size: 9px;
-    color: #aaa;
-}
 .topright{
     justify-content: right;
 }
