@@ -1438,6 +1438,14 @@ h3{
     margin-top: 12px;
     margin-bottom: 12px;
 }
+.topleft{
+    display: flex;
+    flex: 1;
+
+}
+.topright{
+    flex: 2;
+}
 
 .greeting {
     margin-left: 10px;
