@@ -1446,7 +1446,7 @@ h3{
 .topright{
     display: flex;
     justify-content: left;
-    align-items: flex-end;
+    align-items:end;
     flex: 2;
 }
 
