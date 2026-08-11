@@ -83,6 +83,34 @@ VIP_ORDER = [
     "Platinum",
     "Diamond"
 ]
+
+def get_phone_country(phone):
+    try:
+        parsed = phonenumbers.parse("+" + str(phone), None)
+
+        country_name = geocoder.description_for_number(
+            parsed,
+            "en"
+        )
+
+        country_code = phonenumbers.country_code_for_number(parsed)
+
+        region = phonenumbers.region_code_for_number(parsed)
+
+        return {
+            "name": country_name or "Unknown",
+            "code": f"+{country_code}",
+            "region": region or ""
+        }
+
+    except Exception:
+        return {
+            "name": "Unknown",
+            "code": "",
+            "region": ""
+        }
+
+
 from datetime import datetime
 
 def get_current_task_reward(user):
@@ -873,6 +901,8 @@ def dashboard():
 
     pulse = get_supernova_pulse()
 
+    country = get_phone_country(current_user.phone)
+
     return render_template(
         "dashboard.html",
 
@@ -901,7 +931,11 @@ def dashboard():
         vip_expires_at=current_user.vip_expires_at,
         vip_days_left=vip_days_left,
 
-         pulse=pulse
+         pulse=pulse,
+
+        country_name=country["name"],
+        country_code=country["code"],
+        country_region=country["region"]
     )
 # ---------------- LOGOUT ----------------
 @app.route("/logout")
