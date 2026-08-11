@@ -1428,30 +1428,28 @@ h3{
     visibility: visible;
     backdrop-filter: blur(6px);
 }
-.top-content{
-    display:flex;
-    align-items:center;
-    width:100%;
-    color:white;
+.top-content {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    color: white;
 }
 
-.greeting{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    padding-left:10px;
+.greeting {
+    margin-left: 10px;
 }
 
-.greeting h2{
-    margin:0;
-    font-size:24px;
-    font-weight:700;
+.greeting h5 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgb(234 179 8 / var(--tw-text-opacity, 1));
 }
 
-.greeting p{
-    margin:4px 0 0;
-    color:#bdbdbd;
-    font-size:14px;
+.greeting p {
+    margin: 3px 0 0;
+    font-size: 14px;
+    color: #cfcfcf;
 }
 .header-profile2{
     height: 40px;
