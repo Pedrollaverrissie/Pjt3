@@ -1497,6 +1497,9 @@ h3{
 .greeting h5{
     font-size: 14px;
 }
+.supernova-pulse{
+    transform: scale(0.75);
+}
 }
 .vip-status-card{
 
