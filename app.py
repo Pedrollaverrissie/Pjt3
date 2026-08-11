@@ -2,7 +2,7 @@ from game_engine import game
 from flask import Flask, render_template, request, redirect, url_for, jsonify, flash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-import re, random ,time,os,requests,phonenumbers
+import re, random ,time,os,requests
 
 from flask_mail import Mail, Message
 
@@ -21,7 +21,12 @@ from models import (
     Withdrawal
 )
 
+import phonenumbers
 from phonenumbers import geocoder
+from phonenumbers.phonenumberutil import (
+    country_code_for_number,
+    region_code_for_number
+)
 from functools import wraps
 from flask import abort
 
@@ -85,62 +90,66 @@ VIP_ORDER = [
     "Platinum",
     "Diamond"
 ]
-
-import phonenumbers
-from phonenumbers import geocoder
-
 def get_phone_country(phone):
 
     try:
         phone = str(phone).strip()
 
-        # Handle Kenyan/local numbers too
+        # Convert Kenyan/local format to international format
         if phone.startswith("0"):
             phone = "254" + phone[1:]
 
-        # Remove + if already present
-        phone = phone.lstrip("+")
+        # Add +
+        if not phone.startswith("+"):
+            phone = "+" + phone
 
-        parsed = phonenumbers.parse("+" + phone, None)
+        print("PHONE BEING PARSED:", phone)
 
-        region = phonenumbers.region_code_for_number(parsed)
-        country_code = phonenumbers.country_code_for_number(parsed)
+        parsed = phonenumbers.parse(phone, None)
 
-        # Try to get country name
-        country_name = geocoder.description_for_number(
-            parsed,
-            "en"
+        # Get country/region
+        region = region_code_for_number(parsed)
+
+        # Get calling code
+        calling_code = country_code_for_number(parsed)
+
+        print("PHONE REGION:", region)
+        print("PHONE CALLING CODE:", calling_code)
+
+        country_names = {
+            "KE": "Kenya",
+            "TZ": "Tanzania",
+            "UG": "Uganda",
+            "RW": "Rwanda",
+            "BI": "Burundi",
+            "ET": "Ethiopia",
+            "SO": "Somalia",
+            "SS": "South Sudan",
+            "ZA": "South Africa",
+            "NG": "Nigeria",
+            "GH": "Ghana",
+            "IN": "India",
+            "AE": "United Arab Emirates",
+            "GB": "United Kingdom",
+            "US": "United States",
+            "CA": "Canada",
+            "AU": "Australia"
+        }
+
+        country_name = country_names.get(
+            region,
+            "Unknown"
         )
-
-        # Fallback using region code
-        if not country_name:
-            country_names = {
-                "KE": "Kenya",
-                "TZ": "Tanzania",
-                "UG": "Uganda",
-                "RW": "Rwanda",
-                "BI": "Burundi",
-                "ET": "Ethiopia",
-                "SO": "Somalia",
-                "SS": "South Sudan",
-                "US": "United States",
-                "GB": "United Kingdom"
-            }
-
-            country_name = country_names.get(
-                region,
-                "Unknown"
-            )
 
         return {
             "name": country_name,
-            "code": f"+{country_code}",
+            "code": f"+{calling_code}",
             "region": region
         }
 
     except Exception as e:
 
-        print("PHONE COUNTRY ERROR:", e)
+        print("PHONE COUNTRY ERROR:", repr(e))
 
         return {
             "name": "Unknown",
@@ -940,6 +949,7 @@ def dashboard():
     pulse = get_supernova_pulse()
 
     country = get_phone_country(current_user.phone)
+    print("COUNTRY DATA:", country)
 
     return render_template(
         "dashboard.html",
@@ -973,7 +983,7 @@ def dashboard():
 
         country_name=country["name"],
         country_code=country["code"],
-        country_region=country["region"]
+        
     )
 # ---------------- LOGOUT ----------------
 @app.route("/logout")
