@@ -1555,6 +1555,9 @@ h3{
     font-size: 9px;
     color: #aaa;
 }
+.topright{
+    justify-content: right;
+}
 }
 .vip-status-card{
 
