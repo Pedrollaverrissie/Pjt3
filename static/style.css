@@ -1430,6 +1430,7 @@ h3{
 }
 .top-content {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     vertical-align: middle;
     width: 100%;
