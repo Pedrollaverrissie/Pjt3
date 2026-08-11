@@ -1501,6 +1501,53 @@ h3{
     transform: scale(0.75);
     text-align: center;
 }
+.pulse-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 12px;
+    color: rgb(234,179,8);
+    align-self: center;
+}
+
+.pulse-value {
+    font-size: 28px;
+    font-weight: 800;
+    margin-top: 3px;
+}
+
+.pulse-label {
+    font-size: 11px;
+    color: #20d97f;
+    font-weight: 700;
+}
+
+.pulse-bar {
+    width: 80%;
+    height: 6px;
+    background: rgba(255,255,255,.12);
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+.pulse-progress {
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        #16b364,
+        #20d97f
+    );
+    border-radius: 20px;
+    transition: width .6s ease;
+    
+}
+
+.supernova-pulse small {
+    font-size: 9px;
+    color: #aaa;
+}
 }
 .vip-status-card{
 
