@@ -1558,6 +1558,9 @@ h3{
 .topright{
     justify-content: right;
 }
+.header-profile2{
+    margin: 0;
+}
 }
 .vip-status-card{
 
