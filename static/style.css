@@ -1434,7 +1434,8 @@ h3{
     vertical-align: middle;
     width: 100%;
     color: white;
-    margin-top: 8px;
+    margin-top: 12px;
+    margin-bottom: 12px;
 }
 
 .greeting {
