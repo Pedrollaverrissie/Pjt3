@@ -20,7 +20,7 @@ from models import (
     MembershipHistory,
     Withdrawal
 )
-import phonenumbers
+
 from phonenumbers import geocoder
 from functools import wraps
 from flask import abort
