@@ -86,26 +86,61 @@ VIP_ORDER = [
     "Diamond"
 ]
 
-def get_phone_country(phone):
-    try:
-        parsed = phonenumbers.parse("+" + str(phone), None)
 
+
+def get_phone_country(phone):
+
+    try:
+        phone = str(phone).strip()
+
+        # Handle Kenyan/local numbers too
+        if phone.startswith("0"):
+            phone = "254" + phone[1:]
+
+        # Remove + if already present
+        phone = phone.lstrip("+")
+
+        parsed = phonenumbers.parse("+" + phone, None)
+
+        region = phonenumbers.region_code_for_number(parsed)
+        country_code = phonenumbers.country_code_for_number(parsed)
+
+        # Try to get country name
         country_name = geocoder.description_for_number(
             parsed,
             "en"
         )
 
-        country_code = phonenumbers.country_code_for_number(parsed)
+        # Fallback using region code
+        if not country_name:
+            country_names = {
+                "KE": "Kenya",
+                "TZ": "Tanzania",
+                "UG": "Uganda",
+                "RW": "Rwanda",
+                "BI": "Burundi",
+                "ET": "Ethiopia",
+                "SO": "Somalia",
+                "SS": "South Sudan",
+                "US": "United States",
+                "GB": "United Kingdom"
+            }
 
-        region = phonenumbers.region_code_for_number(parsed)
+            country_name = country_names.get(
+                region,
+                "Unknown"
+            )
 
         return {
-            "name": country_name or "Unknown",
+            "name": country_name,
             "code": f"+{country_code}",
-            "region": region or ""
+            "region": region
         }
 
-    except Exception:
+    except Exception as e:
+
+        print("PHONE COUNTRY ERROR:", e)
+
         return {
             "name": "Unknown",
             "code": "",
