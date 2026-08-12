@@ -323,18 +323,28 @@
     border-radius: 50%;
     overflow: hidden;
     cursor: pointer;
-    border: 2px solid #16b364;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #16b364;
+    color: white;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    border: 2px solid white;
 }
 
 .header-profile img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
 }
 
-.header-profile:hover {
-    transform: scale(1.05);
+#profileInitial {
+    text-transform: uppercase;
 }
 </style>
 </head>
@@ -363,23 +373,29 @@
                         </div>
                                     
                     </a>
-                                                        
-                    <div class="header-profile" id="profileImageContainer">
+                                                       <div class="header-profile" id="profileImageContainer">
 
-                        <img
-                            id="profileImage"
-                            src="{{ url_for('static', filename='images/default-profile.png') }}"
-                            alt="Profile"
-                        >
+    <!-- Initial shown by default -->
+    <span
+        id="profileInitial"
+        data-username="{{ username }}">
+    </span>
 
-                        <input
-                            type="file"
-                            id="profilePhotoInput"
-                            accept="image/*"
-                            hidden
-                        >
+    <!-- Hidden until a photo is selected -->
+    <img
+        id="profileImage"
+        alt="Profile"
+        style="display:none;"
+    >
 
-                    </div>         
+    <input
+        type="file"
+        id="profilePhotoInput"
+        accept="image/*"
+        hidden
+    >
+
+</div>       
             </div>
             
         </div>
@@ -803,17 +819,33 @@
 const profileContainer = document.getElementById("profileImageContainer");
 const profileInput = document.getElementById("profilePhotoInput");
 const profileImage = document.getElementById("profileImage");
+const profileInitial = document.getElementById("profileInitial");
 
+
+// Get first letter of username
+const username = profileInitial.dataset.username;
+
+if (username) {
+    profileInitial.textContent = username.charAt(0).toUpperCase();
+}
+
+
+// Open device storage when profile is clicked
 profileContainer.addEventListener("click", function () {
     profileInput.click();
 });
 
+
+// When user selects a photo
 profileInput.addEventListener("change", function () {
 
     const file = this.files[0];
 
-    if (!file) return;
+    if (!file) {
+        return;
+    }
 
+    // Make sure it is an image
     if (!file.type.startsWith("image/")) {
         alert("Please select an image.");
         return;
@@ -822,10 +854,17 @@ profileInput.addEventListener("change", function () {
     const reader = new FileReader();
 
     reader.onload = function (e) {
+
+        // Display selected photo
         profileImage.src = e.target.result;
+        profileImage.style.display = "block";
+
+        // Hide username initial
+        profileInitial.style.display = "none";
     };
 
     reader.readAsDataURL(file);
+
 });
 </script>
 <script>
