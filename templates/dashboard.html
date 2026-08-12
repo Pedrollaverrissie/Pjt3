@@ -343,11 +343,23 @@
                         </div>
                                     
                     </a>
-                                    
-                    <div class="header-profile">
-                                    
-                        <span id="profileInitial" data-username="{{ username }}"></span>
-                    </div>            
+                                                        
+                    <div class="header-profile" id="profileImageContainer">
+
+                        <img
+                            id="profileImage"
+                            src="{{ url_for('static', filename='images/default-profile.png') }}"
+                            alt="Profile"
+                        >
+
+                        <input
+                            type="file"
+                            id="profilePhotoInput"
+                            accept="image/*"
+                            hidden
+                        >
+
+                    </div>         
             </div>
             
         </div>
