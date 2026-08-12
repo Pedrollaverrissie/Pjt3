@@ -708,13 +708,77 @@
         <img
             src="{{ url_for(
                 'static',
-                filename='images/default-profile.png'
+                filename='static/images/profile-img.jfif'
             ) }}"
             alt="Profile"
             class="dashboard-profile-photo"
         >
 
     {% endif %}
+
+        <div class="profile-photo-section">
+
+    <div class="profile-photo-container">
+
+            <div
+        class="profile-photo-container"
+        onclick="openPhotoPicker()">
+
+        {% if current_user.profile_image %}
+
+            <img
+                id="profilePreview"
+                src="{{ current_user.profile_image }}"
+                alt="Profile Photo"
+                class="profile-main-photo"
+            >
+
+        {% else %}
+
+            <img
+                id="profilePreview"
+                src="{{ url_for(
+                    'static',
+                    filename='images/default-profile.png'
+                ) }}"
+                alt="Default Profile"
+                class="profile-main-photo"
+            >
+
+        {% endif %}
+
+    </div>
+
+    <button
+        type="button"
+        class="change-photo-btn"
+        onclick="openPhotoPicker()">
+
+        <i class="fa-solid fa-camera"></i>
+
+        Change Photo
+
+    </button>
+
+    <button
+        type="button"
+        class="remove-photo-btn"
+        onclick="removeProfilePhoto()">
+
+        <i class="fa-solid fa-trash"></i>
+
+        Remove Photo
+
+    </button>
+
+    <input
+        type="file"
+        id="profilePhotoInput"
+        accept="image/jpeg,image/png,image/webp"
+        hidden
+    >
+
+</div>
 
 </div>     
             </div>
@@ -1137,69 +1201,7 @@
     </div>
 
 
-    <div class="profile-photo-section">
 
-    <div class="profile-photo-container">
-
-            <div
-        class="profile-photo-container"
-        onclick="openPhotoPicker()">
-
-        {% if current_user.profile_image %}
-
-            <img
-                id="profilePreview"
-                src="{{ current_user.profile_image }}"
-                alt="Profile Photo"
-                class="profile-main-photo"
-            >
-
-        {% else %}
-
-            <img
-                id="profilePreview"
-                src="{{ url_for(
-                    'static',
-                    filename='images/default-profile.png'
-                ) }}"
-                alt="Default Profile"
-                class="profile-main-photo"
-            >
-
-        {% endif %}
-
-    </div>
-
-    <button
-        type="button"
-        class="change-photo-btn"
-        onclick="openPhotoPicker()">
-
-        <i class="fa-solid fa-camera"></i>
-
-        Change Photo
-
-    </button>
-
-    <button
-        type="button"
-        class="remove-photo-btn"
-        onclick="removeProfilePhoto()">
-
-        <i class="fa-solid fa-trash"></i>
-
-        Remove Photo
-
-    </button>
-
-    <input
-        type="file"
-        id="profilePhotoInput"
-        accept="image/jpeg,image/png,image/webp"
-        hidden
-    >
-
-</div>
     
 
 
