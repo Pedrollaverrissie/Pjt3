@@ -112,150 +112,98 @@ def get_phone_country(phone):
 
         print("PHONE BEING PARSED:", phone)
 
-        # Parse phone number
+        # Parse number
         parsed = phonenumbers.parse(phone, None)
 
-        # Get calling code directly from parsed number
+        # Get calling code directly
         calling_code = parsed.country_code
 
-        # Get region
-        region = region_code_for_number(parsed)
-
-        print("PHONE REGION:", region)
         print("PHONE CALLING CODE:", calling_code)
 
-        # Calling-code fallback
-        calling_code_regions = {
-            254: "KE",
-            255: "TZ",
-            256: "UG",
-            250: "RW",
-            257: "BI",
-            251: "ET",
-            252: "SO",
-            211: "SS",
-            27: "ZA",
-            234: "NG",
-            233: "GH",
-            91: "IN",
-            971: "AE",
-            44: "GB",
-            1: "US",
-            49: "DE",
-            33: "FR",
-            39: "IT",
-            34: "ES",
-            31: "NL",
-            32: "BE",
-            41: "CH",
-            46: "SE",
-            47: "NO",
-            45: "DK",
-            358: "FI",
-            48: "PL",
-            55: "BR",
-            52: "MX",
-            54: "AR",
-            86: "CN",
-            81: "JP",
-            82: "KR",
-            92: "PK",
-            880: "BD",
-            966: "SA",
-            974: "QA",
-            965: "KW",
-            968: "OM",
-            60: "MY",
-            65: "SG",
-            62: "ID",
-            63: "PH",
-            64: "NZ",
-            61: "AU",
-            1: "US"
+        # Calling code -> country
+        country_data = {
+
+            254: ("KE", "Kenya"),
+            255: ("TZ", "Tanzania"),
+            256: ("UG", "Uganda"),
+            250: ("RW", "Rwanda"),
+            257: ("BI", "Burundi"),
+            251: ("ET", "Ethiopia"),
+            252: ("SO", "Somalia"),
+            211: ("SS", "South Sudan"),
+            27: ("ZA", "South Africa"),
+
+            234: ("NG", "Nigeria"),
+            233: ("GH", "Ghana"),
+
+            91: ("IN", "India"),
+            971: ("AE", "United Arab Emirates"),
+
+            44: ("GB", "United Kingdom"),
+            1: ("US", "United States"),
+            61: ("AU", "Australia"),
+            64: ("NZ", "New Zealand"),
+
+            49: ("DE", "Germany"),
+            33: ("FR", "France"),
+            39: ("IT", "Italy"),
+            34: ("ES", "Spain"),
+            31: ("NL", "Netherlands"),
+            32: ("BE", "Belgium"),
+            41: ("CH", "Switzerland"),
+            46: ("SE", "Sweden"),
+            47: ("NO", "Norway"),
+            45: ("DK", "Denmark"),
+            358: ("FI", "Finland"),
+            48: ("PL", "Poland"),
+
+            55: ("BR", "Brazil"),
+            52: ("MX", "Mexico"),
+            54: ("AR", "Argentina"),
+
+            86: ("CN", "China"),
+            81: ("JP", "Japan"),
+            82: ("KR", "South Korea"),
+
+            92: ("PK", "Pakistan"),
+            880: ("BD", "Bangladesh"),
+
+            966: ("SA", "Saudi Arabia"),
+            974: ("QA", "Qatar"),
+            965: ("KW", "Kuwait"),
+            968: ("OM", "Oman"),
+
+            60: ("MY", "Malaysia"),
+            65: ("SG", "Singapore"),
+            62: ("ID", "Indonesia"),
+            63: ("PH", "Philippines")
         }
 
-        # If region_code_for_number fails,
-        # use calling code
-        if not region:
-            region = calling_code_regions.get(
-                calling_code,
-                ""
-            )
+        # Find country
+        country = country_data.get(calling_code)
 
-        # Country names
-        country_names = {
+        if country:
 
-            "KE": "Kenya",
-            "TZ": "Tanzania",
-            "UG": "Uganda",
-            "RW": "Rwanda",
-            "BI": "Burundi",
-            "ET": "Ethiopia",
-            "SO": "Somalia",
-            "SS": "South Sudan",
-            "ZA": "South Africa",
+            region, country_name = country
 
-            "NG": "Nigeria",
-            "GH": "Ghana",
+            print("PHONE REGION:", region)
+            print("PHONE COUNTRY:", country_name)
 
-            "IN": "India",
-            "AE": "United Arab Emirates",
+            return {
+                "name": country_name,
+                "code": f"+{calling_code}",
+                "region": region,
+                "valid": True
+            }
 
-            "GB": "United Kingdom",
-            "US": "United States",
-            "CA": "Canada",
-            "AU": "Australia",
-
-            "DE": "Germany",
-            "FR": "France",
-            "IT": "Italy",
-            "ES": "Spain",
-            "NL": "Netherlands",
-            "BE": "Belgium",
-            "CH": "Switzerland",
-            "SE": "Sweden",
-            "NO": "Norway",
-            "DK": "Denmark",
-            "FI": "Finland",
-            "PL": "Poland",
-
-            "BR": "Brazil",
-            "MX": "Mexico",
-            "AR": "Argentina",
-
-            "CN": "China",
-            "JP": "Japan",
-            "KR": "South Korea",
-
-            "PK": "Pakistan",
-            "BD": "Bangladesh",
-
-            "SA": "Saudi Arabia",
-            "QA": "Qatar",
-            "KW": "Kuwait",
-            "OM": "Oman",
-
-            "MY": "Malaysia",
-            "SG": "Singapore",
-            "ID": "Indonesia",
-            "PH": "Philippines",
-
-            "NZ": "New Zealand"
-        }
-
-        country_name = country_names.get(
-            region,
-            "Unknown"
-        )
-
-        print("FINAL COUNTRY:", country_name)
-        print("FINAL CODE:", f"+{calling_code}")
-        print("FINAL REGION:", region)
+        # Unknown calling code
+        print("UNKNOWN CALLING CODE:", calling_code)
 
         return {
-            "name": country_name,
+            "name": "Unknown",
             "code": f"+{calling_code}",
-            "region": region
+            "region": "",
+            "valid": False
         }
 
     except Exception as e:
@@ -265,9 +213,9 @@ def get_phone_country(phone):
         return {
             "name": "Unknown",
             "code": "",
-            "region": ""
+            "region": "",
+            "valid": False
         }
-
 
 from datetime import datetime
 
