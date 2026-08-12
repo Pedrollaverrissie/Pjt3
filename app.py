@@ -100,7 +100,7 @@ def get_phone_country(phone):
                  .replace(")", "")
         )
 
-        # Convert Kenyan/local format:
+        # Convert local format
         # 0712345678 -> +254712345678
         # 0112345678 -> +254112345678
         if phone.startswith("0"):
@@ -112,30 +112,21 @@ def get_phone_country(phone):
 
         print("PHONE BEING PARSED:", phone)
 
-        # Parse international number
+        # Parse number
         parsed = phonenumbers.parse(phone, None)
 
-        # Check whether the number is valid
-        if not phonenumbers.is_valid_number(parsed):
-            print("INVALID PHONE NUMBER:", phone)
-
-            return {
-                "name": "Unknown",
-                "code": f"+{parsed.country_code}" if parsed.country_code else "",
-                "region": ""
-            }
-
-        # Country/region
-        region = region_code_for_number(parsed)
-
-        # Calling code
+        # Get calling code directly from parsed number
         calling_code = parsed.country_code
 
-        print("PHONE REGION:", region)
+        # Get country/region
+        region = region_code_for_number(parsed)
+
+        print("PHONE REGION:", repr(region))
         print("PHONE CALLING CODE:", calling_code)
 
         country_names = {
 
+            # Africa
             "KE": "Kenya",
             "TZ": "Tanzania",
             "UG": "Uganda",
@@ -148,14 +139,25 @@ def get_phone_country(phone):
             "NG": "Nigeria",
             "GH": "Ghana",
 
+            # Asia
             "IN": "India",
             "AE": "United Arab Emirates",
+            "CN": "China",
+            "JP": "Japan",
+            "KR": "South Korea",
+            "PK": "Pakistan",
+            "BD": "Bangladesh",
+            "SA": "Saudi Arabia",
+            "QA": "Qatar",
+            "KW": "Kuwait",
+            "OM": "Oman",
+            "MY": "Malaysia",
+            "SG": "Singapore",
+            "ID": "Indonesia",
+            "PH": "Philippines",
 
+            # Europe
             "GB": "United Kingdom",
-            "US": "United States",
-            "CA": "Canada",
-            "AU": "Australia",
-
             "DE": "Germany",
             "FR": "France",
             "IT": "Italy",
@@ -169,27 +171,15 @@ def get_phone_country(phone):
             "FI": "Finland",
             "PL": "Poland",
 
+            # Americas
+            "US": "United States",
+            "CA": "Canada",
             "BR": "Brazil",
             "MX": "Mexico",
             "AR": "Argentina",
 
-            "CN": "China",
-            "JP": "Japan",
-            "KR": "South Korea",
-
-            "PK": "Pakistan",
-            "BD": "Bangladesh",
-
-            "SA": "Saudi Arabia",
-            "QA": "Qatar",
-            "KW": "Kuwait",
-            "OM": "Oman",
-
-            "MY": "Malaysia",
-            "SG": "Singapore",
-            "ID": "Indonesia",
-            "PH": "Philippines",
-
+            # Oceania
+            "AU": "Australia",
             "NZ": "New Zealand"
         }
 
@@ -198,10 +188,17 @@ def get_phone_country(phone):
             "Unknown"
         )
 
+        # Check exact number validity separately
+        valid = phonenumbers.is_valid_number(parsed)
+
+        print("PHONE VALID:", valid)
+        print("COUNTRY NAME:", country_name)
+
         return {
             "name": country_name,
-            "code": f"+{calling_code}",
-            "region": region
+            "code": f"+{calling_code}" if calling_code else "",
+            "region": region or "",
+            "valid": valid
         }
 
     except Exception as e:
@@ -211,7 +208,8 @@ def get_phone_country(phone):
         return {
             "name": "Unknown",
             "code": "",
-            "region": ""
+            "region": "",
+            "valid": False
         }
 
 
