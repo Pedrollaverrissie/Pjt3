@@ -611,7 +611,7 @@ def remove_profile_photo():
 
 
 
-#-----------USER LOADER--------------
+#-----------USER LOADER-------------
 
 @login_manager.user_loader
 def load_user(user_id):
