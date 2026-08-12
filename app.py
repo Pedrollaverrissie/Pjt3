@@ -389,8 +389,12 @@ def upload_profile_photo():
 
     try:
 
+        # -------------------------------------------------
         # Check whether a file was received
+        # -------------------------------------------------
+
         if "profile_photo" not in request.files:
+
             return jsonify({
                 "success": False,
                 "message": "No photo was selected."
@@ -398,7 +402,8 @@ def upload_profile_photo():
 
         file = request.files["profile_photo"]
 
-        if file.filename == "":
+        if not file or file.filename == "":
+
             return jsonify({
                 "success": False,
                 "message": "No photo was selected."
@@ -415,15 +420,28 @@ def upload_profile_photo():
             "webp"
         }
 
-        filename = secure_filename(file.filename)
+        original_filename = secure_filename(file.filename)
 
-        extension = filename.rsplit(".", 1)[-1].lower()
+        if "." not in original_filename:
+
+            return jsonify({
+                "success": False,
+                "message": "Invalid image file."
+            }), 400
+
+        extension = original_filename.rsplit(
+            ".",
+            1
+        )[1].lower()
 
         if extension not in allowed_extensions:
 
             return jsonify({
                 "success": False,
-                "message": "Only JPG, JPEG, PNG and WEBP images are allowed."
+                "message": (
+                    "Only JPG, JPEG, PNG and WEBP "
+                    "images are allowed."
+                )
             }), 400
 
         # -------------------------------------------------
@@ -436,6 +454,7 @@ def upload_profile_photo():
             "uploads"
         )
 
+        # Safe even if the folder already exists
         os.makedirs(
             upload_folder,
             exist_ok=True
@@ -447,7 +466,7 @@ def upload_profile_photo():
 
         new_filename = (
             f"profile_{current_user.id}_"
-            f"{uuid.uuid4().hex}.jpg"
+            f"{uuid.uuid4().hex}.{extension}"
         )
 
         filepath = os.path.join(
@@ -456,7 +475,7 @@ def upload_profile_photo():
         )
 
         # -------------------------------------------------
-        # Save image
+        # Save new image
         # -------------------------------------------------
 
         file.save(filepath)
@@ -469,8 +488,8 @@ def upload_profile_photo():
 
         if old_photo:
 
-            # Don't delete the default image
-            if "default-profile.png" not in old_photo:
+            # Only delete photos belonging to uploads
+            if "/static/uploads/" in old_photo:
 
                 old_filename = os.path.basename(
                     old_photo
@@ -481,20 +500,26 @@ def upload_profile_photo():
                     old_filename
                 )
 
-                if os.path.exists(old_filepath):
+                if os.path.isfile(old_filepath):
 
                     try:
+
                         os.remove(old_filepath)
+
+                        print(
+                            "OLD PROFILE PHOTO DELETED:",
+                            old_filepath
+                        )
 
                     except Exception as delete_error:
 
                         print(
                             "OLD PROFILE PHOTO DELETE ERROR:",
-                            delete_error
+                            repr(delete_error)
                         )
 
         # -------------------------------------------------
-        # Save path in database
+        # Save image URL in database
         # -------------------------------------------------
 
         current_user.profile_image = (
@@ -503,15 +528,25 @@ def upload_profile_photo():
 
         db.session.commit()
 
+        # -------------------------------------------------
+        # Success
+        # -------------------------------------------------
+
         print(
             "PROFILE PHOTO UPDATED:",
             current_user.profile_image
         )
 
         return jsonify({
+
             "success": True,
-            "message": "Profile photo updated successfully.",
-            "image_url": current_user.profile_image
+
+            "message":
+                "Profile photo updated successfully.",
+
+            "image_url":
+                current_user.profile_image
+
         })
 
     except Exception as e:
@@ -523,11 +558,18 @@ def upload_profile_photo():
             repr(e)
         )
 
-        return jsonify({
-            "success": False,
-            "message": "Unable to upload profile photo."
-        }), 500
+        # VERY IMPORTANT:
+        # Shows the exact line causing the error
+        traceback.print_exc()
 
+        return jsonify({
+
+            "success": False,
+
+            "message":
+                "Unable to upload profile photo."
+
+        }), 500
 
 # =========================================================
 # REMOVE PROFILE PHOTO
