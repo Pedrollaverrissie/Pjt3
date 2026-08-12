@@ -1758,8 +1758,7 @@ function saveCroppedPhoto() {
 
 function uploadCroppedPhoto(blob) {
 
-    const formData =
-        new FormData();
+    const formData = new FormData();
 
     formData.append(
         "profile_photo",
@@ -1767,96 +1766,124 @@ function uploadCroppedPhoto(blob) {
         "profile.jpg"
     );
 
-
     const saveButton =
-        document.querySelector(
-            ".save-crop-btn"
+        document.querySelector(".save-crop-btn");
+
+    saveButton.disabled = true;
+    saveButton.textContent = "Saving...";
+
+    fetch("/upload-profile-photo", {
+        method: "POST",
+        body: formData
+    })
+
+    .then(async response => {
+
+        // Get the response as text first
+        const text = await response.text();
+
+        console.log("SERVER STATUS:", response.status);
+        console.log("SERVER RESPONSE:", text);
+
+        // Try to convert it to JSON
+        let data;
+
+        try {
+            data = JSON.parse(text);
+        }
+
+        catch (error) {
+
+            console.error(
+                "SERVER DID NOT RETURN JSON:",
+                error
+            );
+
+            throw new Error(
+                "Server returned non-JSON response: " +
+                text.substring(0, 500)
+            );
+        }
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.message ||
+                "Server returned HTTP " +
+                response.status
+            );
+        }
+
+        return data;
+    })
+
+    .then(data => {
+
+        console.log(
+            "UPLOAD SUCCESS:",
+            data
         );
 
-    saveButton.disabled =
-        true;
+        if (!data.success) {
 
-    saveButton.textContent =
-        "Saving...";
+            alert(
+                data.message ||
+                "Unable to save photo."
+            );
 
-
-    fetch(
-        "/upload-profile-photo",
-        {
-            method: "POST",
-
-            body: formData
+            return;
         }
-    )
 
-    .then(
-        response =>
-            response.json()
-    )
+        /*
+           IMPORTANT:
+           Your dashboard uses headerProfileImage,
+           not profilePreview.
+        */
 
-    .then(
-        data => {
-
-            if (!data.success) {
-
-                alert(
-                    data.message ||
-                    "Unable to save photo."
-                );
-
-                return;
-            }
-
-
-            /*
-               Update image immediately
-            */
-
+        const profileImage =
             document.getElementById(
-                "profilePreview"
-            ).src =
+                "headerProfileImage"
+            );
+
+        if (profileImage) {
+
+            profileImage.src =
                 data.image_url +
                 "?t=" +
                 Date.now();
 
-
-            closeCropModal();
-
-
-            alert(
-                "Profile photo updated successfully."
-            );
-
         }
-    )
 
-    .catch(
-        error => {
+        closeCropModal();
 
-            console.error(
-                "UPLOAD ERROR:",
-                error
-            );
+        alert(
+            "Profile photo updated successfully."
+        );
 
-            alert(
-                "Something went wrong while uploading the photo."
-            );
+    })
 
-        }
-    )
+    .catch(error => {
 
-    .finally(
-        function() {
+        console.error(
+            "UPLOAD ERROR:",
+            error
+        );
 
-            saveButton.disabled =
-                false;
+        alert(
+            "Photo upload failed.\n\n" +
+            error.message
+        );
 
-            saveButton.textContent =
-                "Save Photo";
+    })
 
-        }
-    );
+    .finally(() => {
 
+        saveButton.disabled = false;
+
+        saveButton.textContent =
+            "Save Photo";
+
+    });
 }
 
 
