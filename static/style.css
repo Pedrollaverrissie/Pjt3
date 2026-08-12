@@ -1469,7 +1469,7 @@ h3{
 
 .greeting p {
     margin: 3px 0 0;
-    font-size: 11px;
+    font-size: 13px;
     color: #fcfbfb;
 }
 .header-profile2{
@@ -1549,6 +1549,14 @@ h3{
     margin: 0;
     height: 60px;
     width: 60px;
+}
+.greeting .login-location{
+   font-size: 10px; 
+}
+.greeting p {
+    
+    font-size: 11px;
+   
 }
 }
 .vip-status-card{
