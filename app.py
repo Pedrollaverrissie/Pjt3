@@ -34,6 +34,24 @@ from dotenv import load_dotenv
 from datetime import timedelta
 from flask_migrate import Migrate
 
+import os
+import uuid
+
+from flask import (
+    Flask,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    jsonify
+)
+
+from flask_login import (
+    login_required,
+    current_user
+)
+
+from werkzeug.utils import secure_filename
 
 
 VIP_PLANS = {
@@ -87,6 +105,237 @@ VIP_ORDER = [
     "Platinum",
     "Diamond"
 ]
+
+# =========================================================
+# PROFILE PHOTO UPLOAD
+# =========================================================
+
+@app.route("/upload-profile-photo", methods=["POST"])
+@login_required
+def upload_profile_photo():
+
+    try:
+
+        # Check whether a file was received
+        if "profile_photo" not in request.files:
+            return jsonify({
+                "success": False,
+                "message": "No photo was selected."
+            }), 400
+
+        file = request.files["profile_photo"]
+
+        if file.filename == "":
+            return jsonify({
+                "success": False,
+                "message": "No photo was selected."
+            }), 400
+
+        # -------------------------------------------------
+        # Allowed file types
+        # -------------------------------------------------
+
+        allowed_extensions = {
+            "jpg",
+            "jpeg",
+            "png",
+            "webp"
+        }
+
+        filename = secure_filename(file.filename)
+
+        extension = filename.rsplit(".", 1)[-1].lower()
+
+        if extension not in allowed_extensions:
+
+            return jsonify({
+                "success": False,
+                "message": "Only JPG, JPEG, PNG and WEBP images are allowed."
+            }), 400
+
+        # -------------------------------------------------
+        # Create upload directory
+        # -------------------------------------------------
+
+        upload_folder = os.path.join(
+            app.root_path,
+            "static",
+            "uploads"
+        )
+
+        os.makedirs(
+            upload_folder,
+            exist_ok=True
+        )
+
+        # -------------------------------------------------
+        # Generate unique filename
+        # -------------------------------------------------
+
+        new_filename = (
+            f"profile_{current_user.id}_"
+            f"{uuid.uuid4().hex}.jpg"
+        )
+
+        filepath = os.path.join(
+            upload_folder,
+            new_filename
+        )
+
+        # -------------------------------------------------
+        # Save image
+        # -------------------------------------------------
+
+        file.save(filepath)
+
+        # -------------------------------------------------
+        # Delete previous profile photo
+        # -------------------------------------------------
+
+        old_photo = current_user.profile_image
+
+        if old_photo:
+
+            # Don't delete the default image
+            if "default-profile.png" not in old_photo:
+
+                old_filename = os.path.basename(
+                    old_photo
+                )
+
+                old_filepath = os.path.join(
+                    upload_folder,
+                    old_filename
+                )
+
+                if os.path.exists(old_filepath):
+
+                    try:
+                        os.remove(old_filepath)
+
+                    except Exception as delete_error:
+
+                        print(
+                            "OLD PROFILE PHOTO DELETE ERROR:",
+                            delete_error
+                        )
+
+        # -------------------------------------------------
+        # Save path in database
+        # -------------------------------------------------
+
+        current_user.profile_image = (
+            f"/static/uploads/{new_filename}"
+        )
+
+        db.session.commit()
+
+        print(
+            "PROFILE PHOTO UPDATED:",
+            current_user.profile_image
+        )
+
+        return jsonify({
+            "success": True,
+            "message": "Profile photo updated successfully.",
+            "image_url": current_user.profile_image
+        })
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        print(
+            "PROFILE PHOTO UPLOAD ERROR:",
+            repr(e)
+        )
+
+        return jsonify({
+            "success": False,
+            "message": "Unable to upload profile photo."
+        }), 500
+
+
+# =========================================================
+# REMOVE PROFILE PHOTO
+# =========================================================
+
+@app.route("/remove-profile-photo", methods=["POST"])
+@login_required
+def remove_profile_photo():
+
+    try:
+
+        old_photo = current_user.profile_image
+
+        # Nothing to remove
+        if not old_photo:
+
+            return jsonify({
+                "success": True,
+                "message": "No profile photo to remove."
+            })
+
+        # Upload folder
+        upload_folder = os.path.join(
+            app.root_path,
+            "static",
+            "uploads"
+        )
+
+        # Delete physical file
+        if "default-profile.png" not in old_photo:
+
+            old_filename = os.path.basename(
+                old_photo
+            )
+
+            old_filepath = os.path.join(
+                upload_folder,
+                old_filename
+            )
+
+            if os.path.exists(old_filepath):
+
+                try:
+
+                    os.remove(old_filepath)
+
+                except Exception as delete_error:
+
+                    print(
+                        "PROFILE PHOTO DELETE ERROR:",
+                        delete_error
+                    )
+
+        # Remove image from database
+        current_user.profile_image = None
+
+        db.session.commit()
+
+        return jsonify({
+            "success": True,
+            "message": "Profile photo removed.",
+            "image_url": url_for(
+                "static",
+                filename="images/default-profile.png"
+            )
+        })
+
+    except Exception as e:
+
+        db.session.rollback()
+
+        print(
+            "REMOVE PROFILE PHOTO ERROR:",
+            repr(e)
+        )
+
+        return jsonify({
+            "success": False,
+            "message": "Unable to remove profile photo."
+        }), 500
+
 def get_phone_country(phone):
 
     try:

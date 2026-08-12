@@ -318,31 +318,353 @@
 .header-profile {
     width: 45px;
     height: 45px;
+
     border-radius: 50%;
+
     overflow: hidden;
-    cursor: pointer;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    background: #16b364;
-    color: white;
-
-    font-size: 20px;
-    font-weight: bold;
-
-    border: 2px solid white;
+    flex-shrink: 0;
 }
 
-.header-profile img {
+.dashboard-profile-photo {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+/* =====================================================
+   PROFILE PHOTO
+===================================================== */
+
+.profile-photo-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.profile-photo-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #16b364;
+    background: #e5e7eb;
+}
+
+.profile-main-photo {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
-#profileInitial {
-    text-transform: uppercase;
+
+/* =====================================================
+   PHOTO BUTTONS
+===================================================== */
+
+.change-photo-btn,
+.remove-photo-btn {
+    border: none;
+    border-radius: 10px;
+    padding: 10px 18px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.change-photo-btn {
+    background: #16b364;
+    color: white;
+}
+
+.change-photo-btn:hover {
+    background: #119455;
+}
+
+.remove-photo-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.remove-photo-btn:hover {
+    background: #b02a37;
+}
+
+
+/* =====================================================
+   CROP MODAL
+===================================================== */
+
+.crop-modal {
+
+    position: fixed;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0,0,0,.75);
+
+    backdrop-filter: blur(8px);
+
+    z-index: 99999;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   CROP CARD
+===================================================== */
+
+.crop-card {
+
+    width: 380px;
+
+    max-width: 95%;
+
+    background: #18102a;
+
+    border: 1px solid rgba(255,255,255,.3);
+
+    border-radius: 20px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.5);
+
+    color: white;
+
+    box-sizing: border-box;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.crop-header {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+}
+
+.crop-header h3 {
+
+    margin: 0;
+
+    color: white;
+}
+
+.crop-close {
+
+    width: 35px;
+    height: 35px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.1);
+
+    color: white;
+
+    font-size: 25px;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   CROP AREA
+===================================================== */
+
+.crop-area {
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    background: #050505;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    position: relative;
+
+    cursor: grab;
+
+    touch-action: none;
+
+    border: 2px solid rgba(255,255,255,.5);
+}
+
+.crop-area:active {
+    cursor: grabbing;
+}
+
+#cropCanvas {
+
+    width: 100%;
+    height: 100%;
+
+    display: block;
+}
+
+
+/* =====================================================
+   ZOOM
+===================================================== */
+
+.crop-controls {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.crop-controls button {
+
+    width: 38px;
+    height: 38px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #16b364;
+
+    color: white;
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+#zoomSlider {
+
+    flex: 1;
+
+    cursor: pointer;
+}
+
+
+/* =====================================================
+   HINT
+===================================================== */
+
+.crop-hint {
+
+    text-align: center;
+
+    color: #c7c7c7;
+
+    font-size: 13px;
+
+    margin: 12px 0 18px;
+}
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
+.crop-actions {
+
+    display: flex;
+
+    gap: 10px;
+}
+
+.cancel-crop-btn,
+.save-crop-btn {
+
+    flex: 1;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.cancel-crop-btn {
+
+    background: #374151;
+
+    color: white;
+}
+
+.save-crop-btn {
+
+    background: #16b364;
+
+    color: white;
+}
+
+.save-crop-btn:hover {
+
+    background: #119455;
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 500px) {
+
+    .crop-card {
+
+        width: 95%;
+
+        padding: 15px;
+
+    }
+
+    .crop-area {
+
+        width: 100%;
+
+    }
+
+}
+.profile-photo-container {
+    cursor: pointer;
+    transition: transform .2s ease;
+}
+
+.profile-photo-container:hover {
+    transform: scale(1.04);
 }
 </style>
 </head>
@@ -371,29 +693,30 @@
                         </div>
                                     
                     </a>
-                                                       <div class="header-profile" id="profileImageContainer">
+                                                     <div class="header-profile">
 
-    <!-- Initial shown by default -->
-    <span
-        id="profileInitial"
-        data-username="{{ username }}">
-    </span>
+    {% if current_user.profile_image %}
 
-    <!-- Hidden until a photo is selected -->
-    <img
-        id="profileImage"
-        alt="Profile"
-        style="display:none;"
-    >
+        <img
+            src="{{ current_user.profile_image }}"
+            alt="Profile"
+            class="dashboard-profile-photo"
+        >
 
-    <input
-        type="file"
-        id="profilePhotoInput"
-        accept="image/*"
-        hidden
-    >
+    {% else %}
 
-</div>       
+        <img
+            src="{{ url_for(
+                'static',
+                filename='images/default-profile.png'
+            ) }}"
+            alt="Profile"
+            class="dashboard-profile-photo"
+        >
+
+    {% endif %}
+
+</div>     
             </div>
             
         </div>
@@ -813,6 +1136,884 @@
         </div>
     </div>
 
+
+    <div class="profile-photo-section">
+
+    <div class="profile-photo-container">
+
+            <div
+        class="profile-photo-container"
+        onclick="openPhotoPicker()">
+
+        {% if current_user.profile_image %}
+
+            <img
+                id="profilePreview"
+                src="{{ current_user.profile_image }}"
+                alt="Profile Photo"
+                class="profile-main-photo"
+            >
+
+        {% else %}
+
+            <img
+                id="profilePreview"
+                src="{{ url_for(
+                    'static',
+                    filename='images/default-profile.png'
+                ) }}"
+                alt="Default Profile"
+                class="profile-main-photo"
+            >
+
+        {% endif %}
+
+    </div>
+
+    <button
+        type="button"
+        class="change-photo-btn"
+        onclick="openPhotoPicker()">
+
+        <i class="fa-solid fa-camera"></i>
+
+        Change Photo
+
+    </button>
+
+    <button
+        type="button"
+        class="remove-photo-btn"
+        onclick="removeProfilePhoto()">
+
+        <i class="fa-solid fa-trash"></i>
+
+        Remove Photo
+
+    </button>
+
+    <input
+        type="file"
+        id="profilePhotoInput"
+        accept="image/jpeg,image/png,image/webp"
+        hidden
+    >
+
+</div>
+    
+<!-- =====================================================
+     PHOTO CROP MODAL
+===================================================== -->
+
+<div
+    class="crop-modal"
+    id="cropModal">
+
+    <div class="crop-card">
+
+        <div class="crop-header">
+
+            <h3>
+                Edit Profile Photo
+            </h3>
+
+            <button
+                type="button"
+                class="crop-close"
+                onclick="closeCropModal()">
+
+                &times;
+
+            </button>
+
+        </div>
+
+
+        <div class="crop-area">
+
+            <canvas
+                id="cropCanvas">
+            </canvas>
+
+        </div>
+
+
+        <div class="crop-controls">
+
+            <button
+                type="button"
+                onclick="zoomOut()">
+
+                −
+
+            </button>
+
+            <input
+                type="range"
+                id="zoomSlider"
+                min="1"
+                max="3"
+                step="0.01"
+                value="1"
+            >
+
+            <button
+                type="button"
+                onclick="zoomIn()">
+
+                +
+
+            </button>
+
+        </div>
+
+
+        <p class="crop-hint">
+
+            Drag the photo to position it.
+            Use the slider to zoom.
+
+        </p>
+
+
+        <div class="crop-actions">
+
+            <button
+                type="button"
+                class="cancel-crop-btn"
+                onclick="closeCropModal()">
+
+                Cancel
+
+            </button>
+
+            <button
+                type="button"
+                class="save-crop-btn"
+                onclick="saveCroppedPhoto()">
+
+                Save Photo
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+
+let selectedImage = null;
+
+let imageScale = 1;
+
+let imageX = 0;
+let imageY = 0;
+
+let startX = 0;
+let startY = 0;
+
+let dragging = false;
+
+const input =
+    document.getElementById(
+        "profilePhotoInput"
+    );
+
+const modal =
+    document.getElementById(
+        "cropModal"
+    );
+
+const canvas =
+    document.getElementById(
+        "cropCanvas"
+    );
+
+const ctx =
+    canvas.getContext("2d");
+
+const zoomSlider =
+    document.getElementById(
+        "zoomSlider"
+    );
+
+const cropArea =
+    document.querySelector(
+        ".crop-area"
+    );
+
+
+/* =====================================================
+   OPEN FILE PICKER
+===================================================== */
+
+function openPhotoPicker() {
+
+    input.click();
+
+}
+
+
+/* =====================================================
+   FILE SELECTED
+===================================================== */
+
+input.addEventListener(
+    "change",
+    function () {
+
+        const file =
+            this.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        if (!file.type.startsWith("image/")) {
+
+            alert(
+                "Please select an image."
+            );
+
+            return;
+        }
+
+        const reader =
+            new FileReader();
+
+        reader.onload = function(e) {
+
+            selectedImage =
+                new Image();
+
+            selectedImage.onload =
+                function() {
+
+                    imageScale = 1;
+
+                    imageX = 0;
+
+                    imageY = 0;
+
+                    zoomSlider.value = 1;
+
+                    openCropModal();
+
+                    drawCrop();
+
+                };
+
+            selectedImage.src =
+                e.target.result;
+
+        };
+
+        reader.readAsDataURL(file);
+
+        // Allow selecting the same image again
+        this.value = "";
+
+    }
+);
+
+
+/* =====================================================
+   OPEN MODAL
+===================================================== */
+
+function openCropModal() {
+
+    modal.style.display =
+        "flex";
+
+    resizeCanvas();
+
+}
+
+
+/* =====================================================
+   CLOSE MODAL
+===================================================== */
+
+function closeCropModal() {
+
+    modal.style.display =
+        "none";
+
+    selectedImage = null;
+
+}
+
+
+/* =====================================================
+   RESIZE CANVAS
+===================================================== */
+
+function resizeCanvas() {
+
+    const size =
+        cropArea.clientWidth;
+
+    canvas.width = size;
+    canvas.height = size;
+
+    drawCrop();
+
+}
+
+
+/* =====================================================
+   DRAW IMAGE
+===================================================== */
+
+function drawCrop() {
+
+    if (!selectedImage) {
+        return;
+    }
+
+    const size =
+        canvas.width;
+
+    ctx.clearRect(
+        0,
+        0,
+        size,
+        size
+    );
+
+    ctx.fillStyle =
+        "#000";
+
+    ctx.fillRect(
+        0,
+        0,
+        size,
+        size
+    );
+
+
+    /*
+        Make the image cover
+        the crop area.
+    */
+
+    const scaleToCover =
+        Math.max(
+            size / selectedImage.width,
+            size / selectedImage.height
+        );
+
+    const finalScale =
+        scaleToCover *
+        imageScale;
+
+    const width =
+        selectedImage.width *
+        finalScale;
+
+    const height =
+        selectedImage.height *
+        finalScale;
+
+
+    const x =
+        (size - width) / 2 +
+        imageX;
+
+    const y =
+        (size - height) / 2 +
+        imageY;
+
+
+    ctx.drawImage(
+        selectedImage,
+        x,
+        y,
+        width,
+        height
+    );
+
+}
+
+
+/* =====================================================
+   ZOOM SLIDER
+===================================================== */
+
+zoomSlider.addEventListener(
+    "input",
+    function() {
+
+        imageScale =
+            parseFloat(
+                this.value
+            );
+
+        drawCrop();
+
+    }
+);
+
+
+/* =====================================================
+   ZOOM IN
+===================================================== */
+
+function zoomIn() {
+
+    imageScale =
+        Math.min(
+            imageScale + 0.1,
+            3
+        );
+
+    zoomSlider.value =
+        imageScale;
+
+    drawCrop();
+
+}
+
+
+/* =====================================================
+   ZOOM OUT
+===================================================== */
+
+function zoomOut() {
+
+    imageScale =
+        Math.max(
+            imageScale - 0.1,
+            1
+        );
+
+    zoomSlider.value =
+        imageScale;
+
+    drawCrop();
+
+}
+
+
+/* =====================================================
+   MOUSE DRAG
+===================================================== */
+
+cropArea.addEventListener(
+    "mousedown",
+    function(e) {
+
+        dragging = true;
+
+        startX =
+            e.clientX - imageX;
+
+        startY =
+            e.clientY - imageY;
+
+    }
+);
+
+
+document.addEventListener(
+    "mousemove",
+    function(e) {
+
+        if (!dragging) {
+            return;
+        }
+
+        imageX =
+            e.clientX - startX;
+
+        imageY =
+            e.clientY - startY;
+
+        drawCrop();
+
+    }
+);
+
+
+document.addEventListener(
+    "mouseup",
+    function() {
+
+        dragging = false;
+
+    }
+);
+
+
+/* =====================================================
+   TOUCH DRAG
+===================================================== */
+
+cropArea.addEventListener(
+    "touchstart",
+    function(e) {
+
+        const touch =
+            e.touches[0];
+
+        dragging = true;
+
+        startX =
+            touch.clientX - imageX;
+
+        startY =
+            touch.clientY - imageY;
+
+    },
+    { passive: true }
+);
+
+
+cropArea.addEventListener(
+    "touchmove",
+    function(e) {
+
+        if (!dragging) {
+            return;
+        }
+
+        const touch =
+            e.touches[0];
+
+        imageX =
+            touch.clientX - startX;
+
+        imageY =
+            touch.clientY - startY;
+
+        drawCrop();
+
+    },
+    { passive: true }
+);
+
+
+cropArea.addEventListener(
+    "touchend",
+    function() {
+
+        dragging = false;
+
+    }
+);
+
+
+/* =====================================================
+   SAVE CROPPED PHOTO
+===================================================== */
+
+function saveCroppedPhoto() {
+
+    if (!selectedImage) {
+        return;
+    }
+
+    const output =
+        document.createElement(
+            "canvas"
+        );
+
+    const outputSize = 600;
+
+    output.width =
+        outputSize;
+
+    output.height =
+        outputSize;
+
+    const outputCtx =
+        output.getContext("2d");
+
+
+    /*
+       Same calculation as preview
+    */
+
+    const previewSize =
+        canvas.width;
+
+    const scaleToCover =
+        Math.max(
+            previewSize /
+                selectedImage.width,
+
+            previewSize /
+                selectedImage.height
+        );
+
+    const finalScale =
+        scaleToCover *
+        imageScale;
+
+    const width =
+        selectedImage.width *
+        finalScale;
+
+    const height =
+        selectedImage.height *
+        finalScale;
+
+    const x =
+        (previewSize - width) / 2 +
+        imageX;
+
+    const y =
+        (previewSize - height) / 2 +
+        imageY;
+
+
+    /*
+       Scale coordinates from
+       preview canvas to output.
+    */
+
+    const factor =
+        outputSize /
+        previewSize;
+
+
+    outputCtx.drawImage(
+        selectedImage,
+
+        x * factor,
+        y * factor,
+
+        width * factor,
+        height * factor
+    );
+
+
+    /*
+       Convert to JPEG
+    */
+
+    output.toBlob(
+        function(blob) {
+
+            uploadCroppedPhoto(
+                blob
+            );
+
+        },
+        "image/jpeg",
+        0.90
+    );
+
+}
+
+
+/* =====================================================
+   UPLOAD TO FLASK
+===================================================== */
+
+function uploadCroppedPhoto(blob) {
+
+    const formData =
+        new FormData();
+
+    formData.append(
+        "profile_photo",
+        blob,
+        "profile.jpg"
+    );
+
+
+    const saveButton =
+        document.querySelector(
+            ".save-crop-btn"
+        );
+
+    saveButton.disabled =
+        true;
+
+    saveButton.textContent =
+        "Saving...";
+
+
+    fetch(
+        "/upload-profile-photo",
+        {
+            method: "POST",
+
+            body: formData
+        }
+    )
+
+    .then(
+        response =>
+            response.json()
+    )
+
+    .then(
+        data => {
+
+            if (!data.success) {
+
+                alert(
+                    data.message ||
+                    "Unable to save photo."
+                );
+
+                return;
+            }
+
+
+            /*
+               Update image immediately
+            */
+
+            document.getElementById(
+                "profilePreview"
+            ).src =
+                data.image_url +
+                "?t=" +
+                Date.now();
+
+
+            closeCropModal();
+
+
+            alert(
+                "Profile photo updated successfully."
+            );
+
+        }
+    )
+
+    .catch(
+        error => {
+
+            console.error(
+                "UPLOAD ERROR:",
+                error
+            );
+
+            alert(
+                "Something went wrong while uploading the photo."
+            );
+
+        }
+    )
+
+    .finally(
+        function() {
+
+            saveButton.disabled =
+                false;
+
+            saveButton.textContent =
+                "Save Photo";
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   REMOVE PHOTO
+===================================================== */
+
+function removeProfilePhoto() {
+
+    if (
+        !confirm(
+            "Remove your profile photo?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    fetch(
+        "/remove-profile-photo",
+        {
+            method: "POST"
+        }
+    )
+
+    .then(
+        response =>
+            response.json()
+    )
+
+    .then(
+        data => {
+
+            if (!data.success) {
+
+                alert(
+                    data.message ||
+                    "Unable to remove photo."
+                );
+
+                return;
+            }
+
+
+            document.getElementById(
+                "profilePreview"
+            ).src =
+                data.image_url +
+                "?t=" +
+                Date.now();
+
+
+            alert(
+                "Profile photo removed."
+            );
+
+        }
+    )
+
+    .catch(
+        error => {
+
+            console.error(
+                "REMOVE PHOTO ERROR:",
+                error
+            );
+
+            alert(
+                "Something went wrong."
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   WINDOW RESIZE
+===================================================== */
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        if (
+            modal.style.display ===
+            "flex"
+        ) {
+
+            resizeCanvas();
+
+        }
+
+    }
+);
+
+</script>
 <script>
 const profileContainer = document.getElementById("profileImageContainer");
 const profileInput = document.getElementById("profilePhotoInput");
