@@ -662,6 +662,10 @@
 .profile-photo-container:hover {
     transform: scale(1.04);
 }
+
+.renew-form {
+    margin: 0;
+}
 </style>
 </head>
     
@@ -958,11 +962,11 @@
 
                         {% if vip_days_left <= 2 %}
 
-<form action="{{ url_for('renew_membership') }}" method="POST">
-    <button type="submit">
-        Renew Membership
-    </button>
-</form>
+                        <form action="{{ url_for('renew_membership') }}" method="POST">
+                            <button type="submit" class="renew-btn">
+                                Renew Membership
+                            </button>
+                        </form>
 
                         {% endif %}
 
