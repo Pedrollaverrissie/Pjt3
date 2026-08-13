@@ -2572,7 +2572,7 @@ def admin_required(f):
 def get_required_contribution(vip):
 
     requirements = {
-        "Bronze":800,
+        "Bronze":76,
         "Silver": 1500,
         "Gold": 3000,              
         "Platinum": 7500,
