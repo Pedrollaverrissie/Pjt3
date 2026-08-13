@@ -60,7 +60,7 @@ VIP_PLANS = {
         "price": 200,
         "tasks": 1,
         "reward": 20,
-        "withdrawal": 200,
+        "withdrawal": 10,
         "required_referrals": 4
     },
 
