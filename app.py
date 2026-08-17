@@ -3201,11 +3201,18 @@ def utility_processor():
     return dict(
         time_ago=time_ago
     )
-#------------------VIP TASK ROUTE---------------------
 @app.route("/vip")
 @login_required
 @active_account_required
 def vip():
+
+    print("========== VIP DEBUG ==========")
+    print("USER ID:", current_user.id)
+    print("VIP LEVEL:", repr(current_user.vip_level))
+    print("VIP ORDER:", repr(VIP_ORDER))
+    print("VIP EXPIRES:", current_user.vip_expires_at)
+    print("ACCOUNT ACTIVE:", current_user.account_active)
+    print("===============================")
 
     plans = []
 
