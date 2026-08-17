@@ -1,219 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% if renewal_mode %}
+            Renew Membership
+        {% else %}
+            Recharge Wallet
+        {% endif %}
+    </title>
+
     <style>
-       *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Segoe UI",sans-serif;
-}
 
-body{
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:"Segoe UI",sans-serif;
+        }
 
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    min-height:100vh;
+        body{
 
-  background:#414141e8;
+            display:flex;
+            justify-content:center;
+            align-items:center;
 
-    padding:20px;
+            min-height:100vh;
 
-}
+            background:#414141e8;
 
-/* Container */
+            padding:20px;
 
-.container{
+        }
 
-    width:100%;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+        .container{
 
-}
+            width:100%;
 
-/* Card */
+            display:flex;
 
-.card{
+            justify-content:center;
+            align-items:center;
 
-    width: 90%;
-    max-width: 400px;
-    display: flex;
-    flex-direction: column;
-  
-    justify-content: center;
-    align-items: center;
-    background:#0e1114;
-    border-radius:25px;
+        }
 
-    padding:15px;
+        .card{
 
-   box-shadow: 0 -0 6px rgb(187, 189, 186);
+            width:90%;
+            max-width:400px;
 
-}
+            display:flex;
 
-/* Header */
+            flex-direction:column;
 
-.cover{
+            justify-content:center;
+            align-items:center;
 
-    text-align:center;
-    margin-bottom:10px;
+            background:#0e1114;
 
-}
+            border-radius:25px;
 
-.icon{
+            padding:25px 15px;
 
-    font-size:55px;
-    margin-bottom:10px;
+            box-shadow:
+                0 0 6px rgb(187,189,186);
 
-}
+        }
 
-.cover h2{
+        .cover{
 
-    font-size:28px;
-    color:white;
-    margin-bottom:8px;
+            text-align:center;
 
-}
+            margin-bottom:18px;
 
-.cover p{
+        }
 
-    color:#b8c5d6;
-    font-size:15px;
+        .icon{
 
-}
+            font-size:55px;
 
-/* Content */
+            margin-bottom:10px;
 
-.content{
+        }
 
-    width:100%;
+        .cover h2{
 
-}
+            font-size:28px;
 
-/* Inputs */
+            color:white;
 
-.content input{
+            margin-bottom:8px;
 
-    width:90%;
+        }
 
-    padding:12px;
+        .cover p{
 
-    margin-bottom:18px;
+            color:#b8c5d6;
 
-    border:none;
+            font-size:15px;
 
-    border-radius:14px;
+            line-height:1.5;
 
-    background:rgba(255,255,255,.10);
+        }
 
-    color:white;
+        .content{
 
-    font-size:15px;
+            width:100%;
 
-    outline:none;
+        }
 
-    transition:.3s;
-    margin-bottom: 30px;
+        /* Renewal information */
 
-}
+        .renewal-info{
 
-.content input::placeholder{
+            width:90%;
 
-    color:#d1d5db;
+            margin:0 auto 20px auto;
 
-}
+            padding:15px;
 
-.content input:focus{
+            border-radius:15px;
 
-    border:1px solid #38bdf8;
+            background:rgba(255,255,255,.07);
 
-    box-shadow:
-    0 0 12px rgba(56,189,248,.4);
+            text-align:center;
 
-}
+            color:white;
 
-/* Button */
+        }
 
-button{
-     box-shadow: 0 -0 3px rgb(247, 248, 246);
-                   
+        .renewal-info .vip{
 
-    width:70%;
+            font-size:18px;
 
-    padding:12px;
+            font-weight:600;
 
-    border:none;
+            margin-bottom:8px;
 
-    border-radius:14px 9px;
+        }
 
-    background:rgba(75, 78, 80, 0);
+        .renewal-info .price{
 
-    color:white;
+            font-size:24px;
 
-    font-size:16px;
+            font-weight:700;
 
-    font-weight:600;
+            margin:8px 0;
 
-    cursor:pointer;
-    margin-top: 10px;
+        }
 
-}
+        .renewal-info .label{
 
-button:hover{
-    
-    transform:translateY(-2px);
-    
-    background:rgba(54, 54, 54, 0);
+            color:#b8c5d6;
 
+            font-size:13px;
 
+            margin-top:8px;
 
+        }
 
-}
+        .renewal-info .amount{
 
-/* Mobile */
+            font-size:22px;
 
-@media(max-width:480px){
+            font-weight:700;
 
-.card{
+            margin-top:4px;
 
-    padding:25px;
+        }
 
-}
+        .warning{
 
-.cover h2{
+            color:#fbbf24;
 
-    font-size:23px;
+            font-size:13px;
 
-}
+            line-height:1.5;
 
-.icon{
+            margin-top:10px;
 
-    font-size:45px;
+        }
 
-}
+        .content input{
 
-button{
+            width:90%;
 
-    padding:11px;
+            padding:12px;
 
-}
+            margin-bottom:20px;
 
-}
-form{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 30px;
-    width: 100%;
-}
+            border:none;
+
+            border-radius:14px;
+
+            background:rgba(255,255,255,.10);
+
+            color:white;
+
+            font-size:15px;
+
+            outline:none;
+
+            transition:.3s;
+
+        }
+
+        .content input::placeholder{
+
+            color:#d1d5db;
+
+        }
+
+        .content input:focus{
+
+            border:1px solid #38bdf8;
+
+            box-shadow:
+                0 0 12px rgba(56,189,248,.4);
+
+        }
+
+        button{
+
+            box-shadow:
+                0 0 3px rgb(247,248,246);
+
+            width:70%;
+
+            padding:12px;
+
+            border:none;
+
+            border-radius:14px 9px;
+
+            background:rgba(75,78,80,0);
+
+            color:white;
+
+            font-size:16px;
+
+            font-weight:600;
+
+            cursor:pointer;
+
+            margin-top:10px;
+
+        }
+
+        button:hover{
+
+            transform:translateY(-2px);
+
+            background:rgba(54,54,54,0);
+
+        }
+
+        .back{
+
+            display:block;
+
+            margin-top:15px;
+
+            text-align:center;
+
+            color:#b8c5d6;
+
+            text-decoration:none;
+
+            font-size:14px;
+
+        }
+
+        .back:hover{
+
+            color:white;
+
+        }
+
+        @media(max-width:480px){
+
+            .card{
+
+                padding:25px;
+
+            }
+
+            .cover h2{
+
+                font-size:23px;
+
+            }
+
+            .icon{
+
+                font-size:45px;
+
+            }
+
+            button{
+
+                padding:11px;
+
+            }
+
+        }
+
+        form{
+
+            display:flex;
+
+            flex-direction:column;
+
+            justify-content:center;
+
+            align-items:center;
+
+            margin-bottom:10px;
+
+            width:100%;
+
+        }
+
     </style>
+
 </head>
+
 <body>
 
 <div class="container">
@@ -222,25 +340,156 @@ form{
 
         <div class="cover">
 
-            <div class="icon">💳</div>
+            {% if renewal_mode %}
 
-            <h2>Recharge Wallet</h2>
+                <div class="icon">🔄</div>
+
+                <h2>Renew Membership</h2>
+
+                <p>
+                    Renew your existing
+                    {{ current_user.vip_level }}
+                    membership
+                </p>
+
+            {% else %}
+
+                <div class="icon">💳</div>
+
+                <h2>Recharge Wallet</h2>
+
+                <p>
+                    Add money to your wallet
+                </p>
+
+            {% endif %}
 
         </div>
+
+
+        {% if renewal_mode %}
+
+        <div class="renewal-info">
+
+            <div class="vip">
+
+                {{ current_user.vip_level }} VIP
+
+            </div>
+
+
+            <div class="label">
+
+                Membership renewal cost
+
+            </div>
+
+            <div class="price">
+
+                KSh {{ "{:,.2f}".format(renewal_cost) }}
+
+            </div>
+
+
+            {% if current_user.withdrawal_unlocked %}
+
+                <div class="label">
+
+                    Usable wallet balance
+
+                </div>
+
+                <div class="amount">
+
+                    KSh
+                    {{ "{:,.2f}".format(renewal_usable_balance) }}
+
+                </div>
+
+            {% endif %}
+
+
+            <div class="label">
+
+                Amount to recharge
+
+            </div>
+
+            <div class="amount">
+
+                KSh
+                {{ "{:,.2f}".format(renewal_shortfall) }}
+
+            </div>
+
+
+            {% if not current_user.withdrawal_unlocked %}
+
+                <div class="warning">
+
+                    Your withdrawal eligibility is not yet unlocked.
+                    Your existing wallet balance cannot be used
+                    for this renewal.
+
+                </div>
+
+            {% elif renewal_shortfall > 0 %}
+
+                <div class="warning">
+
+                    Your usable balance is not enough to renew.
+                    Please recharge the remaining amount.
+
+                </div>
+
+            {% else %}
+
+                <div class="warning">
+
+                    Your usable balance is enough for renewal.
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
 
         <div class="content">
 
             <form method="POST">
 
-                <input
-                    type="number"
-                    name="amount"
-                    placeholder="Enter Amount"
-                        min=""
-                        step=""
+                {% if renewal_mode %}
+
+                    <!--
+                        Server-calculated amount.
+                        User should not change this.
+                    -->
+
+                    <input
+                        type="number"
+                        name="amount"
+                        value="{{ renewal_shortfall }}"
+                        readonly
+                        required
+                    >
+
+                {% else %}
+
+                    <input
+                        type="number"
+                        name="amount"
+                        placeholder="Enter Amount"
+                        min="1"
+                        step="1"
                         value="200"
-                    required
-                >
+                        required
+                    >
+
+                {% endif %}
+
 
                 <input
                     type="text"
@@ -250,11 +499,42 @@ form{
                     required
                 >
 
-                <button type="submit">
-                    Recharge Now
-                </button>
+
+                {% if renewal_mode %}
+
+                    <input
+                        type="hidden"
+                        name="payment_type"
+                        value="renewal"
+                    >
+
+                    <button type="submit">
+
+                        Recharge & Renew
+
+                    </button>
+
+                {% else %}
+
+                    <button type="submit">
+
+                        Recharge Now
+
+                    </button>
+
+                {% endif %}
 
             </form>
+
+
+            <a
+                href="{{ url_for('vip') }}"
+                class="back"
+            >
+
+                ← Back
+
+            </a>
 
         </div>
 

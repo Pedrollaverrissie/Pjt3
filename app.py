@@ -2172,7 +2172,62 @@ def recharge():
         except Exception as e:
             return f"Recharge failed: {e}"
 
-    return render_template("recharge.html")
+    # ---------------------------------
+    # Recharge page appearance
+    # ---------------------------------
+
+    purpose = request.args.get("purpose")
+
+    renewal_mode = False
+    renewal_cost = 0
+    renewal_usable_balance = 0
+    renewal_shortfall = 0
+
+    if purpose == "renewal" and current_user.vip_level:
+
+        renewal_mode = True
+
+        renewal_cost = VIP_PLANS[
+            current_user.vip_level
+        ]["price"]
+
+        # If withdrawal is NOT unlocked,
+        # no wallet money can be used.
+        if not current_user.withdrawal_unlocked:
+
+            renewal_usable_balance = 0
+
+            renewal_shortfall = renewal_cost
+
+        else:
+
+            # Only the EXTRA recharge can be used.
+            extra_recharge = max(
+                current_user.recharge_balance
+                - current_user.vip_locked_amount,
+                0
+            )
+
+            renewal_usable_balance = (
+                current_user.task_wallet
+                + current_user.team_wallet
+                + current_user.referral_wallet
+                + extra_recharge
+            )
+
+            renewal_shortfall = max(
+                renewal_cost - renewal_usable_balance,
+                0
+            )
+
+
+    return render_template(
+        "recharge.html",
+        renewal_mode=renewal_mode,
+        renewal_cost=renewal_cost,
+        renewal_usable_balance=renewal_usable_balance,
+        renewal_shortfall=renewal_shortfall
+    )
 
 #-----------RENEW MEMBERSHIP--------------- 
 @app.route("/renew-membership", methods=["POST"]) 
@@ -2233,7 +2288,12 @@ def renew_membership():
             "warning"
         )
 
-        return redirect(url_for("recharge"))
+        return redirect(
+            url_for(
+                "recharge",
+                purpose="renewal"
+            )
+        )
 
     # =================================================
     # RULE 2
@@ -2274,7 +2334,12 @@ def renew_membership():
             "warning"
         )
 
-        return redirect(url_for("recharge"))
+        return redirect(
+            url_for(
+                "recharge",
+                purpose="renewal"
+            )
+        )
 
     # =================================================
     # ENOUGH USABLE BALANCE
