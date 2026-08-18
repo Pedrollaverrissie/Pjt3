@@ -105,12 +105,25 @@ setInterval(() => {
 
             if (paymentType === "recharge") {
 
-                statusElement.innerText =
-                    "Recharge successful! Redirecting...";
+                if (purpose === "renewal") {
 
-                setTimeout(() => {
-                    window.location.href = "/dashboard";
-                }, 2000);
+                    statusElement.innerText =
+                        "Payment successful! Membership renewed. Redirecting...";
+
+                    setTimeout(() => {
+                        window.location.href = "/vip";
+                    }, 2000);
+
+                } else {
+
+                    statusElement.innerText =
+                        "Recharge successful! Redirecting...";
+
+                    setTimeout(() => {
+                        window.location.href = "/dashboard";
+                    }, 2000);
+
+                }
 
             } else {
 
@@ -122,7 +135,6 @@ setInterval(() => {
                 }, 2000);
 
             }
-
         }
 
         else if (data.status === "failed") {
