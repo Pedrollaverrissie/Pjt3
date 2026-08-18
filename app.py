@@ -2133,6 +2133,7 @@ def recharge():
 
     if request.method == "POST":
 
+        purpose = request.args.get("purpose")
         phone = request.form["phone"].strip()
         amount = float(request.form["amount"])
 
@@ -2418,22 +2419,7 @@ def renew_membership():
 
         return redirect(url_for("vip"))
 
-    # ---------------------------------
-    # Update main wallet
-    # ---------------------------------
 
-    total_used = (
-        task_used
-        + team_used
-        + referral_used
-        + recharge_used
-    )
-
-    current_user.main_wallet -= total_used
-
-    if current_user.main_wallet < 0:
-
-        current_user.main_wallet = 0
 
     # ---------------------------------
     # Extend membership

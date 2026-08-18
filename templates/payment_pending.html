@@ -76,7 +76,11 @@
 const invoiceId = "{{ invoice_id }}";
 
 const statusElement = document.getElementById("status");
+
 const paymentType = "{{ payment_type }}";
+
+const purpose = "{{ purpose or '' }}";
+
 setInterval(() => {
 
     fetch(`/check-payment/${invoiceId}`)
@@ -127,7 +131,19 @@ setInterval(() => {
                 "Payment cancelled or failed...";
 
             setTimeout(() => {
-                window.location.href = "/payment";
+
+                if (paymentType === "recharge") {
+
+                    if (purpose === "renewal") {
+                        window.location.href = "/recharge?purpose=renewal";
+                    } else {
+                        window.location.href = "/recharge";
+                    }
+
+                } else {
+                    window.location.href = "/payment";
+                }
+
             }, 3000);
 
         }
