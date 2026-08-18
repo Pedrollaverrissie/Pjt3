@@ -2256,7 +2256,7 @@ def renew_membership():
             current_user.vip_expires_at - now
         ).days 
 
-        if days_left > 2 : 
+        if days_left > 27 : 
 
             flash(
                 "Membership can only be renewed during the last 2 days before expiry.",
