@@ -1874,27 +1874,99 @@ def webhook():
                 if not user:
                     return jsonify({"status": "received"}), 200
 
-                # -----------------------------
-                # Credit Recharge
-                # -----------------------------
+                # ---------------------------------
+                # Credit the successful recharge
+                # ---------------------------------
+
                 user.recharge_balance += payment.amount
+
+                # ---------------------------------
+                # RENEWAL RECHARGE
+                # ---------------------------------
+
+                if payment.purpose == "renewal":
+
+                    print(
+                        "RENEWAL RECHARGE DETECTED:",
+                        payment.amount
+                    )
+
+                    # Recalculate balances after
+                    # receiving the recharge.
+                    update_vip_lock(user)
+
+                    # Automatically process renewal
+                    success, message = process_membership_renewal(
+                        user,
+                        allow_locked_recharge=True,
+                        renewal_recharge_amount=payment.amount
+                    )
+
+                    if not success:
+
+                        print(
+                            "AUTOMATIC RENEWAL FAILED:",
+                            message
+                        )
+
+                        # The recharge itself remains credited.
+                        # We do NOT mark the payment as failed because
+                        # the M-Pesa payment was successful.
+
+                        create_notification(
+                            user.id,
+                            "Recharge Successful",
+                            (
+                                f"Your renewal recharge of "
+                                f"KES {payment.amount:,.2f} "
+                                f"was received, but the membership "
+                                f"could not be renewed automatically. "
+                                f"{message}"
+                            ),
+                            "recharge"
+                        )
+
+                        db.session.commit()
+
+                        return jsonify({
+                            "status": "received"
+                        }), 200
+
+                    # ---------------------------------
+                    # Renewal transaction is already
+                    # created by process_membership_renewal()
+                    # ---------------------------------
+
+
+                    db.session.commit()
+
+                    print(
+                        "RENEWAL RECHARGE AND MEMBERSHIP RENEWAL "
+                        "PROCESSED SUCCESSFULLY."
+                    )
+
+                    return jsonify({
+                        "status": "received"
+                    }), 200
+
+
+                # ---------------------------------
+                # NORMAL RECHARGE
+                # ---------------------------------
+
                 user.main_wallet += payment.amount
-
-                # ---------------------------------
-                # ACTIVATE / RENEW VIP MEMBERSHIP
-                # ---------------------------------
-
-                # ---------------------------------
-                # PROCESS VIP MEMBERSHIP
-                # ---------------------------------
 
                 old_vip = user.vip_level
 
-                process_vip_recharge(user, payment.amount)
+                process_vip_recharge(
+                    user,
+                    payment.amount
+                )
 
-                # -----------------------------
+                # ---------------------------------
                 # Recharge Transaction
-                # -----------------------------
+                # ---------------------------------
+
                 db.session.add(
                     Transaction(
                         user_id=user.id,
@@ -1904,29 +1976,38 @@ def webhook():
                         description="Wallet Recharge"
                     )
                 )
+
                 create_notification(
                     user.id,
                     "Recharge Successful",
-                    f"Your recharge of KES {payment.amount:,.2f} has been credited to your account.",
+                    (
+                        f"Your recharge of "
+                        f"KES {payment.amount:,.2f} "
+                        f"has been credited to your account."
+                    ),
                     "recharge"
                 )
 
-                # -----------------------------
+                # ---------------------------------
                 # VIP Notification
-                # -----------------------------
+                # ---------------------------------
+
                 if old_vip != user.vip_level:
 
                     create_notification(
                         user.id,
                         "VIP Upgraded",
-                        f"Congratulations! Your membership has been upgraded to {user.vip_level}.",
+                        (
+                            f"Congratulations! Your membership "
+                            f"has been upgraded to {user.vip_level}."
+                        ),
                         "vip"
                     )
-
 
                 # =============================
                 # REFERRAL COMMISSION
                 # =============================
+
                 if user.referred_by:
 
                     referrer = User.query.filter_by(
@@ -1957,15 +2038,21 @@ def webhook():
                         create_notification(
                             referrer.id,
                             "Referral Commission",
-                            f"You earned KES {referral_bonus:,.2f} from {user.username}'s recharge.",
+                            (
+                                f"You earned KES "
+                                f"{referral_bonus:,.2f} from "
+                                f"{user.username}'s recharge."
+                            ),
                             "referral"
                         )
 
                 db.session.commit()
 
-                print("Recharge processed successfully.")
+                print("Normal recharge processed successfully.")
 
-                return jsonify({"status": "received"}), 200
+                return jsonify({
+                    "status": "received"
+                }), 200
 
 
             # =====================================
@@ -2131,9 +2218,11 @@ def check_payment(invoice_id):
 @active_account_required
 def recharge():
 
+    purpose = request.args.get("purpose")
+
     if request.method == "POST":
 
-        purpose = request.args.get("purpose")
+        
         phone = request.form["phone"].strip()
         amount = float(request.form["amount"])
 
@@ -2158,6 +2247,7 @@ def recharge():
                 amount=amount,
                 status="pending",
                 payment_type="recharge",
+                purpose=purpose,
                 user_id=current_user.id
             )
 
@@ -2227,222 +2317,192 @@ def recharge():
         renewal_mode=renewal_mode,
         renewal_cost=renewal_cost,
         renewal_usable_balance=renewal_usable_balance,
-        renewal_shortfall=renewal_shortfall
+        renewal_shortfall=renewal_shortfall,
+        purpose=purpose
     )
 
-#-----------RENEW MEMBERSHIP--------------- 
-@app.route("/renew-membership", methods=["POST"]) 
-@login_required 
-@active_account_required 
-def renew_membership(): 
 
-    if not current_user.vip_level: 
+def process_membership_renewal(
+    user,
+    allow_locked_recharge=False,
+    renewal_recharge_amount=0
+):
+    if not user.vip_level:
+        return False, "You don't have an active VIP membership."
 
-        flash(
-            "You don't have an active VIP membership.",
-            "danger"
-        )
-
-        return redirect(url_for("vip")) 
-
-    now = datetime.utcnow() 
-
-    # --------------------------------- 
-    # Renewal window 
-    # --------------------------------- 
-
-    if current_user.vip_expires_at: 
-
-        days_left = (
-            current_user.vip_expires_at - now
-        ).days 
-
-        if days_left > 27 : 
-
-            flash(
-                "Membership can only be renewed during the last 2 days before expiry.",
-                "warning"
-            )
-
-            return redirect(url_for("vip")) 
+    now = datetime.utcnow()
 
     # ---------------------------------
-    # Get current VIP renewal price
+    # Renewal window
+    # ---------------------------------
+
+    if user.vip_expires_at:
+
+        days_left = (
+            user.vip_expires_at - now
+        ).days
+
+        if days_left > 27:
+            return False, (
+                "Membership can only be renewed "
+                "during the last 2 days before expiry."
+            )
+
+    # ---------------------------------
+    # Current VIP renewal price
     # ---------------------------------
 
     renewal_cost = VIP_PLANS[
-        current_user.vip_level
+        user.vip_level
     ]["price"]
 
-    # =================================================
-    # RULE 1
-    # withdrawal_unlocked MUST be TRUE
-    # before existing wallet money can be used.
-    # =================================================
+    # ---------------------------------
+    # Withdrawal must be unlocked
+    # ---------------------------------
 
-    if not current_user.withdrawal_unlocked:
-
-        flash(
+    if (
+        not user.withdrawal_unlocked
+        and not allow_locked_recharge
+    ):
+        return False, (
             f"Your withdrawal eligibility is not unlocked. "
             f"Please recharge KSh {renewal_cost:,.2f} "
-            f"to renew your {current_user.vip_level} membership.",
-            "warning"
+            f"to renew your {user.vip_level} membership."
         )
 
-        return redirect(
-            url_for(
-                "recharge",
-                purpose="renewal"
-            )
-        )
-
-    # =================================================
-    # RULE 2
-    # NEVER use vip_locked_amount
-    #
-    # Only extra recharge can be used.
-    # =================================================
+    # ---------------------------------
+    # Only EXTRA recharge can be used
+    # ---------------------------------
 
     extra_recharge = max(
-        current_user.recharge_balance
-        - current_user.vip_locked_amount,
+        user.recharge_balance
+        - user.vip_locked_amount,
         0
     )
 
-    # ---------------------------------
-    # Calculate usable balance
-    # ---------------------------------
+    # Recharge specifically made for this renewal
+    renewal_recharge_available = max(
+        renewal_recharge_amount,
+        0
+    )
 
     usable_balance = (
-        current_user.task_wallet
-        + current_user.team_wallet
-        + current_user.referral_wallet
+        user.task_wallet
+        + user.team_wallet
+        + user.referral_wallet
         + extra_recharge
+        + renewal_recharge_available
     )
 
     # ---------------------------------
-    # Not enough usable money
+    # Not enough balance
     # ---------------------------------
 
     if usable_balance < renewal_cost:
 
         shortfall = renewal_cost - usable_balance
 
-        flash(
-            f"You need KSh {shortfall:,.2f} more to renew "
-            f"your {current_user.vip_level} membership. "
-            f"Please recharge your account.",
-            "warning"
-        )
-
-        return redirect(
-            url_for(
-                "recharge",
-                purpose="renewal"
-            )
+        return False, (
+            f"You need KSh {shortfall:,.2f} more "
+            f"to renew your {user.vip_level} membership."
         )
 
     # =================================================
-    # ENOUGH USABLE BALANCE
-    # Deduct only from allowed balances.
+    # Deduct renewal amount
     # =================================================
 
     remaining = renewal_cost
 
-    # ---------------------------------
     # Task wallet FIRST
-    # ---------------------------------
-
     task_used = min(
-        current_user.task_wallet,
+        user.task_wallet,
         remaining
     )
 
-    current_user.task_wallet -= task_used
-
+    user.task_wallet -= task_used
     remaining -= task_used
 
-    # ---------------------------------
     # Team wallet SECOND
-    # ---------------------------------
-
     team_used = min(
-        current_user.team_wallet,
+        user.team_wallet,
         remaining
     )
 
-    current_user.team_wallet -= team_used
-
+    user.team_wallet -= team_used
     remaining -= team_used
 
-    # ---------------------------------
     # Referral wallet THIRD
-    # ---------------------------------
-
     referral_used = min(
-        current_user.referral_wallet,
+        user.referral_wallet,
         remaining
     )
 
-    current_user.referral_wallet -= referral_used
-
+    user.referral_wallet -= referral_used
     remaining -= referral_used
 
-    # ---------------------------------
-    # Extra recharge FOURTH
-    #
-    # ONLY the extra portion is used.
-    # vip_locked_amount remains untouched.
+
+    # Recharge used for renewal
     # ---------------------------------
 
-    recharge_used = min(
+    recharge_used = 0
+
+    # First use extra recharge that was
+    # already available before this payment.
+    extra_recharge_used = min(
         extra_recharge,
         remaining
     )
 
-    current_user.recharge_balance -= recharge_used
+    user.recharge_balance -= extra_recharge_used
 
-    remaining -= recharge_used
+    recharge_used += extra_recharge_used
+    remaining -= extra_recharge_used
+
+
+    # Then use the recharge specifically
+    # made for this renewal.
+    renewal_recharge_used = min(
+        renewal_recharge_available,
+        remaining
+    )
+
+    user.recharge_balance -= renewal_recharge_used
+
+    recharge_used += renewal_recharge_used
+    remaining -= renewal_recharge_used
 
     # ---------------------------------
     # Safety check
     # ---------------------------------
 
     if remaining > 0:
+        return False, "Unable to complete the renewal."
 
-        db.session.rollback()
+    # ---------------------------------
+    # Recalculate wallet balances
+    # ---------------------------------
 
-        flash(
-            "Unable to complete the renewal. Please try again.",
-            "danger"
-        )
-
-        return redirect(url_for("vip"))
-
-
-
+    update_vip_lock(user)
     # ---------------------------------
     # Extend membership
     # ---------------------------------
 
     if (
-        current_user.vip_expires_at
-        and current_user.vip_expires_at > now
+        user.vip_expires_at
+        and user.vip_expires_at > now
     ):
 
-        current_user.vip_started_at = (
-            current_user.vip_expires_at
-        )
+        user.vip_started_at = user.vip_expires_at
 
-        current_user.vip_expires_at += timedelta(
+        user.vip_expires_at += timedelta(
             days=30
         )
 
     else:
 
-        current_user.vip_started_at = now
+        user.vip_started_at = now
 
-        current_user.vip_expires_at = (
+        user.vip_expires_at = (
             now + timedelta(days=30)
         )
 
@@ -2450,24 +2510,18 @@ def renew_membership():
     # Reset contribution requirement
     # ---------------------------------
 
-    current_user.contribution_deducted = False
+    user.contribution_deducted = False
 
     # ---------------------------------
     # Membership History
     # ---------------------------------
 
     db.session.add(
-
         MembershipHistory(
-
-            user_id=current_user.id,
-
-            vip_level=current_user.vip_level,
-
+            user_id=user.id,
+            vip_level=user.vip_level,
             contribution_used=0,
-
             withdrawal_unlocked=False
-
         )
     )
 
@@ -2478,19 +2532,16 @@ def renew_membership():
     wallet_parts = []
 
     if task_used > 0:
-
         wallet_parts.append(
             f"Task KSh {task_used:,.2f}"
         )
 
     if team_used > 0:
-
         wallet_parts.append(
             f"Team KSh {team_used:,.2f}"
         )
 
     if referral_used > 0:
-
         wallet_parts.append(
             f"Referral KSh {referral_used:,.2f}"
         )
@@ -2498,7 +2549,7 @@ def renew_membership():
     if recharge_used > 0:
 
         wallet_parts.append(
-            f"Extra Recharge KSh {recharge_used:,.2f}"
+            f"Recharge KSh {recharge_used:,.2f}"
         )
 
     wallet_description = ", ".join(
@@ -2506,22 +2557,15 @@ def renew_membership():
     )
 
     db.session.add(
-
         Transaction(
-
-            user_id=current_user.id,
-
+            user_id=user.id,
             transaction_type="membership_renewal",
-
             wallet="multiple",
-
             amount=-renewal_cost,
-
             description=(
-                f"{current_user.vip_level} Membership Renewal "
+                f"{user.vip_level} Membership Renewal "
                 f"({wallet_description})"
             )
-
         )
     )
 
@@ -2530,28 +2574,68 @@ def renew_membership():
     # ---------------------------------
 
     create_notification(
-
-        current_user.id,
-
+        user.id,
         "Membership Renewed",
-
         (
-            f"Your {current_user.vip_level} membership "
+            f"Your {user.vip_level} membership "
             f"has been renewed successfully until "
-            f"{current_user.vip_expires_at.strftime('%d %B %Y')}."
+            f"{user.vip_expires_at.strftime('%d %B %Y')}."
         ),
-
         "membership"
     )
+
+    return True, "Membership renewed successfully."
+
+#-----------RENEW MEMBERSHIP--------------- 
+@app.route("/renew-membership", methods=["POST"])
+@login_required
+@active_account_required
+def renew_membership():
+
+    success, message = process_membership_renewal(
+        current_user
+    )
+
+    if not success:
+
+        # If the problem is insufficient balance,
+        # send the user to the renewal recharge page.
+        if (
+            "need KSh" in message
+            or "Please recharge" in message
+        ):
+
+            flash(
+                message,
+                "warning"
+            )
+
+            return redirect(
+                url_for(
+                    "recharge",
+                    purpose="renewal"
+                )
+            )
+
+        flash(
+            message,
+            "danger"
+        )
+
+        return redirect(
+            url_for("vip")
+        )
 
     db.session.commit()
 
     flash(
-        "Membership renewed successfully!",
+        message,
         "success"
     )
 
-    return redirect(url_for("vip"))
+    return redirect(
+        url_for("vip")
+    )
 #--------------debugging-------------------------
 @app.route("/debug-pending")
 def debug_pending():

@@ -140,6 +140,11 @@ class Payment(db.Model):
         default="registration"
     )
 
+    purpose = db.Column(
+    db.String(20),
+    nullable=True
+    )
+
     # NEW
     user_id = db.Column(
         db.Integer,
