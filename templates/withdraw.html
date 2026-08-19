@@ -1308,7 +1308,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Contribution
 
-        if (currentContribution < requiredContribution) {
+        // Contribution requirement applies ONLY before first withdrawal
+
+        if (!withdrawalUnlocked && currentContribution < requiredContribution) {
 
             submitBtn.disabled = true;
 
