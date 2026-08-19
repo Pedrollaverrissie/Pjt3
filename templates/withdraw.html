@@ -1096,7 +1096,7 @@ body{
 
             <p class="withdrawal-time"
             data-time="{{ withdrawal.created_at.isoformat() }}">
-                {{ withdrawal.created_at.strftime("%d %b %Y %I:%M %p") }}
+            {{ withdrawal.created_at.strftime("%I:%M %p") }}
             </p>
 
             <small>
