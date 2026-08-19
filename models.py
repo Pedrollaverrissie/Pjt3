@@ -36,7 +36,10 @@ class User(UserMixin, db.Model):
         db.String(20),
         nullable=True
     )
-
+    task_unlocked = db.Column(
+    db.Boolean,
+    default=False
+    )
 
     # ================= WALLETS =================
     

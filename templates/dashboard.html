@@ -965,21 +965,21 @@
 
                     <div class="vip-buttons">
 
-                        {% if current_user.vip_level == "Free" %}
+{% if not current_user.task_unlocked %}
 
-                            <a href="/task-access" class="upgrade-btn unlock-task-btn">
-                                <i class="fas fa-lock-open"></i>
-                                Unlock Tasks
-                            </a>
+    <a href="/task-access" class="upgrade-btn unlock-task-btn">
+        <i class="fas fa-lock-open"></i>
+        Unlock Tasks
+    </a>
 
-                        {% else %}
+{% else %}
 
-                            <a href="/vip" class="upgrade-btn">
-                                <i class="fas fa-crown"></i>
-                                Upgrade to VIP
-                            </a>
+    <a href="/vip" class="upgrade-btn">
+        <i class="fas fa-crown"></i>
+        Upgrade to VIP
+    </a>
 
-                        {% endif %}
+{% endif %}
 
                         {% if vip_days_left <= 2 %}
 
