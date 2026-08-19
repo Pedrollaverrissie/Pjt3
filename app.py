@@ -4313,25 +4313,61 @@ def task_access():
 
     now = datetime.utcnow()
 
-    # Expired VIP
+    # -----------------------------------
+    # EXPIRED VIP
+    # -----------------------------------
     if (
         current_user.vip_level != "Free"
         and current_user.vip_expires_at
         and current_user.vip_expires_at <= now
     ):
-        return render_template("task_alert.html")
 
-    # Free user
+        return render_template(
+            "task_alert.html",
+            alert_type="expired",
+            vip_level=current_user.vip_level
+        )
+
+    # -----------------------------------
+    # FREE USER
+    # -----------------------------------
     if current_user.vip_level == "Free":
-        return render_template("task_alert.html")
 
-    # Bronze wallet requirement
+        return render_template(
+            "task_alert.html",
+            alert_type="free"
+        )
+
+    # -----------------------------------
+    # NEW BRONZE USER / NOT ACTIVATED
+    # -----------------------------------
+    if (
+        current_user.vip_level == "Bronze"
+        and current_user.vip_started_at is None
+    ):
+
+        return render_template(
+            "task_alert.html",
+            alert_type="activation",
+            vip_level=current_user.vip_level
+        )
+
+    # -----------------------------------
+    # BRONZE WALLET REQUIREMENT
+    # -----------------------------------
     if current_user.vip_level == "Bronze":
 
         if current_user.main_wallet < 10:
-            return render_template("task_alert.html")
 
-    # Active VIP
+            return render_template(
+                "task_alert.html",
+                alert_type="wallet",
+                vip_level=current_user.vip_level
+            )
+
+    # -----------------------------------
+    # ACTIVE VIP
+    # -----------------------------------
     return redirect(url_for("tasks"))
 #-----------------PROGRESS ROUTE------------------
 from flask import request, jsonify

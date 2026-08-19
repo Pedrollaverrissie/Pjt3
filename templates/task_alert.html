@@ -4,89 +4,160 @@
     <title>Tasks Locked</title>
 
     <style>
-body{
-    background:#0b1020;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    font-family:Arial;
-}
+        body{
+            background:#0b1020;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+            font-family:Arial;
+        }
 
-.card{
-    width:700px;          /* Increased from 500px */
-    min-height:500px;     /* Increased height */
-    background:white;
-    padding:50px;
-    border-radius:20px;
-    text-align:center;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-}
+        .card{
+            width:700px;
+            min-height:500px;
+            background:white;
+            padding:50px;
+            border-radius:20px;
+            text-align:center;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+        }
 
-h2{
-    color:#ff3b30;
-    margin-bottom:25px;
-    font-size:56px;       /* Increased from 40px */
-}
+        h2{
+            color:#ff3b30;
+            margin-bottom:25px;
+            font-size:56px;
+        }
 
-p{
-    color:#444;
-    line-height:1.8;
-    font-size:30px;       /* Increased from 24px */
-}
+        p{
+            color:#444;
+            line-height:1.8;
+            font-size:30px;
+        }
 
-a{
-    display:inline-block;
-    margin-top:30px;
-    text-decoration:none;
-    background:#16b364;
-    color:white;
-    padding:18px 26px;    /* Larger button */
-    border-radius:12px;
-    font-size:28px;       /* Increased from 20px */
-}
+        .main-btn{
+            display:inline-block;
+            margin-top:30px;
+            text-decoration:none;
+            background:#16b364;
+            color:white;
+            padding:18px 26px;
+            border-radius:12px;
+            font-size:28px;
+            border:none;
+            cursor:pointer;
+        }
 
-.back-btn{
-    display:inline-block;
-    margin-top:20px;
-    text-decoration:none;
-    background:#374151;
-    color:white;
-    padding:18px 26px;
-    border-radius:12px;
-    transition:.3s;
-}
+        .main-btn:hover{
+            opacity:.9;
+        }
 
-.back-btn:hover{
-    background:#1f2937;
-}
-            </style>
+        .back-btn{
+            display:inline-block;
+            margin-top:20px;
+            text-decoration:none;
+            background:#374151;
+            color:white;
+            padding:18px 26px;
+            border-radius:12px;
+            transition:.3s;
+            font-size:28px;
+        }
+
+        .back-btn:hover{
+            background:#1f2937;
+        }
+
+        form{
+            margin:0;
+        }
+    </style>
 
 </head>
 
 <body>
 
-        <div class="card">
+<div class="card">
 
-                <h2>🔒 Tasks Locked</h2>
+    <!-- ================================= -->
+    <!-- EXPIRED VIP -->
+    <!-- ================================= -->
 
-                <p>
-                Complete your first recharge of
-                <b>KES 200</b>
-                to activate your daily video tasks.
-                </p>
+    {% if alert_type == "expired" %}
 
-                <a href="/recharge">
-                Recharge Now
-                </a>
-<br>
-                <a href="/dashboard" class="back-btn">
-                    ← Back to Dashboard
-                </a>
+        <h2>🔒 VIP Membership Expired</h2>
 
-        </div>
+        <p>
+            Your
+            <b>{{ vip_level }}</b>
+            membership has expired.
+        </p>
+
+        <p>
+            Renew your
+            <b>{{ vip_level }}</b>
+            membership to continue accessing
+            your daily tasks and earning rewards.
+        </p>
+
+        <form action="{{ url_for('renew_membership') }}" method="POST">
+
+            <button type="submit" class="main-btn">
+                Renew {{ vip_level }} Membership
+            </button>
+
+        </form>
+
+
+    <!-- ================================= -->
+    <!-- FREE USER -->
+    <!-- ================================= -->
+
+    {% elif alert_type == "free" %}
+
+        <h2>🔒 Tasks Locked</h2>
+
+        <p>
+            You need an active VIP membership
+            to access your daily video tasks.
+        </p>
+
+        <a href="{{ url_for('vip') }}" class="main-btn">
+            Choose VIP Plan
+        </a>
+
+
+    <!-- ================================= -->
+    <!-- BRONZE WALLET REQUIREMENT -->
+    <!-- ================================= -->
+
+    {% elif alert_type == "wallet" %}
+
+        <h2>🔒 Tasks Locked</h2>
+
+        <p>
+            Complete your required recharge
+            to activate your daily video tasks.
+        </p>
+
+        <a href="{{ url_for('recharge') }}" class="main-btn">
+            Recharge Now
+        </a>
+
+    {% endif %}
+
+
+    <!-- ================================= -->
+    <!-- BACK TO DASHBOARD -->
+    <!-- ================================= -->
+
+    <a href="{{ url_for('dashboard') }}" class="back-btn">
+        ← Back to Dashboard
+    </a>
+
+</div>
 
 </body>
 </html>
