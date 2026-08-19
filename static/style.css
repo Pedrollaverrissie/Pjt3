@@ -1991,6 +1991,7 @@ h3{
 .renew-btn{
     background:#00bcd4;
     color:white;
+    padding: 10px;
 }
 
 .renew-btn:hover{
