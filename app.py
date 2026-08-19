@@ -4215,32 +4215,45 @@ def start_task(task_id):
     )
 
 #----------TASK ALERT-----------
-@app.route("/tasks")
+
+@app.route("/task-access")
 @login_required
 @active_account_required
-def tasks():
+def task_access():
 
     now = datetime.utcnow()
 
-    # Block expired VIP users
+    # -----------------------------------
+    # EXPIRED VIP
+    # -----------------------------------
     if (
         current_user.vip_level != "Free"
         and current_user.vip_expires_at
         and current_user.vip_expires_at <= now
     ):
-        return redirect(url_for("task_access"))
 
-    # Block Free users
+        return render_template("task_alert.html")
+
+    # -----------------------------------
+    # FREE USER
+    # -----------------------------------
     if current_user.vip_level == "Free":
-        return redirect(url_for("task_access"))
 
-    # Bronze wallet requirement
+        return render_template("task_alert.html")
+
+    # -----------------------------------
+    # BRONZE WALLET CHECK
+    # -----------------------------------
     if current_user.vip_level == "Bronze":
-        if current_user.main_wallet < 10:
-            return redirect(url_for("task_access"))
 
-    # Only active VIP users reach here
-    # Your existing tasks code goes below
+        if current_user.main_wallet < 10:
+
+            return render_template("task_alert.html")
+
+    # -----------------------------------
+    # ACTIVE VIP
+    # -----------------------------------
+    return redirect(url_for("tasks"))
 #-----------------PROGRESS ROUTE------------------
 from flask import request, jsonify
 from datetime import datetime
