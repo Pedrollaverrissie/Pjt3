@@ -1263,7 +1263,9 @@ def dashboard():
         and current_user.vip_expires_at <= datetime.utcnow()
     ):
 
-        # Keep the VIP level so the system remembers
+        # Keep the VIP level for renewal/history
+        pass
+
         # which plan the user needs to renew.
         current_user.account_active = False
 
@@ -3496,7 +3498,7 @@ def time_ago(dt):
 
     else:
         return dt.strftime("%d %b %Y")
-#---------------TASK ROUTE---------------------
+#-------TASK ROUTE-----------
 from datetime import date
 from models import Task, UserTask
 @app.route("/tasks")
@@ -3542,7 +3544,7 @@ def tasks():
         daily_limit=daily_limit,
         daily_reward=daily_reward
     )
-    #-----------TEAM ROUTE----------------
+#-----------TEAM ROUTE--------
 @app.route("/team")
 @login_required
 @active_account_required
