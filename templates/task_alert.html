@@ -128,7 +128,23 @@
             Choose VIP Plan
         </a>
 
+        <!-- ================================= -->
+<!-- NEW BRONZE USER -->
+<!-- ================================= -->
 
+{% elif alert_type == "activation" %}
+
+    <h2>🔒 Tasks Locked</h2>
+
+    <p>
+        Complete your first recharge of
+        <b>KES 200</b>
+        to activate your daily video tasks.
+    </p>
+
+    <a href="{{ url_for('recharge') }}" class="main-btn">
+        Recharge Now
+    </a>
     <!-- ================================= -->
     <!-- BRONZE WALLET REQUIREMENT -->
     <!-- ================================= -->
