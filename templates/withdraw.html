@@ -677,7 +677,35 @@ gap:10px;
     transform:rotate(90deg);
 
 }
+#withdraw-history{
+    max-height:300px;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding-right:8px;
+    scroll-behavior:smooth;
+}
 
+@media(max-width:768px){
+
+    #withdraw-history{
+        max-height:320px;
+    }
+
+}
+
+#withdraw-history::-webkit-scrollbar{
+    width:6px;
+}
+
+#withdraw-history::-webkit-scrollbar-track{
+    background:#f1f5f9;
+    border-radius:10px;
+}
+
+#withdraw-history::-webkit-scrollbar-thumb{
+    background:#1976d2;
+    border-radius:10px;
+}
 /* Animation */
 
 @keyframes toastShow{
