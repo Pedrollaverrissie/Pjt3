@@ -1255,7 +1255,7 @@ def dashboard():
     )
 
     # -------------------------------
-    # Automatically expire VIP
+    # Automatically detect expired VIP
     # -------------------------------
     if (
         current_user.vip_level != "Free"
@@ -1263,17 +1263,17 @@ def dashboard():
         and current_user.vip_expires_at <= datetime.utcnow()
     ):
 
-        # Keep the VIP level for renewal/history
-        pass
+        # Keep the user account ACTIVE
+        current_user.account_active = True
 
-        # which plan the user needs to renew.
-        current_user.account_active = False
+        # Keep the VIP level so the user can renew
+        # Example: Bronze remains Bronze
 
         db.session.add(
             Notification(
                 user_id=current_user.id,
                 title="VIP Expired",
-                message="Your VIP plan has expired. Please renew your plan to reactivate your account."
+                message="Your VIP plan has expired. Please renew your plan to continue using VIP tasks."
             )
         )
 
