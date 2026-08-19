@@ -2588,7 +2588,6 @@ def process_membership_renewal(
 #-----------RENEW MEMBERSHIP--------------- 
 @app.route("/renew-membership", methods=["POST"])
 @login_required
-@active_account_required
 def renew_membership():
 
     success, message = process_membership_renewal(
