@@ -3561,45 +3561,86 @@ def time_ago(dt):
     else:
         return dt.strftime("%d %b %Y")
 #-------TASK ROUTE-----------
-from datetime import date
+from datetime import date, datetime
 from models import Task, UserTask
+
 @app.route("/tasks")
 @login_required
 @active_account_required
 def tasks():
 
-    # Bronze has not been activated yet
+    now = datetime.utcnow()
+
+    # -----------------------------------
+    # EXPIRED VIP
+    # -----------------------------------
+    if (
+        current_user.vip_level != "Free"
+        and current_user.vip_expires_at
+        and current_user.vip_expires_at <= now
+    ):
+        return redirect(url_for("task_access"))
+
+    # -----------------------------------
+    # FREE USER
+    # -----------------------------------
+    if current_user.vip_level == "Free":
+        return redirect(url_for("task_access"))
+
+    # -----------------------------------
+    # BRONZE HAS NOT BEEN ACTIVATED
+    # -----------------------------------
     if (
         current_user.vip_level == "Bronze"
         and current_user.vip_started_at is None
     ):
         return render_template("task_alert.html")
 
-    # Get today's tasks for the current VIP
+    # -----------------------------------
+    # BRONZE WALLET CHECK
+    # -----------------------------------
+    if (
+        current_user.vip_level == "Bronze"
+        and current_user.main_wallet < 10
+    ):
+        return redirect(url_for("task_access"))
+
+    # -----------------------------------
+    # GET TODAY'S TASKS
+    # -----------------------------------
     tasks = Task.query.filter_by(
         vip_level=current_user.vip_level,
         active=True
     ).all()
 
-    if current_user.vip_level == "Free":
-        return redirect(url_for("vip"))
-
-    # VIP plan details
+    # -----------------------------------
+    # VIP PLAN DETAILS
+    # -----------------------------------
     plan = VIP_PLANS[current_user.vip_level]
+
     daily_limit = int(plan["tasks"])
+
     reward = get_current_task_reward(current_user)
 
     daily_reward = reward * plan["tasks"]
 
-    # Tasks completed today
+    # -----------------------------------
+    # TASKS COMPLETED TODAY
+    # -----------------------------------
     completed_tasks = UserTask.query.filter(
         UserTask.user_id == current_user.id,
         db.func.date(UserTask.completed_at) == date.today()
     ).all()
 
-    completed_ids = [t.task_id for t in completed_tasks]
+    completed_ids = [
+        t.task_id for t in completed_tasks
+    ]
+
     completed_today = len(completed_ids)
 
+    # -----------------------------------
+    # RENDER TASKS
+    # -----------------------------------
     return render_template(
         "tasks.html",
         tasks=tasks,
