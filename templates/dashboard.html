@@ -667,6 +667,16 @@
 .renew-form {
     margin: 0;
 }
+.unlock-task-btn{
+    background:linear-gradient(135deg,#16a34a,#22c55e) !important;
+    color:#fff !important;
+    box-shadow:0 8px 20px rgba(34,197,94,.20);
+}
+
+.unlock-task-btn:hover{
+    background:linear-gradient(135deg,#15803d,#16a34a) !important;
+    transform:translateY(-2px);
+}
 </style>
 </head>
     
@@ -955,11 +965,21 @@
 
                     <div class="vip-buttons">
 
-                        <a href="/vip">
-                            <button class="upgrade-btn">
-                                Upgrade VIP
-                            </button>
-                        </a>
+                        {% if current_user.vip_level == "Free" %}
+
+                            <a href="/task-access" class="upgrade-btn unlock-task-btn">
+                                <i class="fas fa-lock-open"></i>
+                                Unlock Tasks
+                            </a>
+
+                        {% else %}
+
+                            <a href="/vip" class="upgrade-btn">
+                                <i class="fas fa-crown"></i>
+                                Upgrade to VIP
+                            </a>
+
+                        {% endif %}
 
                         {% if vip_days_left <= 2 %}
 
