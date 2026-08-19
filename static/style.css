@@ -1982,6 +1982,7 @@ h3{
 .upgrade-btn{
     background:#008cff;
     color:white;
+    padding: 10px;
 }
 
 .upgrade-btn:hover{
