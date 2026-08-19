@@ -3072,9 +3072,6 @@ def can_renew(user):
 
 
 def renew_membership(user):
-    """
-    Adds 30 days without changing VIP level.
-    """
 
     now = datetime.utcnow()
 
@@ -3087,6 +3084,9 @@ def renew_membership(user):
 
         user.vip_started_at = user.vip_expires_at
         user.vip_expires_at += timedelta(days=30)
+
+    # Reactivate the account
+    user.account_active = True
 
     user.contribution_deducted = False
 
