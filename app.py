@@ -2392,7 +2392,7 @@ def process_membership_renewal(
             user.vip_expires_at - now
         ).days
 
-        if days_left > 27:
+        if days_left > 2:
             return False, (
                 "Membership can only be renewed "
                 "during the last 2 days before expiry."
