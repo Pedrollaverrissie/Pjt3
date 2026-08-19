@@ -1263,16 +1263,11 @@ def dashboard():
         and current_user.vip_expires_at <= datetime.utcnow()
     ):
 
-        current_user.vip_level = "Free"
-        current_user.vip_started_at = None
-        current_user.vip_expires_at = None
-
-
         db.session.add(
             Notification(
                 user_id=current_user.id,
                 title="VIP Expired",
-                message="Your VIP plan has expired. Recharge to continue enjoying premium tasks."
+                message=f"Your {current_user.vip_level} plan has expired. Renew to continue enjoying premium tasks."
             )
         )
 
