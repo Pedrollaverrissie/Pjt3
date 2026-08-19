@@ -1210,7 +1210,7 @@ def payment():
 
 
 # ---------------- DASHBOARD ----------------
-from datetime import datetime
+from datetime import datetime, date
 
 @app.route("/dashboard")
 @login_required
@@ -1254,41 +1254,73 @@ def dashboard():
         + current_user.withdrawn
     )
 
-    # -------------------------------
-    # Automatically detect expired VIP
-    # -------------------------------
+    # -----------------------------------
+    # VIP EXPIRATION CHECK
+    # -----------------------------------
+    now = datetime.utcnow()
+
+    vip_expired = False
+
     if (
         current_user.vip_level != "Free"
         and current_user.vip_expires_at
-        and current_user.vip_expires_at <= datetime.utcnow()
+        and current_user.vip_expires_at <= now
     ):
 
-        # Keep the user account ACTIVE
+        vip_expired = True
+
+        # IMPORTANT:
+        # Expired VIP users remain ACTIVE.
+        # Do NOT set account_active = False.
+
         current_user.account_active = True
 
-        # Keep the VIP level so the user can renew
-        # Example: Bronze remains Bronze
+        # -----------------------------------
+        # Create expiration notification
+        # only if one does not already exist
+        # -----------------------------------
+        existing_notification = Notification.query.filter_by(
+            user_id=current_user.id,
+            title="VIP Expired"
+        ).first()
 
-        db.session.add(
-            Notification(
-                user_id=current_user.id,
-                title="VIP Expired",
-                message="Your VIP plan has expired. Please renew your plan to continue using VIP tasks."
+        if not existing_notification:
+
+            db.session.add(
+                Notification(
+                    user_id=current_user.id,
+                    title="VIP Expired",
+                    message=(
+                        "Your VIP plan has expired. "
+                        "Please renew your plan to continue using VIP tasks."
+                    )
+                )
             )
-        )
 
-        db.session.commit()
+            db.session.commit()
 
-    # -------------------------------
+    # -----------------------------------
     # Days remaining
-    # -------------------------------
+    # -----------------------------------
     vip_days_left = 0
 
     if current_user.vip_expires_at:
-        vip_days_left = (
-            current_user.vip_expires_at - datetime.utcnow()
-        ).days
 
+        remaining = (
+            current_user.vip_expires_at - now
+        )
+
+        if remaining.total_seconds() > 0:
+
+            vip_days_left = remaining.days
+
+        else:
+
+            vip_days_left = 0
+
+    # -----------------------------------
+    # Today's task earnings
+    # -----------------------------------
     today_earnings = db.session.query(
         db.func.sum(Transaction.amount)
     ).filter(
@@ -1297,21 +1329,35 @@ def dashboard():
         db.func.date(Transaction.created_at) == date.today()
     ).scalar() or 0
 
+    # -----------------------------------
+    # Unread notifications
+    # -----------------------------------
     unread_notifications = Notification.query.filter_by(
-    user_id=current_user.id,
-    is_read=False
+        user_id=current_user.id,
+        is_read=False
     ).count()
 
+    # -----------------------------------
+    # Supernova Pulse
+    # -----------------------------------
     pulse = get_supernova_pulse()
 
+    # -----------------------------------
+    # Country
+    # -----------------------------------
     country = get_phone_country(current_user.phone)
+
     print("COUNTRY DATA:", country)
 
+    # -----------------------------------
+    # Dashboard
+    # -----------------------------------
     return render_template(
         "dashboard.html",
 
         username=current_user.username,
-         unread_notifications=unread_notifications,
+
+        unread_notifications=unread_notifications,
 
         # Wallets
         main_wallet=current_user.main_wallet,
@@ -1325,6 +1371,7 @@ def dashboard():
         # Totals
         total_income=total_income,
         total_paid=total_paid,
+        total_deposits=total_deposits,
 
         # Referral
         referral_link=referral_link,
@@ -1334,12 +1381,14 @@ def dashboard():
         vip_level=current_user.vip_level,
         vip_expires_at=current_user.vip_expires_at,
         vip_days_left=vip_days_left,
+        vip_expired=vip_expired,
 
-         pulse=pulse,
+        # Pulse
+        pulse=pulse,
 
+        # Country
         country_name=country["name"],
-        country_code=country["code"],
-        
+        country_code=country["code"]
     )
 # ---------------- LOGOUT ----------------
 @app.route("/logout")
@@ -4223,36 +4272,25 @@ def task_access():
 
     now = datetime.utcnow()
 
-    # -----------------------------------
-    # EXPIRED VIP
-    # -----------------------------------
+    # Expired VIP
     if (
         current_user.vip_level != "Free"
         and current_user.vip_expires_at
         and current_user.vip_expires_at <= now
     ):
-
         return render_template("task_alert.html")
 
-    # -----------------------------------
-    # FREE USER
-    # -----------------------------------
+    # Free user
     if current_user.vip_level == "Free":
-
         return render_template("task_alert.html")
 
-    # -----------------------------------
-    # BRONZE WALLET CHECK
-    # -----------------------------------
+    # Bronze wallet requirement
     if current_user.vip_level == "Bronze":
 
         if current_user.main_wallet < 10:
-
             return render_template("task_alert.html")
 
-    # -----------------------------------
-    # ACTIVE VIP
-    # -----------------------------------
+    # Active VIP
     return redirect(url_for("tasks"))
 #-----------------PROGRESS ROUTE------------------
 from flask import request, jsonify
