@@ -1,85 +1,320 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>Tasks Locked</title>
 
     <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
         body{
             background:#0b1020;
+            min-height:100vh;
+
             display:flex;
             justify-content:center;
             align-items:center;
-            height:100vh;
-            font-family:Arial;
+
+            font-family:Arial, sans-serif;
+
+            padding:20px;
+
+            overflow-x:hidden;
         }
 
+        /* =========================
+           CARD
+        ========================= */
+
         .card{
-            width:700px;
+
+            width:100%;
+            max-width:700px;
+
             min-height:500px;
-            background:white;
-            padding:50px;
+
+            background:#ffffff;
+
+            padding:50px 45px;
+
             border-radius:20px;
+
             text-align:center;
+
             display:flex;
             flex-direction:column;
             justify-content:center;
+            align-items:center;
+
+            box-shadow:
+                0 20px 60px rgba(0,0,0,.45);
         }
+
+        /* =========================
+           HEADING
+        ========================= */
 
         h2{
+
             color:#ff3b30;
+
             margin-bottom:25px;
-            font-size:56px;
+
+            font-size:clamp(30px, 5vw, 56px);
+
+            line-height:1.15;
         }
+
+        /* =========================
+           TEXT
+        ========================= */
 
         p{
+
             color:#444;
-            line-height:1.8;
-            font-size:30px;
+
+            line-height:1.7;
+
+            font-size:clamp(17px, 2.5vw, 30px);
+
+            margin-bottom:15px;
+
+            max-width:600px;
         }
 
+        /* =========================
+           BUTTON
+        ========================= */
+
         .main-btn{
-            display:inline-block;
-            margin-top:30px;
+
+            display:inline-flex;
+
+            justify-content:center;
+            align-items:center;
+
+            width:100%;
+            max-width:500px;
+
+            margin-top:20px;
+
             text-decoration:none;
+
             background:#16b364;
+
             color:white;
-            padding:18px 26px;
+
+            padding:16px 24px;
+
             border-radius:12px;
-            font-size:28px;
+
+            font-size:clamp(17px, 2.5vw, 28px);
+
+            font-weight:bold;
+
             border:none;
+
             cursor:pointer;
+
+            transition:.3s;
         }
 
         .main-btn:hover{
-            opacity:.9;
+
+            background:#119653;
+
+            transform:translateY(-2px);
+
+            box-shadow:
+                0 8px 20px rgba(22,179,100,.3);
         }
 
+        /* =========================
+           FORM
+        ========================= */
+
+        form{
+
+            width:100%;
+
+            display:flex;
+
+            justify-content:center;
+        }
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
         .back-btn{
-            display:inline-block;
-            margin-top:20px;
+
+            display:inline-flex;
+
+            justify-content:center;
+            align-items:center;
+
+            width:100%;
+            max-width:500px;
+
+            margin-top:18px;
+
             text-decoration:none;
+
             background:#374151;
+
             color:white;
-            padding:18px 26px;
+
+            padding:16px 24px;
+
             border-radius:12px;
+
             transition:.3s;
-            font-size:28px;
+
+            font-size:clamp(17px, 2.5vw, 28px);
+
+            font-weight:bold;
         }
 
         .back-btn:hover{
+
             background:#1f2937;
+
+            transform:translateY(-2px);
         }
 
-        form{
-            margin:0;
+        /* =========================
+           TABLETS
+        ========================= */
+
+        @media (max-width:768px){
+
+            body{
+
+                padding:15px;
+            }
+
+            .card{
+
+                min-height:auto;
+
+                padding:40px 25px;
+
+                border-radius:18px;
+            }
+
+            h2{
+
+                margin-bottom:20px;
+            }
+
+            p{
+
+                line-height:1.6;
+            }
+
+            .main-btn,
+            .back-btn{
+
+                padding:15px 20px;
+            }
         }
+
+        /* =========================
+           PHONES
+        ========================= */
+
+        @media (max-width:480px){
+
+            body{
+
+                padding:12px;
+            }
+
+            .card{
+
+                width:100%;
+
+                padding:32px 18px;
+
+                border-radius:16px;
+            }
+
+            h2{
+
+                font-size:30px;
+
+                margin-bottom:18px;
+            }
+
+            p{
+
+                font-size:17px;
+
+                line-height:1.6;
+            }
+
+            .main-btn,
+            .back-btn{
+
+                font-size:17px;
+
+                padding:14px 18px;
+
+                border-radius:10px;
+            }
+        }
+
+        /* =========================
+           VERY SMALL PHONES
+        ========================= */
+
+        @media (max-width:350px){
+
+            .card{
+
+                padding:25px 14px;
+            }
+
+            h2{
+
+                font-size:26px;
+            }
+
+            p{
+
+                font-size:16px;
+            }
+
+            .main-btn,
+            .back-btn{
+
+                font-size:16px;
+
+                padding:13px 15px;
+            }
+        }
+
     </style>
 
 </head>
 
+
 <body>
 
+
 <div class="card">
+
 
     <!-- ================================= -->
     <!-- EXPIRED VIP -->
@@ -87,7 +322,9 @@
 
     {% if alert_type == "expired" %}
 
-        <h2>🔒 VIP Membership Expired</h2>
+        <h2>
+            🔒 VIP Membership Expired
+        </h2>
 
         <p>
             Your
@@ -102,9 +339,15 @@
             your daily tasks and earning rewards.
         </p>
 
-        <form action="{{ url_for('renew_membership') }}" method="POST">
+        <form
+            action="{{ url_for('renew_membership') }}"
+            method="POST"
+        >
 
-            <button type="submit" class="main-btn">
+            <button
+                type="submit"
+                class="main-btn"
+            >
                 Renew {{ vip_level }} Membership
             </button>
 
@@ -117,48 +360,66 @@
 
     {% elif alert_type == "free" %}
 
-        <h2>🔒 Tasks Locked</h2>
+        <h2>
+            🔒 Tasks Locked
+        </h2>
 
         <p>
             You need an active VIP membership
             to access your daily video tasks.
         </p>
 
-        <a href="{{ url_for('vip') }}" class="main-btn">
+        <a
+            href="{{ url_for('vip') }}"
+            class="main-btn"
+        >
             Choose VIP Plan
         </a>
 
-        <!-- ================================= -->
-<!-- NEW BRONZE USER -->
-<!-- ================================= -->
 
-{% elif alert_type == "activation" %}
-
-    <h2>🔒 Tasks Locked</h2>
-
-    <p>
-        Complete your first recharge of
-        <b>KES 200</b>
-        to activate your daily video tasks.
-    </p>
-
-    <a href="{{ url_for('recharge') }}" class="main-btn">
-        Recharge Now
-    </a>
     <!-- ================================= -->
-    <!-- BRONZE WALLET REQUIREMENT -->
+    <!-- NEW USER -->
+    <!-- ================================= -->
+
+    {% elif alert_type == "activation" %}
+
+        <h2>
+            🔒 Tasks Locked
+        </h2>
+
+        <p>
+            Complete your first recharge of
+            <b>KES 200</b>
+            to activate your daily video tasks.
+        </p>
+
+        <a
+            href="{{ url_for('recharge') }}"
+            class="main-btn"
+        >
+            Recharge Now
+        </a>
+
+
+    <!-- ================================= -->
+    <!-- WALLET REQUIREMENT -->
     <!-- ================================= -->
 
     {% elif alert_type == "wallet" %}
 
-        <h2>🔒 Tasks Locked</h2>
+        <h2>
+            🔒 Tasks Locked
+        </h2>
 
         <p>
-            Complete your required recharge
-            to activate your daily video tasks.
+            Your Main Wallet balance does not meet
+            the required amount to access tasks.
         </p>
 
-        <a href="{{ url_for('recharge') }}" class="main-btn">
+        <a
+            href="{{ url_for('recharge') }}"
+            class="main-btn"
+        >
             Recharge Now
         </a>
 
@@ -169,11 +430,16 @@
     <!-- BACK TO DASHBOARD -->
     <!-- ================================= -->
 
-    <a href="{{ url_for('dashboard') }}" class="back-btn">
+    <a
+        href="{{ url_for('dashboard') }}"
+        class="back-btn"
+    >
         ← Back to Dashboard
     </a>
 
+
 </div>
+
 
 </body>
 </html>
