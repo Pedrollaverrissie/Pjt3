@@ -1,453 +1,56 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+
+    <title>Withdraw Funds</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/withdraw.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+</head>
 <style>
 
-    .index{
+/* =====================================================
+   SUPERNOVA WITHDRAWAL PAGE
+===================================================== */
 
-    background: white;
-    
-}
-        .badge{
-    position:absolute;
-    top:-2px;
-    right:-3px;
-
-    max-width:10px;
-    height:14px;
-
-    padding:0 2px;
-
-    background:#fb0d00;
-    color:#fff;
-
-    border-radius:999px;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    font-size:8px;
-    font-weight:800;
-
-    border:1px solid white;
-}
-
-.invite-link{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width:100%;
-
-    background:rgb(25,45,61);
-
-    border-radius:10px;
-
-    padding:18px;
-
-    margin-bottom:25px;
-
-    box-shadow:0 -0 10px rgb(6,6,0);
-
-}
-
-.referral-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:15px;
-    gap: 5px;
-
-}
-
-.referral-title{
-
-    color:#f69503;
-
-    font-size:18px;
-
-    font-weight:bold;
-
-}
-
-.referral-badge{
-
-    background:#010e0f;
-
-    color:#42d392;
-
-    padding:5px 10px;
-
-    border-radius:20px;
-
-    font-size:11px;
-
-}
-
-.referral-text{
-
-    color:#c8c8c8;
-
-    font-size:12px;
-
-    margin-bottom:20px;
-
-}
-
-.referral-summary{
-
-    display:flex;
-
-    gap:15px;
-
-    margin-bottom:20px;
-
-}
-
-.summary-card{
-
-    flex:1;
-
-    background:#010e0f;
-
-    border-radius:8px;
-
-    padding:15px;
-
-    text-align:center;
-
-}
-
-.summary-card h4{
-
+*{
     margin:0;
-
-    color:white;
-
-    font-size:18px;
-
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI", Arial, sans-serif;
 }
 
-.summary-card p{
-
-    margin-top:6px;
-
-    color:#bcbcbc;
-
-    font-size:11px;
-
-}
-
-.link-box{
-
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-
-}
-
-.link-box input{
-
-    background:#010e0f;
-   
-    color:white;
-
-    border:none;
- 
-    border-radius:8px;
-
-    padding:12px;
-    text-align: center;
-    font-size:12px;
-    width: 100%;
-
-}
-
-.link-box button{
-
-  
-    width: 100%;
-    height:42px;
-
-    background:#f69503;
-
-    color:black;
-
-    border:none;
-
-    border-radius:8px;
-
-    font-weight:bold;
-
-    cursor:pointer;
-
-    transition:.3s;
-
-}
-
-
-
-.link-box button:hover{
-
-    background:#ffb000;
-
-}
-
-@media (max-width:360px){
-    .link-box input,.link-box button{
-        width: 90%;
-        padding: 0px 4px;
-        
-    }
-    .link-box input{
-        padding: 12px 0px;
-    }
-}
-@media (min-width: 400px){
-        .link-box input,.link-box button{
-        width: 70%;
-        
-        
-    }
-        .link-box button{
-        padding: 0px 12px;
-    }
-}
-@media (min-width: 768px){
-        .link-box input,.link-box button{
-        width: 50%;
-        
-        
-    }
-    .link-box button{
-        padding: 0px 12px;
-    }
-}
-
-.supernova-pulse {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
-    padding: 14px 18px;
-    border-radius: 18px;
-
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.12);
-
-    backdrop-filter: blur(12px);
-
-    color: white;
-}
-
-.pulse-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-
-    font-size: 12px;
-    color: rgb(234,179,8);
-    align-self: center;
-}
-
-.pulse-value {
-    font-size: 28px;
-    font-weight: 800;
-    margin-top: 3px;
-}
-
-.pulse-label {
-    font-size: 11px;
-    color: #20d97f;
-    font-weight: 700;
-}
-
-.pulse-bar {
-    width: 100%;
-    height: 6px;
-    background: rgba(255,255,255,.12);
-    border-radius: 20px;
-    overflow: hidden;
-    margin: 8px 0;
-}
-
-.pulse-progress {
-    height: 100%;
-    background: linear-gradient(
-        90deg,
-        #16b364,
-        #20d97f
-    );
-    border-radius: 20px;
-    transition: width .6s ease;
-}
-
-.supernova-pulse small {
-    font-size: 9px;
-    color: #aaa;
-}
-
-.login-location {
-    margin: 5px 0 0;
-    font-size: 5px;
-    color: #bdbdbd;
-} 
-.login-location span {
-    margin-left: 5px;
-    color: rgb(234, 179, 8);
-    font-weight: 600;
-}
-
-
-.header-profile {
-    width: 36px;
-    height: 36px;
-    margin-top: 2px;
-    border-radius: 50%;
-    overflow: hidden;
-    cursor: pointer;
-    position: relative;
-}
-
-.header-profile-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+body{
+    min-height:100vh;
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            #152417 0%,
+            #07100d 35%,
+            #020504 75%,
+            #010202 100%
+        );
+    color:#fff;
 }
 
 
 /* =====================================================
-   PROFILE PHOTO
+   MAIN CONTAINER
 ===================================================== */
 
-.profile-photo-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-}
-
-.profile-photo-container {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid #16b364;
-    background: #e5e7eb;
-}
-
-.profile-main-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-
-/* =====================================================
-   PHOTO BUTTONS
-===================================================== */
-
-.change-photo-btn,
-.remove-photo-btn {
-    border: none;
-    border-radius: 10px;
-    padding: 10px 18px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.change-photo-btn {
-    background: #16b364;
-    color: white;
-}
-
-.change-photo-btn:hover {
-    background: #119455;
-}
-
-.remove-photo-btn {
-    background: #dc3545;
-    color: white;
-}
-
-.remove-photo-btn:hover {
-    background: #b02a37;
-}
-
-
-/* =====================================================
-   CROP MODAL
-===================================================== */
-
-.crop-modal {
-
-    position: fixed;
-
-    inset: 0;
-
-    width: 100%;
-    height: 100%;
-
-    display: none;
-
-    justify-content: center;
-    align-items: center;
-
-    background: rgba(0,0,0,.75);
-
-    backdrop-filter: blur(8px);
-
-    z-index: 99999;
-
-    padding: 20px;
-
-    box-sizing: border-box;
-}
-
-
-/* =====================================================
-   CROP CARD
-===================================================== */
-
-.crop-card {
-
-    width: 380px;
-
-    max-width: 95%;
-
-    background: #18102a;
-
-    border: 1px solid rgba(255,255,255,.3);
-
-    border-radius: 20px;
-
-    padding: 20px;
-
-    box-shadow:
-        0 20px 60px rgba(0,0,0,.5);
-
-    color: white;
-
-    box-sizing: border-box;
+.withdraw-container{
+    width:100%;
+    max-width:1100px;
+    margin:0 auto;
+    padding:35px 20px 50px;
 }
 
 
@@ -455,182 +58,727 @@
    HEADER
 ===================================================== */
 
-.crop-header {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    margin-bottom: 15px;
+.page-header{
+    margin-bottom:28px;
 }
 
-.crop-header h3 {
-
-    margin: 0;
-
-    color: white;
+.page-header h1{
+    color:#ffffff;
+    font-size:30px;
+    font-weight:700;
+    margin-bottom:8px;
 }
 
-.crop-close {
+.page-header h1 i{
+    color:#dcf803;
+    margin-right:8px;
+}
 
-    width: 35px;
-    height: 35px;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background: rgba(255,255,255,.1);
-
-    color: white;
-
-    font-size: 25px;
-
-    cursor: pointer;
+.page-header p{
+    color:#8e9a95;
+    font-size:14px;
 }
 
 
 /* =====================================================
-   CROP AREA
+   WALLET CARDS
 ===================================================== */
 
-.crop-area {
+.wallet-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(220px,1fr));
 
-    width: 100%;
-
-    aspect-ratio: 1 / 1;
-
-    background: #050505;
-
-    border-radius: 50%;
-
-    overflow: hidden;
-
-    position: relative;
-
-    cursor: grab;
-
-    touch-action: none;
-
-    border: 2px solid rgba(255,255,255,.5);
+    gap:15px;
+    margin-bottom:20px;
 }
 
-.crop-area:active {
-    cursor: grabbing;
+.wallet-card{
+    background:
+        linear-gradient(
+            145deg,
+            #101917,
+            #080e0c
+        );
+
+    border:1px solid rgba(255,255,255,.07);
+
+    border-radius:15px;
+
+    padding:22px;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.35);
+
+    transition:.25s;
 }
 
-#cropCanvas {
+.wallet-card:hover{
+    transform:translateY(-3px);
+    border-color:rgba(220,248,3,.18);
+}
 
-    width: 100%;
-    height: 100%;
+.wallet-card i{
+    font-size:25px;
+    color:#dcf803;
+    margin-bottom:14px;
+}
 
-    display: block;
+.wallet-card h3{
+    color:#8f9a96;
+    font-size:13px;
+    font-weight:500;
+    margin-bottom:7px;
+}
+
+.wallet-card h2{
+    color:#fff;
+    font-size:22px;
 }
 
 
 /* =====================================================
-   ZOOM
+   COMMON CARDS
 ===================================================== */
 
-.crop-controls {
+.eligibility-card,
+.progress-card,
+.withdraw-card,
+.policy-card,
+.history-card{
 
-    display: flex;
+    background:
+        linear-gradient(
+            145deg,
+            #0d1512,
+            #060b09
+        );
 
-    align-items: center;
+    border:1px solid rgba(255,255,255,.07);
 
-    gap: 10px;
+    border-radius:16px;
 
-    margin-top: 18px;
+    padding:23px;
+
+    margin-bottom:18px;
+
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.32);
 }
 
-.crop-controls button {
-
-    width: 38px;
-    height: 38px;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background: #16b364;
-
-    color: white;
-
-    font-size: 22px;
-
-    cursor: pointer;
-}
-
-#zoomSlider {
-
-    flex: 1;
-
-    cursor: pointer;
+.eligibility-card h2,
+.progress-card h2,
+.withdraw-card h2,
+.policy-card h2,
+.history-card h2{
+    color:#fff;
+    font-size:19px;
+    margin-bottom:18px;
 }
 
 
 /* =====================================================
-   HINT
+   ELIGIBILITY
 ===================================================== */
 
-.crop-hint {
+.check-item{
+    display:flex;
+    align-items:center;
+    gap:11px;
 
-    text-align: center;
+    margin:13px 0;
 
-    color: #c7c7c7;
+    color:#d3d8d5;
+    font-size:14px;
+}
 
-    font-size: 13px;
+.check-item i{
+    font-size:17px;
+}
 
-    margin: 12px 0 18px;
+.success{
+    color:#20d97f;
+}
+
+.danger{
+    color:#ef4444;
 }
 
 
 /* =====================================================
-   ACTIONS
+   CONTRIBUTION PROGRESS
 ===================================================== */
 
-.crop-actions {
+.progress-bar{
+    height:9px;
 
-    display: flex;
+    background:#18221f;
 
-    gap: 10px;
+    border-radius:20px;
+
+    overflow:hidden;
+
+    margin:20px 0 14px;
 }
 
-.cancel-crop-btn,
-.save-crop-btn {
+.progress-fill{
+    height:100%;
+    width:0;
 
-    flex: 1;
+    border-radius:20px;
 
-    padding: 12px;
+    background:
+        linear-gradient(
+            90deg,
+            #16b364,
+            #dcf803
+        );
 
-    border: none;
-
-    border-radius: 10px;
-
-    font-weight: bold;
-
-    cursor: pointer;
+    transition:
+        width .8s ease;
 }
 
-.cancel-crop-btn {
+.progress-values{
+    display:flex;
+    justify-content:space-between;
+    gap:15px;
 
-    background: #374151;
-
-    color: white;
+    color:#8e9994;
+    font-size:12px;
 }
 
-.save-crop-btn {
-
-    background: #16b364;
-
-    color: white;
+.progress-values strong{
+    color:#fff;
+    margin-left:4px;
 }
 
-.save-crop-btn:hover {
 
-    background: #119455;
+/* =====================================================
+   WITHDRAW FORM
+===================================================== */
+
+.withdraw-card form{
+    display:flex;
+    flex-direction:column;
+}
+
+.withdraw-card label{
+    color:#aab3af;
+    font-size:13px;
+    margin-top:14px;
+    margin-bottom:7px;
+}
+
+.withdraw-card input{
+
+    width:100%;
+
+    padding:14px 15px;
+
+    background:#080e0c;
+
+    color:#fff;
+
+    border:1px solid #26312d;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:.25s;
+}
+
+.withdraw-card input::placeholder{
+    color:#69736f;
+}
+
+.withdraw-card input:focus{
+
+    border-color:#dcf803;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(220,248,3,.07);
+}
+
+
+/* =====================================================
+   WITHDRAW BUTTON
+===================================================== */
+
+.withdraw-card button{
+
+    margin-top:22px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:10px;
+
+    background:#dcf803;
+
+    color:#111;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.25s;
+}
+
+.withdraw-card button:hover{
+
+    background:#c9e600;
+
+    transform:translateY(-2px);
+}
+
+.withdraw-card button:disabled{
+
+    background:#27302d;
+
+    color:#737c78;
+
+    cursor:not-allowed;
+
+    transform:none;
+}
+
+
+/* =====================================================
+   POLICY
+===================================================== */
+
+.policy-card ul{
+    margin-top:8px;
+    padding-left:20px;
+}
+
+.policy-card li{
+
+    color:#9ba49f;
+
+    font-size:13px;
+
+    line-height:1.7;
+
+    margin:9px 0;
+}
+
+.policy-card strong{
+    color:#fff;
+}
+
+
+/* =====================================================
+   WITHDRAW HISTORY
+===================================================== */
+
+#withdraw-history{
+
+    max-height:330px;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    padding-right:6px;
+}
+
+.withdraw-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:16px;
+
+    margin-top:10px;
+
+    background:#080e0c;
+
+    border:1px solid rgba(255,255,255,.05);
+
+    border-radius:11px;
+}
+
+.withdraw-item h3{
+    color:#fff;
+    font-size:16px;
+    margin-bottom:5px;
+}
+
+.withdraw-item p{
+    color:#8b9590;
+    font-size:12px;
+    margin-bottom:4px;
+}
+
+.withdraw-item small{
+    color:#68736e;
+    font-size:10px;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+
+.status{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    gap:5px;
+
+    padding:6px 11px;
+
+    border-radius:20px;
+
+    color:#fff;
+
+    font-size:11px;
+
+    white-space:nowrap;
+}
+
+.status.paid{
+    background:#126b42;
+}
+
+.status.pending{
+    background:#8a5b08;
+}
+
+.status.failed{
+    background:#8d2525;
+}
+
+.status.approved{
+    background:#17629a;
+}
+
+.status.rejected{
+    background:#4b5050;
+}
+
+.reject-note{
+    color:#ef5555;
+    font-size:11px;
+    margin-top:8px;
+}
+
+
+/* =====================================================
+   EMPTY HISTORY
+===================================================== */
+
+.empty-history{
+
+    text-align:center;
+
+    padding:45px 20px;
+}
+
+.empty-history i{
+
+    font-size:45px;
+
+    color:#56605c;
+
+    margin-bottom:15px;
+}
+
+.empty-history h3{
+    color:#fff;
+    margin-bottom:7px;
+}
+
+.empty-history p{
+    color:#727b77;
+    font-size:13px;
+}
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+#withdraw-history::-webkit-scrollbar{
+    width:5px;
+}
+
+#withdraw-history::-webkit-scrollbar-track{
+    background:#101614;
+    border-radius:10px;
+}
+
+#withdraw-history::-webkit-scrollbar-thumb{
+    background:#46504c;
+    border-radius:10px;
+}
+
+
+/* =====================================================
+   SUPERNOVA TOAST
+===================================================== */
+
+#toast-container{
+
+    position:fixed;
+
+    top:25px;
+    right:25px;
+
+    width:400px;
+    max-width:calc(100% - 30px);
+
+    z-index:999999;
+}
+
+.toast{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #101917,
+            #060b09
+        );
+
+    color:#fff;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:15px;
+
+    padding:20px;
+
+    margin-bottom:14px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.55);
+
+    animation:toastShow .35s ease;
+}
+
+
+/* Top accent */
+
+.toast::before{
+
+    content:"";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+
+    width:100%;
+    height:3px;
+
+    background:#dcf803;
+}
+
+.toast.success::before{
+    background:#20d97f;
+}
+
+.toast.warning::before{
+    background:#f5b942;
+}
+
+.toast.danger::before{
+    background:#ef4444;
+}
+
+
+/* =====================================================
+   TOAST HEADER
+===================================================== */
+
+.toast-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:11px;
+
+    margin-bottom:12px;
+}
+
+.toast-icon{
+    font-size:25px;
+}
+
+.toast.success .toast-icon{
+    color:#20d97f;
+}
+
+.toast.warning .toast-icon{
+    color:#f5b942;
+}
+
+.toast.danger .toast-icon{
+    color:#ef4444;
+}
+
+.toast-title{
+
+    font-size:17px;
+
+    font-weight:700;
+
+    color:#fff;
+}
+
+.toast-message{
+
+    color:#aeb7b3;
+
+    font-size:13px;
+
+    line-height:1.6;
+}
+
+
+/* =====================================================
+   TOAST ACTIONS
+===================================================== */
+
+.toast-actions{
+
+    display:flex;
+
+    gap:8px;
+
+    margin-top:18px;
+}
+
+.toast-btn{
+
+    flex:1;
+
+    padding:11px;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-size:12px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.toast-primary{
+
+    background:#dcf803;
+
+    color:#111;
+}
+
+.toast-primary:hover{
+    background:#c9e600;
+}
+
+.toast-secondary{
+
+    background:#202925;
+
+    color:#fff;
+
+    border:1px solid #303a35;
+}
+
+.toast-secondary:hover{
+    background:#2a332f;
+}
+
+
+/* =====================================================
+   CLOSE
+===================================================== */
+
+.toast-close{
+
+    position:absolute;
+
+    top:12px;
+    right:14px;
+
+    color:#737d78;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    transition:.2s;
+}
+
+.toast-close:hover{
+    color:#fff;
+}
+
+
+/* =====================================================
+   ANIMATION
+===================================================== */
+
+@keyframes toastShow{
+
+    from{
+        opacity:0;
+        transform:translateX(80px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
+
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media(max-width:768px){
+
+    .withdraw-container{
+        padding:25px 14px 40px;
+    }
+
+    .wallet-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .progress-values{
+        flex-direction:column;
+        gap:5px;
+    }
+
+    .withdraw-item{
+        align-items:flex-start;
+    }
+
 }
 
 
@@ -638,1429 +786,771 @@
    MOBILE
 ===================================================== */
 
-@media (max-width: 500px) {
+@media(max-width:500px){
 
-    .crop-card {
-
-        width: 95%;
-
-        padding: 15px;
-
+    .withdraw-container{
+        padding:20px 12px 35px;
     }
 
-    .crop-area {
+    .page-header h1{
+        font-size:24px;
+    }
 
-        width: 100%;
+    .page-header p{
+        font-size:12px;
+    }
 
+    .wallet-grid{
+        grid-template-columns:1fr;
+    }
+
+    .wallet-card{
+        padding:18px;
+    }
+
+    .eligibility-card,
+    .progress-card,
+    .withdraw-card,
+    .policy-card,
+    .history-card{
+        padding:18px;
+        border-radius:13px;
+    }
+
+    .withdraw-item{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .status{
+        margin-top:3px;
+    }
+
+    #toast-container{
+        top:12px;
+        left:12px;
+        right:12px;
+        width:auto;
+        max-width:none;
     }
 
 }
-.profile-photo-container {
-    cursor: pointer;
-    transition: transform .2s ease;
+
+
+/* =====================================================
+   SHORT SCREENS
+===================================================== */
+
+@media(max-height:700px){
+
+    .withdraw-container{
+        padding-top:20px;
+        padding-bottom:25px;
+    }
+
+    .page-header{
+        margin-bottom:18px;
+    }
+
+    .wallet-card{
+        padding:17px;
+    }
+
+    .eligibility-card,
+    .progress-card,
+    .withdraw-card,
+    .policy-card,
+    .history-card{
+        padding:18px;
+        margin-bottom:14px;
+    }
+
 }
 
-.profile-photo-container:hover {
-    transform: scale(1.04);
+
+/* =====================================================
+   TALL SCREENS
+===================================================== */
+
+@media(min-height:850px){
+
+    .withdraw-container{
+        padding-top:45px;
+    }
+
 }
 
-.renew-form {
-    margin: 0;
-}
 </style>
-</head>
-    
-<body >
-    <div class="overlay"></div>
-    <div class="page1">
 
-        <div class="welcome">
-            <h5>Welcome back {{ username }} 🎉</h5>          
-        </div>
+<body
+    data-main-wallet="{{ current_user.withdrawable_wallet }}"
+    data-current-contribution="{{ current_user.referral_contribution_balance }}"
+    data-required-contribution="{{ required_contribution }}"
+    data-minimum-withdrawal="{{ minimum_withdrawal }}"
+    data-pending-withdrawal="{{ 'true' if pending_withdrawal else 'false' }}"
+    data-withdrawal-unlocked="{{ 'true' if current_user.withdrawal_unlocked else 'false' }}">
 
-        <div class="dashboard-header">
+<div class="withdraw-container">
+    <!-- ================= FLASH POPUPS ================= -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
 
-            <button class="dashboard-menu" id="menuBtn"><img src="static/images/menu.svg" alt=""></button>
-            <div class="header-icons">
-            
-                   <a href="/notifications">
-                                    
-                        <div class="notification-icon">
-                            &#128276;
+<div id="toast-container">
 
-                            {% if unread_notifications > 0 %}
-                                <span class="badge">{{ unread_notifications }}</span>
-                            {% endif %}
-                        </div>
-                                    
-                    </a>
-                                                     <div
-    class="header-profile"
-    onclick="openPhotoPicker()"
-    title="Change profile photo">
+{% for category,message in messages %}
 
-    {% if current_user.profile_image %}
+<div class="toast {{ category }}">
 
-        <img
-            id="headerProfileImage"
-            src="{{ current_user.profile_image }}"
-            alt="Profile"
-            class="header-profile-photo"
-        >
+    <span class="toast-close"
+          onclick="this.parentElement.remove()">
+        &times;
+    </span>
 
-    {% else %}
+    <div class="toast-header">
 
-        <img
-            id="headerProfileImage"
-            src="{{ url_for(
-                'static',
-                filename='images/profile-img.jfif'
-            ) }}"
-            alt="Profile"
-            class="header-profile-photo"
-        >
+        <div class="toast-icon">
 
-    {% endif %}
+            {% if category=="success" %}
+                <i class="fas fa-circle-check"></i>
 
-</div>
+            {% elif category=="danger" %}
+                <i class="fas fa-triangle-exclamation"></i>
 
-<input
-    type="file"
-    id="profilePhotoInput"
-    accept="image/jpeg,image/png,image/webp"
-    hidden
->    
-            </div>
-            
-        </div>
-        
-        <div class="sidebar" id="sidebar">
+            {% elif category=="warning" %}
+                <i class="fas fa-circle-info"></i>
 
-            <div class="sidebar-top">
-
-                <button class="cancel" ><img src="static/images/close.jfif" alt=""></button>
-                
-                <img class="logo" src="static/images/supernova earn logo.png" alt="">
-                <h3><Data>SUPERNOVA EARN</Data></h5>
-            </div> 
-
-            <div class="sidebar-content">
-
-                <div class="main">
-                    <p class="titles">MAIN</p>
-                    <div>
-                        <img src="static\images\dashboard.jfif" alt="">
-                        <a class="rtchge"    href="{{ url_for('dashboard') }}">
-                        <button 
-                     >Dashboard
-                        </button>
-                        </a>
-                    </div>
-                     <div>
-                        <img src="static/images/vip.jfif" alt="">
-
-                        <a class="rtchge" href="/vip">
-                            <button>VIP plans</button>
-                        </a>
-                    </div> 
-                    <div>
-                        <img src="static/images/members" alt="Team Members">
-
-                        <a class="rtchge" href="{{ url_for('team_members') }}">
-                            <button type="button">Team Members</button>
-                        </a>
-                    </div>
-
-                    <div>
-                        <img src="static/images/task-icon.jfif" alt="">
-
-                        <a class="rtchge" href="{{ url_for('task_access') }}">
-                            <button>Tasks</button>
-                        </a>
-                    </div>
-                    <div>
-                        <img src="static/images/progress.jfif">
-
-                        <a class="rtchge" href="/progress">
-
-                            <button>Progress</button>
-                        </a>
-                    </div>
-
-                </div>
-
-                <div class="finance">
-                    <p class="titles">FINANCE</p>
-
-                    <div>
-                        <img src="static/images/recharge1.jfif" alt="">
-                        <a class="rtchge" href="/recharge">
-                            <button>Recharge</button>
-                        </a>
-                    </div>
-                    <div>
-                         <img src="static/images/withdraw.jfif" alt="">
-                           <a class="rtchge" href="{{ url_for('withdraw') }}">
-                            <button>Withdraw</button>
-                          </a>
-                    </div>
-                    
-                    <div>
-                         <img src="static/images/bonus.jfif" alt="">
-                        <p>Commissions</p>
-                    </div>
-
-                </div>
-                <div class="finance">
-                    <p class="titles">HISTORY</p>
-
-                    <div>
-                        <img src="static/images/recharge1.jfif" alt="">
-                        <a class="rtchge" href="{{ url_for('recharge_history') }}">
-                            <button>Recharge</button>
-                        </a>
-                    </div>
-
-                    <div>
-                        <img src="static/images/recharge1.jfif" alt="">
-                        <a class="rtchge"
-                        href="{{ url_for('transaction_history') }}">
-                            <button>Transactions</button>
-                        </a>
-                    </div>
-                    
-                    <div>
-                         <img src="static/images/withdraw.jfif" alt="">
-                           <a class="rtchge" a href="{{ url_for('withdrawal_history') }}">
-                            <button>Withdrawals</button>
-                          </a>
-                    </div>
-                
-
-                </div>
-                <div class="games">
-                    <p class="titles">GAMES</p>
-                
-                    <div onclick="window.location.href='/aviator'">
-                        <img src="static/images/aviator-img.jfif" alt="Aviator">
-                        <p>Aviator</p>
-                    </div>
-
-                    <div>
-   
-                        {% if current_user.is_admin %}
-                        <img src="static/images/admin.jfif" alt="">
-                        <a class="rtchge" href="/admin">
-   
-                            <button>Admin panel</button>
-                        </a>
-                        {% endif %}
-                    </div> 
-                
-                </div>
-
-                <div class="account">
-                    <p class="titles">ACCOUNT</p>
-                   
-                    <div onclick="window.location.href='/profile'">
-                         <img src="static/images/profile" alt="">
-                        <p>Profile</p>
-                    </div>
-                    
-                    <div>
-                         <img src="static/images/logout.jfif" alt="">
-                        <p> <a href="/logout">Sign Out</a></p>
-                    </div>
-
-                </div>
-            </div>             
+            {% endif %}
 
         </div>
 
+        <div class="toast-title">
 
-        <div class="page-content">
+            {% if category=="success" %}
+                Withdrawal Submitted
 
+            {% elif category=="danger" %}
+                Withdrawal Not Allowed
 
-            
-<div class="top-content">
+            {% elif category=="warning" %}
+                Attention Required
 
-    <div class="topleft">
-                    <a href="/profile" class="header-profile2">
-                        <span id="profile" data-username="{{ username }}"></span>
-                    </a>
+            {% endif %}
 
-                    <div class="greeting">
-                        <h5 id="greetingText">Good morning</h5>
-                        <p>{{ username }}</p>
+        </div>
 
-                        <p class="login-location">
-                            🌍 {{ country_name }}
-                            <span>{{ country_code }}</span>
-                        </p>
-                    </div>    
-         </div>
+    </div>
 
-            <div class="topright">
-                    <div class="supernova-pulse">
+    <div class="toast-message">
 
-                    <div class="pulse-header">
-                        <span>✦</span>
-                        <strong>SUPERNOVA PULSE</strong>
-                    </div>
+        {{ message }}
 
-                    <div class="pulse-value">
-                        {{ pulse.pulse }}%
-                    </div>
+    </div>
 
-                    <div class="pulse-label">
-                        {{ pulse.activity_level }} ACTIVITY
-                    </div>
+    <div class="toast-actions">
 
-                    <div class="pulse-bar">
-                        <div
-                            class="pulse-progress"
-                            style="width: {{ pulse.pulse }}%;">
-                        </div>
-                    </div>
+        {% if category=="danger" %}
 
-                    <small>
-                        Based on platform activity in the last 24 hours
-                    </small>
+            <button class="toast-btn toast-primary"
+                    onclick="window.location='/recharge'">
 
-            </div>
+                Recharge Now
+
+            </button>
+
+        {% endif %}
+
+        <button class="toast-btn toast-secondary"
+                onclick="this.closest('.toast').remove()">
+
+            OK
+
+        </button>
+
     </div>
 
 </div>
 
-            <div class="vip-status-card">
+{% endfor %}
 
-                <h3 style="color:rgb(255,145,0);margin-top:20px;">
-                    Current VIP Plan
-                </h3>
+</div>
 
-                <h2 style="color:aqua;margin:0;margin-top:10px;">
-                    {{ vip_level }}
-                </h2>
+{% endif %}
+{% endwith %}
 
-                {% if vip_expires_at %}
+    <!-- ================= HEADER ================= -->
 
-                    <p style="margin:0;margin-top:10px;">
-                        Expires:
-                        {{ vip_expires_at.strftime("%d %B %Y") }}
-                    </p>
+    <div class="page-header">
 
-                    <p style="color:rgba(0,252,0,.9);font-weight:bold;margin-top:10px;">
-                        {{ vip_days_left }} Days Remaining
-                    </p>
+        <h1>
+            <i class="fas fa-money-bill-wave"></i>
+            Withdraw Funds
+        </h1>
 
-                    <div class="vip-buttons">
+        <p>
+            Withdraw your earnings directly to your M-Pesa account.
+        </p>
 
-                        <a href="/vip">
-                            <button class="upgrade-btn">
-                                Upgrade VIP
-                            </button>
-                        </a>
+    </div>
 
-                        {% if vip_days_left <= 2 %}
 
-                        <form action="{{ url_for('renew_membership') }}" method="POST">
-                            <button type="submit" class="renew-btn">
-                                Renew Membership
-                            </button>
-                        </form>
+    <!-- ================= WALLET CARDS ================= -->
 
-                        {% endif %}
+    <div class="wallet-grid">
 
-                    </div>
+        <div class="wallet-card">
 
+            <i class="fas fa-wallet"></i>
+
+            <h3>Main Wallet</h3>
+
+            <h2>
+                {{ "{:,.2f}".format(current_user.withdrawable_wallet) }}
+            </h2>
+
+        </div>
+
+        <div class="wallet-card">
+
+            <i class="fas fa-hand-holding-dollar"></i>
+
+            <h3>Total Withdrawn</h3>
+
+            <h2>
+                KES {{ "{:,.2f}".format(current_user.withdrawn) }}
+            </h2>
+
+        </div>
+
+        <div class="wallet-card">
+
+            <i class="fas fa-crown"></i>
+
+            <h3>VIP Level</h3>
+
+            <h2>
+
+                {{ current_user.vip_level }}
+
+            </h2>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ELIGIBILITY ================= -->
+
+    <div class="eligibility-card">
+
+        <h2>
+
+            Withdrawal Eligibility
+
+        </h2>
+
+        <div class="check-list">
+
+            <div class="check-item">
+
+                {% if current_user.account_active %}
+                    <i class="fas fa-circle-check success"></i>
                 {% else %}
+                    <i class="fas fa-circle-xmark danger"></i>
+                {% endif %}
 
-                    <p style="color:white;">
-                        You are on a Free plan.
+                Active Account
+
+            </div>
+
+            <div class="check-item">
+
+                {% if current_user.vip_expires_at and current_user.vip_expires_at > now and current_user.vip_level != "Free" %}
+                    <i class="fas fa-circle-check success"></i>
+                {% else %}
+                    <i class="fas fa-circle-xmark danger"></i>
+                {% endif %}
+
+                VIP Membership
+
+            </div>
+
+            <div class="check-item">
+
+                {% if current_user.withdrawal_unlocked or current_user.withdrawable_wallet >= minimum_withdrawal %}
+                    <i class="fas fa-circle-check success"></i>
+                {% else %}
+                    <i class="fas fa-circle-xmark danger"></i>
+                {% endif %}
+
+                Minimum Wallet Balance (KES {{ minimum_withdrawal }})
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= CONTRIBUTION ================= -->
+
+    <div class="progress-card">
+
+        <h2>
+
+            Contribution Progress
+
+        </h2>
+
+        <div class="progress-bar">
+
+            <div
+                id="progressFill"
+                class="progress-fill">
+
+            </div>
+
+        </div>
+
+        <div class="progress-values">
+
+            <span>
+
+                Current
+
+                <strong>
+
+                    KES {{ "{:,.2f}".format(current_user.referral_contribution_balance) }}
+
+                </strong>
+
+            </span>
+
+            <span>
+
+                Required
+
+                <strong>
+
+                    KES {{ required_contribution }}
+
+                </strong>
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= FORM ================= -->
+
+    <div class="withdraw-card">
+
+        <h2>
+
+            Request Withdrawal
+
+        </h2>
+
+        <form method="POST">
+
+            <label>
+
+                Amount
+
+            </label>
+
+            <input
+                type="number"
+                name="amount"
+                min="{{ minimum_withdrawal }}"
+                {% if current_user.withdrawal_unlocked %}
+                placeholder="Enter withdrawal amount"
+                {% else %}
+                placeholder="Minimum KES {{ minimum_withdrawal }}"
+                {% endif %}
+                required>
+
+            <label>
+
+                M-Pesa Number
+
+            </label>
+
+            <input
+                type="text"
+                name="phone"
+                value="{{ current_user.phone }}"
+                required>
+
+            <button>
+
+                <i class="fas fa-paper-plane"></i>
+
+                Request Withdrawal
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- ================= POLICY ================= -->
+
+    <div class="policy-card">
+
+        <h2>
+
+            Withdrawal Policy
+
+        </h2>
+
+        <ul>
+
+            <li>
+                Your first withdrawal requires at least
+                <strong>KES {{ "{:,.0f}".format(minimum_withdrawal) }}</strong>
+                in your withdrawable wallet.
+            </li>
+
+            <li>
+                After your first successful withdrawal,
+                you may withdraw any amount you earn while your VIP membership remains active.
+            </li>
+
+            <li>Only one pending withdrawal is allowed.</li>
+
+            <li>Your VIP membership must be active.</li>
+
+            <li>You must reach the required contribution.</li>
+
+            <li>The contribution is deducted ONLY on the first successful withdrawal of the current membership.</li>
+
+            <li>Any remaining contribution balance carries forward to the next membership renewal.</li>
+
+            <li>Withdrawals are sent automatically to your M-Pesa account via IntaSend.</li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- ================= HISTORY ================= -->
+
+    <div class="history-card">
+
+        <h2>
+
+            Recent Withdrawals
+
+        </h2>
+
+<div id="withdraw-history">
+
+{% if withdrawals %}
+
+    {% for withdrawal in withdrawals %}
+
+    <div class="withdraw-item">
+
+        <div>
+
+            <h3>
+                KES {{ "{:,.2f}".format(withdrawal.amount) }}
+            </h3>
+
+            <p>
+                {{ withdrawal.created_at.strftime("%d %b %Y %I:%M %p") }}
+            </p>
+
+            <small>
+
+                Reference:
+                {{ withdrawal.reference }}
+
+            </small>
+
+            {% if withdrawal.mpesa_receipt %}
+
+            <br>
+
+            <small>
+
+                M-Pesa Receipt:
+                {{ withdrawal.mpesa_receipt }}
+
+            </small>
+
+            {% endif %}
+
+        </div>
+
+        <div>
+
+            {% if withdrawal.status == "Paid" %}
+
+                <span class="status paid">
+
+                    <i class="fas fa-circle-check"></i>
+
+                    Paid
+
+                </span>
+
+            {% elif withdrawal.status == "Pending" %}
+
+                <span class="status pending">
+
+                    <i class="fas fa-clock"></i>
+
+                    Pending
+
+                </span>
+
+            {% elif withdrawal.status == "Approved" %}
+
+                <span class="status approved">
+
+                    <i class="fas fa-user-check"></i>
+
+                    Approved
+
+                </span>
+
+            {% elif withdrawal.status == "Failed" %}
+
+                <span class="status failed">
+
+                    <i class="fas fa-circle-xmark"></i>
+
+                    Failed
+
+                </span>
+
+            {% elif withdrawal.status == "Rejected" %}
+
+                <span class="status rejected">
+
+                    <i class="fas fa-ban"></i>
+
+                    Rejected
+
+                </span>
+
+                {% if withdrawal.admin_note %}
+
+                    <p class="reject-note">
+
+                        {{ withdrawal.admin_note }}
+
                     </p>
-
-                    <a href="/vip">
-                        <button class="upgrade-btn">
-                            Upgrade to VIP
-                        </button>
-                    </a>
 
                 {% endif %}
 
-            </div>
-
-            <div class="wallet-income">
-                <p class="p1"> TOTAL INCOME</p>
-                <h2>Ksh. {{ total_income }}</h2>
-                <p>ALL WALLETS COMBINED</p>
-            </div>
-
-
-            <div class="income">
-                
-                    <div class="team-income">
-                            <h4>Ksh. {{ team_wallet }}</h4>
-                            <p>TEAM</p>
-
-                    </div>
-                    <div class="withdrawm-income">
-                            <h4>Ksh. {{ withdrawn }}</h4>
-                            <p>WITHDRAWN</p>
-
-                    </div>
-                    
-                    <div class="today-income">
-                        <h4>Ksh. {{ today_earnings }}</h4>
-                        <p>TODAY</p>
-                    </div>
-
-            </div>
-         <div class="wallet-container">
-            <p class="wallet-name">YOUR WALLETS</p>
-            
-            <div class="all-wallets">
-                
-                 <div class="main-wallet">
-                     <img src="static/images/wallet.jfif" alt="" class="wallets-img">
-                     <p>MAIN WALLET</p>
-                     <h4>Ksh. {{ main_wallet }}</h4>
-                      <h6>MAIN</h6>
-                </div>
-
-                <div class="task-wallet">
-                     <img src="static/images/withdrawalable wallet.jfif" alt="" class="withdrawable-img" class="wallets-img">
-                     <p>WITHDRAWABLE WALLET</p>
-                     <h4>Ksh. {{ withdrawable_wallet }}</h4>
-                      <h6>EARN</h6>
-                </div>
-
-                <div class="team-earnings">
-                    <img src="static/images/team earnins.jfif" alt="" class="wallets-img">
-                     <p>TEAM EARNINGS</p>
-                     <h4>Ksh. {{ team_wallet }}</h4>
-                    <h6>TEAM</h6>
-                </div>
-
-
-                <div class="task-wallet">
-                     <img class="task-img" src="static/images/task wallet.jfif" alt="" class="wallets-img">
-                     <p>TASK WALLET</p>
-                     <h4>Ksh. {{ task_wallet }}</h4>
-                      <h6>TASK</h6>
-                </div>
-
-                <div class="total-withdrawals">
-                     <img src="static/images/today earn.jfif" alt="" class="wallets-img">
-                     <p>TOTAL WITHDRAWN</p>
-                     <h4>Ksh. {{ withdrawn }}</h4>
-                      <h6>PAID</h6>
-                </div>
-
-                <div class="today-earnings">
-
-                    <img class="earnings-img"
-                        src="static/images/today earnings.jfif">
-
-                    <p>TODAY'S EARNINGS</p>
-
-                    <h4>Ksh. {{ today_earnings }}</h4>
-
-                    <h6>TODAY</h6>
-
-                </div>
-
-                <div class="commissions">
-                     <img src="static/images/commission.jfif" alt="" class="wallets-img">
-                     <p>COMMISSIONS</p>
-                     <h4>Ksh. {{ commissions }}</h4>
-                      <h6>COMMS</h6>
-                </div>
-
-               
-            </div>
-
-        <div class="link-container">
-                <div class="invite-link">
-
-                    <div class="referral-header">
-
-                        <div class="referral-title">
-
-                            👥 Referral Center
-
-                        </div>
-
-                        <div class="referral-badge">
-
-                            {{ total_referrals }} Members
-
-                        </div>
-
-                    </div>
-
-                    <p class="referral-text">
-                        Invite your friends and earn commissions whenever they recharge.
-                    </p>
-
-                    <div class="referral-summary">
-
-                        <div class="summary-card">
-
-                            <h4>{{ total_referrals }}</h4>
-
-                            <p>Total Referrals</p>
-
-                        </div>
-
-                        <div class="summary-card">
-
-                            <h4>KES {{ commissions }}</h4>
-
-                            <p>Commission Earned</p>
-
-                        </div>
-
-                    </div>
-
-                    <div class="link-box">
-
-                        <input
-                            type="text"
-                            id="referralLink"
-                            value="{{ referral_link }}"
-                            readonly
-                        >
-
-                        <button
-                            id="copyBtn"
-                            onclick="copyReferralLink()">
-
-                            📋 COPY LINK
-
-                        </button>
-
-                    </div>
-
-                </div>
-             </div>
-        </div>   
-        </div>    
+            {% endif %}
 
         </div>
+
     </div>
 
-<!-- =====================================================
-     PHOTO CROP MODAL
-===================================================== -->
+    {% endfor %}
 
-<div
-    class="crop-modal"
-    id="cropModal">
+{% else %}
 
-    <div class="crop-card">
+<div class="empty-history">
 
-        <div class="crop-header">
+    <i class="fas fa-wallet"></i>
 
-            <h3>
-                Edit Profile Photo
-            </h3>
+    <h3>
 
-            <button
-                type="button"
-                class="crop-close"
-                onclick="closeCropModal()">
+        No withdrawals yet
 
-                &times;
+    </h3>
 
-            </button>
+    <p>
 
-        </div>
+        Your withdrawal history will appear here.
 
+    </p>
 
-        <div class="crop-area">
+</div>
 
-            <canvas
-                id="cropCanvas">
-            </canvas>
+{% endif %}
 
-        </div>
-
-
-        <div class="crop-controls">
-
-            <button
-                type="button"
-                onclick="zoomOut()">
-
-                −
-
-            </button>
-
-            <input
-                type="range"
-                id="zoomSlider"
-                min="1"
-                max="3"
-                step="0.01"
-                value="1"
-            >
-
-            <button
-                type="button"
-                onclick="zoomIn()">
-
-                +
-
-            </button>
-
-        </div>
-
-
-        <p class="crop-hint">
-
-            Drag the photo to position it.
-            Use the slider to zoom.
-
-        </p>
-
-
-        <div class="crop-actions">
-
-            <button
-                type="button"
-                class="cancel-crop-btn"
-                onclick="closeCropModal()">
-
-                Cancel
-
-            </button>
-
-            <button
-                type="button"
-                class="save-crop-btn"
-                onclick="saveCroppedPhoto()">
-
-                Save Photo
-
-            </button>
-
-        </div>
+</div>
 
     </div>
 
 </div>
+
+<script src="{{ url_for('static', filename='js/withdraw.js') }}"></script>
 <script>
+    // ==============================
+// WITHDRAW PAGE
+// ==============================
 
-let selectedImage = null;
+document.addEventListener("DOMContentLoaded", () => {
 
-let imageScale = 1;
+    // -----------------------------
+    // Elements
+    // -----------------------------
 
-let imageX = 0;
-let imageY = 0;
+    const progressBar = document.getElementById("progressFill");
 
-let startX = 0;
-let startY = 0;
+    const currentContribution =
+        Number(document.body.dataset.currentContribution || 0);
 
-let dragging = false;
+    const requiredContribution =
+        Number(document.body.dataset.requiredContribution || 0);
 
-const input =
-    document.getElementById(
-        "profilePhotoInput"
-    );
+    const amountInput = document.querySelector("input[name='amount']");
 
-const modal =
-    document.getElementById(
-        "cropModal"
-    );
+    const phoneInput = document.querySelector("input[name='phone']");
 
-const canvas =
-    document.getElementById(
-        "cropCanvas"
-    );
+    const submitBtn = document.querySelector("button");
 
-const ctx =
-    canvas.getContext("2d");
+    const walletBalance =
+        Number(document.body.dataset.mainWallet || 500);
 
-const zoomSlider =
-    document.getElementById(
-        "zoomSlider"
-    );
+    const hasPending =
+        document.body.dataset.pendingWithdrawal === "true";
 
-const cropArea =
-    document.querySelector(
-        ".crop-area"
-    );
+    const minimumWithdrawal =
+    Number(document.body.dataset.minimumWithdrawal || 0);
 
+    const withdrawalUnlocked =
+        document.body.dataset.withdrawalUnlocked === "true";
 
-/* =====================================================
-   OPEN FILE PICKER
-===================================================== */
+    // -----------------------------
+    // Progress Bar
+    // -----------------------------
 
-function openPhotoPicker() {
+    if (progressBar && requiredContribution > 0) {
 
-    input.click();
+        let percent = (currentContribution / requiredContribution) * 100;
 
-}
+        if (percent > 100)
+            percent = 100;
 
+        progressBar.style.width = percent + "%";
 
-/* =====================================================
-   FILE SELECTED
-===================================================== */
+    }
 
-input.addEventListener(
-    "change",
-    function () {
+    // -----------------------------
+    // Validate Withdrawal
+    // -----------------------------
 
-        const file =
-            this.files[0];
+    function validateWithdrawal() {
 
-        if (!file) {
-            return;
-        }
+        const amount = Number(amountInput.value);
 
-        if (!file.type.startsWith("image/")) {
+        // Minimum
 
-            alert(
-                "Please select an image."
-            );
+        if (!withdrawalUnlocked && amount < minimumWithdrawal) {
+
+            submitBtn.disabled = true;
+
+            submitBtn.innerHTML =
+                `Minimum Withdrawal is KES ${minimumWithdrawal}`;
 
             return;
         }
 
-        const reader =
-            new FileReader();
+        // Wallet
 
-        reader.onload = function(e) {
+        if (amount > walletBalance) {
 
-            selectedImage =
-                new Image();
+            submitBtn.disabled = true;
 
-            selectedImage.onload =
-                function() {
-
-                    imageScale = 1;
-
-                    imageX = 0;
-
-                    imageY = 0;
-
-                    zoomSlider.value = 1;
-
-                    openCropModal();
-
-                    drawCrop();
-
-                };
-
-            selectedImage.src =
-                e.target.result;
-
-        };
-
-        reader.readAsDataURL(file);
-
-        // Allow selecting the same image again
-        this.value = "";
-
-    }
-);
-
-
-/* =====================================================
-   OPEN MODAL
-===================================================== */
-
-function openCropModal() {
-
-    modal.style.display =
-        "flex";
-
-    resizeCanvas();
-
-}
-
-
-/* =====================================================
-   CLOSE MODAL
-===================================================== */
-
-function closeCropModal() {
-
-    modal.style.display =
-        "none";
-
-    selectedImage = null;
-
-}
-
-
-/* =====================================================
-   RESIZE CANVAS
-===================================================== */
-
-function resizeCanvas() {
-
-    const size =
-        cropArea.clientWidth;
-
-    canvas.width = size;
-    canvas.height = size;
-
-    drawCrop();
-
-}
-
-
-/* =====================================================
-   DRAW IMAGE
-===================================================== */
-
-function drawCrop() {
-
-    if (!selectedImage) {
-        return;
-    }
-
-    const size =
-        canvas.width;
-
-    ctx.clearRect(
-        0,
-        0,
-        size,
-        size
-    );
-
-    ctx.fillStyle =
-        "#000";
-
-    ctx.fillRect(
-        0,
-        0,
-        size,
-        size
-    );
-
-
-    /*
-        Make the image cover
-        the crop area.
-    */
-
-    const scaleToCover =
-        Math.max(
-            size / selectedImage.width,
-            size / selectedImage.height
-        );
-
-    const finalScale =
-        scaleToCover *
-        imageScale;
-
-    const width =
-        selectedImage.width *
-        finalScale;
-
-    const height =
-        selectedImage.height *
-        finalScale;
-
-
-    const x =
-        (size - width) / 2 +
-        imageX;
-
-    const y =
-        (size - height) / 2 +
-        imageY;
-
-
-    ctx.drawImage(
-        selectedImage,
-        x,
-        y,
-        width,
-        height
-    );
-
-}
-
-
-/* =====================================================
-   ZOOM SLIDER
-===================================================== */
-
-zoomSlider.addEventListener(
-    "input",
-    function() {
-
-        imageScale =
-            parseFloat(
-                this.value
-            );
-
-        drawCrop();
-
-    }
-);
-
-
-/* =====================================================
-   ZOOM IN
-===================================================== */
-
-function zoomIn() {
-
-    imageScale =
-        Math.min(
-            imageScale + 0.1,
-            3
-        );
-
-    zoomSlider.value =
-        imageScale;
-
-    drawCrop();
-
-}
-
-
-/* =====================================================
-   ZOOM OUT
-===================================================== */
-
-function zoomOut() {
-
-    imageScale =
-        Math.max(
-            imageScale - 0.1,
-            1
-        );
-
-    zoomSlider.value =
-        imageScale;
-
-    drawCrop();
-
-}
-
-
-/* =====================================================
-   MOUSE DRAG
-===================================================== */
-
-cropArea.addEventListener(
-    "mousedown",
-    function(e) {
-
-        dragging = true;
-
-        startX =
-            e.clientX - imageX;
-
-        startY =
-            e.clientY - imageY;
-
-    }
-);
-
-
-document.addEventListener(
-    "mousemove",
-    function(e) {
-
-        if (!dragging) {
-            return;
-        }
-
-        imageX =
-            e.clientX - startX;
-
-        imageY =
-            e.clientY - startY;
-
-        drawCrop();
-
-    }
-);
-
-
-document.addEventListener(
-    "mouseup",
-    function() {
-
-        dragging = false;
-
-    }
-);
-
-
-/* =====================================================
-   TOUCH DRAG
-===================================================== */
-
-cropArea.addEventListener(
-    "touchstart",
-    function(e) {
-
-        const touch =
-            e.touches[0];
-
-        dragging = true;
-
-        startX =
-            touch.clientX - imageX;
-
-        startY =
-            touch.clientY - imageY;
-
-    },
-    { passive: true }
-);
-
-
-cropArea.addEventListener(
-    "touchmove",
-    function(e) {
-
-        if (!dragging) {
-            return;
-        }
-
-        const touch =
-            e.touches[0];
-
-        imageX =
-            touch.clientX - startX;
-
-        imageY =
-            touch.clientY - startY;
-
-        drawCrop();
-
-    },
-    { passive: true }
-);
-
-
-cropArea.addEventListener(
-    "touchend",
-    function() {
-
-        dragging = false;
-
-    }
-);
-
-
-/* =====================================================
-   SAVE CROPPED PHOTO
-===================================================== */
-
-function saveCroppedPhoto() {
-
-    if (!selectedImage) {
-        return;
-    }
-
-    const output =
-        document.createElement(
-            "canvas"
-        );
-
-    const outputSize = 600;
-
-    output.width =
-        outputSize;
-
-    output.height =
-        outputSize;
-
-    const outputCtx =
-        output.getContext("2d");
-
-
-    /*
-       Same calculation as preview
-    */
-
-    const previewSize =
-        canvas.width;
-
-    const scaleToCover =
-        Math.max(
-            previewSize /
-                selectedImage.width,
-
-            previewSize /
-                selectedImage.height
-        );
-
-    const finalScale =
-        scaleToCover *
-        imageScale;
-
-    const width =
-        selectedImage.width *
-        finalScale;
-
-    const height =
-        selectedImage.height *
-        finalScale;
-
-    const x =
-        (previewSize - width) / 2 +
-        imageX;
-
-    const y =
-        (previewSize - height) / 2 +
-        imageY;
-
-
-    /*
-       Scale coordinates from
-       preview canvas to output.
-    */
-
-    const factor =
-        outputSize /
-        previewSize;
-
-
-    outputCtx.drawImage(
-        selectedImage,
-
-        x * factor,
-        y * factor,
-
-        width * factor,
-        height * factor
-    );
-
-
-    /*
-       Convert to JPEG
-    */
-
-    output.toBlob(
-        function(blob) {
-
-            uploadCroppedPhoto(
-                blob
-            );
-
-        },
-        "image/jpeg",
-        0.90
-    );
-
-}
-
-
-/* =====================================================
-   UPLOAD TO FLASK
-===================================================== */
-
-function uploadCroppedPhoto(blob) {
-
-    const formData = new FormData();
-
-    formData.append(
-        "profile_photo",
-        blob,
-        "profile.jpg"
-    );
-
-    const saveButton =
-        document.querySelector(".save-crop-btn");
-
-    saveButton.disabled = true;
-    saveButton.textContent = "Saving...";
-
-    fetch("/upload-profile-photo", {
-        method: "POST",
-        body: formData
-    })
-
-    .then(async response => {
-
-        // Get the response as text first
-        const text = await response.text();
-
-        console.log("SERVER STATUS:", response.status);
-        console.log("SERVER RESPONSE:", text);
-
-        // Try to convert it to JSON
-        let data;
-
-        try {
-            data = JSON.parse(text);
-        }
-
-        catch (error) {
-
-            console.error(
-                "SERVER DID NOT RETURN JSON:",
-                error
-            );
-
-            throw new Error(
-                "Server returned non-JSON response: " +
-                text.substring(0, 500)
-            );
-        }
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.message ||
-                "Server returned HTTP " +
-                response.status
-            );
-        }
-
-        return data;
-    })
-
-    .then(data => {
-
-        console.log(
-            "UPLOAD SUCCESS:",
-            data
-        );
-
-        if (!data.success) {
-
-            alert(
-                data.message ||
-                "Unable to save photo."
-            );
+            submitBtn.innerHTML =
+                "Insufficient Withdrawable Wallet";
 
             return;
         }
 
-        /*
-           IMPORTANT:
-           Your dashboard uses headerProfileImage,
-           not profilePreview.
-        */
+        // Contribution
 
-        const profileImage =
-            document.getElementById(
-                "headerProfileImage"
-            );
+        if (currentContribution < requiredContribution) {
 
-        if (profileImage) {
+            submitBtn.disabled = true;
 
-            profileImage.src =
-                data.image_url +
-                "?t=" +
-                Date.now();
+            submitBtn.innerHTML =
+                "Contribution Requirement Not Met";
 
+            return;
         }
 
-        closeCropModal();
+        // Pending
 
-        alert(
-            "Profile photo updated successfully."
-        );
+        if (hasPending) {
 
-    })
+            submitBtn.disabled = true;
 
-    .catch(error => {
+            submitBtn.innerHTML =
+                "Pending Withdrawal Exists";
 
-        console.error(
-            "UPLOAD ERROR:",
-            error
-        );
+            return;
+        }
 
-        alert(
-            "Photo upload failed.\n\n" +
-            error.message
-        );
+        submitBtn.disabled = false;
 
-    })
+        submitBtn.innerHTML =
+            '<i class="fas fa-paper-plane"></i> Request Withdrawal';
 
-    .finally(() => {
+    }
 
-        saveButton.disabled = false;
+    if (amountInput) {
 
-        saveButton.textContent =
-            "Save Photo";
+        amountInput.addEventListener("input", validateWithdrawal);
+
+        validateWithdrawal();
+
+    }
+
+    // -----------------------------
+    // Loading Animation
+    // -----------------------------
+
+    const form = document.querySelector("form");
+
+    if (form) {
+
+        form.addEventListener("submit", () => {
+
+            submitBtn.disabled = true;
+
+            submitBtn.innerHTML =
+                '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+        });
+
+    }
+
+});
+</script>
+<script>
+setTimeout(function(){
+
+    const toasts = document.querySelectorAll(".toast");
+
+    toasts.forEach(function(toast){
+
+        toast.style.transition = ".5s";
+        toast.style.opacity = "0";
+        toast.style.transform = "translateX(100px)";
+
+        setTimeout(function(){
+            toast.remove();
+        },500);
 
     });
-}
 
-
-/* =====================================================
-   REMOVE PHOTO
-===================================================== */
-
-function removeProfilePhoto() {
-
-    if (
-        !confirm(
-            "Remove your profile photo?"
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    fetch(
-        "/remove-profile-photo",
-        {
-            method: "POST"
-        }
-    )
-
-    .then(
-        response =>
-            response.json()
-    )
-
-    .then(
-        data => {
-
-            if (!data.success) {
-
-                alert(
-                    data.message ||
-                    "Unable to remove photo."
-                );
-
-                return;
-            }
-
-
-            document.getElementById(
-                "profilePreview"
-            ).src =
-                data.image_url +
-                "?t=" +
-                Date.now();
-
-
-            alert(
-                "Profile photo removed."
-            );
-
-        }
-    )
-
-    .catch(
-        error => {
-
-            console.error(
-                "REMOVE PHOTO ERROR:",
-                error
-            );
-
-            alert(
-                "Something went wrong."
-            );
-
-        }
-    );
-
-}
-
-
-/* =====================================================
-   WINDOW RESIZE
-===================================================== */
-
-window.addEventListener(
-    "resize",
-    function() {
-
-        if (
-            modal.style.display ===
-            "flex"
-        ) {
-
-            resizeCanvas();
-
-        }
-
-    }
-);
-
+},5000);
 </script>
-<script>
-const profileContainer = document.getElementById("profileImageContainer");
-const profileInput = document.getElementById("profilePhotoInput");
-const profileImage = document.getElementById("profileImage");
-const profileInitial = document.getElementById("profileInitial");
 
 
-// Get first letter of username
-const username = profileInitial.dataset.username;
 
-if (username) {
-    profileInitial.textContent = username.charAt(0).toUpperCase();
-}
-
-
-// Open device storage when profile is clicked
-profileContainer.addEventListener("click", function () {
-    profileInput.click();
-});
-
-
-// When user selects a photo
-profileInput.addEventListener("change", function () {
-
-    const file = this.files[0];
-
-    if (!file) {
-        return;
-    }
-
-    // Make sure it is an image
-    if (!file.type.startsWith("image/")) {
-        alert("Please select an image.");
-        return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-
-        // Display selected photo
-        profileImage.src = e.target.result;
-        profileImage.style.display = "block";
-
-        // Hide username initial
-        profileInitial.style.display = "none";
-    };
-
-    reader.readAsDataURL(file);
-
-});
-</script>
-<script>
-function updateGreeting() {
-    const hour = new Date().getHours();
-
-    let greeting;
-
-    if (hour >= 0 && hour < 12) {
-        greeting = "Good morning";
-    } else if (hour >= 12 && hour < 16) {
-        greeting = "Good afternoon";
-    } else if (hour >= 16 && hour < 19) {
-        greeting = "Good evening";
-    } else {
-        greeting = "Good night";
-    }
-
-    document.getElementById("greetingText").textContent = greeting;
-}
-
-updateGreeting();
-</script>
 </body>
+
 </html>

@@ -16,126 +16,130 @@
 
 </head>
 <style>
-   /* ===========================
-   WITHDRAW PAGE
-=========================== */
+
+/* =====================================================
+   SUPERNOVA WITHDRAWAL PAGE
+===================================================== */
 
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family:"Segoe UI", Arial, sans-serif;
 }
 
 body{
-
-    background:#020e28a0;
-    color:#020202;
-
+    min-height:100vh;
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            #152417 0%,
+            #07100d 35%,
+            #020504 75%,
+            #010202 100%
+        );
+    color:#fff;
 }
+
+
+/* =====================================================
+   MAIN CONTAINER
+===================================================== */
 
 .withdraw-container{
-
-    max-width:1200px;
-
-    margin:40px auto;
-
-    padding:20px;
-
+    width:100%;
+    max-width:1100px;
+    margin:0 auto;
+    padding:35px 20px 50px;
 }
 
 
-/* ===========================
-HEADER
-=========================== */
+/* =====================================================
+   HEADER
+===================================================== */
 
 .page-header{
-
-    margin-bottom:30px;
-
+    margin-bottom:28px;
 }
 
 .page-header h1{
+    color:#ffffff;
+    font-size:30px;
+    font-weight:700;
+    margin-bottom:8px;
+}
 
-    color:#1565c0;
-
-    font-size:34px;
-
-    margin-bottom:10px;
-
+.page-header h1 i{
+    color:#dcf803;
+    margin-right:8px;
 }
 
 .page-header p{
-
-    color:#666;
-
+    color:#8e9a95;
+    font-size:14px;
 }
 
 
-/* ===========================
-WALLET CARDS
-=========================== */
+/* =====================================================
+   WALLET CARDS
+===================================================== */
 
 .wallet-grid{
-
     display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(220px,1fr));
 
-    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-
-    gap:20px;
-
-    margin-bottom:30px;
-
+    gap:15px;
+    margin-bottom:20px;
 }
 
 .wallet-card{
+    background:
+        linear-gradient(
+            145deg,
+            #101917,
+            #080e0c
+        );
 
-    background:#ffffff;
+    border:1px solid rgba(255,255,255,.07);
 
-    border-radius:18px;
+    border-radius:15px;
 
-    padding:25px;
+    padding:22px;
 
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.35);
 
-    transition:.3s;
-
+    transition:.25s;
 }
 
 .wallet-card:hover{
-
-    transform:translateY(-6px);
-
+    transform:translateY(-3px);
+    border-color:rgba(220,248,3,.18);
 }
 
 .wallet-card i{
-
-    font-size:34px;
-
-    color:#1976d2;
-
-    margin-bottom:15px;
-
+    font-size:25px;
+    color:#dcf803;
+    margin-bottom:14px;
 }
 
 .wallet-card h3{
-
-    color:#666;
-
-    margin-bottom:8px;
-
+    color:#8f9a96;
+    font-size:13px;
+    font-weight:500;
+    margin-bottom:7px;
 }
 
 .wallet-card h2{
-
-    color:#1565c0;
-
+    color:#fff;
+    font-size:22px;
 }
 
 
-/* ===========================
-COMMON CARDS
-=========================== */
+/* =====================================================
+   COMMON CARDS
+===================================================== */
 
 .eligibility-card,
 .progress-card,
@@ -143,194 +147,248 @@ COMMON CARDS
 .policy-card,
 .history-card{
 
-    background:white;
+    background:
+        linear-gradient(
+            145deg,
+            #0d1512,
+            #060b09
+        );
 
-    border-radius:18px;
+    border:1px solid rgba(255,255,255,.07);
 
-    padding:25px;
+    border-radius:16px;
 
-    margin-bottom:25px;
+    padding:23px;
 
-    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    margin-bottom:18px;
 
+    box-shadow:
+        0 12px 35px rgba(0,0,0,.32);
+}
+
+.eligibility-card h2,
+.progress-card h2,
+.withdraw-card h2,
+.policy-card h2,
+.history-card h2{
+    color:#fff;
+    font-size:19px;
+    margin-bottom:18px;
 }
 
 
-/* ===========================
-ELIGIBILITY
-=========================== */
+/* =====================================================
+   ELIGIBILITY
+===================================================== */
 
 .check-item{
-
     display:flex;
-
     align-items:center;
+    gap:11px;
 
-    gap:12px;
+    margin:13px 0;
 
-    margin:15px 0;
+    color:#d3d8d5;
+    font-size:14px;
+}
 
+.check-item i{
     font-size:17px;
-
 }
 
 .success{
-
-    color:#2e7d32;
-
+    color:#20d97f;
 }
 
 .danger{
-
-    color:#d32f2f;
-
+    color:#ef4444;
 }
 
 
-/* ===========================
-PROGRESS BAR
-=========================== */
+/* =====================================================
+   CONTRIBUTION PROGRESS
+===================================================== */
 
 .progress-bar{
+    height:9px;
 
-    height:18px;
+    background:#18221f;
 
-    background:#d9e6ff;
-
-    border-radius:50px;
+    border-radius:20px;
 
     overflow:hidden;
 
-    margin:25px 0;
-
+    margin:20px 0 14px;
 }
 
 .progress-fill{
-
     height:100%;
-
     width:0;
 
-    border-radius:50px;
+    border-radius:20px;
 
-    background:linear-gradient(90deg,#1976d2,#42a5f5);
+    background:
+        linear-gradient(
+            90deg,
+            #16b364,
+            #dcf803
+        );
 
-    transition:1s;
-
+    transition:
+        width .8s ease;
 }
 
 .progress-values{
-
     display:flex;
-
     justify-content:space-between;
-
-    flex-wrap:wrap;
-
     gap:15px;
 
+    color:#8e9994;
+    font-size:12px;
+}
+
+.progress-values strong{
+    color:#fff;
+    margin-left:4px;
 }
 
 
-/* ===========================
-FORM
-=========================== */
+/* =====================================================
+   WITHDRAW FORM
+===================================================== */
 
 .withdraw-card form{
-
     display:flex;
-
     flex-direction:column;
-
 }
 
 .withdraw-card label{
-
-    margin-top:18px;
-
-    margin-bottom:8px;
-
-    font-weight:bold;
-
+    color:#aab3af;
+    font-size:13px;
+    margin-top:14px;
+    margin-bottom:7px;
 }
 
 .withdraw-card input{
 
-    padding:15px;
+    width:100%;
 
-    border:1px solid #d6d6d6;
+    padding:14px 15px;
 
-    border-radius:12px;
+    background:#080e0c;
 
-    font-size:16px;
+    color:#fff;
+
+    border:1px solid #26312d;
+
+    border-radius:10px;
+
+    font-size:15px;
 
     outline:none;
 
-    transition:.3s;
+    transition:.25s;
+}
 
+.withdraw-card input::placeholder{
+    color:#69736f;
 }
 
 .withdraw-card input:focus{
 
-    border-color:#1976d2;
+    border-color:#dcf803;
 
+    box-shadow:
+        0 0 0 2px
+        rgba(220,248,3,.07);
 }
+
+
+/* =====================================================
+   WITHDRAW BUTTON
+===================================================== */
 
 .withdraw-card button{
 
-    margin-top:25px;
+    margin-top:22px;
 
-    padding:16px;
+    padding:14px;
 
     border:none;
 
-    border-radius:12px;
+    border-radius:10px;
 
-    background:#1565c0;
+    background:#dcf803;
 
-    color:white;
+    color:#111;
 
-    font-size:17px;
+    font-size:15px;
+
+    font-weight:700;
 
     cursor:pointer;
 
-    transition:.3s;
-
+    transition:.25s;
 }
 
 .withdraw-card button:hover{
 
-    background:#0d47a1;
+    background:#c9e600;
 
-    transform:translateY(-3px);
+    transform:translateY(-2px);
+}
 
+.withdraw-card button:disabled{
+
+    background:#27302d;
+
+    color:#737c78;
+
+    cursor:not-allowed;
+
+    transform:none;
 }
 
 
-/* ===========================
-POLICY
-=========================== */
+/* =====================================================
+   POLICY
+===================================================== */
 
 .policy-card ul{
-
-    margin-top:15px;
-
+    margin-top:8px;
     padding-left:20px;
-
 }
 
 .policy-card li{
 
-    margin:12px 0;
+    color:#9ba49f;
 
-    line-height:1.6;
+    font-size:13px;
 
+    line-height:1.7;
+
+    margin:9px 0;
+}
+
+.policy-card strong{
+    color:#fff;
 }
 
 
-/* ===========================
-HISTORY
-=========================== */
+/* =====================================================
+   WITHDRAW HISTORY
+===================================================== */
+
+#withdraw-history{
+
+    max-height:330px;
+
+    overflow-y:auto;
+
+    overflow-x:hidden;
+
+    padding-right:6px;
+}
 
 .withdraw-item{
 
@@ -340,145 +398,152 @@ HISTORY
 
     align-items:center;
 
-    padding:18px;
+    gap:15px;
 
-    margin-top:15px;
+    padding:16px;
 
-    border-radius:12px;
+    margin-top:10px;
 
-    background:#f7f9fc;
+    background:#080e0c;
 
+    border:1px solid rgba(255,255,255,.05);
+
+    border-radius:11px;
 }
+
+.withdraw-item h3{
+    color:#fff;
+    font-size:16px;
+    margin-bottom:5px;
+}
+
+.withdraw-item p{
+    color:#8b9590;
+    font-size:12px;
+    margin-bottom:4px;
+}
+
+.withdraw-item small{
+    color:#68736e;
+    font-size:10px;
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
 
 .status{
 
-    padding:7px 14px;
+    display:inline-flex;
 
-    border-radius:25px;
+    align-items:center;
 
-    color:white;
+    gap:5px;
 
-    font-size:13px;
+    padding:6px 11px;
 
+    border-radius:20px;
+
+    color:#fff;
+
+    font-size:11px;
+
+    white-space:nowrap;
 }
 
 .status.paid{
-
-    background:#2e7d32;
-
+    background:#126b42;
 }
 
 .status.pending{
-
-    background:#ff9800;
-
+    background:#8a5b08;
 }
 
 .status.failed{
+    background:#8d2525;
+}
 
-    background:#d32f2f;
+.status.approved{
+    background:#17629a;
+}
 
+.status.rejected{
+    background:#4b5050;
+}
+
+.reject-note{
+    color:#ef5555;
+    font-size:11px;
+    margin-top:8px;
 }
 
 
-/* ===========================
-RESPONSIVE
-=========================== */
-
-@media(max-width:768px){
-
-.wallet-grid{
-
-grid-template-columns:1fr;
-
-}
-
-.progress-values{
-
-flex-direction:column;
-
-}
-
-.withdraw-item{
-
-flex-direction:column;
-
-align-items:flex-start;
-
-gap:10px;
-
-}
-
-} 
-.approved{
-
-    background:#1976d2;
-
-}
-
-.rejected{
-
-    background:#616161;
-
-}
+/* =====================================================
+   EMPTY HISTORY
+===================================================== */
 
 .empty-history{
 
     text-align:center;
 
-    padding:60px 20px;
-
+    padding:45px 20px;
 }
 
 .empty-history i{
 
-    font-size:70px;
+    font-size:45px;
 
-    color:#1565c0;
+    color:#56605c;
 
-    margin-bottom:20px;
-
+    margin-bottom:15px;
 }
 
 .empty-history h3{
-
-    margin-bottom:10px;
-
+    color:#fff;
+    margin-bottom:7px;
 }
 
 .empty-history p{
-
-    color:#666;
-
-}
-
-.reject-note{
-
-    margin-top:10px;
-
-    color:red;
-
+    color:#727b77;
     font-size:13px;
-
 }
-/* =========================================
-   SUPERNOVA PREMIUM NOTIFICATIONS
-=========================================*/
+
+
+/* =====================================================
+   SCROLLBAR
+===================================================== */
+
+#withdraw-history::-webkit-scrollbar{
+    width:5px;
+}
+
+#withdraw-history::-webkit-scrollbar-track{
+    background:#101614;
+    border-radius:10px;
+}
+
+#withdraw-history::-webkit-scrollbar-thumb{
+    background:#46504c;
+    border-radius:10px;
+}
+
+
+/* =====================================================
+   SUPERNOVA TOAST
+===================================================== */
 
 #toast-container{
 
     position:fixed;
 
-    top:30px;
+    top:25px;
+    right:25px;
 
-    right:30px;
-
-    width:480px;
-
-    max-width:95%;
+    width:400px;
+    max-width:calc(100% - 30px);
 
     z-index:999999;
-
 }
 
 .toast{
@@ -487,26 +552,31 @@ gap:10px;
 
     overflow:hidden;
 
-    background:linear-gradient(145deg,#0f172a,#172554);
+    background:
+        linear-gradient(
+            145deg,
+            #101917,
+            #060b09
+        );
 
-    color:white;
-
-    border-radius:22px;
-
-    padding:28px;
-
-    margin-bottom:22px;
+    color:#fff;
 
     border:1px solid rgba(255,255,255,.08);
 
+    border-radius:15px;
+
+    padding:20px;
+
+    margin-bottom:14px;
+
     box-shadow:
-        0 25px 60px rgba(0,0,0,.45);
+        0 20px 50px rgba(0,0,0,.55);
 
-    animation:toastShow .45s ease;
-
+    animation:toastShow .35s ease;
 }
 
-/* Gold Top Border */
+
+/* Top accent */
 
 .toast::before{
 
@@ -515,36 +585,30 @@ gap:10px;
     position:absolute;
 
     top:0;
-
     left:0;
 
     width:100%;
+    height:3px;
 
-    height:5px;
-
-    background:#fbbf24;
-
+    background:#dcf803;
 }
 
-/* Different Icons */
-
-.toast.success .toast-icon{
-
-    color:#38bdf8;
-
+.toast.success::before{
+    background:#20d97f;
 }
 
-.toast.warning .toast-icon{
-
-    color:#fbbf24;
-
+.toast.warning::before{
+    background:#f5b942;
 }
 
-.toast.danger .toast-icon{
-
-    color:#ef4444;
-
+.toast.danger::before{
+    background:#ef4444;
 }
+
+
+/* =====================================================
+   TOAST HEADER
+===================================================== */
 
 .toast-header{
 
@@ -552,213 +616,270 @@ gap:10px;
 
     align-items:center;
 
-    gap:15px;
+    gap:11px;
 
-    margin-bottom:18px;
-
+    margin-bottom:12px;
 }
 
 .toast-icon{
+    font-size:25px;
+}
 
-    font-size:38px;
+.toast.success .toast-icon{
+    color:#20d97f;
+}
 
+.toast.warning .toast-icon{
+    color:#f5b942;
+}
+
+.toast.danger .toast-icon{
+    color:#ef4444;
 }
 
 .toast-title{
 
-    font-size:24px;
+    font-size:17px;
 
     font-weight:700;
 
-    color:#ffffff;
-
+    color:#fff;
 }
 
 .toast-message{
 
-    font-size:17px;
+    color:#aeb7b3;
 
-    line-height:1.8;
+    font-size:13px;
 
-    color:#dbeafe;
-
-    margin-top:10px;
-
+    line-height:1.6;
 }
 
-/* Buttons */
+
+/* =====================================================
+   TOAST ACTIONS
+===================================================== */
 
 .toast-actions{
 
-    margin-top:28px;
-
     display:flex;
 
-    gap:12px;
+    gap:8px;
 
+    margin-top:18px;
 }
 
 .toast-btn{
 
     flex:1;
 
-    padding:14px;
+    padding:11px;
 
     border:none;
 
-    border-radius:12px;
+    border-radius:8px;
+
+    font-size:12px;
+
+    font-weight:700;
 
     cursor:pointer;
 
-    font-size:15px;
-
-    font-weight:bold;
-
-    transition:.3s;
-
+    transition:.2s;
 }
-
-/* Primary */
 
 .toast-primary{
 
-    background:#2563eb;
+    background:#dcf803;
 
-    color:white;
-
+    color:#111;
 }
 
 .toast-primary:hover{
-
-    background:#1d4ed8;
-
+    background:#c9e600;
 }
-
-/* Secondary */
 
 .toast-secondary{
 
-    background:#fbbf24;
+    background:#202925;
 
-    color:#111827;
+    color:#fff;
 
+    border:1px solid #303a35;
 }
 
 .toast-secondary:hover{
-
-    background:#f59e0b;
-
+    background:#2a332f;
 }
 
-/* Close */
+
+/* =====================================================
+   CLOSE
+===================================================== */
 
 .toast-close{
 
     position:absolute;
 
-    top:18px;
+    top:12px;
+    right:14px;
 
-    right:18px;
+    color:#737d78;
 
-    font-size:28px;
+    font-size:22px;
 
     cursor:pointer;
 
-    color:#cbd5e1;
-
-    transition:.3s;
-
+    transition:.2s;
 }
 
 .toast-close:hover{
-
-    color:white;
-
-    transform:rotate(90deg);
-
-}
-#withdraw-history{
-    max-height:300px;
-    overflow-y:auto;
-    overflow-x:hidden;
-    padding-right:8px;
-    scroll-behavior:smooth;
+    color:#fff;
 }
 
-@media(max-width:768px){
 
-    #withdraw-history{
-        max-height:320px;
-    }
-
-}
-
-#withdraw-history::-webkit-scrollbar{
-    width:6px;
-}
-
-#withdraw-history::-webkit-scrollbar-track{
-    background:#f1f5f9;
-    border-radius:10px;
-}
-
-#withdraw-history::-webkit-scrollbar-thumb{
-    background:#1976d2;
-    border-radius:10px;
-}
-/* Animation */
+/* =====================================================
+   ANIMATION
+===================================================== */
 
 @keyframes toastShow{
 
     from{
-
         opacity:0;
-
-        transform:translateX(120px);
-
+        transform:translateX(80px);
     }
 
     to{
-
         opacity:1;
-
         transform:translateX(0);
+    }
+}
 
+
+/* =====================================================
+   TABLET
+===================================================== */
+
+@media(max-width:768px){
+
+    .withdraw-container{
+        padding:25px 14px 40px;
+    }
+
+    .wallet-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .progress-values{
+        flex-direction:column;
+        gap:5px;
+    }
+
+    .withdraw-item{
+        align-items:flex-start;
     }
 
 }
 
-@media(max-width:768px){
 
-#toast-container{
+/* =====================================================
+   MOBILE
+===================================================== */
 
-    left:10px;
+@media(max-width:500px){
 
-    right:10px;
+    .withdraw-container{
+        padding:20px 12px 35px;
+    }
 
-    width:auto;
+    .page-header h1{
+        font-size:24px;
+    }
+
+    .page-header p{
+        font-size:12px;
+    }
+
+    .wallet-grid{
+        grid-template-columns:1fr;
+    }
+
+    .wallet-card{
+        padding:18px;
+    }
+
+    .eligibility-card,
+    .progress-card,
+    .withdraw-card,
+    .policy-card,
+    .history-card{
+        padding:18px;
+        border-radius:13px;
+    }
+
+    .withdraw-item{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .status{
+        margin-top:3px;
+    }
+
+    #toast-container{
+        top:12px;
+        left:12px;
+        right:12px;
+        width:auto;
+        max-width:none;
+    }
 
 }
 
-.toast{
 
-    padding:22px;
+/* =====================================================
+   SHORT SCREENS
+===================================================== */
+
+@media(max-height:700px){
+
+    .withdraw-container{
+        padding-top:20px;
+        padding-bottom:25px;
+    }
+
+    .page-header{
+        margin-bottom:18px;
+    }
+
+    .wallet-card{
+        padding:17px;
+    }
+
+    .eligibility-card,
+    .progress-card,
+    .withdraw-card,
+    .policy-card,
+    .history-card{
+        padding:18px;
+        margin-bottom:14px;
+    }
 
 }
 
-.toast-title{
 
-    font-size:20px;
+/* =====================================================
+   TALL SCREENS
+===================================================== */
+
+@media(min-height:850px){
+
+    .withdraw-container{
+        padding-top:45px;
+    }
 
 }
 
-.toast-message{
-
-    font-size:15px;
-
-}
-
-}
 </style>
 
 <body
