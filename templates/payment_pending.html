@@ -608,57 +608,43 @@ h2{
 
     <div class="steps">
 
+        <div class="step active" id="step1">
 
-        <div class="step active">
-
-            <div class="circle">
-
+            <div class="step-circle">
                 ✓
-
             </div>
 
             <div class="step-text">
-
                 Request Sent
-
             </div>
 
         </div>
 
 
-        <div class="step active">
+        <div class="step" id="step2">
 
-            <div class="circle">
-
+            <div class="step-circle">
                 2
-
             </div>
 
             <div class="step-text">
-
                 Confirm PIN
-
             </div>
 
         </div>
 
 
-        <div class="step">
+        <div class="step" id="step3">
 
-            <div class="circle">
-
+            <div class="step-circle">
                 3
-
             </div>
 
             <div class="step-text">
-
                 Completed
-
             </div>
 
         </div>
-
 
     </div>
 
@@ -680,7 +666,76 @@ h2{
 
 </div>
 
+<script>
+    function updateSteps(status) {
 
+    const step1 = document.getElementById("step1");
+    const step2 = document.getElementById("step2");
+    const step3 = document.getElementById("step3");
+
+    const circle1 = step1.querySelector(".step-circle");
+    const circle2 = step2.querySelector(".step-circle");
+    const circle3 = step3.querySelector(".step-circle");
+
+
+    // Reset
+    step1.classList.remove("active");
+    step2.classList.remove("active");
+    step3.classList.remove("active");
+
+
+    // PAYMENT REQUEST SENT
+    if (status === "pending") {
+
+        step1.classList.add("active");
+
+        circle1.innerText = "✓";
+        circle2.innerText = "2";
+        circle3.innerText = "3";
+
+    }
+
+
+    // PAYMENT PROCESSING
+    else if (status === "processing") {
+
+        step1.classList.add("active");
+        step2.classList.add("active");
+
+        circle1.innerText = "✓";
+        circle2.innerText = "✓";
+        circle3.innerText = "3";
+
+    }
+
+
+    // PAYMENT SUCCESSFUL
+    else if (status === "approved") {
+
+        step1.classList.add("active");
+        step2.classList.add("active");
+        step3.classList.add("active");
+
+        circle1.innerText = "✓";
+        circle2.innerText = "✓";
+        circle3.innerText = "✓";
+
+    }
+
+
+    // PAYMENT FAILED
+    else if (status === "failed") {
+
+        step1.classList.add("active");
+
+        circle1.innerText = "✓";
+        circle2.innerText = "!";
+        circle3.innerText = "3";
+
+    }
+
+}
+</script>
 
 <script>
 
@@ -703,6 +758,8 @@ setInterval(() => {
     .then(response => response.json())
 
     .then(data => {
+
+        updateSteps(data.status);
 
 
         if(data.status === "pending"){
