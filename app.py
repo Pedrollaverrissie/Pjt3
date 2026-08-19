@@ -3224,9 +3224,6 @@ def process_vip_recharge(user, amount):
         return
 
     # Existing VIP logic
-    if user.vip_expires_at and user.vip_expires_at <= now:
-        user.account_active = False
-
     update_vip_lock(user)
 
 
