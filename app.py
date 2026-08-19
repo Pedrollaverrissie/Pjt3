@@ -4493,9 +4493,12 @@ def withdraw():
             current_user.vip_level
         )
 
+        now = datetime.utcnow()
+
         return render_template(
             "withdraw.html",
             pending_withdrawal=pending_withdrawal,
+            now=now,
             withdrawals=withdrawals,
             required_contribution=required_contribution,
             minimum_withdrawal=minimum_withdrawal,
