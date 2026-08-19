@@ -473,7 +473,7 @@
 
             <p>Tasks: {{ plan.tasks }}</p>
 
-            {% if current_vip %}
+            {% if current_vip and current_vip in VIP_ORDER %}
                 {% set current_index = VIP_ORDER.index(current_vip) %}
             {% else %}
                 {% set current_index = -1 %}
