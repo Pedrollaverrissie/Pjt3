@@ -2962,38 +2962,60 @@ from datetime import datetime
 
 def can_withdraw(user):
 
+    # ---------------------------------
     # Account inactive
+    # ---------------------------------
     if not user.account_active:
         return False, "Your account is inactive."
 
-    # VIP expired
+    # ---------------------------------
+    # No VIP membership
+    # ---------------------------------
     if not user.vip_expires_at:
         return False, "You do not have an active membership."
 
+    # ---------------------------------
+    # VIP expired
+    # ---------------------------------
     if datetime.utcnow() > user.vip_expires_at:
         return False, "Your VIP membership has expired."
 
     # Contribution requirement
     required = get_required_contribution(user.vip_level)
 
-    if user.referral_contribution_balance < required:
-        remaining = required - user.referral_contribution_balance
+    # Contribution is required only once per membership period.
+    # After the first successful withdrawal, contribution_deducted
+    # becomes True and subsequent withdrawals are allowed.
+    if not user.contribution_deducted:
 
-        return (
-            False,
-            f"You need KES {remaining:.2f} more contribution to unlock withdrawals."
-        )
-    
-        # Withdrawable balance
+        if user.referral_contribution_balance < required:
+
+            remaining = (
+                required
+                - user.referral_contribution_balance
+            )
+
+            return (
+                False,
+                f"You need KES {remaining:.2f} more contribution "
+                f"to unlock withdrawals."
+            )
+
+    # ---------------------------------
+    # Withdrawable balance
+    # ---------------------------------
     if not user.withdrawal_unlocked:
 
-        minimum = get_minimum_withdrawal(user.vip_level)
+        minimum = get_minimum_withdrawal(
+            user.vip_level
+        )
 
         if user.withdrawable_wallet < minimum:
 
             return (
                 False,
-                f"You need at least KES {minimum:.2f} in your withdrawable wallet."
+                f"You need at least KES {minimum:.2f} "
+                f"in your withdrawable wallet."
             )
 
     return True, "Withdrawal unlocked."
@@ -4505,7 +4527,11 @@ def withdraw():
             can_withdraw=(
                 current_user.account_active
                 and current_user.withdrawable_wallet >= minimum_withdrawal
-                and current_user.referral_contribution_balance >= required_contribution
+                and (
+                    current_user.contribution_deducted
+                    or
+                    current_user.referral_contribution_balance >= required_contribution
+                )
                 and pending_withdrawal is None
             )
         )
