@@ -487,11 +487,25 @@
 
             {% if current_vip == plan.name %}
 
-                {% if vip_days_left is not none and vip_days_left <= 2 %}
+                {% if vip_expired %}
 
+                    <!-- EXPIRED VIP -->
                     <form action="{{ url_for('renew_membership') }}" method="POST">
 
-                        <button class="vip-btn">
+                        <button class="vip-btn" type="submit">
+
+                            Renew Membership
+
+                        </button>
+
+                    </form>
+
+                {% elif vip_days_left is not none and vip_days_left <= 2 %}
+
+                    <!-- VIP EXPIRING SOON -->
+                    <form action="{{ url_for('renew_membership') }}" method="POST">
+
+                        <button class="vip-btn" type="submit">
 
                             Renew Membership
 
@@ -501,6 +515,7 @@
 
                 {% else %}
 
+                    <!-- ACTIVE VIP -->
                     <button class="vip-btn disabled" disabled>
 
                         ✓ Current Plan
@@ -509,17 +524,19 @@
 
                 {% endif %}
 
+
             <!-- ========================= -->
             <!-- LOWER VIP -->
             <!-- ========================= -->
 
-            {% elif current_vip and plan_index < current_index %}
+            {% elif current_vip and current_vip in VIP_ORDER and plan_index < current_index %}
 
                 <button class="vip-btn disabled" disabled>
 
                     Lower Plan
 
                 </button>
+
 
             <!-- ========================= -->
             <!-- HIGHEST VIP -->
@@ -533,8 +550,9 @@
 
                 </button>
 
+
             <!-- ========================= -->
-            <!-- UPGRADE -->
+            <!-- UPGRADE / PURCHASE -->
             <!-- ========================= -->
 
             {% else %}

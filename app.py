@@ -3268,6 +3268,8 @@ def utility_processor():
     return dict(
         time_ago=time_ago
     )
+
+#--- VIP ROUTE ------
 @app.route("/vip")
 @login_required
 @active_account_required
@@ -3302,6 +3304,15 @@ def vip():
             current_user.vip_expires_at - datetime.utcnow()
         ).days
 
+    # -------------------------------
+    # CHECK VIP EXPIRATION
+    # -------------------------------
+    vip_expired = (
+        current_user.vip_level != "Free"
+        and current_user.vip_expires_at
+        and current_user.vip_expires_at <= datetime.utcnow()
+    )
+
     return render_template(
 
         "vip.html",
@@ -3320,7 +3331,9 @@ def vip():
 
         current_user=current_user,
 
-        vip_days_left=vip_days_left
+        vip_days_left=vip_days_left,
+
+        vip_expired=vip_expired
 
     )
 #--------------VIP UPGRADE ROUTE---------------
