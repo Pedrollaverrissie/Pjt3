@@ -50,29 +50,24 @@
             align-items:center;
 
         }
+.card{
+    width:100%;
+    max-width:520px;
 
-        .card{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
 
-            width:90%;
-            max-width:400px;
+    background:#0e1114;
 
-            display:flex;
+    border-radius:25px;
 
-            flex-direction:column;
+    padding:35px 30px;
 
-            justify-content:center;
-            align-items:center;
-
-            background:#0e1114;
-
-            border-radius:25px;
-
-            padding:25px 15px;
-
-            box-shadow:
-                0 0 6px rgb(187,189,186);
-
-        }
+    box-shadow:
+        0 0 6px rgb(187,189,186);
+}
 
         .cover{
 
@@ -118,23 +113,22 @@
 
         /* Renewal information */
 
-        .renewal-info{
+.renewal-info{
+    width:100%;
+    max-width:460px;
 
-            width:90%;
+    margin:0 auto 25px auto;
 
-            margin:0 auto 20px auto;
+    padding:22px;
 
-            padding:15px;
+    border-radius:15px;
 
-            border-radius:15px;
+    background:rgba(255,255,255,.07);
 
-            background:rgba(255,255,255,.07);
+    text-align:center;
 
-            text-align:center;
-
-            color:white;
-
-        }
+    color:white;
+}
 
         .renewal-info .vip{
 
@@ -190,7 +184,9 @@
 
         .content input{
 
-            width:90%;
+         
+            width:100%;
+            max-width:460px;
 
             padding:12px;
 
@@ -232,7 +228,8 @@
             box-shadow:
                 0 0 3px rgb(247,248,246);
 
-            width:70%;
+            width:100%;
+            max-width:460px;
 
             padding:12px;
 
@@ -284,33 +281,48 @@
 
         }
 
-        @media(max-width:480px){
+@media(max-width:480px){
 
-            .card{
+    body{
+        padding:12px;
+    }
 
-                padding:25px;
+    .card{
+        width:100%;
+        padding:28px 18px;
+        border-radius:20px;
+    }
 
-            }
+    .cover h2{
+        font-size:24px;
+    }
 
-            .cover h2{
+    .icon{
+        font-size:45px;
+    }
 
-                font-size:23px;
+    .renewal-info{
+        width:100%;
+        padding:18px 14px;
+    }
 
-            }
+    .renewal-info .price{
+        font-size:22px;
+    }
 
-            .icon{
+    .renewal-info .amount{
+        font-size:20px;
+    }
 
-                font-size:45px;
+    button{
+        width:100%;
+        padding:13px;
+    }
 
-            }
-
-            button{
-
-                padding:11px;
-
-            }
-
-        }
+    .content input{
+        width:100%;
+    }
+}
 
         form{
 
