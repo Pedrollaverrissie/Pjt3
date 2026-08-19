@@ -3519,6 +3519,9 @@ def tasks():
         active=True
     ).all()
 
+    if current_user.vip_level == "Free":
+        return redirect(url_for("vip"))
+
     # VIP plan details
     plan = VIP_PLANS[current_user.vip_level]
     daily_limit = int(plan["tasks"])
