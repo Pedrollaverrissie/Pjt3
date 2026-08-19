@@ -15,9 +15,7 @@
 }
 
 body{
-
     margin:0;
-
     min-height:100vh;
 
     display:flex;
@@ -27,315 +25,230 @@ body{
     padding:20px;
 
     font-family:
-        Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
         Arial,
         sans-serif;
 
-    background:
+    background:#020202;
 
-        radial-gradient(
-            circle at 50% 0%,
-            #123f31 0%,
-            #081914 30%,
-            #030807 65%,
-            #010202 100%
-        );
-
-    color:white;
-
+    color:#ffffff;
 }
 
 
-/* =====================================
-   MAIN CARD
-===================================== */
+/* ===============================
+   PAYMENT CARD
+================================ */
 
 .payment-card{
-
     width:100%;
-
     max-width:430px;
 
-    padding:40px 32px 30px;
+    background:#071017;
 
-    background:
+    border:1px solid #1c2b2f;
 
-        linear-gradient(
-            145deg,
-            rgba(18,32,29,.98),
-            rgba(5,13,12,.99)
-        );
+    border-radius:12px;
 
-    border:
-
-        1px solid
-        rgba(255,255,255,.08);
-
-    border-radius:24px;
+    padding:38px 32px 30px;
 
     text-align:center;
 
     box-shadow:
-
-        0 30px 80px
-        rgba(0,0,0,.65),
-
-        0 0 40px
-        rgba(32,201,151,.06);
-
+        0 15px 45px
+        rgba(0,0,0,.55);
 }
 
 
-/* =====================================
-   BRAND / PAYMENT ICON
-===================================== */
+/* ===============================
+   PAYMENT ICON
+================================ */
 
 .payment-icon{
-
-    width:72px;
-
-    height:72px;
+    width:64px;
+    height:64px;
 
     margin:0 auto 22px;
 
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 
-    border-radius:50%;
+    border-radius:12px;
 
-    background:
+    background:#0b1b1d;
 
-        rgba(32,201,151,.08);
-
-    border:
-
-        1px solid
-        rgba(32,201,151,.20);
-
-    box-shadow:
-
-        0 0 30px
-        rgba(32,201,151,.08);
-
+    border:1px solid
+        rgba(220,248,3,.25);
 }
-
 
 .payment-icon span{
-
-    font-size:32px;
-
+    font-size:28px;
 }
 
 
-/* =====================================
+/* ===============================
    TITLE
-===================================== */
+================================ */
 
 h2{
-
     margin:0;
+
+    font-family:
+        Cambria,
+        Cochin,
+        Georgia,
+        Times,
+        "Times New Roman",
+        serif;
 
     font-size:27px;
 
+    color:#fdfdfd;
+
     font-weight:700;
-
-    letter-spacing:-.4px;
-
-    color:#ffffff;
-
 }
 
 
+/* ===============================
+   SUBTITLE
+================================ */
+
 .subtitle{
+    max-width:340px;
 
-    margin:
+    margin:13px auto 0;
 
-        12px auto 0;
-
-    max-width:330px;
-
-    color:
-
-        rgba(255,255,255,.60);
+    color:#aab3b5;
 
     font-size:14px;
 
     line-height:1.7;
-
 }
 
 
-/* =====================================
+/* ===============================
    LOADER
-===================================== */
+================================ */
 
 .loader-wrapper{
-
     position:relative;
 
-    width:76px;
+    width:70px;
+    height:70px;
 
-    height:76px;
-
-    margin:32px auto 24px;
-
+    margin:30px auto 25px;
 }
 
 
 .loader{
-
-    width:76px;
-
-    height:76px;
+    width:70px;
+    height:70px;
 
     border-radius:50%;
 
-    border:
+    border:4px solid #172326;
 
-        4px solid
-        rgba(255,255,255,.06);
-
-    border-top-color:#20c997;
-
-    border-right-color:#20c997;
+    border-top-color:#dcf803;
 
     animation:
-
-        spin 1s linear infinite;
-
+        spin .9s linear infinite;
 }
 
 
 .loader-inner{
-
     position:absolute;
 
     top:50%;
-
     left:50%;
 
     transform:
         translate(-50%,-50%);
 
-    width:34px;
-
-    height:34px;
+    width:26px;
+    height:26px;
 
     border-radius:50%;
 
-    background:
+    background:#101b1b;
 
-        rgba(32,201,151,.10);
-
-    display:flex;
-
-    align-items:center;
-
-    justify-content:center;
-
+    border:1px solid
+        rgba(220,248,3,.25);
 }
 
 
 .loader-inner::after{
-
     content:"";
 
-    width:8px;
+    position:absolute;
 
-    height:8px;
+    top:50%;
+    left:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    width:7px;
+    height:7px;
 
     border-radius:50%;
 
-    background:#20c997;
-
-    box-shadow:
-
-        0 0 12px
-        rgba(32,201,151,.8);
-
+    background:#dcf803;
 }
 
 
-/* =====================================
+/* ===============================
    STATUS
-===================================== */
+================================ */
 
 #status{
-
-    min-height:50px;
+    min-height:52px;
 
     margin:0;
 
-    padding:14px 18px;
+    padding:14px 16px;
 
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 
-    border-radius:12px;
+    background:#0a1519;
 
-    background:
+    border-left:3px solid #dcf803;
 
-        rgba(255,255,255,.035);
+    border-radius:6px;
 
-    border:
-
-        1px solid
-        rgba(255,255,255,.07);
-
-    color:
-
-        rgba(255,255,255,.88);
+    color:#d7dddd;
 
     font-size:14px;
 
     font-weight:600;
 
     line-height:1.5;
-
 }
 
 
-/* =====================================
+/* ===============================
    PAYMENT STEPS
-===================================== */
+================================ */
 
 .steps{
-
     display:flex;
 
-    align-items:flex-start;
+    justify-content:space-between;
 
-    justify-content:center;
-
-    margin:
-
-        30px 0 25px;
-
+    margin:32px 0 25px;
 }
 
 
 .step{
-
     flex:1;
 
     position:relative;
 
     text-align:center;
-
 }
 
 
 .step:not(:last-child)::after{
-
     content:"";
 
     position:absolute;
@@ -348,206 +261,139 @@ h2{
 
     height:1px;
 
-    background:
-
-        rgba(255,255,255,.10);
-
+    background:#273235;
 }
 
 
 .step-circle{
-
     position:relative;
 
     z-index:2;
 
     width:27px;
-
     height:27px;
 
     margin:auto;
 
     display:flex;
-
     align-items:center;
-
     justify-content:center;
 
     border-radius:50%;
 
-    background:#111b18;
+    background:#0b1518;
 
-    border:
+    border:1px solid #2a3538;
 
-        1px solid
-        rgba(255,255,255,.12);
-
-    color:
-
-        rgba(255,255,255,.45);
+    color:#758083;
 
     font-size:11px;
 
-    font-weight:700;
-
+    font-weight:bold;
 }
 
 
 .step.active .step-circle{
+    background:#16200a;
 
-    background:
+    border-color:#dcf803;
 
-        rgba(32,201,151,.12);
-
-    border-color:#20c997;
-
-    color:#20c997;
-
-    box-shadow:
-
-        0 0 15px
-        rgba(32,201,151,.15);
-
+    color:#dcf803;
 }
 
 
 .step-text{
-
     margin-top:8px;
 
+    color:#697477;
+
     font-size:10px;
-
-    color:
-
-        rgba(255,255,255,.40);
-
 }
 
 
 .step.active .step-text{
-
-    color:
-
-        rgba(255,255,255,.75);
-
+    color:#dce5e6;
 }
 
 
-/* =====================================
+/* ===============================
    SECURITY
-===================================== */
+================================ */
 
 .security{
-
     padding-top:20px;
 
     border-top:
+        1px solid #1b282b;
 
-        1px solid
-        rgba(255,255,255,.06);
-
-    color:
-
-        rgba(255,255,255,.38);
+    color:#687477;
 
     font-size:11px;
 
     line-height:1.7;
-
 }
 
 
 .security-icon{
-
-    display:inline-block;
-
     margin-right:5px;
-
 }
 
 
-/* =====================================
+/* ===============================
    ANIMATION
-===================================== */
+================================ */
 
 @keyframes spin{
 
     from{
-
         transform:rotate(0deg);
-
     }
 
     to{
-
         transform:rotate(360deg);
-
     }
 
 }
 
 
-/* =====================================
+/* ===============================
    MOBILE
-===================================== */
+================================ */
 
 @media(max-width:480px){
 
     body{
-
         padding:15px;
-
     }
 
     .payment-card{
+        padding:32px 22px 27px;
 
-        padding:
-
-            34px 22px 27px;
-
-        border-radius:20px;
-
-    }
-
-    .payment-icon{
-
-        width:64px;
-
-        height:64px;
-
-    }
-
-    .payment-icon span{
-
-        font-size:28px;
-
+        border-radius:10px;
     }
 
     h2{
-
         font-size:24px;
-
     }
 
-    .subtitle{
+    .payment-icon{
+        width:58px;
+        height:58px;
+    }
 
-        font-size:13px;
-
+    .payment-icon span{
+        font-size:25px;
     }
 
     .loader-wrapper,
     .loader{
-
-        width:68px;
-
-        height:68px;
-
+        width:64px;
+        height:64px;
     }
 
 }
 
 </style>
-
 </head>
 
 
