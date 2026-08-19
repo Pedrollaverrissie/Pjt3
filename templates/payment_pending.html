@@ -1,173 +1,811 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Processing</title>
 
-    <style>
-        body{
-            font-family: Arial, sans-serif;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            height:90vh;
-            background:#020202;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        .container{
-            background:rgb(1, 12, 19);
-            padding:30px;
-            border-radius:10px;
-            box-shadow: 0 0 4px #dcf803;
-            text-align:center;
-            width:300px;
-            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-        }
+<title>Payment Processing</title>
 
-        h2{
-            color:#dcf803;
-        }
-        p{
-            color: rgb(249, 233, 233);
-        }
+<style>
 
-        #status{
-            margin-top:15px;
-            font-weight:bold;
-        }
+*{
+    box-sizing:border-box;
+}
 
-        .loader{
-            margin:20px auto;
-            border:5px solid #f3f3f3;
-            border-top:5px solid #dcf803;
-            border-radius:50%;
-            width:40px;
-            height:40px;
-            animation:spin 1s linear infinite;
-        }
+body{
 
-        @keyframes spin{
-            0%{transform:rotate(0deg);}
-            100%{transform:rotate(360deg);}
-        }
-    </style>
+    margin:0;
+
+    min-height:100vh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:20px;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    background:
+
+        radial-gradient(
+            circle at 50% 0%,
+            #123f31 0%,
+            #081914 30%,
+            #030807 65%,
+            #010202 100%
+        );
+
+    color:white;
+
+}
+
+
+/* =====================================
+   MAIN CARD
+===================================== */
+
+.payment-card{
+
+    width:100%;
+
+    max-width:430px;
+
+    padding:40px 32px 30px;
+
+    background:
+
+        linear-gradient(
+            145deg,
+            rgba(18,32,29,.98),
+            rgba(5,13,12,.99)
+        );
+
+    border:
+
+        1px solid
+        rgba(255,255,255,.08);
+
+    border-radius:24px;
+
+    text-align:center;
+
+    box-shadow:
+
+        0 30px 80px
+        rgba(0,0,0,.65),
+
+        0 0 40px
+        rgba(32,201,151,.06);
+
+}
+
+
+/* =====================================
+   BRAND / PAYMENT ICON
+===================================== */
+
+.payment-icon{
+
+    width:72px;
+
+    height:72px;
+
+    margin:0 auto 22px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:
+
+        rgba(32,201,151,.08);
+
+    border:
+
+        1px solid
+        rgba(32,201,151,.20);
+
+    box-shadow:
+
+        0 0 30px
+        rgba(32,201,151,.08);
+
+}
+
+
+.payment-icon span{
+
+    font-size:32px;
+
+}
+
+
+/* =====================================
+   TITLE
+===================================== */
+
+h2{
+
+    margin:0;
+
+    font-size:27px;
+
+    font-weight:700;
+
+    letter-spacing:-.4px;
+
+    color:#ffffff;
+
+}
+
+
+.subtitle{
+
+    margin:
+
+        12px auto 0;
+
+    max-width:330px;
+
+    color:
+
+        rgba(255,255,255,.60);
+
+    font-size:14px;
+
+    line-height:1.7;
+
+}
+
+
+/* =====================================
+   LOADER
+===================================== */
+
+.loader-wrapper{
+
+    position:relative;
+
+    width:76px;
+
+    height:76px;
+
+    margin:32px auto 24px;
+
+}
+
+
+.loader{
+
+    width:76px;
+
+    height:76px;
+
+    border-radius:50%;
+
+    border:
+
+        4px solid
+        rgba(255,255,255,.06);
+
+    border-top-color:#20c997;
+
+    border-right-color:#20c997;
+
+    animation:
+
+        spin 1s linear infinite;
+
+}
+
+
+.loader-inner{
+
+    position:absolute;
+
+    top:50%;
+
+    left:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    width:34px;
+
+    height:34px;
+
+    border-radius:50%;
+
+    background:
+
+        rgba(32,201,151,.10);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+}
+
+
+.loader-inner::after{
+
+    content:"";
+
+    width:8px;
+
+    height:8px;
+
+    border-radius:50%;
+
+    background:#20c997;
+
+    box-shadow:
+
+        0 0 12px
+        rgba(32,201,151,.8);
+
+}
+
+
+/* =====================================
+   STATUS
+===================================== */
+
+#status{
+
+    min-height:50px;
+
+    margin:0;
+
+    padding:14px 18px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:12px;
+
+    background:
+
+        rgba(255,255,255,.035);
+
+    border:
+
+        1px solid
+        rgba(255,255,255,.07);
+
+    color:
+
+        rgba(255,255,255,.88);
+
+    font-size:14px;
+
+    font-weight:600;
+
+    line-height:1.5;
+
+}
+
+
+/* =====================================
+   PAYMENT STEPS
+===================================== */
+
+.steps{
+
+    display:flex;
+
+    align-items:flex-start;
+
+    justify-content:center;
+
+    margin:
+
+        30px 0 25px;
+
+}
+
+
+.step{
+
+    flex:1;
+
+    position:relative;
+
+    text-align:center;
+
+}
+
+
+.step:not(:last-child)::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:13px;
+
+    left:60%;
+
+    width:80%;
+
+    height:1px;
+
+    background:
+
+        rgba(255,255,255,.10);
+
+}
+
+
+.circle{
+
+    position:relative;
+
+    z-index:2;
+
+    width:27px;
+
+    height:27px;
+
+    margin:auto;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#111b18;
+
+    border:
+
+        1px solid
+        rgba(255,255,255,.12);
+
+    color:
+
+        rgba(255,255,255,.45);
+
+    font-size:11px;
+
+    font-weight:700;
+
+}
+
+
+.step.active .circle{
+
+    background:
+
+        rgba(32,201,151,.12);
+
+    border-color:#20c997;
+
+    color:#20c997;
+
+    box-shadow:
+
+        0 0 15px
+        rgba(32,201,151,.15);
+
+}
+
+
+.step-text{
+
+    margin-top:8px;
+
+    font-size:10px;
+
+    color:
+
+        rgba(255,255,255,.40);
+
+}
+
+
+.step.active .step-text{
+
+    color:
+
+        rgba(255,255,255,.75);
+
+}
+
+
+/* =====================================
+   SECURITY
+===================================== */
+
+.security{
+
+    padding-top:20px;
+
+    border-top:
+
+        1px solid
+        rgba(255,255,255,.06);
+
+    color:
+
+        rgba(255,255,255,.38);
+
+    font-size:11px;
+
+    line-height:1.7;
+
+}
+
+
+.security-icon{
+
+    display:inline-block;
+
+    margin-right:5px;
+
+}
+
+
+/* =====================================
+   ANIMATION
+===================================== */
+
+@keyframes spin{
+
+    from{
+
+        transform:rotate(0deg);
+
+    }
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media(max-width:480px){
+
+    body{
+
+        padding:15px;
+
+    }
+
+    .payment-card{
+
+        padding:
+
+            34px 22px 27px;
+
+        border-radius:20px;
+
+    }
+
+    .payment-icon{
+
+        width:64px;
+
+        height:64px;
+
+    }
+
+    .payment-icon span{
+
+        font-size:28px;
+
+    }
+
+    h2{
+
+        font-size:24px;
+
+    }
+
+    .subtitle{
+
+        font-size:13px;
+
+    }
+
+    .loader-wrapper,
+    .loader{
+
+        width:68px;
+
+        height:68px;
+
+    }
+
+}
+
+</style>
+
 </head>
+
+
 <body>
 
-    <div class="container">
 
-        <h2>STK Push Sent</h2>
+<div class="payment-card">
 
-        <p>
-            Check your phone and enter your M-Pesa PIN to complete payment.
-        </p>
+
+    <!-- PAYMENT ICON -->
+
+    <div class="payment-icon">
+
+        <span>📱</span>
+
+    </div>
+
+
+    <!-- TITLE -->
+
+    <h2>
+
+        Complete Your Payment
+
+    </h2>
+
+
+    <p class="subtitle">
+
+        A payment request has been sent to your phone.
+
+        Enter your M-Pesa PIN to authorize the transaction.
+
+    </p>
+
+
+    <!-- LOADER -->
+
+    <div class="loader-wrapper">
 
         <div class="loader"></div>
 
-        <p id="status">
-            Waiting for payment...
-        </p>
+        <div class="loader-inner"></div>
 
     </div>
+
+
+    <!-- STATUS -->
+
+    <p id="status">
+
+        Waiting for payment confirmation...
+
+    </p>
+
+
+    <!-- STEPS -->
+
+    <div class="steps">
+
+
+        <div class="step active">
+
+            <div class="circle">
+
+                ✓
+
+            </div>
+
+            <div class="step-text">
+
+                Request Sent
+
+            </div>
+
+        </div>
+
+
+        <div class="step active">
+
+            <div class="circle">
+
+                2
+
+            </div>
+
+            <div class="step-text">
+
+                Confirm PIN
+
+            </div>
+
+        </div>
+
+
+        <div class="step">
+
+            <div class="circle">
+
+                3
+
+            </div>
+
+            <div class="step-text">
+
+                Completed
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- SECURITY -->
+
+    <div class="security">
+
+        <span class="security-icon">🔒</span>
+
+        Secure payment processing
+
+        <br>
+
+        Please keep this page open until your payment is confirmed.
+
+    </div>
+
+
+</div>
+
+
 
 <script>
 
 const invoiceId = "{{ invoice_id }}";
 
-const statusElement = document.getElementById("status");
+const statusElement =
+    document.getElementById("status");
 
-const paymentType = "{{ payment_type }}";
+const paymentType =
+    "{{ payment_type }}";
 
-const purpose = "{{ purpose or '' }}";
+const purpose =
+    "{{ purpose or '' }}";
+
 
 setInterval(() => {
 
     fetch(`/check-payment/${invoiceId}`)
+
     .then(response => response.json())
+
     .then(data => {
 
-        if (data.status === "pending") {
+
+        if(data.status === "pending"){
 
             statusElement.innerText =
                 "Waiting for payment confirmation...";
 
         }
 
-        else if (data.status === "processing") {
+
+        else if(data.status === "processing"){
 
             statusElement.innerText =
-                "Processing payment...";
+                "Processing your payment...";
 
         }
 
-        else if (data.status === "approved") {
 
-            if (paymentType === "recharge") {
-
-                if (purpose === "renewal") {
-
-                    statusElement.innerText =
-                        "Payment successful! Membership renewed. Redirecting...";
-
-                    setTimeout(() => {
-                        window.location.href = "/vip";
-                    }, 2000);
-
-                } else {
-
-                    statusElement.innerText =
-                        "Recharge successful! Redirecting...";
-
-                    setTimeout(() => {
-                        window.location.href = "/dashboard";
-                    }, 2000);
-
-                }
-
-            } else {
-
-                statusElement.innerText =
-                    "Payment successful! Redirecting to login...";
-
-                setTimeout(() => {
-                    window.location.href = "/login";
-                }, 2000);
-
-            }
-        }
-
-        else if (data.status === "failed") {
+        else if(data.status === "approved"){
 
             statusElement.innerText =
-                "Payment cancelled or failed...";
+                "Payment successful! Redirecting...";
+
 
             setTimeout(() => {
 
-                if (paymentType === "recharge") {
+                if(paymentType === "recharge"){
 
-                    if (purpose === "renewal") {
-                        window.location.href = "/recharge?purpose=renewal";
-                    } else {
-                        window.location.href = "/recharge";
+                    if(purpose === "renewal"){
+
+                        window.location.href =
+                            "/vip";
+
                     }
 
-                } else {
-                    window.location.href = "/payment";
+                    else{
+
+                        window.location.href =
+                            "/dashboard";
+
+                    }
+
                 }
 
-            }, 3000);
+                else{
+
+                    window.location.href =
+                        "/login";
+
+                }
+
+            },2000);
 
         }
 
-        else if (data.status === "not_found") {
+
+        else if(data.status === "failed"){
+
+            statusElement.innerText =
+                "Payment cancelled or failed.";
+
+
+            setTimeout(() => {
+
+                if(paymentType === "recharge"){
+
+                    if(purpose === "renewal"){
+
+                        window.location.href =
+                            "/recharge?purpose=renewal";
+
+                    }
+
+                    else{
+
+                        window.location.href =
+                            "/recharge";
+
+                    }
+
+                }
+
+                else{
+
+                    window.location.href =
+                        "/payment";
+
+                }
+
+            },3000);
+
+        }
+
+
+        else if(data.status === "not_found"){
 
             statusElement.innerText =
                 "Payment record not found.";
 
         }
 
-        else {
+
+        else{
 
             statusElement.innerText =
                 "Status: " + data.status;
@@ -175,6 +813,8 @@ setInterval(() => {
         }
 
     })
+
+
     .catch(error => {
 
         console.error(error);
@@ -184,9 +824,12 @@ setInterval(() => {
 
     });
 
-}, 4000);
+
+},4000);
 
 </script>
 
+
 </body>
+
 </html>
