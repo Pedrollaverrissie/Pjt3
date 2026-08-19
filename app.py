@@ -1263,20 +1263,19 @@ def dashboard():
         and current_user.vip_expires_at <= datetime.utcnow()
     ):
 
+        # Keep the VIP level so the system remembers
+        # which plan the user needs to renew.
         current_user.account_active = False
 
         db.session.add(
             Notification(
                 user_id=current_user.id,
                 title="VIP Expired",
-                message="Your VIP plan has expired. Please recharge to continue."
+                message="Your VIP plan has expired. Please renew your plan to reactivate your account."
             )
         )
 
         db.session.commit()
-
-        logout_user()
-        return redirect("/login")
 
     # -------------------------------
     # Days remaining
