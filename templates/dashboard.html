@@ -774,6 +774,47 @@
 .vip-status-card p {
     text-align: center;
 }
+
+
+/* =========================
+   CIRCULAR DOTTED LOADER
+========================= */
+
+.renew-loader {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 24px;
+}
+
+.dot-spinner {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(circle at 50% 0%, white 3px, transparent 4px),
+        radial-gradient(circle at 85% 15%, white 3px, transparent 4px),
+        radial-gradient(circle at 100% 50%, white 3px, transparent 4px),
+        radial-gradient(circle at 85% 85%, white 3px, transparent 4px),
+        radial-gradient(circle at 50% 100%, white 3px, transparent 4px),
+        radial-gradient(circle at 15% 85%, white 3px, transparent 4px),
+        radial-gradient(circle at 0% 50%, white 3px, transparent 4px),
+        radial-gradient(circle at 15% 15%, white 3px, transparent 4px);
+
+    animation: rotateDots 0.9s linear infinite;
+}
+
+@keyframes rotateDots {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
 </style>
 
 </head>
@@ -1362,7 +1403,7 @@
     {% if vip_expires_at %}
 
         <p style="margin:0;margin-top:10px;">
-            Expired:
+            Expires:
             {{ vip_expires_at.strftime("%d %B %Y") }}
         </p>
 
@@ -1380,19 +1421,24 @@
 
             {% if vip_days_left <= 2 %}
 
-            <form
-                action="{{ url_for('renew_membership') }}"
-                method="POST">
+                <form
+                    action="{{ url_for('renew_membership') }}"
+                    method="POST"
+                    onsubmit="return startRenewalLoader(this)"
+                >
+                    <button
+                        class="vip-btn renew-button"
+                        type="submit"
+                    >
+                        <span class="renew-text">
+                            Renew {{ plan.name }}
+                        </span>
 
-                <button
-                    type="submit"
-                    class="renew-btn">
-
-                    Renew Membership
-
-                </button>
-
-            </form>
+                        <span class="renew-loader">
+                            <span class="dot-spinner"></span>
+                        </span>
+                    </button>
+                </form>
 
             {% endif %}
 
@@ -1876,7 +1922,31 @@
 
 </div>
 
+<script>
+function startRenewalLoader(form) {
 
+    const button = form.querySelector(".renew-button");
+    const text = button.querySelector(".renew-text");
+    const loader = button.querySelector(".renew-loader");
+
+    // Prevent multiple clicks
+    button.disabled = true;
+
+    // Hide Renew Membership text
+    text.style.display = "none";
+
+    // Show circular dotted loader
+    loader.style.display = "flex";
+
+    // Keep loader visible for at least 3 seconds
+    setTimeout(function () {
+        form.submit();
+    }, 3000);
+
+    // Stop the normal form submission for now
+    return false;
+}
+</script>
 <script>
 
 /* =====================================================
