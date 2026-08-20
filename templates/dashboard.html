@@ -1362,7 +1362,7 @@
     {% if vip_expires_at %}
 
     <p style="margin:0;margin-top:10px;">
-        {% if vip_expires_at <= datetime.utcnow() %}
+        {% if vip_days_left <= 0 %}
             Expired:
         {% else %}
             Expires:
