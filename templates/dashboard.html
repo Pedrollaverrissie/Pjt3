@@ -802,7 +802,8 @@
         radial-gradient(circle at 0% 50%, white 3px, transparent 4px),
         radial-gradient(circle at 15% 15%, white 3px, transparent 4px);
 
-    animation: dashboardRotateDots 0.9s linear infinite;
+    /* Slower rotation */
+    animation: dashboardRotateDots 1.8s linear infinite;
 }
 
 @keyframes dashboardRotateDots {
@@ -817,9 +818,26 @@
 
 }
 
+/* =========================
+   LOADING BUTTON
+========================= */
+
 .dashboard-renew-btn:disabled {
+
+    /* Dark background while loading */
+    background: #1b1f24 !important;
+
+    /* Keep white dots highly visible */
+    color: white;
+
     cursor: wait;
-    opacity: .85;
+
+    opacity: 1;
+
+    transform: none;
+
+    box-shadow:
+        0 0 10px rgba(255,255,255,.08);
 }
 </style>
 
