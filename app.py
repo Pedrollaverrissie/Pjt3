@@ -3605,43 +3605,42 @@ def time_ago(dt):
 
 from datetime import datetime, timedelta
 
-def get_current_rotation_batch():
-    """
-    Returns the rotation batch for the current 24-hour period.
-    """
+def get_current_rotation_batch(vip_level):
 
     now = datetime.utcnow()
 
-    # Find the earliest task that has been assigned a rotation batch
-    first_task = Task.query.filter(
-        Task.rotation_batch.isnot(None)
+    current_task = Task.query.filter(
+        Task.vip_level == vip_level,
+        Task.active == True,
+        Task.available_from <= now,
+        Task.available_until > now
     ).order_by(
-        Task.available_from.asc()
+        Task.rotation_batch.desc()
     ).first()
 
-    # No rotation tasks yet
-    if not first_task or not first_task.available_from:
-        return None
+    if current_task:
+        return current_task.rotation_batch
 
-    # Calculate how many 24-hour periods have passed
-    elapsed = now - first_task.available_from
+    # No currently active batch.
+    # Find the latest batch for this VIP.
+    latest_task = Task.query.filter(
+        Task.vip_level == vip_level,
+        Task.rotation_batch.isnot(None)
+    ).order_by(
+        Task.rotation_batch.desc()
+    ).first()
 
-    days_passed = int(
-        elapsed.total_seconds() // 86400
-    )
+    if latest_task:
+        return latest_task.rotation_batch
 
-    # Batch numbering starts from 1
-    return days_passed + 1
+    return None
+
 
 def get_current_rotation_tasks(vip_level):
-    """
-    Return tasks belonging to the current 24-hour rotation
-    for the user's VIP level.
-    """
 
     now = datetime.utcnow()
 
-    batch = get_current_rotation_batch()
+    batch = get_current_rotation_batch(vip_level)
 
     if batch is None:
         return []
@@ -3799,7 +3798,7 @@ def team():
     )
 
 #--------------ADMNIN TASK ROUTE----------------
-@@app.route("/admin/tasks", methods=["GET", "POST"])
+@app.route("/admin/tasks", methods=["GET", "POST"])
 @login_required
 @active_account_required
 def admin_tasks():
