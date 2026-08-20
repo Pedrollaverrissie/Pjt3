@@ -658,12 +658,23 @@ button:active{
                     <input
                         type="number"
                         name="amount"
-                        placeholder="Enter Amount"
-                        min="1"
-                        step="1"
-                        value="200"
+                        placeholder="{% if first_recharge %}Minimum KSh 200{% else %}Enter Amount{% endif %}"
+                        min="{{ 200 if first_recharge else 10 }}"
+                        step="50"
+                        {% if first_recharge %}value="200"{% endif %}
                         required
                     >
+                    {% if first_recharge %}
+                        <div style="
+                            color:#fbbf24;
+                            font-size:13px;
+                            margin-top:-8px;
+                            margin-bottom:16px;
+                            text-align:center;
+                        ">
+                            Activation Amount is KSh 200
+                        </div>
+                    {% endif %}
 
                 {% endif %}
 

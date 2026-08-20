@@ -2270,11 +2270,32 @@ def recharge():
 
     purpose = request.args.get("purpose")
 
+    # Check whether this is the user's first recharge
+    first_recharge = not Payment.query.filter_by(
+        user_id=current_user.id,
+        payment_type="recharge"
+    ).first()
+
+
+
     if request.method == "POST":
 
         
         phone = request.form["phone"].strip()
         amount = float(request.form["amount"])
+
+        # First recharge must be at least KES 200
+        if first_recharge and amount < 200:
+            return render_template(
+                "recharge.html",
+                renewal_mode=False,
+                renewal_cost=0,
+                renewal_usable_balance=0,
+                renewal_shortfall=0,
+                purpose=purpose,
+                first_recharge=True,
+                recharge_error="Your first recharge must be at least KES 200."
+            )
 
         if phone.startswith("0"):
             phone = "254" + phone[1:]
@@ -2368,7 +2389,8 @@ def recharge():
         renewal_cost=renewal_cost,
         renewal_usable_balance=renewal_usable_balance,
         renewal_shortfall=renewal_shortfall,
-        purpose=purpose
+        purpose=purpose,
+        first_recharge=first_recharge
     )
 
 
