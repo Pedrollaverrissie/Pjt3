@@ -449,50 +449,49 @@
 }
         
 /* =========================
-   RENEW LOADER
+   CIRCULAR DOTTED LOADER
 ========================= */
-
-.renew-button {
-    position: relative;
-    min-height: 52px;
-}
 
 .renew-loader {
     display: none;
     align-items: center;
     justify-content: center;
-    gap: 2px;
+    width: 100%;
+    height: 24px;
 }
 
-.dots::after {
-    content: "";
-    display: inline-block;
-    width: 24px;
-    text-align: left;
-    animation: dots 1.2s infinite;
+.dot-spinner {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(circle at 50% 0%, white 3px, transparent 4px),
+        radial-gradient(circle at 85% 15%, white 3px, transparent 4px),
+        radial-gradient(circle at 100% 50%, white 3px, transparent 4px),
+        radial-gradient(circle at 85% 85%, white 3px, transparent 4px),
+        radial-gradient(circle at 50% 100%, white 3px, transparent 4px),
+        radial-gradient(circle at 15% 85%, white 3px, transparent 4px),
+        radial-gradient(circle at 0% 50%, white 3px, transparent 4px),
+        radial-gradient(circle at 15% 15%, white 3px, transparent 4px);
+
+    animation: rotateDots 0.9s linear infinite;
 }
 
-@keyframes dots {
+@keyframes rotateDots {
 
-    0% {
-        content: "";
+    from {
+        transform: rotate(0deg);
     }
 
-    25% {
-        content: ".";
+    to {
+        transform: rotate(360deg);
     }
+}
 
-    50% {
-        content: "..";
-    }
-
-    75% {
-        content: "...";
-    }
-
-    100% {
-        content: "";
-    }
+.renew-button:disabled {
+    cursor: wait;
+    opacity: .85;
 }
     </style>
 </head>
@@ -557,15 +556,24 @@
                 {% elif vip_days_left is not none and vip_days_left <= 2 %}
 
                     <!-- VIP EXPIRING SOON -->
-                    <form action="{{ url_for('renew_membership') }}" method="POST">
+<form
+    action="{{ url_for('renew_membership') }}"
+    method="POST"
+    onsubmit="startRenewalLoader(this)"
+>
+    <button
+        class="vip-btn renew-button"
+        type="submit"
+    >
+        <span class="renew-text">
+            Renew {{ plan.name }}
+        </span>
 
-                        <button class="vip-btn" type="submit">
-
-                            Renew Membership
-
-                        </button>
-
-                    </form>
+        <span class="renew-loader">
+            <span class="dot-spinner"></span>
+        </span>
+    </button>
+</form>
 
                 {% else %}
 
@@ -680,29 +688,21 @@
 function startRenewalLoader(form) {
 
     const button = form.querySelector(".renew-button");
-    const renewText = button.querySelector(".renew-text");
+    const text = button.querySelector(".renew-text");
     const loader = button.querySelector(".renew-loader");
 
-    // Prevent double-clicks
     button.disabled = true;
 
-    // Hide normal text
-    renewText.style.display = "none";
-
-    // Show loader
+    text.style.display = "none";
     loader.style.display = "flex";
 
-    /*
-       Keep loader visible for at least 3 seconds
-       before submitting the renewal form.
-    */
-    setTimeout(function() {
+    // Wait at least 3 seconds
+    setTimeout(function () {
 
         form.submit();
 
     }, 3000);
 
-    // Prevent the browser from submitting immediately
     return false;
 }
 
