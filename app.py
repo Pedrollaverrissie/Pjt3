@@ -2291,7 +2291,7 @@ def recharge():
                 renewal_shortfall=0,
                 purpose=purpose,
                 first_recharge=True,
-                recharge_error="Your Activation Amount is Ksh.200."
+                recharge_error="Your Activation Amount is Ksh. 200"
             )
 
         if phone.startswith("0"):
