@@ -321,6 +321,15 @@ class Task(db.Model):
         db.DateTime,
         nullable=True
     )
+    rotation_batch = db.Column(
+    db.Integer,
+    nullable=True
+    )
+
+    rotation_order = db.Column(
+        db.Integer,
+        nullable=True
+    )
 
 
 class UserTask(db.Model):

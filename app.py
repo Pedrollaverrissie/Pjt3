@@ -3603,7 +3603,58 @@ def time_ago(dt):
     else:
         return dt.strftime("%d %b %Y")
 
+from datetime import datetime, timedelta
 
+def get_current_rotation_batch():
+    """
+    Returns the rotation batch for the current 24-hour period.
+    """
+
+    now = datetime.utcnow()
+
+    # Find the earliest task that has been assigned a rotation batch
+    first_task = Task.query.filter(
+        Task.rotation_batch.isnot(None)
+    ).order_by(
+        Task.available_from.asc()
+    ).first()
+
+    # No rotation tasks yet
+    if not first_task or not first_task.available_from:
+        return None
+
+    # Calculate how many 24-hour periods have passed
+    elapsed = now - first_task.available_from
+
+    days_passed = int(
+        elapsed.total_seconds() // 86400
+    )
+
+    # Batch numbering starts from 1
+    return days_passed + 1
+
+def get_current_rotation_tasks(vip_level):
+    """
+    Return tasks belonging to the current 24-hour rotation
+    for the user's VIP level.
+    """
+
+    now = datetime.utcnow()
+
+    batch = get_current_rotation_batch()
+
+    if batch is None:
+        return []
+
+    return Task.query.filter(
+        Task.vip_level == vip_level,
+        Task.active == True,
+        Task.rotation_batch == batch,
+        Task.available_from <= now,
+        Task.available_until > now
+    ).order_by(
+        Task.rotation_order.asc()
+    ).all()
 #-------TASK ROUTE-----------
 from datetime import date, datetime
 from models import Task, UserTask
@@ -3618,6 +3669,7 @@ def tasks():
     # -----------------------------------
     # EXPIRED VIP
     # -----------------------------------
+
     if (
         current_user.vip_expires_at
         and current_user.vip_expires_at <= now
@@ -3630,6 +3682,7 @@ def tasks():
     # -----------------------------------
     # NEW BRONZE USER - NOT ACTIVATED
     # -----------------------------------
+
     if (
         current_user.vip_level == "Bronze"
         and current_user.vip_started_at is None
@@ -3642,6 +3695,7 @@ def tasks():
     # -----------------------------------
     # FREE USER
     # -----------------------------------
+
     if current_user.vip_level == "Free":
         return render_template(
             "task_alert.html",
@@ -3651,6 +3705,7 @@ def tasks():
     # -----------------------------------
     # BRONZE WALLET CHECK
     # -----------------------------------
+
     if (
         current_user.vip_level == "Bronze"
         and current_user.main_wallet < 10
@@ -3661,18 +3716,17 @@ def tasks():
         )
 
     # -----------------------------------
-    # GET TASKS
+    # CURRENT 24-HOUR ROTATION
     # -----------------------------------
-    tasks = Task.query.filter(
-        Task.vip_level == current_user.vip_level,
-        Task.active == True,
-        Task.available_from <= now,
-        Task.available_until > now
-    ).all()
+
+    tasks = get_current_rotation_tasks(
+        current_user.vip_level
+    )
 
     # -----------------------------------
     # VIP PLAN
     # -----------------------------------
+
     plan = VIP_PLANS[current_user.vip_level]
 
     daily_limit = int(plan["tasks"])
@@ -3684,6 +3738,7 @@ def tasks():
     # -----------------------------------
     # COMPLETED TODAY
     # -----------------------------------
+
     completed_tasks = UserTask.query.filter(
         UserTask.user_id == current_user.id,
         db.func.date(UserTask.completed_at) == date.today()
@@ -3698,6 +3753,7 @@ def tasks():
     # -----------------------------------
     # RENDER
     # -----------------------------------
+
     return render_template(
         "tasks.html",
         tasks=tasks,
@@ -3743,37 +3799,170 @@ def team():
     )
 
 #--------------ADMNIN TASK ROUTE----------------
-@app.route("/admin/tasks", methods=["GET", "POST"])
+@@app.route("/admin/tasks", methods=["GET", "POST"])
 @login_required
 @active_account_required
 def admin_tasks():
 
-    # Replace this with your own admin check later
     if current_user.email != "petersongitonga02@gmail.com":
         return "Access Denied"
 
     if request.method == "POST":
 
+        # -----------------------------------
+        # GET FORM DATA
+        # -----------------------------------
+
+        title = request.form["title"]
+        description = request.form.get("description")
+
+        reward = float(
+            request.form["reward"]
+        )
+
+        vip_level = request.form["vip_level"]
+
+        url = request.form["url"]
+
+        video_duration = int(
+            request.form.get(
+                "video_duration",
+                25
+            )
+        )
+
+        # -----------------------------------
+        # VIDEO DURATION VALIDATION
+        # -----------------------------------
+
+        if video_duration < 25 or video_duration > 30:
+
+            flash(
+                "Video duration must be between 25 and 30 seconds.",
+                "danger"
+            )
+
+            return redirect("/admin/tasks")
+
+        # -----------------------------------
+        # CURRENT TIME
+        # -----------------------------------
+
         now = datetime.utcnow()
 
+        # -----------------------------------
+        # FIND LAST ROTATION BATCH
+        # -----------------------------------
+
+        last_task = Task.query.filter(
+            Task.rotation_batch.isnot(None)
+        ).order_by(
+            Task.rotation_batch.desc(),
+            Task.rotation_order.desc()
+        ).first()
+
+        # -----------------------------------
+        # DETERMINE BATCH
+        # -----------------------------------
+
+        if not last_task:
+
+            # First advertisement
+            rotation_batch = 1
+            rotation_order = 1
+
+            available_from = now
+
+        else:
+
+            current_batch = last_task.rotation_batch
+            current_order = last_task.rotation_order
+
+            # 20 advertisements per batch
+            if current_order < 20:
+
+                rotation_batch = current_batch
+                rotation_order = current_order + 1
+
+                # Find the beginning of this batch
+                first_batch_task = Task.query.filter_by(
+                    rotation_batch=rotation_batch,
+                    rotation_order=1
+                ).first()
+
+                available_from = (
+                    first_batch_task.available_from
+                )
+
+            else:
+
+                # Start a NEW 24-hour batch
+                rotation_batch = current_batch + 1
+                rotation_order = 1
+
+                available_from = (
+                    last_task.available_from
+                    + timedelta(hours=24)
+                )
+
+        # -----------------------------------
+        # BATCH EXPIRATION
+        # -----------------------------------
+
+        available_until = (
+            available_from
+            + timedelta(hours=24)
+        )
+
+        # -----------------------------------
+        # CREATE TASK
+        # -----------------------------------
+
         task = Task(
-            title=request.form["title"],
-            description=request.form["description"],
-            reward=float(request.form["reward"]),
-            vip_level=request.form["vip_level"],
-            url=request.form["url"],
+
+            title=title,
+
+            description=description,
+
+            reward=reward,
+
+            vip_level=vip_level,
+
+            url=url,
+
             active=True,
-            video_duration=25,
-            available_from=now,
-            available_until=now + timedelta(hours=24)
+
+            video_duration=video_duration,
+
+            available_from=available_from,
+
+            available_until=available_until,
+
+            rotation_batch=rotation_batch,
+
+            rotation_order=rotation_order
         )
 
         db.session.add(task)
+
         db.session.commit()
+
+        flash(
+            f"Task added to rotation batch "
+            f"{rotation_batch}, video "
+            f"{rotation_order}.",
+            "success"
+        )
 
         return redirect("/admin/tasks")
 
-    tasks = Task.query.order_by(Task.id.desc()).all()
+    # -----------------------------------
+    # EXISTING TASKS
+    # -----------------------------------
+
+    tasks = Task.query.order_by(
+        Task.id.desc()
+    ).all()
 
     return render_template(
         "admin_tasks.html",
