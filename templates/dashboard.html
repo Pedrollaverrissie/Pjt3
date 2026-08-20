@@ -774,6 +774,53 @@
 .vip-status-card p {
     text-align: center;
 }
+
+/* =========================
+   DASHBOARD RENEW LOADER
+========================= */
+
+.dashboard-renew-loader {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 24px;
+}
+
+.dashboard-dot-spinner {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+
+    background:
+        radial-gradient(circle at 50% 0%, white 3px, transparent 4px),
+        radial-gradient(circle at 85% 15%, white 3px, transparent 4px),
+        radial-gradient(circle at 100% 50%, white 3px, transparent 4px),
+        radial-gradient(circle at 85% 85%, white 3px, transparent 4px),
+        radial-gradient(circle at 50% 100%, white 3px, transparent 4px),
+        radial-gradient(circle at 15% 85%, white 3px, transparent 4px),
+        radial-gradient(circle at 0% 50%, white 3px, transparent 4px),
+        radial-gradient(circle at 15% 15%, white 3px, transparent 4px);
+
+    animation: dashboardRotateDots 0.9s linear infinite;
+}
+
+@keyframes dashboardRotateDots {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+.dashboard-renew-btn:disabled {
+    cursor: wait;
+    opacity: .85;
+}
 </style>
 
 </head>
@@ -1385,19 +1432,28 @@
 
             {% if vip_days_left <= 2 %}
 
-            <form
-                action="{{ url_for('renew_membership') }}"
-                method="POST">
+                <form
+                    action="{{ url_for('renew_membership') }}"
+                    method="POST"
+                    onsubmit="return startDashboardRenewal(this)"
+                >
 
-                <button
-                    type="submit"
-                    class="renew-btn">
+                    <button
+                        type="submit"
+                        class="renew-btn dashboard-renew-btn"
+                    >
 
-                    Renew Membership
+                        <span class="dashboard-renew-text">
+                            Renew Membership
+                        </span>
 
-                </button>
+                        <span class="dashboard-renew-loader">
+                            <span class="dashboard-dot-spinner"></span>
+                        </span>
 
-            </form>
+                    </button>
+
+                </form>
 
             {% endif %}
 
@@ -1881,6 +1937,35 @@
 
 </div>
 
+<script>
+
+function startDashboardRenewal(form) {
+
+    const button = form.querySelector(".dashboard-renew-btn");
+    const text = form.querySelector(".dashboard-renew-text");
+    const loader = form.querySelector(".dashboard-renew-loader");
+
+    // Prevent double-clicking
+    button.disabled = true;
+
+    // Hide button text
+    text.style.display = "none";
+
+    // Show circular dotted loader
+    loader.style.display = "flex";
+
+    // Wait at least 5 seconds
+    setTimeout(function () {
+
+        form.submit();
+
+    }, 5000);
+
+    // Stop normal submission temporarily
+    return false;
+}
+
+</script>
 
 <script>
 
