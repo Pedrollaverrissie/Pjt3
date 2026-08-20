@@ -1361,10 +1361,15 @@
 
     {% if vip_expires_at %}
 
-        <p style="margin:0;margin-top:10px;">
+    <p style="margin:0;margin-top:10px;">
+        {% if vip_expires_at <= datetime.utcnow() %}
+            Expired:
+        {% else %}
             Expires:
-            {{ vip_expires_at.strftime("%d %B %Y") }}
-        </p>
+        {% endif %}
+
+        {{ vip_expires_at.strftime("%d %B %Y") }}
+    </p>
 
         <p style="color:rgba(0,252,0,.9);font-weight:bold;margin-top:10px;">
             {{ vip_days_left }} Days Remaining
