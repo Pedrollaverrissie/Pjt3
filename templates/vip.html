@@ -529,81 +529,76 @@
                     NEW USER - NOT ACTIVATED
                     ========================= #}
 
-                {% if current_user.vip_expires_at is none %}
+                    {% if current_user.vip_expires_at is none %}
 
-                    <form
-                        action="{{ url_for('upgrade_vip', plan=plan.name) }}"
-                        method="POST"
-                    >
-                        <button class="vip-btn" type="submit">
-                            Activate {{ plan.name }}
-                        </button>
-                    </form>
+                        <form action="{{ url_for('recharge') }}" method="GET">
+                            <button class="vip-btn" type="submit">
+                                Activate {{ plan.name }}
+                            </button>
+                        </form>
 
 
-                {# =========================
-                EXPIRED VIP
-                ========================= #}
+                    {# =========================
+                    EXPIRED VIP
+                    ========================= #}
 
-                {% elif vip_expired %}
+                    {% elif vip_expired %}
 
-                    <form
-                        action="{{ url_for('renew_membership') }}"
-                        method="POST"
-                        onsubmit="return startRenewalLoader(this)"
-                    >
-                        <button
-                            class="vip-btn renew-button"
-                            type="submit"
+                        <form
+                            action="{{ url_for('renew_membership') }}"
+                            method="POST"
+                            onsubmit="return startRenewalLoader(this)"
                         >
-                            <span class="renew-text">
-                                Renew {{ plan.name }}
-                            </span>
+                            <button class="vip-btn renew-button" type="submit">
 
-                            <span class="renew-loader">
-                                <span class="dot-spinner"></span>
-                            </span>
-                        </button>
-                    </form>
+                                <span class="renew-text">
+                                    Renew {{ plan.name }}
+                                </span>
+
+                                <span class="renew-loader">
+                                    <span class="dot-spinner"></span>
+                                </span>
+
+                            </button>
+                        </form>
 
 
-                {# =========================
-                EXPIRING SOON
-                ========================= #}
+                    {# =========================
+                    EXPIRING SOON
+                    ========================= #}
 
-                {% elif vip_days_left is not none and vip_days_left <= 2 %}
+                    {% elif vip_days_left is not none and vip_days_left <= 2 %}
 
-                    <form
-                        action="{{ url_for('renew_membership') }}"
-                        method="POST"
-                        onsubmit="return startRenewalLoader(this)"
-                    >
-                        <button
-                            class="vip-btn renew-button"
-                            type="submit"
+                        <form
+                            action="{{ url_for('renew_membership') }}"
+                            method="POST"
+                            onsubmit="return startRenewalLoader(this)"
                         >
-                            <span class="renew-text">
-                                Renew {{ plan.name }}
-                            </span>
+                            <button class="vip-btn renew-button" type="submit">
 
-                            <span class="renew-loader">
-                                <span class="dot-spinner"></span>
-                            </span>
+                                <span class="renew-text">
+                                    Renew {{ plan.name }}
+                                </span>
+
+                                <span class="renew-loader">
+                                    <span class="dot-spinner"></span>
+                                </span>
+
+                            </button>
+                        </form>
+
+
+                    {# =========================
+                    ACTIVE VIP
+                    ========================= #}
+
+                    {% else %}
+
+                        <button class="vip-btn disabled" disabled>
+                            ✓ Current Plan
                         </button>
-                    </form>
 
-
-                {# =========================
-                ACTIVE VIP
-                ========================= #}
-
-                {% else %}
-
-                    <button class="vip-btn disabled" disabled>
-                        ✓ Current Plan
-                    </button>
-
-                {% endif %}
+                    {% endif %}
 
 
             <!-- ========================= -->
