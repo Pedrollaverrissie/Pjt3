@@ -1054,11 +1054,12 @@ def verify_signup_email(email):
 
             phone=signup_data["phone"],
 
-            password=signup_data["password"],
+            password=generate_password_hash(
+                signup_data["password"]
+            ),
 
             referred_by=signup_data["referred_by"]
         )
-
         db.session.add(pending_user)
 
         db.session.commit()
@@ -1188,9 +1189,20 @@ def payment():
                 amount=100,
                 status="pending",
                 payment_type="registration"
+                purpose="registration",
+                user_id=None
             )
 
             db.session.add(payment)
+            db.session.commit()
+
+
+            pending_user.payment_id = payment.id
+            pending_user.invoice_id = invoice_id
+            pending_user.expected_amount = 100
+            pending_user.amount_received = 0
+            pending_user.status = "processing"
+
             db.session.commit()
 
             print("PAYMENT SAVED:")
@@ -4003,7 +4015,138 @@ def admin_pending_user_details(pending_id):
         pending_user=pending_user,
         payment=payment
     )
+#-----APPROVE PENDING USERS------
+@app.route("/admin/pending-users/<int:pending_id>/approve", methods=["POST"])
+@login_required
+@admin_required
+def approve_pending_user(pending_id):
 
+    pending_user = PendingUser.query.get_or_404(pending_id)
+
+    # -----------------------------------
+    # Prevent double approval
+    # -----------------------------------
+    if pending_user.status == "completed":
+        flash("This registration has already been completed.", "info")
+        return redirect(
+            url_for(
+                "admin_pending_user_details",
+                pending_id=pending_user.id
+            )
+        )
+
+    # -----------------------------------
+    # Verify payment amount
+    # -----------------------------------
+    expected = float(pending_user.expected_amount or 0)
+    received = float(pending_user.amount_received or 0)
+
+    if received < expected:
+
+        pending_user.status = "invalid_amount"
+
+        pending_user.rejection_reason = (
+            f"Insufficient payment. "
+            f"Expected KES {expected:.2f}, "
+            f"received KES {received:.2f}."
+        )
+
+        db.session.commit()
+
+        flash(
+            f"Cannot approve. Expected KES {expected:.2f}, "
+            f"but only KES {received:.2f} was received.",
+            "danger"
+        )
+
+        return redirect(
+            url_for(
+                "admin_pending_user_details",
+                pending_id=pending_user.id
+            )
+        )
+
+    # -----------------------------------
+    # Make sure email isn't already used
+    # -----------------------------------
+    existing_user = User.query.filter_by(
+        email=pending_user.email
+    ).first()
+
+    if existing_user:
+
+        pending_user.status = "rejected"
+
+        pending_user.rejection_reason = (
+            "A user with this email already exists."
+        )
+
+        db.session.commit()
+
+        flash(
+            "A user with this email already exists.",
+            "danger"
+        )
+
+        return redirect(
+            url_for(
+                "admin_pending_user_details",
+                pending_id=pending_user.id
+            )
+        )
+
+    # -----------------------------------
+    # Create actual user
+    # -----------------------------------
+    new_user = User(
+        username=pending_user.username,
+        email=pending_user.email,
+        phone=pending_user.phone,
+        password=pending_user.password,
+        referred_by=pending_user.referred_by,
+        vip_level="Free",
+        account_active=True
+    )
+
+    db.session.add(new_user)
+
+    # Flush so PostgreSQL gives us the new user ID
+    db.session.flush()
+
+    # -----------------------------------
+    # Mark registration completed
+    # -----------------------------------
+    pending_user.status = "completed"
+    pending_user.amount_received = received
+
+    # -----------------------------------
+    # Update linked payment
+    # -----------------------------------
+    if pending_user.payment_id:
+
+        payment = Payment.query.get(
+            pending_user.payment_id
+        )
+
+        if payment:
+            payment.status = "completed"
+            payment.user_id = new_user.id
+
+    # -----------------------------------
+    # Save everything
+    # -----------------------------------
+    db.session.commit()
+
+    flash(
+        f"User {new_user.username} was successfully approved.",
+        "success"
+    )
+
+    return redirect(
+        url_for(
+            "admin_pending_users"
+        )
+    )
 #--------------ADMIN USERS ROUTE------------------
 @app.route("/admin/users")
 @login_required
