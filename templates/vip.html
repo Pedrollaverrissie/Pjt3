@@ -479,7 +479,6 @@
 }
 
 @keyframes rotateDots {
-
     from {
         transform: rotate(0deg);
     }
@@ -487,11 +486,6 @@
     to {
         transform: rotate(360deg);
     }
-}
-
-.renew-button:disabled {
-    cursor: wait;
-    opacity: .85;
 }
     </style>
 </head>
@@ -537,7 +531,7 @@
 <form
     action="{{ url_for('renew_membership') }}"
     method="POST"
-    onsubmit="startRenewalLoader(this)"
+    onsubmit="return startRenewalLoader(this)"
 >
     <button
         class="vip-btn renew-button"
@@ -547,8 +541,8 @@
             Renew {{ plan.name }}
         </span>
 
-        <span class="renew-loader" style="display:none;">
-            Renewing<span class="dots"></span>
+        <span class="renew-loader">
+            <span class="dot-spinner"></span>
         </span>
     </button>
 </form>
@@ -684,28 +678,29 @@
 {% endwith %}
 
 <script>
-
 function startRenewalLoader(form) {
 
     const button = form.querySelector(".renew-button");
     const text = button.querySelector(".renew-text");
     const loader = button.querySelector(".renew-loader");
 
+    // Prevent multiple clicks
     button.disabled = true;
 
+    // Hide Renew Membership text
     text.style.display = "none";
+
+    // Show circular dotted loader
     loader.style.display = "flex";
 
-    // Wait at least 3 seconds
+    // Keep loader visible for at least 3 seconds
     setTimeout(function () {
-
         form.submit();
-
     }, 3000);
 
+    // Stop the normal form submission for now
     return false;
 }
-
 </script>
 <script>
 
