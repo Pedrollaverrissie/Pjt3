@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Pending Users</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .pending-container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 30px auto;
+        }
+
+        .pending-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .pending-header h1 {
+            color: white;
+            margin: 0;
+        }
+
+        .back-btn {
+            background: #0d6efd;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+
+        .pending-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            overflow-x: auto;
+            box-shadow: 0 0 15px rgba(0,0,0,.15);
+        }
+
+        .pending-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1100px;
+        }
+
+        .pending-table th {
+            background: #111827;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .pending-table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            font-size: 12px;
+            color: #222;
+        }
+
+        .pending-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .status-processing {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .status-invalid_amount {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #842029;
+        }
+
+        .status-expired {
+            background: #e2e3e5;
+            color: #41464b;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+        }
+
+        .amount-received {
+            font-weight: bold;
+        }
+
+        .amount-valid {
+            color: #198754;
+        }
+
+        .amount-invalid {
+            color: #dc3545;
+        }
+
+        .invoice {
+            font-family: monospace;
+            font-size: 11px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="pending-container">
+
+    <div class="pending-header">
+
+        <h1>
+            Pending Users
+        </h1>
+
+        <a href="/admin"
+           class="back-btn">
+            ← Admin Dashboard
+        </a>
+
+    </div>
+
+
+    <div class="pending-card">
+
+        {% if pending_users %}
+
+        <table class="pending-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>User</th>
+
+                    <th>Email</th>
+
+                    <th>Phone</th>
+
+                    <th>Expected</th>
+
+                    <th>Received</th>
+
+                    <th>Status</th>
+
+                    <th>Invoice ID</th>
+
+                    <th>Created</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for pending in pending_users %}
+
+                <tr>
+
+                    <td>
+                        #{{ pending.id }}
+                    </td>
+
+
+                    <td>
+                        <strong>
+                            {{ pending.username }}
+                        </strong>
+                    </td>
+
+
+                    <td>
+                        {{ pending.email }}
+                    </td>
+
+
+                    <td>
+                        {{ pending.phone }}
+                    </td>
+
+
+                    <td>
+                        KES {{ "%.2f"|format(pending.expected_amount or 0) }}
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="amount-received
+                            {% if pending.amount_received >= pending.expected_amount %}
+                                amount-valid
+                            {% else %}
+                                amount-invalid
+                            {% endif %}">
+
+                            KES
+                            {{ "%.2f"|format(pending.amount_received or 0) }}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <span class="status status-{{ pending.status }}">
+
+                            {{ pending.status|replace("_", " ")|title }}
+
+                        </span>
+
+                    </td>
+
+
+                    <td class="invoice">
+
+                        {{ pending.invoice_id or "—" }}
+
+                    </td>
+
+
+                    <td>
+
+                        {% if pending.created_at %}
+
+                            {{ pending.created_at.strftime("%d/%m/%Y %H:%M") }}
+
+                        {% else %}
+
+                            —
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <td>
+
+                        <a href="#"
+                           style="color:#0d6efd; font-weight:bold;">
+                            View
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+            <div class="empty-message">
+
+                <h3>No Pending Users</h3>
+
+                <p>
+                    There are currently no pending registrations.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

@@ -161,17 +161,83 @@ class PendingUser(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
 
-    username = db.Column(db.String(100), nullable=False)
+    username = db.Column(
+        db.String(100),
+        nullable=False
+    )
 
-    email = db.Column(db.String(120), nullable=False)
+    email = db.Column(
+        db.String(120),
+        nullable=False
+    )
 
-    phone = db.Column(db.String(20), nullable=False)
+    phone = db.Column(
+        db.String(20),
+        nullable=False
+    )
 
-    password = db.Column(db.String(255), nullable=False)
+    password = db.Column(
+        db.String(255),
+        nullable=False
+    )
 
     referred_by = db.Column(
         db.String(20),
         nullable=True
+    )
+
+    # ================= PAYMENT INFORMATION =================
+
+    payment_id = db.Column(
+        db.Integer,
+        db.ForeignKey("payment.id"),
+        nullable=True
+    )
+
+    invoice_id = db.Column(
+        db.String(100),
+        nullable=True
+    )
+
+    expected_amount = db.Column(
+        db.Float,
+        default=100
+    )
+
+    amount_received = db.Column(
+        db.Float,
+        default=0
+    )
+
+    # ================= STATUS =================
+
+    status = db.Column(
+        db.String(30),
+        default="processing"
+    )
+
+    # processing
+    # completed
+    # invalid_amount
+    # rejected
+    # expired
+
+    rejection_reason = db.Column(
+        db.Text,
+        nullable=True
+    )
+
+    # ================= DATES =================
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    updated_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow
     )
 
 

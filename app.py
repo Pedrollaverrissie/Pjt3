@@ -1173,7 +1173,7 @@ def payment():
 
             response = service.collect.mpesa_stk_push(
                 phone_number=phone,
-                amount=7,
+                amount=100,
                 narrative="Account Activation"
             )
 
@@ -1185,7 +1185,7 @@ def payment():
                 phone=phone,
                 email=pending_user.email,
                 transaction_code=invoice_id,
-                amount=7,
+                amount=100,
                 status="pending",
                 payment_type="registration"
             )
@@ -2123,7 +2123,7 @@ def webhook():
                     return jsonify({"status": "ignored"}), 200
 
                 # Registration fee MUST be exactly KES 100
-                if payment.amount != 7:
+                if payment.amount != 100:
                     print("INVALID REGISTRATION PAYMENT AMOUNT")
                     print("EXPECTED: 100")
                     print("RECEIVED:", payment.amount)
@@ -3079,7 +3079,7 @@ RENEWAL_WINDOW_DAYS = 2
 def get_minimum_recharge(vip_level):
 
     recharge_requirements = {
-        "Bronze":17,
+        "Bronze":200,
         "Silver": 500,
         "Gold": 1000,
         "Platinum": 2500,
@@ -3285,7 +3285,7 @@ def process_vip_recharge(user, amount):
     if (
         user.vip_level == "Bronze"
         and user.vip_started_at is None
-        and amount >= 17
+        and amount >= 200
     ):
 
         user.account_active = True
@@ -3965,7 +3965,23 @@ def admin():
         vip_members=vip_members,
         total_deposits=total_deposits
     )
+#--------ADMIN PENDING USERS-------
+@app.route("/admin/pending-users")
+@login_required
+@admin_required
+def admin_pending_users():
 
+    if not current_user.is_admin:
+        return redirect(url_for("dashboard"))
+
+    pending_users = PendingUser.query.order_by(
+        PendingUser.created_at.desc()
+    ).all()
+
+    return render_template(
+        "admin_pending_users.html",
+        pending_users=pending_users
+    )
 #--------------ADMIN USERS ROUTE------------------
 @app.route("/admin/users")
 @login_required
