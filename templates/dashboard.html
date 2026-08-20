@@ -1396,19 +1396,36 @@
 
         </div>
 
+{% else %}
+
+    {% if current_user.vip_level == "Bronze"
+          and current_user.vip_started_at is none %}
+
+        <p style="color:white;">
+            Your Bronze membership is awaiting activation.
+        </p>
+
+        <a href="{{ url_for('recharge') }}">
+            <button class="upgrade-btn">
+                Activate Bronze
+            </button>
+        </a>
+
     {% else %}
 
         <p style="color:white;">
-            You are on a Free plan.
+            Your membership is not currently active.
         </p>
 
-        <a href="/vip">
+        <a href="{{ url_for('vip') }}">
             <button class="upgrade-btn">
-                Upgrade to VIP
+                Choose VIP Plan
             </button>
         </a>
 
     {% endif %}
+
+{% endif %}
 
 </div>
 

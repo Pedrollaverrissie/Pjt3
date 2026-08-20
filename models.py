@@ -58,7 +58,7 @@ class User(UserMixin, db.Model):
 
     vip_level = db.Column(
         db.String(20),
-        default="Free"
+        default="Bronze"
     )
     is_admin = db.Column(
     db.Boolean,

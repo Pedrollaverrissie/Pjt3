@@ -3237,7 +3237,7 @@ def can_afford_upgrade(user):
 
 def get_locked_capital(user):
 
-    if user.vip_level == "Free":
+    if user.vip_level not in VIP_PLANS:
         return 0
 
     return VIP_PLANS[user.vip_level]["price"]
@@ -3375,14 +3375,13 @@ def vip():
             current_user.vip_expires_at - datetime.utcnow()
         ).days
 
-    # -------------------------------
-    # CHECK VIP EXPIRATION
-    # -------------------------------
-    vip_expired = (
-        current_user.vip_level != "Free"
-        and current_user.vip_expires_at
-        and current_user.vip_expires_at <= datetime.utcnow()
-    )
+        # -------------------------------
+        # CHECK VIP EXPIRATION
+        # -------------------------------
+        vip_expired = (
+            current_user.vip_expires_at
+            and current_user.vip_expires_at <= datetime.utcnow()
+        )
 
     return render_template(
 
@@ -3582,6 +3581,8 @@ def time_ago(dt):
 
     else:
         return dt.strftime("%d %b %Y")
+
+
 #-------TASK ROUTE-----------
 from datetime import date, datetime
 from models import Task, UserTask
@@ -3597,26 +3598,34 @@ def tasks():
     # EXPIRED VIP
     # -----------------------------------
     if (
-        current_user.vip_level != "Free"
-        and current_user.vip_expires_at
+        current_user.vip_expires_at
         and current_user.vip_expires_at <= now
     ):
-        return redirect(url_for("task_access"))
+        return render_template(
+            "task_alert.html",
+            alert_type="expired"
+        )
 
     # -----------------------------------
-    # FREE USER
-    # -----------------------------------
-    if current_user.vip_level == "Free":
-        return redirect(url_for("task_access"))
-
-    # -----------------------------------
-    # BRONZE HAS NOT BEEN ACTIVATED
+    # NEW BRONZE USER - NOT ACTIVATED
     # -----------------------------------
     if (
         current_user.vip_level == "Bronze"
         and current_user.vip_started_at is None
     ):
-        return render_template("task_alert.html")
+        return render_template(
+            "task_alert.html",
+            alert_type="activation"
+        )
+
+    # -----------------------------------
+    # FREE USER
+    # -----------------------------------
+    if current_user.vip_level == "Free":
+        return render_template(
+            "task_alert.html",
+            alert_type="free"
+        )
 
     # -----------------------------------
     # BRONZE WALLET CHECK
@@ -3625,10 +3634,13 @@ def tasks():
         current_user.vip_level == "Bronze"
         and current_user.main_wallet < 10
     ):
-        return redirect(url_for("task_access"))
+        return render_template(
+            "task_alert.html",
+            alert_type="wallet"
+        )
 
     # -----------------------------------
-    # GET TODAY'S TASKS
+    # GET TASKS
     # -----------------------------------
     tasks = Task.query.filter_by(
         vip_level=current_user.vip_level,
@@ -3636,7 +3648,7 @@ def tasks():
     ).all()
 
     # -----------------------------------
-    # VIP PLAN DETAILS
+    # VIP PLAN
     # -----------------------------------
     plan = VIP_PLANS[current_user.vip_level]
 
@@ -3647,7 +3659,7 @@ def tasks():
     daily_reward = reward * plan["tasks"]
 
     # -----------------------------------
-    # TASKS COMPLETED TODAY
+    # COMPLETED TODAY
     # -----------------------------------
     completed_tasks = UserTask.query.filter(
         UserTask.user_id == current_user.id,
@@ -3661,7 +3673,7 @@ def tasks():
     completed_today = len(completed_ids)
 
     # -----------------------------------
-    # RENDER TASKS
+    # RENDER
     # -----------------------------------
     return render_template(
         "tasks.html",
