@@ -2683,7 +2683,7 @@ def renew_membership():
     )
 
     return redirect(
-        url_for("vip")
+        url_for("dashboard")
     )
 #--------------debugging-------------------------
 @app.route("/debug-pending")
