@@ -2123,7 +2123,7 @@ def webhook():
                     return jsonify({"status": "ignored"}), 200
 
                 # Registration fee MUST be exactly KES 100
-                if payment.amount != 100:
+                if payment.amount != 7:
                     print("INVALID REGISTRATION PAYMENT AMOUNT")
                     print("EXPECTED: 100")
                     print("RECEIVED:", payment.amount)
