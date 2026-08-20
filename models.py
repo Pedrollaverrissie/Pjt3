@@ -302,7 +302,25 @@ class Task(db.Model):
 
     daily_limit = db.Column(db.Integer, default=1)
 
-    video_duration = db.Column(db.Integer, default=30)
+    # Video must be between 25 and 30 seconds
+    video_duration = db.Column(
+        db.Integer,
+        default=25
+    )
+
+    # ==============================
+    # DAILY ADVERTISEMENT ROTATION
+    # ==============================
+
+    available_from = db.Column(
+        db.DateTime,
+        nullable=True
+    )
+
+    available_until = db.Column(
+        db.DateTime,
+        nullable=True
+    )
 
 
 class UserTask(db.Model):

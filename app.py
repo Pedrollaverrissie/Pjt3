@@ -3663,9 +3663,11 @@ def tasks():
     # -----------------------------------
     # GET TASKS
     # -----------------------------------
-    tasks = Task.query.filter_by(
-        vip_level=current_user.vip_level,
-        active=True
+    tasks = Task.query.filter(
+        Task.vip_level == current_user.vip_level,
+        Task.active == True,
+        Task.available_from <= now,
+        Task.available_until > now
     ).all()
 
     # -----------------------------------
@@ -3752,13 +3754,18 @@ def admin_tasks():
 
     if request.method == "POST":
 
+        now = datetime.utcnow()
+
         task = Task(
             title=request.form["title"],
             description=request.form["description"],
             reward=float(request.form["reward"]),
             vip_level=request.form["vip_level"],
             url=request.form["url"],
-            active=True
+            active=True,
+            video_duration=25,
+            available_from=now,
+            available_until=now + timedelta(hours=24)
         )
 
         db.session.add(task)
@@ -3839,7 +3846,20 @@ def claim_task(task_id):
             "success": False,
             "message": "Task is inactive."
         }), 400
+    
+    now = datetime.utcnow()
 
+    if (
+        task.available_from is None
+        or task.available_until is None
+        or task.available_from > now
+        or task.available_until <= now
+    ):
+        return jsonify({
+            "success": False,
+            "message": "This advertisement is no longer available."
+        }), 400
+    
     # VIP check
     if task.vip_level != current_user.vip_level:
         return jsonify({
@@ -3906,18 +3926,18 @@ def claim_task(task_id):
         }), 400
 
     # Server-side watch verification
-    if session.watched_seconds < 25:
+    if session.watched_seconds < task.video_duration:
         return jsonify({
             "success": False,
             "message": "Please finish watching the video."
         }), 400
 
     # Extra protection against fake requests
-    elapsed = (datetime.utcnow() - session.started_at).total_seconds()
+    elapsed = (
+        datetime.utcnow() - session.started_at
+    ).total_seconds()
 
-    print("Elapsed:", elapsed)
-
-    if elapsed < 25:
+    if elapsed < task.video_duration:
         return jsonify({
             "success": False,
             "message": "Please finish watching the video."
@@ -4359,6 +4379,17 @@ def start_task(task_id):
     if not task.active:
         return redirect("/tasks")
 
+    # Task must currently be available
+    now = datetime.utcnow()
+
+    if (
+        task.available_from is None
+        or task.available_until is None
+        or task.available_from > now
+        or task.available_until <= now
+    ):
+        return redirect("/tasks")
+    
     # VIP restriction
     if task.vip_level != current_user.vip_level:
         return redirect("/tasks")
@@ -4502,7 +4533,12 @@ def update_task_progress():
         return jsonify(success=False), 404
 
     # Never allow more than 25 seconds
-    watched = min(watched, 25)
+    task = Task.query.get(task_id)
+
+    if not task:
+        return jsonify(success=False), 404
+
+    watched = min(watched, task.video_duration)
 
     # User cannot report more time than has actually passed
     elapsed = int((datetime.utcnow() - session.started_at).total_seconds())
