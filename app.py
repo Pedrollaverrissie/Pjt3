@@ -3368,6 +3368,7 @@ def vip():
         })
 
     vip_days_left = None
+    vip_expired = False
 
     if current_user.vip_expires_at:
 
