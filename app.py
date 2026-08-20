@@ -3982,6 +3982,28 @@ def admin_pending_users():
         "admin_pending_users.html",
         pending_users=pending_users
     )
+
+#----PENDING USER DETAILS-------
+@app.route("/admin/pending-users/<int:pending_id>")
+@login_required
+def admin_pending_user_details(pending_id):
+
+    if not current_user.is_admin:
+        return redirect(url_for("dashboard"))
+
+    pending_user = PendingUser.query.get_or_404(pending_id)
+
+    payment = None
+
+    if pending_user.payment_id:
+        payment = Payment.query.get(pending_user.payment_id)
+
+    return render_template(
+        "admin_pending_user_details.html",
+        pending_user=pending_user,
+        payment=payment
+    )
+
 #--------------ADMIN USERS ROUTE------------------
 @app.route("/admin/users")
 @login_required
