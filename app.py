@@ -2955,7 +2955,8 @@ def admin_required(f):
 def get_required_contribution(vip):
 
     requirements = {
-        "Bronze":76,
+        "Bronze":800
+        ,
         "Silver": 1500,
         "Gold": 3000,              
         "Platinum": 7500,
@@ -3081,11 +3082,11 @@ def deduct_membership_contribution(user):
 
 def get_minimum_withdrawal(vip_level):
     minimums = {
-        "Bronze":10,
-        "Silver": 495,
-        "Gold": 1000,
-        "Platinum": 2500,
-        "Diamond": 5000
+        "Bronze":100,
+        "Silver": 100,
+        "Gold": 100,
+        "Platinum": 100,
+        "Diamond": 100
     }
 
     return minimums.get(vip_level, 500)
