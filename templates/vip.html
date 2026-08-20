@@ -487,6 +487,37 @@
         transform: rotate(360deg);
     }
 }
+
+
+/* ACTIVATE BUTTON */
+.activate-btn {
+    background: linear-gradient(135deg, #16a34a, #22c55e) !important;
+}
+
+.activate-btn:hover {
+    box-shadow: 0 12px 28px rgba(34, 197, 94, .45);
+}
+
+
+/* RENEW BUTTON */
+.renew-button {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24) !important;
+    color: #111 !important;
+}
+
+.renew-button:hover {
+    box-shadow: 0 12px 28px rgba(251, 191, 36, .45);
+}
+
+
+/* DARK BACKGROUND WHILE RENEWING */
+.renew-button:disabled {
+    background: #1f2937 !important;
+    color: white !important;
+    cursor: wait;
+    opacity: 1;
+    box-shadow: none;
+}
     </style>
 </head>
 
@@ -532,8 +563,8 @@
                     {% if current_user.vip_expires_at is none %}
 
                         <form action="{{ url_for('recharge') }}" method="GET">
-                            <button class="vip-btn" type="submit">
-                                Activate {{ plan.name }}
+                            <button class="vip-btn      activate-btn" type="submit">
+                                    Activate {{ plan.name }}
                             </button>
                         </form>
 
