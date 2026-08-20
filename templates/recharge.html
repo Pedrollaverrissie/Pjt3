@@ -659,7 +659,7 @@ button:active{
                         type="number"
                         name="amount"
                         placeholder="{% if first_recharge %}Minimum KSh 200{% else %}Enter Amount{% endif %}"
-                        min="{{  if first_recharge else 10 }}"
+                        min="{{ 20 if first_recharge else 10 }}"
                         step="1"
                         {% if first_recharge %}value="200"{% endif %}
                         required
