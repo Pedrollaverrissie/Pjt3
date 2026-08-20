@@ -4003,6 +4003,19 @@ def admin_pending_user_details(pending_id):
         pending_user=pending_user,
         payment=payment
     )
+
+#-----DELETE PENDING USERS------
+@app.route("/admin/pending-users/<int:pending_id>/delete", methods=["POST"])
+@login_required
+@admin_required
+def delete_pending_user(pending_id):
+
+    pending_user = PendingUser.query.get_or_404(pending_id)
+
+    db.session.delete(pending_user)
+    db.session.commit()
+
+    return redirect(url_for("admin_pending_users"))
 #--------------ADMIN USERS ROUTE------------------
 @app.route("/admin/users")
 @login_required
