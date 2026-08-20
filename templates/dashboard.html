@@ -1,23 +1,35 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Dashboard</title>
-       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <script
+        src="{{ url_for('static', filename='script.js') }}"
+        defer
+    ></script>
+
 <style>
 
-    .index{
-
-    background: white;
-    
+.index{
+    background:white;
 }
-        .badge{
+
+
+/* =====================================================
+   NOTIFICATION BADGE
+===================================================== */
+
+.badge{
     position:absolute;
+
     top:-2px;
     right:-3px;
 
@@ -41,10 +53,16 @@
     border:1px solid white;
 }
 
+
+/* =====================================================
+   REFERRAL
+===================================================== */
+
 .invite-link{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
     width:100%;
 
     background:rgb(25,45,61);
@@ -56,36 +74,28 @@
     margin-bottom:25px;
 
     box-shadow:0 -0 10px rgb(6,6,0);
-
 }
 
 .referral-header{
-
     display:flex;
 
     justify-content:space-between;
-
     align-items:center;
 
     margin-bottom:15px;
-    gap: 5px;
 
+    gap:5px;
 }
 
 .referral-title{
-
     color:#f69503;
 
     font-size:18px;
-
     font-weight:bold;
-
 }
 
 .referral-badge{
-
     background:#010e0f;
-
     color:#42d392;
 
     padding:5px 10px;
@@ -93,31 +103,25 @@
     border-radius:20px;
 
     font-size:11px;
-
 }
 
 .referral-text{
-
     color:#c8c8c8;
 
     font-size:12px;
 
     margin-bottom:20px;
-
 }
 
 .referral-summary{
-
     display:flex;
 
     gap:15px;
 
     margin-bottom:20px;
-
 }
 
 .summary-card{
-
     flex:1;
 
     background:#010e0f;
@@ -127,61 +131,58 @@
     padding:15px;
 
     text-align:center;
-
 }
 
 .summary-card h4{
-
     margin:0;
 
     color:white;
 
     font-size:18px;
-
 }
 
 .summary-card p{
-
     margin-top:6px;
 
     color:#bcbcbc;
 
     font-size:11px;
-
 }
 
 .link-box{
-
     display:flex;
-    flex-direction:column;
-    gap:12px;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
 
+    flex-direction:column;
+
+    gap:12px;
+
+    width:100%;
+
+    justify-content:center;
+    align-items:center;
 }
 
 .link-box input{
-
     background:#010e0f;
-   
+
     color:white;
 
     border:none;
- 
+
     border-radius:8px;
 
     padding:12px;
-    text-align: center;
-    font-size:12px;
-    width: 100%;
 
+    text-align:center;
+
+    font-size:12px;
+
+    width:100%;
 }
 
 .link-box button{
+    width:100%;
 
-  
-    width: 100%;
     height:42px;
 
     background:#f69503;
@@ -197,139 +198,211 @@
     cursor:pointer;
 
     transition:.3s;
-
 }
-
-
 
 .link-box button:hover{
-
     background:#ffb000;
-
 }
+
+
+/* =====================================================
+   RESPONSIVE REFERRAL
+===================================================== */
 
 @media (max-width:360px){
-    .link-box input,.link-box button{
-        width: 90%;
-        padding: 0px 4px;
-        
-    }
-    .link-box input{
-        padding: 12px 0px;
-    }
-}
-@media (min-width: 400px){
-        .link-box input,.link-box button{
-        width: 70%;
-        
-        
-    }
-        .link-box button{
-        padding: 0px 12px;
-    }
-}
-@media (min-width: 768px){
-        .link-box input,.link-box button{
-        width: 50%;
-        
-        
-    }
+
+    .link-box input,
     .link-box button{
-        padding: 0px 12px;
+
+        width:90%;
+
+        padding:0 4px;
+    }
+
+    .link-box input{
+        padding:12px 0;
     }
 }
 
-.supernova-pulse {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
-    padding: 14px 18px;
-    border-radius: 18px;
 
-    background: rgba(255,255,255,.06);
-    border: 1px solid rgba(255,255,255,.12);
+@media (min-width:400px){
 
-    backdrop-filter: blur(12px);
+    .link-box input,
+    .link-box button{
 
-    color: white;
+        width:70%;
+    }
+
+    .link-box button{
+        padding:0 12px;
+    }
 }
 
-.pulse-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
 
-    font-size: 12px;
-    color: rgb(234,179,8);
-    align-self: center;
+@media (min-width:768px){
+
+    .link-box input,
+    .link-box button{
+
+        width:50%;
+    }
+
+    .link-box button{
+        padding:0 12px;
+    }
 }
 
-.pulse-value {
-    font-size: 28px;
-    font-weight: 800;
-    margin-top: 3px;
+
+/* =====================================================
+   SUPERNOVA PULSE
+===================================================== */
+
+.supernova-pulse{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+    align-items:center;
+
+    padding:14px 18px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.06);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    backdrop-filter:blur(12px);
+
+    color:white;
 }
 
-.pulse-label {
-    font-size: 11px;
-    color: #20d97f;
-    font-weight: 700;
+.pulse-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    font-size:12px;
+
+    color:rgb(234,179,8);
+
+    align-self:center;
 }
 
-.pulse-bar {
-    width: 100%;
-    height: 6px;
-    background: rgba(255,255,255,.12);
-    border-radius: 20px;
-    overflow: hidden;
-    margin: 8px 0;
+.pulse-value{
+
+    font-size:28px;
+
+    font-weight:800;
+
+    margin-top:3px;
 }
 
-.pulse-progress {
-    height: 100%;
-    background: linear-gradient(
+.pulse-label{
+
+    font-size:11px;
+
+    color:#20d97f;
+
+    font-weight:700;
+}
+
+.pulse-bar{
+
+    width:100%;
+
+    height:6px;
+
+    background:rgba(255,255,255,.12);
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    margin:8px 0;
+}
+
+.pulse-progress{
+
+    height:100%;
+
+    background:linear-gradient(
         90deg,
         #16b364,
         #20d97f
     );
-    border-radius: 20px;
-    transition: width .6s ease;
+
+    border-radius:20px;
+
+    transition:width .6s ease;
 }
 
-.supernova-pulse small {
-    font-size: 9px;
-    color: #aaa;
-}
+.supernova-pulse small{
 
-.login-location {
-    margin: 5px 0 0;
-    font-size: 5px;
-    color: #bdbdbd;
-} 
-.login-location span {
-    margin-left: 5px;
-    color: rgb(234, 179, 8);
-    font-weight: 600;
+    font-size:9px;
+
+    color:#aaa;
 }
 
 
-.header-profile {
-    width: 36px;
-    height: 36px;
-    margin-top: 2px;
-    border-radius: 50%;
-    overflow: hidden;
-    cursor: pointer;
-    position: relative;
+/* =====================================================
+   LOGIN LOCATION
+===================================================== */
+
+.login-location{
+
+    margin:5px 0 0;
+
+    font-size:5px;
+
+    color:#bdbdbd;
 }
 
-.header-profile-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+.login-location span{
+
+    margin-left:5px;
+
+    color:rgb(234,179,8);
+
+    font-weight:600;
+}
+
+
+/* =====================================================
+   HEADER PROFILE
+===================================================== */
+
+.header-profile{
+
+    width:36px;
+
+    height:36px;
+
+    margin-top:2px;
+
+    border-radius:50%;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+    position:relative;
+}
+
+.header-profile-photo{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
 }
 
 
@@ -337,28 +410,42 @@
    PROFILE PHOTO
 ===================================================== */
 
-.profile-photo-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
+.profile-photo-section{
+
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:12px;
 }
 
-.profile-photo-container {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    overflow: hidden;
-    border: 3px solid #16b364;
-    background: #e5e7eb;
+.profile-photo-container{
+
+    width:120px;
+
+    height:120px;
+
+    border-radius:50%;
+
+    overflow:hidden;
+
+    border:3px solid #16b364;
+
+    background:#e5e7eb;
 }
 
-.profile-main-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
+.profile-main-photo{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
 }
 
 
@@ -367,30 +454,41 @@
 ===================================================== */
 
 .change-photo-btn,
-.remove-photo-btn {
-    border: none;
-    border-radius: 10px;
-    padding: 10px 18px;
-    cursor: pointer;
-    font-weight: bold;
+.remove-photo-btn{
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:10px 18px;
+
+    cursor:pointer;
+
+    font-weight:bold;
 }
 
-.change-photo-btn {
-    background: #16b364;
-    color: white;
+.change-photo-btn{
+
+    background:#16b364;
+
+    color:white;
 }
 
-.change-photo-btn:hover {
-    background: #119455;
+.change-photo-btn:hover{
+
+    background:#119455;
 }
 
-.remove-photo-btn {
-    background: #dc3545;
-    color: white;
+.remove-photo-btn{
+
+    background:#dc3545;
+
+    color:white;
 }
 
-.remove-photo-btn:hover {
-    background: #b02a37;
+.remove-photo-btn:hover{
+
+    background:#b02a37;
 }
 
 
@@ -398,29 +496,29 @@
    CROP MODAL
 ===================================================== */
 
-.crop-modal {
+.crop-modal{
 
-    position: fixed;
+    position:fixed;
 
-    inset: 0;
+    inset:0;
 
-    width: 100%;
-    height: 100%;
+    width:100%;
+    height:100%;
 
-    display: none;
+    display:none;
 
-    justify-content: center;
-    align-items: center;
+    justify-content:center;
+    align-items:center;
 
-    background: rgba(0,0,0,.75);
+    background:rgba(0,0,0,.75);
 
-    backdrop-filter: blur(8px);
+    backdrop-filter:blur(8px);
 
-    z-index: 99999;
+    z-index:99999;
 
-    padding: 20px;
+    padding:20px;
 
-    box-sizing: border-box;
+    box-sizing:border-box;
 }
 
 
@@ -428,67 +526,68 @@
    CROP CARD
 ===================================================== */
 
-.crop-card {
+.crop-card{
 
-    width: 380px;
+    width:380px;
 
-    max-width: 95%;
+    max-width:95%;
 
-    background: #18102a;
+    background:#18102a;
 
-    border: 1px solid rgba(255,255,255,.3);
+    border:1px solid rgba(255,255,255,.3);
 
-    border-radius: 20px;
+    border-radius:20px;
 
-    padding: 20px;
+    padding:20px;
 
     box-shadow:
         0 20px 60px rgba(0,0,0,.5);
 
-    color: white;
+    color:white;
 
-    box-sizing: border-box;
+    box-sizing:border-box;
 }
 
 
 /* =====================================================
-   HEADER
+   CROP HEADER
 ===================================================== */
 
-.crop-header {
+.crop-header{
 
-    display: flex;
+    display:flex;
 
-    align-items: center;
+    align-items:center;
 
-    justify-content: space-between;
+    justify-content:space-between;
 
-    margin-bottom: 15px;
+    margin-bottom:15px;
 }
 
-.crop-header h3 {
+.crop-header h3{
 
-    margin: 0;
+    margin:0;
 
-    color: white;
+    color:white;
 }
 
-.crop-close {
+.crop-close{
 
-    width: 35px;
-    height: 35px;
+    width:35px;
 
-    border: none;
+    height:35px;
 
-    border-radius: 50%;
+    border:none;
 
-    background: rgba(255,255,255,.1);
+    border-radius:50%;
 
-    color: white;
+    background:rgba(255,255,255,.1);
 
-    font-size: 25px;
+    color:white;
 
-    cursor: pointer;
+    font-size:25px;
+
+    cursor:pointer;
 }
 
 
@@ -496,37 +595,38 @@
    CROP AREA
 ===================================================== */
 
-.crop-area {
+.crop-area{
 
-    width: 100%;
+    width:100%;
 
-    aspect-ratio: 1 / 1;
+    aspect-ratio:1 / 1;
 
-    background: #050505;
+    background:#050505;
 
-    border-radius: 50%;
+    border-radius:50%;
 
-    overflow: hidden;
+    overflow:hidden;
 
-    position: relative;
+    position:relative;
 
-    cursor: grab;
+    cursor:grab;
 
-    touch-action: none;
+    touch-action:none;
 
-    border: 2px solid rgba(255,255,255,.5);
+    border:2px solid rgba(255,255,255,.5);
 }
 
-.crop-area:active {
-    cursor: grabbing;
+.crop-area:active{
+    cursor:grabbing;
 }
 
-#cropCanvas {
+#cropCanvas{
 
-    width: 100%;
-    height: 100%;
+    width:100%;
 
-    display: block;
+    height:100%;
+
+    display:block;
 }
 
 
@@ -534,580 +634,1079 @@
    ZOOM
 ===================================================== */
 
-.crop-controls {
+.crop-controls{
 
-    display: flex;
+    display:flex;
 
-    align-items: center;
+    align-items:center;
 
-    gap: 10px;
+    gap:10px;
 
-    margin-top: 18px;
+    margin-top:18px;
 }
 
-.crop-controls button {
+.crop-controls button{
 
-    width: 38px;
-    height: 38px;
+    width:38px;
 
-    border: none;
+    height:38px;
 
-    border-radius: 50%;
+    border:none;
 
-    background: #16b364;
+    border-radius:50%;
 
-    color: white;
+    background:#16b364;
 
-    font-size: 22px;
+    color:white;
 
-    cursor: pointer;
+    font-size:22px;
+
+    cursor:pointer;
 }
 
-#zoomSlider {
+#zoomSlider{
 
-    flex: 1;
+    flex:1;
 
-    cursor: pointer;
-}
-
-
-/* =====================================================
-   HINT
-===================================================== */
-
-.crop-hint {
-
-    text-align: center;
-
-    color: #c7c7c7;
-
-    font-size: 13px;
-
-    margin: 12px 0 18px;
+    cursor:pointer;
 }
 
 
 /* =====================================================
-   ACTIONS
+   CROP HINT
 ===================================================== */
 
-.crop-actions {
+.crop-hint{
 
-    display: flex;
+    text-align:center;
 
-    gap: 10px;
+    color:#c7c7c7;
+
+    font-size:13px;
+
+    margin:12px 0 18px;
+}
+
+
+/* =====================================================
+   CROP ACTIONS
+===================================================== */
+
+.crop-actions{
+
+    display:flex;
+
+    gap:10px;
 }
 
 .cancel-crop-btn,
-.save-crop-btn {
+.save-crop-btn{
 
-    flex: 1;
+    flex:1;
 
-    padding: 12px;
+    padding:12px;
 
-    border: none;
+    border:none;
 
-    border-radius: 10px;
+    border-radius:10px;
 
-    font-weight: bold;
+    font-weight:bold;
 
-    cursor: pointer;
+    cursor:pointer;
 }
 
-.cancel-crop-btn {
+.cancel-crop-btn{
 
-    background: #374151;
+    background:#374151;
 
-    color: white;
+    color:white;
 }
 
-.save-crop-btn {
+.save-crop-btn{
 
-    background: #16b364;
+    background:#16b364;
 
-    color: white;
+    color:white;
 }
 
-.save-crop-btn:hover {
+.save-crop-btn:hover{
 
-    background: #119455;
+    background:#119455;
 }
 
 
 /* =====================================================
-   MOBILE
+   MOBILE CROP
 ===================================================== */
 
-@media (max-width: 500px) {
+@media (max-width:500px){
 
-    .crop-card {
+    .crop-card{
 
-        width: 95%;
+        width:95%;
 
-        padding: 15px;
-
+        padding:15px;
     }
 
-    .crop-area {
+    .crop-area{
 
-        width: 100%;
-
+        width:100%;
     }
-
-}
-.profile-photo-container {
-    cursor: pointer;
-    transition: transform .2s ease;
 }
 
-.profile-photo-container:hover {
-    transform: scale(1.04);
+
+.profile-photo-container{
+
+    cursor:pointer;
+
+    transition:transform .2s ease;
 }
 
-.renew-form {
-    margin: 0;
-}
-.unlock-task-btn{
-    background:linear-gradient(135deg,#16a34a,#22c55e) !important;
-    color:#fff !important;
-    box-shadow:0 8px 20px rgba(34,197,94,.20);
+.profile-photo-container:hover{
+
+    transform:scale(1.04);
 }
 
-.unlock-task-btn:hover{
-    background:linear-gradient(135deg,#15803d,#16a34a) !important;
-    transform:translateY(-2px);
+
+.renew-form{
+    margin:0;
 }
+
 </style>
+
 </head>
-    
-<body >
-    <div class="overlay"></div>
-    <div class="page1">
-
-        <div class="welcome">
-            <h5>Welcome back {{ username }} 🎉</h5>          
-        </div>
-
-        <div class="dashboard-header">
-
-            <button class="dashboard-menu" id="menuBtn"><img src="static/images/menu.svg" alt=""></button>
-            <div class="header-icons">
-            
-                   <a href="/notifications">
-                                    
-                        <div class="notification-icon">
-                            &#128276;
-
-                            {% if unread_notifications > 0 %}
-                                <span class="badge">{{ unread_notifications }}</span>
-                            {% endif %}
-                        </div>
-                                    
-                    </a>
-                                                     <div
-    class="header-profile"
-    onclick="openPhotoPicker()"
-    title="Change profile photo">
-
-    {% if current_user.profile_image %}
-
-        <img
-            id="headerProfileImage"
-            src="{{ current_user.profile_image }}"
-            alt="Profile"
-            class="header-profile-photo"
-        >
-
-    {% else %}
-
-        <img
-            id="headerProfileImage"
-            src="{{ url_for(
-                'static',
-                filename='images/profile-img.jfif'
-            ) }}"
-            alt="Profile"
-            class="header-profile-photo"
-        >
-
-    {% endif %}
-
-</div>
-
-<input
-    type="file"
-    id="profilePhotoInput"
-    accept="image/jpeg,image/png,image/webp"
-    hidden
->    
-            </div>
-            
-        </div>
-        
-        <div class="sidebar" id="sidebar">
-
-            <div class="sidebar-top">
-
-                <button class="cancel" ><img src="static/images/close.jfif" alt=""></button>
-                
-                <img class="logo" src="static/images/supernova earn logo.png" alt="">
-                <h3><Data>SUPERNOVA EARN</Data></h5>
-            </div> 
-
-            <div class="sidebar-content">
-
-                <div class="main">
-                    <p class="titles">MAIN</p>
-                    <div>
-                        <img src="static\images\dashboard.jfif" alt="">
-                        <a class="rtchge"    href="{{ url_for('dashboard') }}">
-                        <button 
-                     >Dashboard
-                        </button>
-                        </a>
-                    </div>
-                     <div>
-                        <img src="static/images/vip.jfif" alt="">
-
-                        <a class="rtchge" href="/vip">
-                            <button>VIP plans</button>
-                        </a>
-                    </div> 
-                    <div>
-                        <img src="static/images/members" alt="Team Members">
-
-                        <a class="rtchge" href="{{ url_for('team_members') }}">
-                            <button type="button">Team Members</button>
-                        </a>
-                    </div>
-
-                    <div>
-                        <img src="static/images/task-icon.jfif" alt="">
-
-                        <a class="rtchge" href="{{ url_for('task_access') }}">
-                            <button>Tasks</button>
-                        </a>
-                    </div>
-                    <div>
-                        <img src="static/images/progress.jfif">
-
-                        <a class="rtchge" href="/progress">
-
-                            <button>Progress</button>
-                        </a>
-                    </div>
-
-                </div>
-
-                <div class="finance">
-                    <p class="titles">FINANCE</p>
-
-                    <div>
-                        <img src="static/images/recharge1.jfif" alt="">
-                        <a class="rtchge" href="/recharge">
-                            <button>Recharge</button>
-                        </a>
-                    </div>
-                    <div>
-                         <img src="static/images/withdraw.jfif" alt="">
-                           <a class="rtchge" href="{{ url_for('withdraw') }}">
-                            <button>Withdraw</button>
-                          </a>
-                    </div>
-                    
-                    <div>
-                         <img src="static/images/bonus.jfif" alt="">
-                        <p>Commissions</p>
-                    </div>
-
-                </div>
-                <div class="finance">
-                    <p class="titles">HISTORY</p>
-
-                    <div>
-                        <img src="static/images/recharge1.jfif" alt="">
-                        <a class="rtchge" href="{{ url_for('recharge_history') }}">
-                            <button>Recharge</button>
-                        </a>
-                    </div>
-
-                    <div>
-                        <img src="static/images/recharge1.jfif" alt="">
-                        <a class="rtchge"
-                        href="{{ url_for('transaction_history') }}">
-                            <button>Transactions</button>
-                        </a>
-                    </div>
-                    
-                    <div>
-                         <img src="static/images/withdraw.jfif" alt="">
-                           <a class="rtchge" a href="{{ url_for('withdrawal_history') }}">
-                            <button>Withdrawals</button>
-                          </a>
-                    </div>
-                
-
-                </div>
-                <div class="games">
-                    <p class="titles">GAMES</p>
-                
-                    <div onclick="window.location.href='/aviator'">
-                        <img src="static/images/aviator-img.jfif" alt="Aviator">
-                        <p>Aviator</p>
-                    </div>
-
-                    <div>
-   
-                        {% if current_user.is_admin %}
-                        <img src="static/images/admin.jfif" alt="">
-                        <a class="rtchge" href="/admin">
-   
-                            <button>Admin panel</button>
-                        </a>
-                        {% endif %}
-                    </div> 
-                
-                </div>
-
-                <div class="account">
-                    <p class="titles">ACCOUNT</p>
-                   
-                    <div onclick="window.location.href='/profile'">
-                         <img src="static/images/profile" alt="">
-                        <p>Profile</p>
-                    </div>
-                    
-                    <div>
-                         <img src="static/images/logout.jfif" alt="">
-                        <p> <a href="/logout">Sign Out</a></p>
-                    </div>
-
-                </div>
-            </div>             
-
-        </div>
 
 
-        <div class="page-content">
+<body>
+
+<div class="overlay"></div>
+
+<div class="page1">
 
 
-            
-<div class="top-content">
+    <!-- =================================================
+         WELCOME
+    ================================================== -->
 
-    <div class="topleft">
-                    <a href="/profile" class="header-profile2">
-                        <span id="profile" data-username="{{ username }}"></span>
-                    </a>
+    <div class="welcome">
 
-                    <div class="greeting">
-                        <h5 id="greetingText">Good morning</h5>
-                        <p>{{ username }}</p>
+        <h5>
+            Welcome back {{ username }} 🎉
+        </h5>
 
-                        <p class="login-location">
-                            🌍 {{ country_name }}
-                            <span>{{ country_code }}</span>
-                        </p>
-                    </div>    
-         </div>
-
-            <div class="topright">
-                    <div class="supernova-pulse">
-
-                    <div class="pulse-header">
-                        <span>✦</span>
-                        <strong>SUPERNOVA PULSE</strong>
-                    </div>
-
-                    <div class="pulse-value">
-                        {{ pulse.pulse }}%
-                    </div>
-
-                    <div class="pulse-label">
-                        {{ pulse.activity_level }} ACTIVITY
-                    </div>
-
-                    <div class="pulse-bar">
-                        <div
-                            class="pulse-progress"
-                            style="width: {{ pulse.pulse }}%;">
-                        </div>
-                    </div>
-
-                    <small>
-                        Based on platform activity in the last 24 hours
-                    </small>
-
-            </div>
     </div>
 
-</div>
 
-            <div class="vip-status-card">
+    <!-- =================================================
+         DASHBOARD HEADER
+    ================================================== -->
 
-                <h3 style="color:rgb(255,145,0);margin-top:20px;">
-                    Current VIP Plan
-                </h3>
+    <div class="dashboard-header">
 
-                <h2 style="color:aqua;margin:0;margin-top:10px;">
-                    {{ vip_level }}
-                </h2>
+        <button
+            class="dashboard-menu"
+            id="menuBtn">
 
-                {% if vip_expires_at %}
+            <img
+                src="static/images/menu.svg"
+                alt="">
 
-                    <p style="margin:0;margin-top:10px;">
-                        Expires:
-                        {{ vip_expires_at.strftime("%d %B %Y") }}
-                    </p>
+        </button>
 
-                    <p style="color:rgba(0,252,0,.9);font-weight:bold;margin-top:10px;">
-                        {{ vip_days_left }} Days Remaining
-                    </p>
 
-                    <div class="vip-buttons">
+        <div class="header-icons">
 
-{% if not current_user.task_unlocked %}
+            <a href="/notifications">
 
-    <a href="/task-access" class="upgrade-btn unlock-task-btn">
-        <i class="fas fa-lock-open"></i>
-        Unlock Tasks
-    </a>
+                <div class="notification-icon">
 
-{% else %}
+                    &#128276;
 
-    <a href="/vip" class="upgrade-btn">
-        <i class="fas fa-crown"></i>
-        Upgrade to VIP
-    </a>
+                    {% if unread_notifications > 0 %}
 
-{% endif %}
+                        <span class="badge">
+                            {{ unread_notifications }}
+                        </span>
 
-                        {% if vip_days_left <= 2 %}
+                    {% endif %}
 
-                        <form action="{{ url_for('renew_membership') }}" method="POST">
-                            <button type="submit" class="renew-btn">
-                                Renew Membership
-                            </button>
-                        </form>
+                </div>
 
-                        {% endif %}
+            </a>
 
-                    </div>
+
+            <div
+                class="header-profile"
+                onclick="openPhotoPicker()"
+                title="Change profile photo">
+
+                {% if current_user.profile_image %}
+
+                    <img
+                        id="headerProfileImage"
+                        src="{{ current_user.profile_image }}"
+                        alt="Profile"
+                        class="header-profile-photo">
 
                 {% else %}
 
-                    <p style="color:white;">
-                        You are on a Free plan.
-                    </p>
-
-                    <a href="/task-access" class="upgrade-btn unlock-task-btn">
-                        <i class="fas fa-lock-open"></i>
-                        Unlock Tasks
-                    </a>
+                    <img
+                        id="headerProfileImage"
+                        src="{{ url_for(
+                            'static',
+                            filename='images/profile-img.jfif'
+                        ) }}"
+                        alt="Profile"
+                        class="header-profile-photo">
 
                 {% endif %}
 
             </div>
 
-            <div class="wallet-income">
-                <p class="p1"> TOTAL INCOME</p>
-                <h2>Ksh. {{ total_income }}</h2>
-                <p>ALL WALLETS COMBINED</p>
-            </div>
+
+            <input
+                type="file"
+                id="profilePhotoInput"
+                accept="image/jpeg,image/png,image/webp"
+                hidden>
+
+        </div>
+
+    </div>
 
 
-            <div class="income">
-                
-                    <div class="team-income">
-                            <h4>Ksh. {{ team_wallet }}</h4>
-                            <p>TEAM</p>
+    <!-- =================================================
+         SIDEBAR
+    ================================================== -->
 
-                    </div>
-                    <div class="withdrawm-income">
-                            <h4>Ksh. {{ withdrawn }}</h4>
-                            <p>WITHDRAWN</p>
+    <div
+        class="sidebar"
+        id="sidebar">
 
-                    </div>
-                    
-                    <div class="today-income">
-                        <h4>Ksh. {{ today_earnings }}</h4>
-                        <p>TODAY</p>
-                    </div>
+        <div class="sidebar-top">
 
-            </div>
-         <div class="wallet-container">
-            <p class="wallet-name">YOUR WALLETS</p>
-            
-            <div class="all-wallets">
-                
-                 <div class="main-wallet">
-                     <img src="static/images/wallet.jfif" alt="" class="wallets-img">
-                     <p>MAIN WALLET</p>
-                     <h4>Ksh. {{ main_wallet }}</h4>
-                      <h6>MAIN</h6>
+            <button class="cancel">
+
+                <img
+                    src="static/images/close.jfif"
+                    alt="">
+
+            </button>
+
+
+            <img
+                class="logo"
+                src="static/images/supernova earn logo.png"
+                alt="">
+
+
+            <h3>
+                <Data>SUPERNOVA EARN</Data>
+            </h3>
+
+        </div>
+
+
+        <div class="sidebar-content">
+
+
+            <!-- MAIN -->
+
+            <div class="main">
+
+                <p class="titles">
+                    MAIN
+                </p>
+
+
+                <div>
+
+                    <img
+                        src="static/images/dashboard.jfif"
+                        alt="">
+
+                    <a
+                        class="rtchge"
+                        href="{{ url_for('dashboard') }}">
+
+                        <button>
+                            Dashboard
+                        </button>
+
+                    </a>
+
                 </div>
+
+
+                <div>
+
+                    <img
+                        src="static/images/vip.jfif"
+                        alt="">
+
+                    <a
+                        class="rtchge"
+                        href="/vip">
+
+                        <button>
+                            VIP plans
+                        </button>
+
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <img
+                        src="static/images/members"
+                        alt="Team Members">
+
+                    <a
+                        class="rtchge"
+                        href="{{ url_for('team_members') }}">
+
+                        <button type="button">
+                            Team Members
+                        </button>
+
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <img
+                        src="static/images/task-icon.jfif"
+                        alt="">
+
+                    <a
+                        class="rtchge"
+                        href="{{ url_for('task_access') }}">
+
+                        <button>
+                            Tasks
+                        </button>
+
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <img
+                        src="static/images/progress.jfif">
+
+                    <a
+                        class="rtchge"
+                        href="/progress">
+
+                        <button>
+                            Progress
+                        </button>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- FINANCE -->
+
+            <div class="finance">
+
+                <p class="titles">
+                    FINANCE
+                </p>
+
+
+                <div>
+
+                    <img
+                        src="static/images/recharge1.jfif"
+                        alt="">
+
+                    <a
+                        class="rtchge"
+                        href="/recharge">
+
+                        <button>
+                            Recharge
+                        </button>
+
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <img
+                        src="static/images/withdraw.jfif"
+                        alt="">
+
+                    <a
+                        class="rtchge"
+                        href="{{ url_for('withdraw') }}">
+
+                        <button>
+                            Withdraw
+                        </button>
+
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <img
+                        src="static/images/bonus.jfif"
+                        alt="">
+
+                    <p>
+                        Commissions
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- HISTORY -->
+
+            <div class="finance">
+
+                <p class="titles">
+                    HISTORY
+                </p>
+
+
+                <div>
+
+                    <img
+                        src="static/images/recharge1.jfif"
+                        alt="">
+
+                    <a
+                        class="rtchge"
+                        href="{{ url_for('recharge_history') }}">
+
+                        <button>
+                            Recharge
+                        </button>
+
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <img
+                        src="static/images/recharge1.jfif"
+                        alt="">
+
+                    <a
+                        class="rtchge"
+                        href="{{ url_for('transaction_history') }}">
+
+                        <button>
+                            Transactions
+                        </button>
+
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <img
+                        src="static/images/withdraw.jfif"
+                        alt="">
+
+                    <a
+                        class="rtchge"
+                        href="{{ url_for('withdrawal_history') }}">
+
+                        <button>
+                            Withdrawals
+                        </button>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- GAMES -->
+
+            <div class="games">
+
+                <p class="titles">
+                    GAMES
+                </p>
+
+
+                <div
+                    onclick="window.location.href='/aviator'">
+
+                    <img
+                        src="static/images/aviator-img.jfif"
+                        alt="Aviator">
+
+                    <p>
+                        Aviator
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    {% if current_user.is_admin %}
+
+                        <img
+                            src="static/images/admin.jfif"
+                            alt="">
+
+                        <a
+                            class="rtchge"
+                            href="/admin">
+
+                            <button>
+                                Admin panel
+                            </button>
+
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- ACCOUNT -->
+
+            <div class="account">
+
+                <p class="titles">
+                    ACCOUNT
+                </p>
+
+
+                <div
+                    onclick="window.location.href='/profile'">
+
+                    <img
+                        src="static/images/profile"
+                        alt="">
+
+                    <p>
+                        Profile
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <img
+                        src="static/images/logout.jfif"
+                        alt="">
+
+                    <p>
+                        <a href="/logout">
+                            Sign Out
+                        </a>
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         PAGE CONTENT
+    ================================================== -->
+
+    <div class="page-content">
+
+
+        <!-- TOP CONTENT -->
+
+        <div class="top-content">
+
+
+            <div class="topleft">
+
+                <a
+                    href="/profile"
+                    class="header-profile2">
+
+                    <span
+                        id="profile"
+                        data-username="{{ username }}">
+                    </span>
+
+                </a>
+
+
+                <div class="greeting">
+
+                    <h5 id="greetingText">
+                        Good morning
+                    </h5>
+
+                    <p>
+                        {{ username }}
+                    </p>
+
+
+                    <p class="login-location">
+
+                        🌍 {{ country_name }}
+
+                        <span>
+                            {{ country_code }}
+                        </span>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="topright">
+
+                <div class="supernova-pulse">
+
+                    <div class="pulse-header">
+
+                        <span>
+                            ✦
+                        </span>
+
+                        <strong>
+                            SUPERNOVA PULSE
+                        </strong>
+
+                    </div>
+
+
+                    <div class="pulse-value">
+
+                        {{ pulse.pulse }}%
+
+                    </div>
+
+
+                    <div class="pulse-label">
+
+                        {{ pulse.activity_level }} ACTIVITY
+
+                    </div>
+
+
+                    <div class="pulse-bar">
+
+                        <div
+                            class="pulse-progress"
+                            style="width: {{ pulse.pulse }}%;">
+
+                        </div>
+
+                    </div>
+
+
+                    <small>
+
+                        Based on platform activity in the last 24 hours
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             VIP STATUS
+        ================================================== -->
+
+        <div class="vip-status-card">
+
+            <h3 style="color:rgb(255,145,0);margin-top:20px;">
+
+                Current VIP Plan
+
+            </h3>
+
+
+            <h2
+                style="color:aqua;margin:0;margin-top:10px;">
+
+                {{ vip_level }}
+
+            </h2>
+
+
+            {% if vip_expires_at %}
+
+
+                <p
+                    style="margin:0;margin-top:10px;">
+
+                    Expires:
+
+                    {{ vip_expires_at.strftime("%d %B %Y") }}
+
+                </p>
+
+
+                <p
+                    style="color:rgba(0,252,0,.9);font-weight:bold;margin-top:10px;">
+
+                    {{ vip_days_left }} Days Remaining
+
+                </p>
+
+
+                <div class="vip-buttons">
+
+
+                    <!-- ORIGINAL BUTTON -->
+
+                    <a
+                        href="/vip"
+                        class="upgrade-btn">
+
+                        <i class="fas fa-crown"></i>
+
+                        Upgrade to VIP
+
+                    </a>
+
+
+                    {% if vip_days_left <= 2 %}
+
+                    <form
+                        action="{{ url_for('renew_membership') }}"
+                        method="POST">
+
+                        <button
+                            type="submit"
+                            class="renew-btn">
+
+                            Renew Membership
+
+                        </button>
+
+                    </form>
+
+                    {% endif %}
+
+                </div>
+
+
+            {% else %}
+
+
+                <p style="color:white;">
+
+                    You are on a Free plan.
+
+                </p>
+
+
+                <a href="/vip">
+
+                    <button class="upgrade-btn">
+
+                        Upgrade to VIP
+
+                    </button>
+
+                </a>
+
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- =================================================
+             TOTAL INCOME
+        ================================================== -->
+
+        <div class="wallet-income">
+
+            <p class="p1">
+                TOTAL INCOME
+            </p>
+
+            <h2>
+                Ksh. {{ total_income }}
+            </h2>
+
+            <p>
+                ALL WALLETS COMBINED
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             INCOME SUMMARY
+        ================================================== -->
+
+        <div class="income">
+
+
+            <div class="team-income">
+
+                <h4>
+                    Ksh. {{ team_wallet }}
+                </h4>
+
+                <p>
+                    TEAM
+                </p>
+
+            </div>
+
+
+            <div class="withdrawm-income">
+
+                <h4>
+                    Ksh. {{ withdrawn }}
+                </h4>
+
+                <p>
+                    WITHDRAWN
+                </p>
+
+            </div>
+
+
+            <div class="today-income">
+
+                <h4>
+                    Ksh. {{ today_earnings }}
+                </h4>
+
+                <p>
+                    TODAY
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             WALLETS
+        ================================================== -->
+
+        <div class="wallet-container">
+
+            <p class="wallet-name">
+                YOUR WALLETS
+            </p>
+
+
+            <div class="all-wallets">
+
+
+                <div class="main-wallet">
+
+                    <img
+                        src="static/images/wallet.jfif"
+                        alt=""
+                        class="wallets-img">
+
+                    <p>
+                        MAIN WALLET
+                    </p>
+
+                    <h4>
+                        Ksh. {{ main_wallet }}
+                    </h4>
+
+                    <h6>
+                        MAIN
+                    </h6>
+
+                </div>
+
 
                 <div class="task-wallet">
-                     <img src="static/images/withdrawalable wallet.jfif" alt="" class="withdrawable-img" class="wallets-img">
-                     <p>WITHDRAWABLE WALLET</p>
-                     <h4>Ksh. {{ withdrawable_wallet }}</h4>
-                      <h6>EARN</h6>
+
+                    <img
+                        src="static/images/withdrawalable wallet.jfif"
+                        alt=""
+                        class="withdrawable-img"
+                        class="wallets-img">
+
+                    <p>
+                        WITHDRAWABLE WALLET
+                    </p>
+
+                    <h4>
+                        Ksh. {{ withdrawable_wallet }}
+                    </h4>
+
+                    <h6>
+                        EARN
+                    </h6>
+
                 </div>
+
 
                 <div class="team-earnings">
-                    <img src="static/images/team earnins.jfif" alt="" class="wallets-img">
-                     <p>TEAM EARNINGS</p>
-                     <h4>Ksh. {{ team_wallet }}</h4>
-                    <h6>TEAM</h6>
+
+                    <img
+                        src="static/images/team earnins.jfif"
+                        alt=""
+                        class="wallets-img">
+
+                    <p>
+                        TEAM EARNINGS
+                    </p>
+
+                    <h4>
+                        Ksh. {{ team_wallet }}
+                    </h4>
+
+                    <h6>
+                        TEAM
+                    </h6>
+
                 </div>
 
 
                 <div class="task-wallet">
-                     <img class="task-img" src="static/images/task wallet.jfif" alt="" class="wallets-img">
-                     <p>TASK WALLET</p>
-                     <h4>Ksh. {{ task_wallet }}</h4>
-                      <h6>TASK</h6>
+
+                    <img
+                        class="task-img"
+                        src="static/images/task wallet.jfif"
+                        alt=""
+                        class="wallets-img">
+
+                    <p>
+                        TASK WALLET
+                    </p>
+
+                    <h4>
+                        Ksh. {{ task_wallet }}
+                    </h4>
+
+                    <h6>
+                        TASK
+                    </h6>
+
                 </div>
 
+
                 <div class="total-withdrawals">
-                     <img src="static/images/today earn.jfif" alt="" class="wallets-img">
-                     <p>TOTAL WITHDRAWN</p>
-                     <h4>Ksh. {{ withdrawn }}</h4>
-                      <h6>PAID</h6>
+
+                    <img
+                        src="static/images/today earn.jfif"
+                        alt=""
+                        class="wallets-img">
+
+                    <p>
+                        TOTAL WITHDRAWN
+                    </p>
+
+                    <h4>
+                        Ksh. {{ withdrawn }}
+                    </h4>
+
+                    <h6>
+                        PAID
+                    </h6>
+
                 </div>
+
 
                 <div class="today-earnings">
 
-                    <img class="earnings-img"
+                    <img
+                        class="earnings-img"
                         src="static/images/today earnings.jfif">
 
-                    <p>TODAY'S EARNINGS</p>
+                    <p>
+                        TODAY'S EARNINGS
+                    </p>
 
-                    <h4>Ksh. {{ today_earnings }}</h4>
+                    <h4>
+                        Ksh. {{ today_earnings }}
+                    </h4>
 
-                    <h6>TODAY</h6>
+                    <h6>
+                        TODAY
+                    </h6>
 
                 </div>
+
 
                 <div class="commissions">
-                     <img src="static/images/commission.jfif" alt="" class="wallets-img">
-                     <p>COMMISSIONS</p>
-                     <h4>Ksh. {{ commissions }}</h4>
-                      <h6>COMMS</h6>
+
+                    <img
+                        src="static/images/commission.jfif"
+                        alt=""
+                        class="wallets-img">
+
+                    <p>
+                        COMMISSIONS
+                    </p>
+
+                    <h4>
+                        Ksh. {{ commissions }}
+                    </h4>
+
+                    <h6>
+                        COMMS
+                    </h6>
+
                 </div>
 
-               
             </div>
 
-        <div class="link-container">
+
+            <!-- =================================================
+                 REFERRAL CENTER
+            ================================================== -->
+
+            <div class="link-container">
+
                 <div class="invite-link">
 
+
                     <div class="referral-header">
+
 
                         <div class="referral-title">
 
                             👥 Referral Center
 
                         </div>
+
 
                         <div class="referral-badge">
 
@@ -1117,29 +1716,44 @@
 
                     </div>
 
+
                     <p class="referral-text">
+
                         Invite your friends and earn commissions whenever they recharge.
+
                     </p>
+
 
                     <div class="referral-summary">
 
+
                         <div class="summary-card">
 
-                            <h4>{{ total_referrals }}</h4>
+                            <h4>
+                                {{ total_referrals }}
+                            </h4>
 
-                            <p>Total Referrals</p>
+                            <p>
+                                Total Referrals
+                            </p>
 
                         </div>
 
+
                         <div class="summary-card">
 
-                            <h4>KES {{ commissions }}</h4>
+                            <h4>
+                                KES {{ commissions }}
+                            </h4>
 
-                            <p>Commission Earned</p>
+                            <p>
+                                Commission Earned
+                            </p>
 
                         </div>
 
                     </div>
+
 
                     <div class="link-box">
 
@@ -1149,6 +1763,7 @@
                             value="{{ referral_link }}"
                             readonly
                         >
+
 
                         <button
                             id="copyBtn"
@@ -1161,12 +1776,15 @@
                     </div>
 
                 </div>
-             </div>
-        </div>   
-        </div>    
+
+            </div>
 
         </div>
+
     </div>
+
+</div>
+
 
 <!-- =====================================================
      PHOTO CROP MODAL
@@ -1176,13 +1794,16 @@
     class="crop-modal"
     id="cropModal">
 
+
     <div class="crop-card">
+
 
         <div class="crop-header">
 
             <h3>
                 Edit Profile Photo
             </h3>
+
 
             <button
                 type="button"
@@ -1215,6 +1836,7 @@
 
             </button>
 
+
             <input
                 type="range"
                 id="zoomSlider"
@@ -1223,6 +1845,7 @@
                 step="0.01"
                 value="1"
             >
+
 
             <button
                 type="button"
@@ -1254,6 +1877,7 @@
 
             </button>
 
+
             <button
                 type="button"
                 class="save-crop-btn"
@@ -1268,7 +1892,13 @@
     </div>
 
 </div>
+
+
 <script>
+
+/* =====================================================
+   PHOTO CROP VARIABLES
+===================================================== */
 
 let selectedImage = null;
 
@@ -1282,28 +1912,34 @@ let startY = 0;
 
 let dragging = false;
 
+
 const input =
     document.getElementById(
         "profilePhotoInput"
     );
+
 
 const modal =
     document.getElementById(
         "cropModal"
     );
 
+
 const canvas =
     document.getElementById(
         "cropCanvas"
     );
 
+
 const ctx =
     canvas.getContext("2d");
+
 
 const zoomSlider =
     document.getElementById(
         "zoomSlider"
     );
+
 
 const cropArea =
     document.querySelector(
@@ -1315,7 +1951,7 @@ const cropArea =
    OPEN FILE PICKER
 ===================================================== */
 
-function openPhotoPicker() {
+function openPhotoPicker(){
 
     input.click();
 
@@ -1328,16 +1964,17 @@ function openPhotoPicker() {
 
 input.addEventListener(
     "change",
-    function () {
+    function(){
 
         const file =
             this.files[0];
 
-        if (!file) {
+        if(!file){
             return;
         }
 
-        if (!file.type.startsWith("image/")) {
+
+        if(!file.type.startsWith("image/")){
 
             alert(
                 "Please select an image."
@@ -1346,39 +1983,44 @@ input.addEventListener(
             return;
         }
 
+
         const reader =
             new FileReader();
 
-        reader.onload = function(e) {
 
-            selectedImage =
-                new Image();
+        reader.onload =
+            function(e){
 
-            selectedImage.onload =
-                function() {
+                selectedImage =
+                    new Image();
 
-                    imageScale = 1;
 
-                    imageX = 0;
+                selectedImage.onload =
+                    function(){
 
-                    imageY = 0;
+                        imageScale = 1;
 
-                    zoomSlider.value = 1;
+                        imageX = 0;
+                        imageY = 0;
 
-                    openCropModal();
+                        zoomSlider.value = 1;
 
-                    drawCrop();
+                        openCropModal();
 
-                };
+                        drawCrop();
 
-            selectedImage.src =
-                e.target.result;
+                    };
 
-        };
+
+                selectedImage.src =
+                    e.target.result;
+
+            };
+
 
         reader.readAsDataURL(file);
 
-        // Allow selecting the same image again
+
         this.value = "";
 
     }
@@ -1389,7 +2031,7 @@ input.addEventListener(
    OPEN MODAL
 ===================================================== */
 
-function openCropModal() {
+function openCropModal(){
 
     modal.style.display =
         "flex";
@@ -1403,7 +2045,7 @@ function openCropModal() {
    CLOSE MODAL
 ===================================================== */
 
-function closeCropModal() {
+function closeCropModal(){
 
     modal.style.display =
         "none";
@@ -1417,12 +2059,13 @@ function closeCropModal() {
    RESIZE CANVAS
 ===================================================== */
 
-function resizeCanvas() {
+function resizeCanvas(){
 
     const size =
         cropArea.clientWidth;
 
     canvas.width = size;
+
     canvas.height = size;
 
     drawCrop();
@@ -1434,14 +2077,16 @@ function resizeCanvas() {
    DRAW IMAGE
 ===================================================== */
 
-function drawCrop() {
+function drawCrop(){
 
-    if (!selectedImage) {
+    if(!selectedImage){
         return;
     }
 
+
     const size =
         canvas.width;
+
 
     ctx.clearRect(
         0,
@@ -1450,8 +2095,10 @@ function drawCrop() {
         size
     );
 
+
     ctx.fillStyle =
         "#000";
+
 
     ctx.fillRect(
         0,
@@ -1461,24 +2108,22 @@ function drawCrop() {
     );
 
 
-    /*
-        Make the image cover
-        the crop area.
-    */
-
     const scaleToCover =
         Math.max(
             size / selectedImage.width,
             size / selectedImage.height
         );
 
+
     const finalScale =
         scaleToCover *
         imageScale;
 
+
     const width =
         selectedImage.width *
         finalScale;
+
 
     const height =
         selectedImage.height *
@@ -1488,6 +2133,7 @@ function drawCrop() {
     const x =
         (size - width) / 2 +
         imageX;
+
 
     const y =
         (size - height) / 2 +
@@ -1511,7 +2157,7 @@ function drawCrop() {
 
 zoomSlider.addEventListener(
     "input",
-    function() {
+    function(){
 
         imageScale =
             parseFloat(
@@ -1528,7 +2174,7 @@ zoomSlider.addEventListener(
    ZOOM IN
 ===================================================== */
 
-function zoomIn() {
+function zoomIn(){
 
     imageScale =
         Math.min(
@@ -1548,7 +2194,7 @@ function zoomIn() {
    ZOOM OUT
 ===================================================== */
 
-function zoomOut() {
+function zoomOut(){
 
     imageScale =
         Math.max(
@@ -1570,15 +2216,17 @@ function zoomOut() {
 
 cropArea.addEventListener(
     "mousedown",
-    function(e) {
+    function(e){
 
         dragging = true;
 
         startX =
-            e.clientX - imageX;
+            e.clientX -
+            imageX;
 
         startY =
-            e.clientY - imageY;
+            e.clientY -
+            imageY;
 
     }
 );
@@ -1586,17 +2234,22 @@ cropArea.addEventListener(
 
 document.addEventListener(
     "mousemove",
-    function(e) {
+    function(e){
 
-        if (!dragging) {
+        if(!dragging){
             return;
         }
 
+
         imageX =
-            e.clientX - startX;
+            e.clientX -
+            startX;
+
 
         imageY =
-            e.clientY - startY;
+            e.clientY -
+            startY;
+
 
         drawCrop();
 
@@ -1606,7 +2259,7 @@ document.addEventListener(
 
 document.addEventListener(
     "mouseup",
-    function() {
+    function(){
 
         dragging = false;
 
@@ -1620,51 +2273,62 @@ document.addEventListener(
 
 cropArea.addEventListener(
     "touchstart",
-    function(e) {
+    function(e){
 
         const touch =
             e.touches[0];
 
+
         dragging = true;
 
+
         startX =
-            touch.clientX - imageX;
+            touch.clientX -
+            imageX;
+
 
         startY =
-            touch.clientY - imageY;
+            touch.clientY -
+            imageY;
 
     },
-    { passive: true }
+    { passive:true }
 );
 
 
 cropArea.addEventListener(
     "touchmove",
-    function(e) {
+    function(e){
 
-        if (!dragging) {
+        if(!dragging){
             return;
         }
+
 
         const touch =
             e.touches[0];
 
+
         imageX =
-            touch.clientX - startX;
+            touch.clientX -
+            startX;
+
 
         imageY =
-            touch.clientY - startY;
+            touch.clientY -
+            startY;
+
 
         drawCrop();
 
     },
-    { passive: true }
+    { passive:true }
 );
 
 
 cropArea.addEventListener(
     "touchend",
-    function() {
+    function(){
 
         dragging = false;
 
@@ -1676,35 +2340,37 @@ cropArea.addEventListener(
    SAVE CROPPED PHOTO
 ===================================================== */
 
-function saveCroppedPhoto() {
+function saveCroppedPhoto(){
 
-    if (!selectedImage) {
+    if(!selectedImage){
         return;
     }
+
 
     const output =
         document.createElement(
             "canvas"
         );
 
+
     const outputSize = 600;
+
 
     output.width =
         outputSize;
 
+
     output.height =
         outputSize;
+
 
     const outputCtx =
         output.getContext("2d");
 
 
-    /*
-       Same calculation as preview
-    */
-
     const previewSize =
         canvas.width;
+
 
     const scaleToCover =
         Math.max(
@@ -1715,31 +2381,31 @@ function saveCroppedPhoto() {
                 selectedImage.height
         );
 
+
     const finalScale =
         scaleToCover *
         imageScale;
+
 
     const width =
         selectedImage.width *
         finalScale;
 
+
     const height =
         selectedImage.height *
         finalScale;
+
 
     const x =
         (previewSize - width) / 2 +
         imageX;
 
+
     const y =
         (previewSize - height) / 2 +
         imageY;
 
-
-    /*
-       Scale coordinates from
-       preview canvas to output.
-    */
 
     const factor =
         outputSize /
@@ -1757,12 +2423,8 @@ function saveCroppedPhoto() {
     );
 
 
-    /*
-       Convert to JPEG
-    */
-
     output.toBlob(
-        function(blob) {
+        function(blob){
 
             uploadCroppedPhoto(
                 blob
@@ -1780,9 +2442,11 @@ function saveCroppedPhoto() {
    UPLOAD TO FLASK
 ===================================================== */
 
-function uploadCroppedPhoto(blob) {
+function uploadCroppedPhoto(blob){
 
-    const formData = new FormData();
+    const formData =
+        new FormData();
+
 
     formData.append(
         "profile_photo",
@@ -1790,124 +2454,168 @@ function uploadCroppedPhoto(blob) {
         "profile.jpg"
     );
 
+
     const saveButton =
-        document.querySelector(".save-crop-btn");
+        document.querySelector(
+            ".save-crop-btn"
+        );
+
 
     saveButton.disabled = true;
-    saveButton.textContent = "Saving...";
 
-    fetch("/upload-profile-photo", {
-        method: "POST",
-        body: formData
-    })
+    saveButton.textContent =
+        "Saving...";
 
-    .then(async response => {
 
-        // Get the response as text first
-        const text = await response.text();
-
-        console.log("SERVER STATUS:", response.status);
-        console.log("SERVER RESPONSE:", text);
-
-        // Try to convert it to JSON
-        let data;
-
-        try {
-            data = JSON.parse(text);
+    fetch(
+        "/upload-profile-photo",
+        {
+            method:"POST",
+            body:formData
         }
+    )
 
-        catch (error) {
+    .then(
+        async response => {
+
+            const text =
+                await response.text();
+
+
+            console.log(
+                "SERVER STATUS:",
+                response.status
+            );
+
+
+            console.log(
+                "SERVER RESPONSE:",
+                text
+            );
+
+
+            let data;
+
+
+            try{
+
+                data =
+                    JSON.parse(text);
+
+            }
+
+            catch(error){
+
+                console.error(
+                    "SERVER DID NOT RETURN JSON:",
+                    error
+                );
+
+
+                throw new Error(
+                    "Server returned non-JSON response: " +
+                    text.substring(0,500)
+                );
+
+            }
+
+
+            if(!response.ok){
+
+                throw new Error(
+                    data.message ||
+                    "Server returned HTTP " +
+                    response.status
+                );
+
+            }
+
+
+            return data;
+
+        }
+    )
+
+
+    .then(
+        data => {
+
+            console.log(
+                "UPLOAD SUCCESS:",
+                data
+            );
+
+
+            if(!data.success){
+
+                alert(
+                    data.message ||
+                    "Unable to save photo."
+                );
+
+                return;
+
+            }
+
+
+            const profileImage =
+                document.getElementById(
+                    "headerProfileImage"
+                );
+
+
+            if(profileImage){
+
+                profileImage.src =
+                    data.image_url +
+                    "?t=" +
+                    Date.now();
+
+            }
+
+
+            closeCropModal();
+
+
+            alert(
+                "Profile photo updated successfully."
+            );
+
+        }
+    )
+
+
+    .catch(
+        error => {
 
             console.error(
-                "SERVER DID NOT RETURN JSON:",
+                "UPLOAD ERROR:",
                 error
             );
 
-            throw new Error(
-                "Server returned non-JSON response: " +
-                text.substring(0, 500)
-            );
-        }
-
-        if (!response.ok) {
-
-            throw new Error(
-                data.message ||
-                "Server returned HTTP " +
-                response.status
-            );
-        }
-
-        return data;
-    })
-
-    .then(data => {
-
-        console.log(
-            "UPLOAD SUCCESS:",
-            data
-        );
-
-        if (!data.success) {
 
             alert(
-                data.message ||
-                "Unable to save photo."
+                "Photo upload failed.\n\n" +
+                error.message
             );
 
-            return;
         }
+    )
 
-        /*
-           IMPORTANT:
-           Your dashboard uses headerProfileImage,
-           not profilePreview.
-        */
 
-        const profileImage =
-            document.getElementById(
-                "headerProfileImage"
-            );
+    .finally(
+        () => {
 
-        if (profileImage) {
+            saveButton.disabled =
+                false;
 
-            profileImage.src =
-                data.image_url +
-                "?t=" +
-                Date.now();
+
+            saveButton.textContent =
+                "Save Photo";
 
         }
+    );
 
-        closeCropModal();
-
-        alert(
-            "Profile photo updated successfully."
-        );
-
-    })
-
-    .catch(error => {
-
-        console.error(
-            "UPLOAD ERROR:",
-            error
-        );
-
-        alert(
-            "Photo upload failed.\n\n" +
-            error.message
-        );
-
-    })
-
-    .finally(() => {
-
-        saveButton.disabled = false;
-
-        saveButton.textContent =
-            "Save Photo";
-
-    });
 }
 
 
@@ -1915,13 +2623,13 @@ function uploadCroppedPhoto(blob) {
    REMOVE PHOTO
 ===================================================== */
 
-function removeProfilePhoto() {
+function removeProfilePhoto(){
 
-    if (
+    if(
         !confirm(
             "Remove your profile photo?"
         )
-    ) {
+    ){
 
         return;
 
@@ -1931,19 +2639,21 @@ function removeProfilePhoto() {
     fetch(
         "/remove-profile-photo",
         {
-            method: "POST"
+            method:"POST"
         }
     )
+
 
     .then(
         response =>
             response.json()
     )
 
+
     .then(
         data => {
 
-            if (!data.success) {
+            if(!data.success){
 
                 alert(
                     data.message ||
@@ -1951,15 +2661,24 @@ function removeProfilePhoto() {
                 );
 
                 return;
+
             }
 
 
-            document.getElementById(
-                "profilePreview"
-            ).src =
-                data.image_url +
-                "?t=" +
-                Date.now();
+            const profileImage =
+                document.getElementById(
+                    "headerProfileImage"
+                );
+
+
+            if(profileImage){
+
+                profileImage.src =
+                    data.image_url +
+                    "?t=" +
+                    Date.now();
+
+            }
 
 
             alert(
@@ -1969,6 +2688,7 @@ function removeProfilePhoto() {
         }
     )
 
+
     .catch(
         error => {
 
@@ -1976,6 +2696,7 @@ function removeProfilePhoto() {
                 "REMOVE PHOTO ERROR:",
                 error
             );
+
 
             alert(
                 "Something went wrong."
@@ -1993,12 +2714,12 @@ function removeProfilePhoto() {
 
 window.addEventListener(
     "resize",
-    function() {
+    function(){
 
-        if (
+        if(
             modal.style.display ===
             "flex"
-        ) {
+        ){
 
             resizeCanvas();
 
@@ -2008,78 +2729,73 @@ window.addEventListener(
 );
 
 </script>
+
+
 <script>
-const profileContainer = document.getElementById("profileImageContainer");
-const profileInput = document.getElementById("profilePhotoInput");
-const profileImage = document.getElementById("profileImage");
-const profileInitial = document.getElementById("profileInitial");
 
+/* =====================================================
+   GREETING
+===================================================== */
 
-// Get first letter of username
-const username = profileInitial.dataset.username;
+function updateGreeting(){
 
-if (username) {
-    profileInitial.textContent = username.charAt(0).toUpperCase();
-}
+    const hour =
+        new Date().getHours();
 
-
-// Open device storage when profile is clicked
-profileContainer.addEventListener("click", function () {
-    profileInput.click();
-});
-
-
-// When user selects a photo
-profileInput.addEventListener("change", function () {
-
-    const file = this.files[0];
-
-    if (!file) {
-        return;
-    }
-
-    // Make sure it is an image
-    if (!file.type.startsWith("image/")) {
-        alert("Please select an image.");
-        return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onload = function (e) {
-
-        // Display selected photo
-        profileImage.src = e.target.result;
-        profileImage.style.display = "block";
-
-        // Hide username initial
-        profileInitial.style.display = "none";
-    };
-
-    reader.readAsDataURL(file);
-
-});
-</script>
-<script>
-function updateGreeting() {
-    const hour = new Date().getHours();
 
     let greeting;
 
-    if (hour >= 0 && hour < 12) {
-        greeting = "Good morning";
-    } else if (hour >= 12 && hour < 16) {
-        greeting = "Good afternoon";
-    } else if (hour >= 16 && hour < 19) {
-        greeting = "Good evening";
-    } else {
-        greeting = "Good night";
+
+    if(
+        hour >= 0 &&
+        hour < 12
+    ){
+
+        greeting =
+            "Good morning";
+
     }
 
-    document.getElementById("greetingText").textContent = greeting;
+    else if(
+        hour >= 12 &&
+        hour < 16
+    ){
+
+        greeting =
+            "Good afternoon";
+
+    }
+
+    else if(
+        hour >= 16 &&
+        hour < 19
+    ){
+
+        greeting =
+            "Good evening";
+
+    }
+
+    else{
+
+        greeting =
+            "Good night";
+
+    }
+
+
+    document.getElementById(
+        "greetingText"
+    ).textContent =
+        greeting;
+
 }
 
+
 updateGreeting();
+
 </script>
+
+
 </body>
 </html>
