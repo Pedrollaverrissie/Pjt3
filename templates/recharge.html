@@ -664,15 +664,18 @@ button:active{
                         {% if first_recharge %}value="200"{% endif %}
                         required
                     >
-                    {% if first_recharge %}
+                    {% if recharge_error %}
                         <div style="
-                            color:#fbbf24;
-                            font-size:13px;
-                            margin-top:-8px;
-                            margin-bottom:16px;
+                            background:#3a1515;
+                            color:#ff6b6b;
+                            border:1px solid #7f1d1d;
+                            padding:12px;
+                            border-radius:8px;
+                            margin-bottom:15px;
                             text-align:center;
+                            font-size:14px;
                         ">
-                            Activation Amount is KSh 200
+                            {{ recharge_error }}
                         </div>
                     {% endif %}
 

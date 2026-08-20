@@ -2270,11 +2270,8 @@ def recharge():
 
     purpose = request.args.get("purpose")
 
-    # Check whether this is the user's first recharge
-    first_recharge = not Payment.query.filter_by(
-        user_id=current_user.id,
-        payment_type="recharge"
-    ).first()
+    # User is not activated if they don't have a VIP expiry date
+    first_recharge = current_user.vip_expires_at is None
 
 
 
@@ -2284,8 +2281,8 @@ def recharge():
         phone = request.form["phone"].strip()
         amount = float(request.form["amount"])
 
-        # First recharge must be at least KES 200
-        if first_recharge and amount < 200:
+        # First activation recharge must be at least KES 200
+        if not purpose == "renewal" and first_recharge and amount < 200:
             return render_template(
                 "recharge.html",
                 renewal_mode=False,
